@@ -6,9 +6,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DeliveryOrderController;
 
-
-Route::get('/', [LoginController::class, "index"])->name("login");
-Route::post('/', [LoginController::class, "checkLogin"]);
+Route::get('/', function(){
+    return redirect("/dashboard");
+});
+Route::get('/login', [LoginController::class, "index"])->name("login")->middleware("guest");
+Route::post('/login', [LoginController::class, "checkLogin"]);
 Route::post('/logout', [LoginController::class, "logout"])->middleware("auth");
 
 

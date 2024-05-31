@@ -1,5 +1,4 @@
-<div class="container">
-    <button class="btn btn-primary mt-2" id="toggleNavbar">Toggle Navbar</button>
+
     <nav class="navbar navbar-expand-lg " style="background: rgb(95, 95, 95)">
 
         <div class="container-fluid">
@@ -54,13 +53,5 @@
 
         </div>
     </nav>
-</div>
-    @push('scripts')
-    <script>
-        $(document).ready(function () {
-            $("#toggleNavbar").click(function () {
-                $("#navbar").toggle();
-            });
-        });
-    </script>
-    @endpush
+
+
