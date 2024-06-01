@@ -12,6 +12,7 @@ class PartnerController extends Controller{
 
     public function index(){
         return view("pages.partner.index", [
+            "partners" => Partner::all()
 
         ]);
     }
@@ -25,19 +26,23 @@ class PartnerController extends Controller{
 
     public function store(Request $request){
         $validatedData = $request->validate([
-            "product_name" => "required|min:3",
-            "price"=>"required|numeric|min:0|not_in:0",
-            "variant" => "required|min:3",
-            "stock" => "required|numeric|min:0|not_in:0",
-            "unit"=>"required"
+            "partner_name" => "required|min:1",
+            "role"=>"required",
+            "remark" => "nullable",
+            "address" => "required|min:0",
+            "contact"=>"required|numeric|min:7|not_in:0",
+            "phone"=>"required|numeric|min:1|not_in:0",
+            "fax"=>"required|numeric|min:1|not_in:0",
+            "email" => "required|email:dns",
+            "tempo" => "nullable"
         ]);
 
 
-        $user = User::where("name", session("logged_in_user"))->first();
-        $validatedData["user_id"] = $user->id;
+        // $user = User::where("name", session("logged_in_user"))->first();
+        // $validatedData["user_id"] = $user->id;
 
         Partner::create($validatedData);
-        return redirect("/dashboard")->with("successAddProduct", "Product added successfully!");
+        return redirect(route("partner-index"))->with("successAddPartner", "Partner added successfully!");
 
 
     }
@@ -45,23 +50,27 @@ class PartnerController extends Controller{
 
 
         return view("pages.partner.edit", [
-            "product" =>Partner::where("id", $id)->first()
+            "partner" =>Partner::where("id", $id)->first()
         ]);
     }
     public function update(Request $request, $id){
         $validatedData = $request->validate([
-            "product_name" => "required|min:3",
-            "price"=>"required|numeric|min:0|not_in:0",
-            "variant" => "required|min:3",
-            "stock" => "required|numeric|min:0|not_in:0",
-            "unit"=>"required"
+            "partner_name" => "required|min:1",
+            "role"=>"required",
+            "remark" => "nullable",
+            "address" => "required|min:0",
+            "contact"=>"required|min:7|not_in:0",
+            "phone"=>"required|min:1|not_in:0",
+            "fax"=>"required|min:1|not_in:0",
+            "email" => "required|email:dns",
+            "tempo" => "nullable"
         ]);
         Partner::where("id", $id)->update($validatedData);
-        return redirect("/dashboard")->with("successEditProduct", "Product editted successfully!");
+        return redirect(route("partner-index"))->with("successEditPartner", "Partner editted successfully!");
 
     }
     public function destroy($id){
         Partner::destroy("id", $id);
-        return redirect("/dashboard")->with("successDeleteProduct", "Product deleted successfully!");
+        return redirect(route("partner-index"))->with("successDeletePartner", "Partner deleted successfully!");
     }
 }

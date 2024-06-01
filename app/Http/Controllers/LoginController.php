@@ -26,11 +26,11 @@ class LoginController extends Controller
         $valid = Auth::attempt($validatedData);
         if($valid){
             $request->session()->regenerate();
-            return redirect()->intended("/dashboard");
+            return redirect()->intended(route("dashboard"));
         }
 
         //Kalo ga ada yang match sama sekali
-        return redirect("/")->with("failMessage", "Login failed!");
+        return redirect(route("login"))->with("failMessage", "Login failed!");
     }
     public function logout(Request $request){
         //Logout dan clear data
@@ -39,7 +39,7 @@ class LoginController extends Controller
         $request->session()->regenerateToken();
 
         //Balikin ke halaman login
-        return redirect("/");
+        return redirect(route("login"));
 
     }
     protected function credentials(Request $request)

@@ -21,15 +21,15 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link text-white text-decoration-none mx-2" href="#"><i class="bi bi-shop"></i> Partner</a>
+                <a class="nav-link text-decoration-none mx-2 @if (Request::is("partner*")) text-warning @else text-white @endif" href="{{ route("partner-index") }}"><i class="bi bi-shop"></i> Partner</a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link text-white text-decoration-none mx-2" href="#"><i class="bi bi-box"></i> Produk</a>
+                <a class="nav-link text-decoration-none mx-2 @if (Request::is("product*")) text-warning @else text-white @endif" href="{{ route("product-index") }}"><i class="bi bi-box"></i> Produk</a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link text-white text-decoration-none mx-2" href="#"><i class="bi bi-building"></i> Proyek</a>
+                <a class="nav-link text-decoration-none mx-2 @if (Request::is("project*")) text-warning @else text-white @endif" href="{{ route("project-index") }}"><i class="bi bi-building"></i> Proyek</a>
             </li>
             {{-- <li class="nav-item dropdown">
                 <a class="nav-link text-white text-decoration-none mx-2 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

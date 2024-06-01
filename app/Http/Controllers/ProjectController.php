@@ -11,7 +11,7 @@ class ProjectController extends Controller{
 
     public function index(){
         return view("pages.project.index", [
-
+            "projects" => Project::all()
         ]);
     }
 
@@ -24,43 +24,42 @@ class ProjectController extends Controller{
 
     public function store(Request $request){
         $validatedData = $request->validate([
-            "product_name" => "required|min:3",
-            "price"=>"required|numeric|min:0|not_in:0",
-            "variant" => "required|min:3",
-            "stock" => "required|numeric|min:0|not_in:0",
-            "unit"=>"required"
+            "project_name" => "required|min:3",
+            "location"=>"required",
+            "PIC" => "required|min:3",
+            "address" => "required"
         ]);
 
 
-        $user = User::where("name", session("logged_in_user"))->first();
-        $validatedData["user_id"] = $user->id;
+        // $user = User::where("name", session("logged_in_user"))->first();
+        // $validatedData["user_id"] = $user->id;
 
         Project::create($validatedData);
-        return redirect("/dashboard")->with("successAddProduct", "Product added successfully!");
+        return redirect(route("project-index"))->with("successAddProject", "Project added successfully!");
 
 
     }
     public function edit($id){
 
 
-        return view("pages.delivery-order.edit", [
-            "product" => Project::where("id", $id)->first()
+        return view("pages.project.edit", [
+            "project" => Project::where("id", $id)->first()
         ]);
+
     }
     public function update(Request $request, $id){
         $validatedData = $request->validate([
-            "product_name" => "required|min:3",
-            "price"=>"required|numeric|min:0|not_in:0",
-            "variant" => "required|min:3",
-            "stock" => "required|numeric|min:0|not_in:0",
-            "unit"=>"required"
+            "project_name" => "required|min:3",
+            "location"=>"required",
+            "PIC" => "required|min:3",
+            "address" => "required"
         ]);
         Project::where("id", $id)->update($validatedData);
-        return redirect("/dashboard")->with("successEditProduct", "Product editted successfully!");
+        return redirect(route("project-index"))->with("successEditProject", "Project editted successfully!");
 
     }
     public function destroy($id){
         Project::destroy("id", $id);
-        return redirect("/dashboard")->with("successDeleteProduct", "Product deleted successfully!");
+        return redirect(route("project-index"))->with("successDeleteProject", "Project deleted successfully!");
     }
 }
