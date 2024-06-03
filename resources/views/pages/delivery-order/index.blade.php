@@ -19,7 +19,7 @@
 
     @endif
 
-<a href="/dashboard/upload" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
+<a href="{{ route("deliveryorder-create") }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
     <i class="bi bi-plus-square"></i>
     Add New Data</a>
 <br>
