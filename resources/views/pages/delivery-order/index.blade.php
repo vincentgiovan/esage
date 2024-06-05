@@ -2,10 +2,11 @@
 
 @section("content")
 
-<h1>welcome, </h1>
+<br>
+<h1>Delivery Orders</h1>
+<br>
 
-
-<h5>welcome back, {{ Auth::user()->name }}! </h5>
+{{-- <h5>welcome back, {{ Auth::user()->name }}! </h5> --}}
 
     @if (session()->has("successAddProduct"))
             <p class="text-success fw-bold">{{ session("successAddProduct") }}</p>
@@ -19,39 +20,38 @@
 
     @endif
 
-<a href="/dashboard/upload" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
+<a href="{{ route("deliveryorder-create") }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
     <i class="bi bi-plus-square"></i>
-    Add New Data</a>
+    Add New Delivery</a>
 <br>
 <!-- tabel list data-->
 
 <table class="w-100">
     <tr>
         <th class="border border-1 border-dark ">Nomor</th>
-        <th class="border border-1 border-dark ">Nama Produk </th>
-        <th class="border border-1 border-dark ">Stok</th>
-        <th class="border border-1 border-dark ">Harga</th>
-        <th class="border border-1 border-dark ">Unit</th>
-        <th class="border border-1 border-dark ">Variant</th>
-        <th class="border border-1 border-dark ">Uploaded By</th>
+        <th class="border border-1 border-dark ">Product</th>
+        <th class="border border-1 border-dark ">Delivery Date</th>
+        <th class="border border-1 border-dark ">Project</th>
+        <th class="border border-1 border-dark ">Register</th>
+        <th class="border border-1 border-dark ">Note</th>
         <th class="border border-1 border-dark ">Action</th>
     </tr>
 
-    {{-- @foreach ($products as $p)
+    @foreach ($deliveryorders as $p)
         <tr>
             <td class="border border-1 border-dark " >{{ $loop->iteration }}</td>
             <td class="border border-1 border-dark " >{{ $p->product_name }}</td>
-            <td class="border border-1 border-dark " >{{ $p->stock }}</td>
-            <td class="border border-1 border-dark " >{{ $p->price }}</td>
-            <td class="border border-1 border-dark " >{{ $p->unit }}</td>
-            <td class="border border-1 border-dark " >{{ $p->variant }}</td>
-            <td class="border border-1 border-dark " >{{ $p->user->name }}</td>
+            <td class="border border-1 border-dark " >{{ $p->delivery_date }}</td>
+            <td class="border border-1 border-dark " >{{ $p->project_name }},00</td>
+            <td class="border border-1 border-dark " >{{ $p->register }}</td>
+            <td class="border border-1 border-dark " >{{ $p->note }}</td>
+            {{-- <td class="border border-1 border-dark " >{{ $p->user->name }}</td> --}}
             <td class="border border-1 border-dark d-flex justify-content-center " >
                 <div class="d-flex gap-5">
-                <a href="/dashboard/{{ $p->id }}/edit" class="btn btn-warning text-white" style="font-size: 10pt">
+                <a href="{{ route("deliveryorder-edit", $p->id ) }}" class="btn btn-warning text-white" style="font-size: 10pt">
                     <i class="bi bi-pencil"></i>
                     Edit Data</a>
-                <form action="/dashboard/{{ $p->id }}" method="POST">
+                <form action="{{ route("deliveryorder-destroy", $p->id ) }}" method="POST">
                     @csrf
                     <button class="btn btn-danger text-white" style="font-size: 10pt " onclick="return confirm('Do you want to delete this item?')">
                         <i class="bi bi-trash"></i>
@@ -61,7 +61,7 @@
 
         </tr>
 
-    @endforeach --}}
+    @endforeach
 </table>
 
 @endsection

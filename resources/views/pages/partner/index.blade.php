@@ -2,10 +2,12 @@
 
 @section("content")
 
-<h1>welcome, </h1>
+<br>
+<h1>Sage Partners </h1>
+<br>
 
 
-<h5>welcome back, {{ Auth::user()->name }}! </h5>
+{{-- <h5>welcome back, {{ Auth::user()->name }}! </h5> --}}
 
     @if (session()->has("successAddPartner"))
             <p class="text-success fw-bold">{{ session("successAddPartner") }}</p>

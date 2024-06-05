@@ -24,19 +24,19 @@ class DeliveryOrderController extends Controller{
 
     public function store(Request $request){
         $validatedData = $request->validate([
-            "product_name" => "required|min:3",
-            "price"=>"required|numeric|min:0|not_in:0",
-            "variant" => "required|min:3",
-            "stock" => "required|numeric|min:0|not_in:0",
-            "unit"=>"required"
+            "product_name" => "required|min:1",
+            "delivery_date"=>"required|date",
+            "project_name" => "required|min:1",
+            "register" => "required|numeric|min:0|not_in:0",
+            "note"=>"nullable"
         ]);
 
 
-        $user = User::where("name", session("logged_in_user"))->first();
-        $validatedData["user_id"] = $user->id;
+        // $user = User::where("name", session("logged_in_user"))->first();
+        // $validatedData["user_id"] = $user->id;
 
         DeliveryOrder::create($validatedData);
-        return redirect("/dashboard")->with("successAddProduct", "Product added successfully!");
+        return redirect(route("delivery-order-index"))->with("successAddOrder", "Order added successfully!");
 
 
     }
@@ -44,23 +44,23 @@ class DeliveryOrderController extends Controller{
 
 
         return view("pages.delivery-order.edit", [
-            "product" => DeliveryOrder::where("id", $id)->first()
+            "delivery_order" => DeliveryOrder::where("id", $id)->first()
         ]);
     }
     public function update(Request $request, $id){
         $validatedData = $request->validate([
-            "product_name" => "required|min:3",
-            "price"=>"required|numeric|min:0|not_in:0",
-            "variant" => "required|min:3",
-            "stock" => "required|numeric|min:0|not_in:0",
-            "unit"=>"required"
+            "product_name" => "required|min:1",
+            "delivery_date"=>"required|date",
+            "project_name" => "required|min:1",
+            "register" => "required|numeric|min:0|not_in:0",
+            "note"=>"nullable"
         ]);
         DeliveryOrder::where("id", $id)->update($validatedData);
-        return redirect("/dashboard")->with("successEditProduct", "Product editted successfully!");
+        return redirect(route("delivery-order-index"))->with("successEditOrder", "Order editted successfully!");
 
     }
     public function destroy($id){
         DeliveryOrder::destroy("id", $id);
-        return redirect("/dashboard")->with("successDeleteProduct", "Product deleted successfully!");
+        return redirect(route("delivery-order-index"))->with("successDeleteOrder", "Order deleted successfully!");
     }
 }

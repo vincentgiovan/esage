@@ -80,3 +80,4 @@ Route::post('/project/{id}/edit', [ProjectController::class, "update"] )->name("
 
 //delete data
 Route::post('/project/{id}', [ProjectController::class, "destroy"] )->name("project-destroy");
+

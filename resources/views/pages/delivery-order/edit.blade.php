@@ -2,46 +2,65 @@
 
 @section("content")
 
-
     <div class="d-flex justify-content-center align-items-center" style="min-height:100vh">
     <div class="container">
-        ,
+
         <h2>Edit Item</h2>
-        <form method="POST" action="/dashboard/{{ $product->id }}/edit">
+
 {{-- @csrf kepake untuk token ,wajib --}}
-            @csrf
-            <input type="text" name="product_name" placeholder="Nama Barang" value = "{{ old("product_name", $product->product_name ) }}">
-                @error("product_name")
-                <p style = "color: red; font-size: 10px;">{{$message }}</p>
-                @enderror
 
-                <input type="text" name="price" placeholder="Harga" value = "{{ old("price", $product->price) }}">
-                @error("price")
-                <p style = "color: red; font-size: 10px;">{{$message }}</p>
-                @enderror
+            <form method="POST" action="{{ route("delivery-order-edit",$deliver_order->id ) }}">
+                {{-- @csrf kepake untuk token ,wajib --}}
+                            @csrf
+                            <div class="mt-3">
+                                <select name="product_name" class="form-select">
+                                    @foreach ($product_name as $pn)
+                                        <option value="{{ $pn }}" @if ($product->product_name == $pn ) selected @endif>{{ $pn }}</option>
+                                    @endforeach
 
-                <input type="number" name="stock" placeholder="Stok"  value = "{{ old("stock", $product->stock) }}">
-                @error("stock")
-                <p style = "color: red; font-size: 10px;">{{$message  }}</p>
-                @enderror
+                                </select>
+                                @error("product_name")
+                                <p style = "color: red; font-size: 10px;">{{$message }}</p>
+                                @enderror
+                            </div>
+                            <div class="mt-3">
+                                <select name="delivery_date" class="form-select">
+                                    @foreach ($delivery_date as $dd)
+                                        <option value="{{ $dd }}" @if ($product->delivery_date == $dd ) selected @endif>{{ $dd }}</option>
+                                    @endforeach
 
-                <input type="text" name="variant" placeholder="Variant"  value = "{{ old("variant", $product->variant) }}">
-                @error("variant")
-                <p style = "color: red; font-size: 10px;">{{$message }}</p>
-                @enderror
+                                </select>
+                                @error("delivery_date")
+                                <p style = "color: red; font-size: 10px;">{{$message }}</p>
+                                @enderror
+                            </div>
+                            <div class="mt-3">
+                                <select name="project_name" class="form-select">
+                                    @foreach ($project_name as $pn)
+                                        <option value="{{ $pn }}" @if ($product->project_name == $pn ) selected @endif>{{ $pn }}</option>
+                                    @endforeach
 
-                <input type="text" name="unit" placeholder="Unit"  value = "{{ old("unit", $product->unit) }}">
-                @error("unit")
-                <p style = "color: red; font-size: 10px;">{{$message }}</p>
-                @enderror
-
-            @if (session()->has("passwordNotConfirmed"))
-            <p class="text-success fw-bold">{{ session("passwordNotConfirmed") }}</p>
-
-            @endif
-            <input type="submit" value="Edit">
-
-        </form>
+                                </select>
+                                @error("project_name")
+                                <p style = "color: red; font-size: 10px;">{{$message }}</p>
+                                @enderror
+                            </div>
+                            <div class="mt-3">
+                                <input type="text" class="form-control" name="register" placeholder="Register"  value = "{{ old("register", $product->register) }}">
+                                @error("register")
+                                <p style = "color: red; font-size: 10px;">{{$message }}</p>
+                                @enderror
+                            </div>
+                            <div class="mt-3">
+                                <input type="text" class="form-control" name="note" placeholder="Note" value = "{{ old("note" , $product->note)}}">
+                                @error("note")
+                                <p style = "color: red; font-size: 10px;">{{$message }}</p>
+                                @enderror
+                            </div>
+                            <div class="mt-3">
+                            <input type="submit" class="btn btn-success px-3 py-1" value="Edit">
+                            </div>
+                        </form>
     </div>
 </div>
 

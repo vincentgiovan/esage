@@ -13,16 +13,12 @@ class PartnerController extends Controller{
     public function index(){
         return view("pages.partner.index", [
             "partners" => Partner::all()
-
         ]);
     }
 
     public function create(){
         return view("pages.partner.create");
     }
-
-
-
 
     public function store(Request $request){
         $validatedData = $request->validate([

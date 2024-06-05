@@ -2,10 +2,11 @@
 
 @section("content")
 
-<h1>welcome, </h1>
+<br>
+<h1>Warehouse Items</h1>
+<br>
 
-
-<h5>welcome back, {{ Auth::user()->name }}! </h5>
+{{-- <h5>welcome back, {{ Auth::user()->name }}! </h5> --}}
 
     @if (session()->has("successAddProduct"))
             <p class="text-success fw-bold">{{ session("successAddProduct") }}</p>
