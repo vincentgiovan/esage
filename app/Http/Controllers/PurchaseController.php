@@ -7,16 +7,16 @@ use App\Models\Purchase;
 use App\Models\Pembelian;
 use Illuminate\Http\Request;
 
-class Purchaseontroller extends Controller
+class PurchaseController extends Controller
 {
     public function index(){
-        return view("pages.purchase", [
-
+        return view("pages.purchase.index", [
+            "purchases" => Purchase::all()
         ]);
     }
 
     public function create(){
-        return view("inputitem");
+        return view("pages.purchase.create");
     }
 
 
@@ -36,14 +36,14 @@ class Purchaseontroller extends Controller
         $validatedData["user_id"] = $user->id;
 
         Purchase::create($validatedData);
-        return redirect("/dashboard")->with("successAddProduct", "Product added successfully!");
+        return redirect(route("purchase-index"))->with("successAddProduct", "Product added successfully!");
 
 
     }
     public function edit($id){
 
 
-        return view("edititem", [
+        return view("pages.purchase.edit", [
             "product" => Purchase::where("id", $id)->first()
         ]);
     }
@@ -56,11 +56,11 @@ class Purchaseontroller extends Controller
             "unit"=>"required"
         ]);
         Purchase::where("id", $id)->update($validatedData);
-        return redirect("/dashboard")->with("successEditProduct", "Product editted successfully!");
+        return redirect(route("purchase-index"))->with("successEditProduct", "Product editted successfully!");
 
     }
     public function destroy($id){
         Purchase::destroy("id", $id);
-        return redirect("/dashboard")->with("successDeleteProduct", "Product deleted successfully!");
+        return redirect(route("purchase-index"))->with("successDeleteProduct", "Product deleted successfully!");
     }
 }

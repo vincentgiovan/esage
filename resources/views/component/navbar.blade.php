@@ -1,6 +1,7 @@
 
     <nav class="navbar navbar-expand-lg " style="background: rgb(95, 95, 95)">
 
+
         <div class="container-fluid">
         <a class="navbar-brand text-white mx-2 d-flex align-items-center gap-1" href="/dashboard">
             <img src="{{ asset("res/output-onlinepngtools.png") }}" width="25px" alt="">
@@ -13,12 +14,12 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-                <li class="nav-item">
-                <a class="nav-link text-white text-decoration-none mx-2" aria-current="page" href="/deliveryorder"><i class="bi bi-truck"></i> D-Order</a>
+            <li class="nav-item">
+                <a class="nav-link text-decoration-none mx-2 @if (Request::is("deliveryorder*")) text-warning @else text-white @endif" href="{{ route("deliveryorder-index") }}"><i class="bi bi-truck"></i> D-Order</a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link text-white text-decoration-none mx-2" href="https://aniwave.to/home"><i class="bi bi-card-checklist"></i> Pembelian</a>
+                <a class="nav-link text-decoration-none mx-2 @if (Request::is("purchase*")) text-warning @else text-white @endif" href="{{ route("purchase-index") }}"><i class="bi bi-card-checklist"></i> Pembelian</a>
             </li>
 
             <li class="nav-item">
@@ -53,6 +54,9 @@
         </div>
 
         </div>
+        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+            <span class="ti-view-list"></span>
+        </button>
     </nav>
 
 

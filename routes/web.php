@@ -7,6 +7,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\DeliveryOrderController;
 
 Route::get('/', function(){
@@ -81,3 +82,17 @@ Route::post('/project/{id}/edit', [ProjectController::class, "update"] )->name("
 //delete data
 Route::post('/project/{id}', [ProjectController::class, "destroy"] )->name("project-destroy");
 
+// ===== Purchase ===== //
+//show data
+Route::get('/purchase', [PurchaseController::class, "index"] )->name("purchase-index");
+
+//create new data
+Route::get('/purchase/create', [PurchaseController::class, "create"] )->name("purchase-create");
+Route::post('/purchase/store', [PurchaseController::class, "store"] )->name("purchase-store");
+
+//edit data
+Route::get('/purchase/{id}/edit', [PurchaseController::class, "edit"] )->name("purchase-edit");
+Route::post('/purchase/{id}/edit', [PurchaseController::class, "update"] )->name("purchase-update");
+
+//delete data
+Route::post('/purchase/{id}', [PurchaseController::class, "destroy"] )->name("purchase-destroy");

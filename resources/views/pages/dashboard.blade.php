@@ -29,6 +29,8 @@
         <!-- partial:partials/_navbar.html -->
         @include("component.navbar")
 
+        
+
         <!-- partial -->
         <div class="container-fluid page-body-wrapper" style="padding: 0;">
         <!-- partial:partials/_sidebar.html -->
@@ -396,8 +398,3 @@
 
 </html>
 
-@extends('layouts.main-admin')
-
-@section("content")
-    <h1>Ini halaman dashboard</h1>
-@endsection
