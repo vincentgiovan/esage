@@ -11,7 +11,7 @@ class DeliveryOrderController extends Controller{
 
     public function index(){
         return view("pages.delivery-order.index", [
-
+            "deliveryorders" => DeliveryOrder::all()
         ]);
     }
 

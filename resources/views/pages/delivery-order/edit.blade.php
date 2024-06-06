@@ -9,7 +9,7 @@
 
 {{-- @csrf kepake untuk token ,wajib --}}
 
-            <form method="POST" action="{{ route("delivery-order-edit",$deliver_order->id ) }}">
+            <form method="POST" action="{{ route("deliveryorder-edit",$delivery_order->id ) }}">
                 {{-- @csrf kepake untuk token ,wajib --}}
                             @csrf
                             <div class="mt-3">
