@@ -18,8 +18,6 @@ class AccountController extends Controller
     }
 
 
-
-
     public function store(Request $request){
         $validatedData = $request->validate([
             "product_name" => "required|min:3",
