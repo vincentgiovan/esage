@@ -86,7 +86,7 @@
             });
         </script> --}}
         <!-- FITUR KEREN bad ui design-->
-        {{-- <script>
+        <script>
             const susbtn = document.querySelector("#susbtn");
             susbtn.addEventListener("mouseover", () => {
                 if(susbtn.style.marginLeft == "200px" || susbtn.style.marginLeft == "600px" || susbtn.style.marginLeft == "1000px"){
@@ -112,7 +112,7 @@
                 }
 
             });
-        </script> --}}
+        </script>
 
     </div>
 </div>
