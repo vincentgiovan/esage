@@ -3,7 +3,7 @@
 
         <div class="container-fluid">
         <a class="navbar-brand text-white mx-2 d-flex align-items-center gap-1" href="/dashboard">
-            <img src="res/output-onlinepngtools.png" width="25px" alt="">
+            <img src="{{ asset("res/output-onlinepngtools.png") }}" width="25px" alt="">
             <span>eSage V2.0</span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

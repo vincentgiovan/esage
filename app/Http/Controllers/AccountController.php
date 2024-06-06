@@ -9,15 +9,13 @@ class AccountController extends Controller
 {
     public function index(){
         return view("pages.deliveryorder", [
-
+            "test" => "test"
         ]);
     }
 
     public function create(){
         return view("inputitem");
     }
-
-
 
 
     public function store(Request $request){
