@@ -42,13 +42,18 @@
             <td class="border border-1 border-dark " >{{ $loop->iteration }}</td>
             <td class="border border-1 border-dark " >{{ $p->partner->partner_name }}</td>
             <td class="border border-1 border-dark " >{{ $p->purchase_deadline }}</td>
-            <td class="border border-1 border-dark " >{{ $p->register }}</td>
+            <td class="border border-1 border-dark " >
+                <div class="d-flex gap-5 w-100 justify-content-center align-items-center">
+                    {{ $p->register }}
+                <a href="{{ route("purchase-viewitem", $p->id ) }}" class="btn btn-success text-white" style="font-size: 10pt"><i class="bi bi-cart"></i>View Cart</a>
+                </div>
+            </td>
             <td class="border border-1 border-dark " >{{ $p->purchase_date }}</td>
             <td class="border border-1 border-dark " >{{ $p->note }}</td>
             {{-- <td class="border border-1 border-dark " >{{ $p->user->name }}</td> --}}
             <td class="border border-1 border-dark " >
                 <div class="d-flex gap-5 w-100 justify-content-center">
-                <a href="{{ route("purchase-viewitem", $p->id ) }}" class="btn btn-success text-white" style="font-size: 10pt"><i class="bi bi-cart"></i>View Cart</a>
+
                 <a href="{{ route("purchase-edit", $p->id ) }}" class="btn btn-warning text-white" style="font-size: 10pt">
                     <i class="bi bi-pencil"></i>
                     Edit Data</a>
