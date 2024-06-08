@@ -9,6 +9,7 @@ class Project extends Model
 {
     use HasFactory;
     protected $guarded = ["id"];
+
     public function delivery_orders(){
         return $this->hasMany(DeliveryOrder::class);
     }

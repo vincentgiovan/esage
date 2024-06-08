@@ -3,7 +3,7 @@
 @section("content")
 
 <br>
-<h1>Warehouse Items</h1>
+<h1>All Products in {{ $purchase->register }}</h1>
 <br>
 
 {{-- <h5>welcome back, {{ Auth::user()->name }}! </h5> --}}

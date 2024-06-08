@@ -44,8 +44,8 @@
             <td class="border border-1 border-dark " >{{ $p->PIC }}</td>
             <td class="border border-1 border-dark " >{{ $p->address }}</td>
             {{-- <td class="border border-1 border-dark " >{{ $p->user->name }}</td> --}}
-            <td class="border border-1 border-dark d-flex justify-content-center " >
-                <div class="d-flex gap-5">
+            <td class="border border-1 border-dark " >
+                <div class="d-flex gap-5 w-100 justify-content-center">
                 <a href="{{ route("project-edit", $p->id ) }}" class="btn btn-warning text-white" style="font-size: 10pt">
                     <i class="bi bi-pencil"></i>
                     Edit Data</a>

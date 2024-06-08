@@ -9,10 +9,21 @@ class Product extends Model
 {
     use HasFactory;
     protected $guarded = ["id"];
-    public function delivery_orders(){
-        return $this->hasMany(DeliveryOrder::class);
-    }
+
     public function purchases(){
-        return $this->hasMany(Purchase::class);
+        return $this->belongsToMany(Purchase::class);
     }
+
+    public function delivery_orders(){
+        return $this->belongsToMany(DeliveryOrder::class, "delivery_order_products");
+    }
+
+    public function delivery_order_products(){
+        return $this->hasMany(DeliveryOrderProduct::class);
+    }
+
+    public function purchase_products(){
+        return $this->hasMany(PurchaseProduct::class);
+    }
+
 }

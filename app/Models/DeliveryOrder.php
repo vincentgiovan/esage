@@ -16,7 +16,12 @@ class DeliveryOrder extends Model
         return $this->belongsTo(Project::class);
     }
 
-    public function product(){
-        return $this->belongsToMany(Product::class);
+    public function products(){
+        return $this->belongsToMany(Product::class, "delivery_order_products");
     }
+
+    public function delivery_order_products(){
+        return $this->hasMany(DeliveryOrderProduct::class);
+    }
+
 }

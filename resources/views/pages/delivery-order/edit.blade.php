@@ -9,58 +9,62 @@
 
 {{-- @csrf kepake untuk token ,wajib --}}
 
-            <form method="POST" action="{{ route("deliveryorder-edit",$delivery_order->id ) }}">
-                {{-- @csrf kepake untuk token ,wajib --}}
-                            @csrf
-                            <div class="mt-3">
-                                <select name="product_name" class="form-select">
-                                    @foreach ($product_name as $pn)
-                                        <option value="{{ $pn }}" @if ($product->product_name == $pn ) selected @endif>{{ $pn }}</option>
-                                    @endforeach
+    <form method="POST" action="{{ route("deliveryorder-update",$delivery_order->id ) }}">
+        @csrf
+    <div class="mt-3">
+    <select name="product_id" class="form-select">
+    @foreach ($products as $product)
+        <option value="{{ $product->id }}" @if($delivery_order->product_id == $product->id) selected @endif >{{ $product->product_name }}</option>
+    @endforeach
 
-                                </select>
-                                @error("product_name")
-                                <p style = "color: red; font-size: 10px;">{{$message }}</p>
-                                @enderror
-                            </div>
-                            <div class="mt-3">
-                                <select name="delivery_date" class="form-select">
-                                    @foreach ($delivery_date as $dd)
-                                        <option value="{{ $dd }}" @if ($product->delivery_date == $dd ) selected @endif>{{ $dd }}</option>
-                                    @endforeach
+    </select>
+    @error("product_id")
+    <p style = "color: red; font-size: 10px;">{{$message }}</p>
+    @enderror
+    </div>
+    <div class="mt-3">
+    <input type="date" class="form-control" name="delivery_date" placeholder="delivery_date"  value = "{{ old("delivery_date", $delivery_order->delivery_date) }}">
 
-                                </select>
-                                @error("delivery_date")
-                                <p style = "color: red; font-size: 10px;">{{$message }}</p>
-                                @enderror
-                            </div>
-                            <div class="mt-3">
-                                <select name="project_name" class="form-select">
-                                    @foreach ($project_name as $pn)
-                                        <option value="{{ $pn }}" @if ($product->project_name == $pn ) selected @endif>{{ $pn }}</option>
-                                    @endforeach
-
-                                </select>
-                                @error("project_name")
-                                <p style = "color: red; font-size: 10px;">{{$message }}</p>
-                                @enderror
-                            </div>
-                            <div class="mt-3">
-                                <input type="text" class="form-control" name="register" placeholder="Register"  value = "{{ old("register", $product->register) }}">
-                                @error("register")
-                                <p style = "color: red; font-size: 10px;">{{$message }}</p>
-                                @enderror
-                            </div>
-                            <div class="mt-3">
-                                <input type="text" class="form-control" name="note" placeholder="Note" value = "{{ old("note" , $product->note)}}">
-                                @error("note")
-                                <p style = "color: red; font-size: 10px;">{{$message }}</p>
-                                @enderror
-                            </div>
-                            <div class="mt-3">
-                            <input type="submit" class="btn btn-success px-3 py-1" value="Edit">
-                            </div>
-                        </form>
+    @error("delivery_date")
+    <p style = "color: red; font-size: 10px;">{{$message }}</p>
+    @enderror
+    </div>
+    <div class="mt-3">
+        <select name="project_id" class="form-select">
+            @foreach ($projects as $pn)
+                <option value="{{ $pn->id}}" @if($delivery_order->project_id == $pn->id) selected @endif >{{ $pn->project_name }}</option>
+            @endforeach
+        </select>
+        @error("project_id")
+        <p style = "color: red; font-size: 10px;">{{$message }}</p>
+        @enderror
+    </div>
+    <div class="mt-3">
+    <input type="text" class="form-control" name="register" placeholder="Register"  value = "{{ old("register", $delivery_order->register) }}">
+    @error("register")
+    <p style = "color: red; font-size: 10px;">{{$message }}</p>
+    @enderror
+    </div>
+    <div class="mt-3">
+    {{-- <input type="text" class="form-control" name="status" placeholder="Status"  value = "{{ old("status") }}"> --}}
+    <select name="delivery_status" class="form-select">
+    <option value="Complete">Complete</option>
+    <option value="Incomplete">Incomplete</option>
+    </select>
+    @error("delivery_status")
+    <p style = "color: red; font-size: 10px;">{{$message }}</p>
+    @enderror
+    </div>
+    <div class="mt-3">
+    <input type="text" class="form-control" name="note" placeholder="Note" value = "{{ old("note" , $delivery_order->note)}}">
+    @error("note")
+    <p style = "color: red; font-size: 10px;">{{$message }}</p>
+    @enderror
+    </div>
+    <div class="mt-3">
+    <input type="submit" class="btn btn-success px-3 py-1" value="Edit">
+    </div>
+    </form>
     </div>
 </div>
 

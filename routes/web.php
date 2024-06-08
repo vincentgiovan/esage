@@ -86,6 +86,8 @@ Route::post('/project/{id}', [ProjectController::class, "destroy"] )->name("proj
 //show data
 Route::get('/purchase', [PurchaseController::class, "index"] )->name("purchase-index");
 
+Route::get('/purchase/{id}/viewitem', [PurchaseController::class, "viewitem"] )->name("purchase-viewitem");
+
 //create new data
 Route::get('/purchase/create', [PurchaseController::class, "create"] )->name("purchase-create");
 Route::post('/purchase/store', [PurchaseController::class, "store"] )->name("purchase-store");

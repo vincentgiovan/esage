@@ -8,6 +8,8 @@ use App\Models\Product;
 use App\Models\Project;
 use App\Models\Purchase;
 use App\Models\DeliveryOrder;
+use App\Models\DeliveryOrderProduct;
+use App\Models\PurchaseProduct;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -109,28 +111,38 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Purchase::create([
-            "supplier_id" => 1,
+            "partner_id" => 1,
             "register" => "PU/25052024/1",
             "purchase_deadline" => "2024-05-28",
             "purchase_date" => "2024-05-25",
             "purchase_status" => "ordered",
-            "product_id" => 2
         ]);
         Purchase::create([
-            "supplier_id" => 1,
-            "register" => "PU/25052024/1",
-            "purchase_deadline" => "2024-05-28",
-            "purchase_date" => "2024-05-25",
-            "purchase_status" => "paid",
-            "product_id" => 3
-        ]);
-        Purchase::create([
-            "supplier_id" => 2,
+            "partner_id" => 1,
             "register" => "PU/25052024/2",
             "purchase_deadline" => "2024-05-28",
             "purchase_date" => "2024-05-26",
             "purchase_status" => "retreived",
+        ]);
+        PurchaseProduct::create([
+            "purchase_id" => 1,
             "product_id" => 2
+        ]);
+        PurchaseProduct::create([
+            "purchase_id" => 1,
+            "product_id" => 4
+        ]);
+        PurchaseProduct::create([
+            "purchase_id" => 1,
+            "product_id" => 1
+        ]);
+        PurchaseProduct::create([
+            "purchase_id" => 2,
+            "product_id" => 2
+        ]);
+        PurchaseProduct::create([
+            "purchase_id" => 2,
+            "product_id" => 3
         ]);
 
         DeliveryOrder::create([
@@ -138,21 +150,25 @@ class DatabaseSeeder extends Seeder
             "register" => "DO/29052024/1",
             "delivery_status" => "incomplete",
             "project_id" => 1,
-            "product_id" => 3,
         ]);
         DeliveryOrder::create([
             "delivery_date" => "2024-05-31",
             "register" => "DO/29052024/2",
             "delivery_status" => "incomplete",
-            "project_id" => 2,
-            "product_id" => 4,
+            "project_id" => 1,
         ]);
-        DeliveryOrder::create([
-            "delivery_date" => "2024-05-31",
-            "register" => "DO/29052024/2",
-            "delivery_status" => "incomplete",
-            "project_id" => 2,
-            "product_id" => 5,
+        
+        DeliveryOrderProduct::create([
+            "delivery_order_id" => 1,
+            "product_id" => 3
+        ]);
+        DeliveryOrderProduct::create([
+            "delivery_order_id" => 2,
+            "product_id" => 2
+        ]);
+        DeliveryOrderProduct::create([
+            "delivery_order_id" => 2,
+            "product_id" => 3
         ]);
     }
 }

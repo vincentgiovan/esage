@@ -3,7 +3,7 @@
 
 
         <div class="container-fluid">
-        <a class="navbar-brand text-white mx-2 d-flex align-items-center gap-1" href="/dashboard">
+        <a class="navbar-brand text-white mx-2 d-flex align-items-center gap-1" href={{ route("dashboard") }}>
             <img src="{{ asset("res/output-onlinepngtools.png") }}" width="25px" alt="">
             <span>eSage V2.0</span>
         </a>
@@ -14,25 +14,6 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-            <li class="nav-item">
-                <a class="nav-link text-decoration-none mx-2 @if (Request::is("deliveryorder*")) text-warning @else text-white @endif" href="{{ route("deliveryorder-index") }}"><i class="bi bi-truck"></i> D-Order</a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link text-decoration-none mx-2 @if (Request::is("purchase*")) text-warning @else text-white @endif" href="{{ route("purchase-index") }}"><i class="bi bi-card-checklist"></i> Pembelian</a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link text-decoration-none mx-2 @if (Request::is("partner*")) text-warning @else text-white @endif" href="{{ route("partner-index") }}"><i class="bi bi-shop"></i> Partner</a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link text-decoration-none mx-2 @if (Request::is("product*")) text-warning @else text-white @endif" href="{{ route("product-index") }}"><i class="bi bi-box"></i> Produk</a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link text-decoration-none mx-2 @if (Request::is("project*")) text-warning @else text-white @endif" href="{{ route("project-index") }}"><i class="bi bi-building"></i> Proyek</a>
-            </li>
             {{-- <li class="nav-item dropdown">
                 <a class="nav-link text-white text-decoration-none mx-2 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Dropdown

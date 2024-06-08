@@ -5,11 +5,15 @@
     <ul class="nav">
 
         <li class="nav-item">
-            <a class="nav-link text-dark text-decoration-none mx-2" aria-current="page" href="/deliveryorder"><i class="bi bi-truck me-2"></i> D-Order</a>
+            <a class="nav-link text-decoration-none mx-2 @if (Request::is("dashboard*")) text-warning @else text-dark @endif" href="{{ route("dashboard") }}"><i class="bi bi-grid-1x2 me-2"></i> Dashboard</a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link text-dark text-decoration-none mx-2" href="https://aniwave.to/home"><i class="bi bi-card-checklist me-2"></i> Pembelian</a>
+            <a class="nav-link text-decoration-none mx-2 @if (Request::is("deliveryorder*")) text-warning @else text-dark @endif" href="{{ route("deliveryorder-index") }}"><i class="bi bi-truck me-2"></i> D-Order</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link text-decoration-none mx-2 @if (Request::is("purchase*")) text-warning @else text-dark @endif" href="{{ route("purchase-index") }}"><i class="bi bi-card-checklist me-2"></i> Pembelian</a>
         </li>
 
         <li class="nav-item">

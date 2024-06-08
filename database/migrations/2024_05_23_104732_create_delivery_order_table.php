@@ -19,11 +19,9 @@ return new class extends Migration
                 $table->date("delivery_date");
                 $table->string("delivery_status");
                 $table->unsignedBigInteger("project_id");
-                $table->unsignedBigInteger("product_id");
                 $table->string("register");
                 $table->longText("note")->nullable();
                 $table->foreign("project_id")->references("id")->on("projects");
-                $table->foreign("product_id")->references("id")->on("products");
             });
 
     }

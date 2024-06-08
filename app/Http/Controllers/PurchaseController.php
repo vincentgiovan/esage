@@ -19,9 +19,6 @@ class PurchaseController extends Controller
         return view("pages.purchase.create");
     }
 
-
-
-
     public function store(Request $request){
         $validatedData = $request->validate([
             "product_name" => "required|min:3",
@@ -45,6 +42,15 @@ class PurchaseController extends Controller
 
         return view("pages.purchase.edit", [
             "product" => Purchase::where("id", $id)->first()
+        ]);
+    }
+    public function viewitem($id){
+        $purchase = Purchase::where("id", $id)->first();
+        $products = $purchase->products;
+
+        return view("pages.purchase.viewitem", [
+            "purchase" => $purchase,
+            "products" => $products
         ]);
     }
     public function update(Request $request, $id){

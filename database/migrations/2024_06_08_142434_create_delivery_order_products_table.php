@@ -13,16 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('purchases', function (Blueprint $table) {
+        Schema::create('delivery_order_products', function (Blueprint $table) {
             $table->id();
+
+            $table->unsignedBigInteger("product_id");
+            $table->unsignedBigInteger("delivery_order_id");
+
+            $table->foreign("product_id")->references("id")->on("products")->onDelete("cascade");
+            $table->foreign("delivery_order_id")->references("id")->on("products")->onDelete("cascade");
+
             $table->timestamps();
-            $table->unsignedBigInteger("partner_id");
-            $table->string("register");
-            $table->date("purchase_deadline");
-            $table->longText("note")->nullable();
-            $table->date("purchase_date");
-            $table->string("purchase_status");
-            $table->foreign("partner_id")->references("id")->on("partners");
         });
     }
 
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pembelian');
+        Schema::dropIfExists('delivery_order_products');
     }
 };
