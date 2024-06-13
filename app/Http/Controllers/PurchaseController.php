@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Partner;
 use App\Models\Purchase;
 use App\Models\Pembelian;
 use Illuminate\Http\Request;
@@ -16,50 +17,60 @@ class PurchaseController extends Controller
     }
 
     public function create(){
-        return view("pages.purchase.create");
+        return view("pages.purchase.create",
+        ["supplier" => Partner::all(),
+        "status" => ["Complete", "Incomplete"]]
+    );
+
     }
 
     public function store(Request $request){
         $validatedData = $request->validate([
-            "product_name" => "required|min:3",
-            "price"=>"required|numeric|min:0|not_in:0",
-            "variant" => "required|min:3",
-            "stock" => "required|numeric|min:0|not_in:0",
-            "unit"=>"required"
+            // "product_name" => "required|min:3",
+            "purchase_date" => "required",
+            "purchase_deadline" => "required",
+            "register" => "required|min:3",
+            "partner_id" => "required",
+            "purchase_status" => "required"
         ]);
 
 
-        $user = User::where("name", session("logged_in_user"))->first();
-        $validatedData["user_id"] = $user->id;
+        // $user = User::where("name", session("logged_in_user"))->first();
+        // $validatedData["user_id"] = $user->id;
 
         Purchase::create($validatedData);
-        return redirect(route("purchase-index"))->with("successAddProduct", "Product added successfully!");
+        return redirect(route("purchase-index"))->with("successAddPurchase", "Purchase added successfully!");
 
 
     }
+
     public function edit($id){
-
-
         return view("pages.purchase.edit", [
-            "product" => Purchase::where("id", $id)->first()
+            "purchase" => Purchase::where("id", $id)->first(),
+            "supplier" => Partner::all(),
+            "status" => ["Complete", "Incomplete"]
         ]);
     }
+
     public function viewitem($id){
         $purchase = Purchase::where("id", $id)->first();
         $products = $purchase->products;
+
 
         return view("pages.purchase.viewitem", [
             "purchase" => $purchase,
             "products" => $products
         ]);
     }
+
     public function update(Request $request, $id){
         $validatedData = $request->validate([
-            "product_name" => "required|min:3",
-            "price"=>"required|numeric|min:0|not_in:0",
-            "variant" => "required|min:3",
-            "stock" => "required|numeric|min:0|not_in:0",
-            "unit"=>"required"
+            // "product_name" => "required|min:3",
+            "purchase_date" => "required",
+            "purchase_deadline" => "required",
+            "register" => "required|min:3",
+            "partner_id" => "required",
+            "purchase_status" => "required"
         ]);
         Purchase::where("id", $id)->update($validatedData);
         return redirect(route("purchase-index"))->with("successEditProduct", "Product editted successfully!");

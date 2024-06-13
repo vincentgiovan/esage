@@ -9,7 +9,7 @@
         <h2 class="text-center fw-bold">Create New Order</h2>
         <form method="POST" action="{{ route("deliveryorder-store"{{-- ,$delivery_order->id--}} ) }}">
                         @csrf
-            <div class="mt-3">
+            {{-- <div class="mt-3">
                 <select name="product_id" class="form-select">
                     @foreach ($products as $product)
                         <option value="{{ $product->id }}" >{{ $product->product_name }}</option>
@@ -19,9 +19,9 @@
                 @error("product_id")
                 <p style = "color: red; font-size: 10px;">{{$message }}</p>
                 @enderror
-            </div>
+            </div> --}}
             <div class="mt-3">
-                <input type="date" class="form-control" name="delivery_date" placeholder="delivery_date"  value = "{{ old("delivery_date", $product->delivery_date) }}">
+                <input type="date" class="form-control" name="delivery_date" placeholder="delivery_date"  value = "{{ old("delivery_date") }}">
 
                 @error("delivery_date")
                 <p style = "color: red; font-size: 10px;">{{$message }}</p>
@@ -39,7 +39,7 @@
                 @enderror
             </div>
             <div class="mt-3">
-                <input type="text" class="form-control" name="register" placeholder="Register"  value = "{{ old("register", $product->register) }}">
+                <input type="text" class="form-control" name="register" placeholder="Register"  value = "{{ old("register") }}">
                 @error("register")
                 <p style = "color: red; font-size: 10px;">{{$message }}</p>
                 @enderror
@@ -55,13 +55,13 @@
                 @enderror
             </div>
             <div class="mt-3">
-                <input type="text" class="form-control" name="note" placeholder="Note" value = "{{ old("note" , $product->note)}}">
+                <input type="text" class="form-control" name="note" placeholder="Note" value = "{{ old("note")}}">
                 @error("note")
                 <p style = "color: red; font-size: 10px;">{{$message }}</p>
                 @enderror
             </div>
             <div class="mt-3">
-                <input type="submit" class="btn btn-success px-3 py-1" value="Edit">
+                <input type="submit" class="btn btn-success px-3 py-1" value="add">
             </div>
         </form>
     </div>

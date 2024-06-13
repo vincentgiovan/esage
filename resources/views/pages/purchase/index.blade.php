@@ -34,6 +34,7 @@
         <th class="border border-1 border-dark ">Register</th>
         <th class="border border-1 border-dark ">Purchase Date</th>
         <th class="border border-1 border-dark ">Note</th>
+        <th class="border border-1 border-dark ">Nuwenahinyuuuyeeaaa</th>
         <th class="border border-1 border-dark ">Action</th>
     </tr>
 
@@ -50,6 +51,7 @@
             </td>
             <td class="border border-1 border-dark " >{{ $p->purchase_date }}</td>
             <td class="border border-1 border-dark " >{{ $p->note }}</td>
+            <td class="border border-1 border-dark " >{{ $p->purchase_status }}</td>
             {{-- <td class="border border-1 border-dark " >{{ $p->user->name }}</td> --}}
             <td class="border border-1 border-dark " >
                 <div class="d-flex gap-5 w-100 justify-content-center">

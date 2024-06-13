@@ -11,7 +11,7 @@
 
     <form method="POST" action="{{ route("deliveryorder-update",$delivery_order->id ) }}">
         @csrf
-    <div class="mt-3">
+    {{-- <div class="mt-3">
     <select name="product_id" class="form-select">
     @foreach ($products as $product)
         <option value="{{ $product->id }}" @if($delivery_order->product_id == $product->id) selected @endif >{{ $product->product_name }}</option>
@@ -21,7 +21,7 @@
     @error("product_id")
     <p style = "color: red; font-size: 10px;">{{$message }}</p>
     @enderror
-    </div>
+    </div> --}}
     <div class="mt-3">
     <input type="date" class="form-control" name="delivery_date" placeholder="delivery_date"  value = "{{ old("delivery_date", $delivery_order->delivery_date) }}">
 

@@ -1,4 +1,4 @@
-@extends('layouts.main-admin')
+@extends('layouts.login-main-admin')
 
 @section('content')
 <div class="container d-flex justify-content-center align-items-center" style="min-height:100vh">
@@ -15,7 +15,7 @@
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="text" class="form-control  @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" autofocus>
+                                <input id="email" type="text" class="form-control border border-secondary  @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" autofocus>
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
@@ -30,7 +30,7 @@
 
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <input id="password" type="password" class="pe-5 form-control position-relative z-0 rounded @error('password') is-invalid @enderror" name="password"  autocomplete="current-password">
+                                    <input id="password" type="password" class="pe-5 form-control border border-secondary position-relative z-0 rounded @error('password') is-invalid @enderror" name="password"  autocomplete="current-password">
                                     <div class="input-group-append position-absolute z-1 end-0">
                                         <button type="button" class="btn" id="togglePassword">
                                             <i class="bi bi-eye-fill" id="toggleIcon"></i>
@@ -48,8 +48,8 @@
 
                         <div class="form-group row mt-3">
                             <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                                <div class="">
+                                    <input class="form-check-input border border-secondary" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
                                     <label class="form-check-label" for="remember">
                                         {{ __('Remember Me') }}
@@ -63,12 +63,6 @@
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Login') }}
                                 </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
                             </div>
                         </div>
                     </form>
