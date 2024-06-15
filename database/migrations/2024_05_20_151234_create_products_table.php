@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string("variant")->nullable();
             $table->string("product_code");
             $table->unsignedBigInteger("price");
-            $table->unsignedFloat("discount");
+            $table->unsignedFloat("markup");
             $table->unsignedInteger("stock");
 
 

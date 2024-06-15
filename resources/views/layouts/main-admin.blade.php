@@ -23,12 +23,31 @@
                 background-color: rgb(224, 224, 224)
             }
 
-            /* change button color on hover with style */
-            /* #susbtn:hover {
+            /* button[type="button"], button[type="submit"]:hover {
                 background-color: gray;
                 border-color: gray;
             } */
+
+            table th, td{
+                padding: 5px 10px;
+            }
+
+            table th {
+                background-color: rgb(194, 191, 191);
+            }
+
+            .select2-selection__arrow {
+				margin-top: 5px;
+				margin-right: 10px;
+			}
         </style>
+
+        <!-- Include Select2 CSS -->
+		<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+        <!-- Include jQuery  -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     </head>
 
     <body>
@@ -73,5 +92,27 @@
 
         <!-- Import bootstrap -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+        <!-- Include Select2 JavaScript -->
+		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+        <script>
+            $(document).ready(() => {
+                $('#select-product-dropdown').select2({
+                    placeholder: "Select a Student",
+                    allowClear: false
+                });
+
+                // $('#select-product-dropdown').next('.select2-container').find('.select2-selection').addClass('form-control py-3');
+
+                $('#select-product-dropdown').next('.select2-container').find('.select2-selection').css({
+                    "height": "2.4rem",
+                    "padding-top": "0.3rem",
+                    "border": "none",
+                    "width": "100%"
+                });
+            });
+
+        </script>
     </body>
 </html>

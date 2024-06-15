@@ -34,7 +34,7 @@
         <th class="border border-1 border-dark ">Register</th>
         <th class="border border-1 border-dark ">Purchase Date</th>
         <th class="border border-1 border-dark ">Note</th>
-        <th class="border border-1 border-dark ">Nuwenahinyuuuyeeaaa</th>
+        <th class="border border-1 border-dark ">Purchase Status</th>
         <th class="border border-1 border-dark ">Action</th>
     </tr>
 
@@ -46,7 +46,7 @@
             <td class="border border-1 border-dark " >
                 <div class="d-flex gap-5 w-100 justify-content-center align-items-center">
                     {{ $p->register }}
-                <a href="{{ route("purchase-viewitem", $p->id ) }}" class="btn btn-success text-white" style="font-size: 10pt"><i class="bi bi-cart"></i>View Cart</a>
+                <a href="{{ route("purchaseproduct-viewitem", $p->id ) }}" class="btn btn-success text-white" style="font-size: 10pt"><i class="bi bi-cart"></i>View Cart</a>
                 </div>
             </td>
             <td class="border border-1 border-dark " >{{ $p->purchase_date }}</td>

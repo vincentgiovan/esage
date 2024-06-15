@@ -9,6 +9,9 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\DeliveryOrderController;
+use App\Http\Controllers\DeliveryProductController;
+use App\Http\Controllers\PurchaseProductController;
+use App\Http\Controllers\DeliveryOrderProductController;
 
 Route::get('/', function(){
     return redirect("/dashboard");
@@ -22,79 +25,121 @@ Route::get('/dashboard', function () {
     return view("pages.dashboard");
 })->name("dashboard")->middleware("auth");
 
-// ===== DELIVERY ORDER ===== //
-//show data
-Route::get('/deliveryorder', [DeliveryOrderController::class, "index"] )->name("deliveryorder-index");
 
-//create new data
-Route::get('/deliveryorder/create', [DeliveryOrderController::class, "create"] )->name("deliveryorder-create");
-Route::post('/deliveryorder/store', [DeliveryOrderController::class, "store"] )->name("deliveryorder-store");
+Route::middleware("auth")->group(function(){
+    // ===== DELIVERY ORDER ===== //
+    //show data
+    Route::get('/deliveryorder', [DeliveryOrderController::class, "index"] )->name("deliveryorder-index");
 
-//edit data
-Route::get('/deliveryorder/{id}/edit', [DeliveryOrderController::class, "edit"] )->name("deliveryorder-edit");
-Route::post('/deliveryorder/{id}/edit', [DeliveryOrderController::class, "update"] )->name("deliveryorder-update");
+    //create new data
+    Route::get('/deliveryorder/create', [DeliveryOrderController::class, "create"] )->name("deliveryorder-create");
+    Route::post('/deliveryorder/store', [DeliveryOrderController::class, "store"] )->name("deliveryorder-store");
 
-//delete data
-Route::post('/deliveryorder/{id}', [DeliveryOrderController::class, "destroy"] )->name("deliveryorder-destroy");
+    //edit data
+    Route::get('/deliveryorder/{id}/edit', [DeliveryOrderController::class, "edit"] )->name("deliveryorder-edit");
+    Route::post('/deliveryorder/{id}/edit', [DeliveryOrderController::class, "update"] )->name("deliveryorder-update");
 
-// ===== product ===== //
-//show data
-Route::get('/product', [ProductController::class, "index"] )->name("product-index");
+    //delete data
+    Route::post('/deliveryorder/{id}', [DeliveryOrderController::class, "destroy"] )->name("deliveryorder-destroy");
 
-//create new data
-Route::get('/product/create', [ProductController::class, "create"] )->name("product-create");
-Route::post('/product/store', [ProductController::class, "store"] )->name("product-store");
 
-//edit data
-Route::get('/product/{id}/edit', [ProductController::class, "edit"] )->name("product-edit");
-Route::post('/product/{id}/edit', [ProductController::class, "update"] )->name("product-update");
+    // ===== Product ===== //
 
-//delete data
-Route::post('/product/{id}', [ProductController::class, "destroy"] )->name("product-destroy");
+    //show data
+    Route::get('/product', [ProductController::class, "index"] )->name("product-index");
 
-// ===== Partner ===== //
-//show data
-Route::get('/partner', [PartnerController::class, "index"] )->name("partner-index");
+    //create new data
+    Route::get('/product/create', [ProductController::class, "create"] )->name("product-create");
+    Route::post('/product/store', [ProductController::class, "store"] )->name("product-store");
 
-//create new data
-Route::get('/partner/create', [PartnerController::class, "create"] )->name("partner-create");
-Route::post('/partner/store', [PartnerController::class, "store"] )->name("partner-store");
+    //edit data
+    Route::get('/product/{id}/edit', [ProductController::class, "edit"] )->name("product-edit");
+    Route::post('/product/{id}/edit', [ProductController::class, "update"] )->name("product-update");
 
-//edit data
-Route::get('/partner/{id}/edit', [PartnerController::class, "edit"] )->name("partner-edit");
-Route::post('/partner/{id}/edit', [PartnerController::class, "update"] )->name("partner-update");
+    //delete data
+    Route::post('/product/{id}', [ProductController::class, "destroy"] )->name("product-destroy");
 
-//delete data
-Route::post('/partner/{id}', [PartnerController::class, "destroy"] )->name("partner-destroy");
 
-// ===== Project ===== //
-//show data
-Route::get('/project', [ProjectController::class, "index"] )->name("project-index");
+    // ===== Partner ===== //
 
-//create new data
-Route::get('/project/create', [ProjectController::class, "create"] )->name("project-create");
-Route::post('/project/store', [ProjectController::class, "store"] )->name("project-store");
+    //show data
+    Route::get('/partner', [PartnerController::class, "index"] )->name("partner-index");
 
-//edit data
-Route::get('/project/{id}/edit', [ProjectController::class, "edit"] )->name("project-edit");
-Route::post('/project/{id}/edit', [ProjectController::class, "update"] )->name("project-update");
+    //create new data
+    Route::get('/partner/create', [PartnerController::class, "create"] )->name("partner-create");
+    Route::post('/partner/store', [PartnerController::class, "store"] )->name("partner-store");
 
-//delete data
-Route::post('/project/{id}', [ProjectController::class, "destroy"] )->name("project-destroy");
+    //edit data
+    Route::get('/partner/{id}/edit', [PartnerController::class, "edit"] )->name("partner-edit");
+    Route::post('/partner/{id}/edit', [PartnerController::class, "update"] )->name("partner-update");
 
-// ===== Purchase ===== //
-//show data
-Route::get('/purchase', [PurchaseController::class, "index"] )->name("purchase-index");
+    //delete data
+    Route::post('/partner/{id}', [PartnerController::class, "destroy"] )->name("partner-destroy");
 
-Route::get('/purchase/{id}/viewitem', [PurchaseController::class, "viewitem"] )->name("purchase-viewitem");
 
-//create new data
-Route::get('/purchase/create', [PurchaseController::class, "create"] )->name("purchase-create");
-Route::post('/purchase/store', [PurchaseController::class, "store"] )->name("purchase-store");
+    // ===== Project ===== //
 
-//edit data
-Route::get('/purchase/{id}/edit', [PurchaseController::class, "edit"] )->name("purchase-edit");
-Route::post('/purchase/{id}/edit', [PurchaseController::class, "update"] )->name("purchase-update");
+    //show data
+    Route::get('/project', [ProjectController::class, "index"] )->name("project-index");
 
-//delete data
-Route::post('/purchase/{id}', [PurchaseController::class, "destroy"] )->name("purchase-destroy");
+    //create new data
+    Route::get('/project/create', [ProjectController::class, "create"] )->name("project-create");
+    Route::post('/project/store', [ProjectController::class, "store"] )->name("project-store");
+
+    //edit data
+    Route::get('/project/{id}/edit', [ProjectController::class, "edit"] )->name("project-edit");
+    Route::post('/project/{id}/edit', [ProjectController::class, "update"] )->name("project-update");
+
+    //delete data
+    Route::post('/project/{id}', [ProjectController::class, "destroy"] )->name("project-destroy");
+
+
+    // ===== Purchase ===== //
+
+    //show data
+    Route::get('/purchase', [PurchaseController::class, "index"] )->name("purchase-index");
+
+    //create new data
+    Route::get('/purchase/create', [PurchaseController::class, "create"] )->name("purchase-create");
+    Route::post('/purchase/store', [PurchaseController::class, "store"] )->name("purchase-store");
+
+    //edit data
+    Route::get('/purchase/{id}/edit', [PurchaseController::class, "edit"] )->name("purchase-edit");
+    Route::post('/purchase/{id}/edit', [PurchaseController::class, "update"] )->name("purchase-update");
+
+    //delete data
+    Route::post('/purchase/{id}', [PurchaseController::class, "destroy"] )->name("purchase-destroy");
+
+
+    // ===== PurchaseProduct ===== //
+
+    //show data
+    Route::get('/purchaseproduct/{id}/viewitem', [PurchaseProductController::class, "view_items"] )->name("purchaseproduct-viewitem");
+
+    //add existing products to a purchase
+    Route::get('/purchaseproduct/{id}/create1', [PurchaseProductController::class, "add_existing_product"] )->name("purchaseproduct-create1");
+    Route::post('/purchaseproduct/{id}/store1', [PurchaseProductController::class, "store_existing_product"] )->name("purchaseproduct-store1");
+
+    //add unexisting products to a purchase also to the product database
+    Route::get('/purchaseproduct/{id}/create2', [PurchaseProductController::class, "add_new_product"] )->name("purchaseproduct-create2");
+    Route::post('/purchaseproduct/{id}/store2', [PurchaseProductController::class, "store_new_product"] )->name("purchaseproduct-store2");
+
+    //delete data
+    Route::post('/purchaseproduct/{id}', [PurchaseProductController::class, "destroy"] )->name("purchaseproduct-destroy");
+
+
+    // ===== DeliveryProduct ===== //
+    //show data
+    Route::get('/deliveryorderproduct/{id}/viewitem', [DeliveryOrderProductController::class, "view_items"] )->name("deliveryorderproduct-viewitem");
+
+    //add existing products to a purchase
+    Route::get('/deliveryorderproduct/{id}/create1', [DeliveryOrderProductController::class, "add_existing_product"] )->name("deliveryorderproduct-create1");
+    Route::post('/deliveryorderproduct/{id}/store1', [DeliveryOrderProductController::class, "store_existing_product"] )->name("deliveryorderproduct-store1");
+
+    //add unexisting products to a purchase also to the product database
+    Route::get('/deliveryorderproduct/{id}/create2', [DeliveryOrderProductController::class, "add_new_product"] )->name("deliveryorderproduct-create2");
+    Route::post('/deliveryorderproduct/{id}/store2', [DeliveryOrderProductController::class, "store_new_product"] )->name("deliveryorderproduct-store2");
+
+    //delete data
+    Route::post('/deliveryorderproduct/{id}', [DeliveryOrderProductController::class, "destroy"] )->name("deliveryorderproduct-destroy");
+});

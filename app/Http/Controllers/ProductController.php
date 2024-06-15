@@ -28,7 +28,7 @@ class ProductController extends Controller{
             "price"=>"required|numeric|min:0|not_in:0",
             "variant" => "required|min:3",
             "stock" => "required|numeric|min:0|not_in:0",
-            "discount" => "nullable|numeric",
+            "markup" => "nullable|numeric",
             "status" => "required|min:3",
             "product_code" => "required|min:3",
             "unit"=>"required"
@@ -57,7 +57,7 @@ class ProductController extends Controller{
             "price"=>"required|numeric|min:0|not_in:0",
             "variant" => "required|min:3",
             "stock" => "required|numeric|min:0|not_in:0",
-            "discount" => "nullable|numeric",
+            "markup" => "nullable|numeric",
             "status" => "required|min:3",
             "product_code" => "required|min:3",
             "unit"=>"required"
@@ -70,4 +70,8 @@ class ProductController extends Controller{
         Product::destroy("id", $id);
         return redirect(route("product-index"))->with("successDeleteProduct", "Product deleted successfully!");
     }
+
+public function peon(){
+
+}
 }

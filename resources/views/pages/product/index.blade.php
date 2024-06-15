@@ -35,7 +35,7 @@
         <th class="border border-1 border-dark ">Harga</th>
         <th class="border border-1 border-dark ">Unit</th>
         <th class="border border-1 border-dark ">Variant</th>
-        <th class="border border-1 border-dark ">Discount</th>
+        <th class="border border-1 border-dark ">Markup</th>
         <th class="border border-1 border-dark ">Status</th>
         <th class="border border-1 border-dark ">Action</th>
     </tr>
@@ -49,7 +49,7 @@
             <td class="border border-1 border-dark " >Rp {{ $p->price }},00</td>
             <td class="border border-1 border-dark " >{{ $p->unit }}</td>
             <td class="border border-1 border-dark " >{{ $p->variant }}</td>
-            <td class="border border-1 border-dark " >{{ $p->discount }}</td>
+            <td class="border border-1 border-dark " >{{ $p->markup }}</td>
             <td class="border border-1 border-dark " >{{ $p->status }}</td>
             {{-- <td class="border border-1 border-dark " >{{ $p->user->name }}</td> --}}
             <td class="border border-1 border-dark " >

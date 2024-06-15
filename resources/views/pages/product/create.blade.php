@@ -50,8 +50,8 @@
                 @enderror
             </div>
             <div class="mt-3">
-                <input type="number" class="form-control" name="discount" placeholder="Diskon"  value = "{{ old("discount") }}">
-                @error("discount")
+                <input type="number" class="form-control" name="markup" placeholder="Markup"  value = "{{ old("markup") }}">
+                @error("markup")
                 <p style = "color: red; font-size: 10px;">{{$message  }}</p>
                 @enderror
             </div>

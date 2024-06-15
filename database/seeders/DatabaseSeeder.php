@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
             "variant" => "papan panjang",
             "product_code" => "PapanKayu-001",
             "price" => 40000,
-            "discount" => 0.0,
+            "markup" => 0.0,
             "stock" => 50
         ]);
         Product::create([
@@ -44,7 +44,7 @@ class DatabaseSeeder extends Seeder
             "variant" => "paku payung",
             "product_code" => "PakuPayung-001",
             "price" => 30000,
-            "discount" => 5.0,
+            "markup" => 5.0,
             "stock" => 40
         ]);
         Product::create([
@@ -54,7 +54,7 @@ class DatabaseSeeder extends Seeder
             "variant" => "papan sedang",
             "product_code" => "PapanKayu-002",
             "price" => 20000,
-            "discount" => 10.0,
+            "markup" => 10.0,
             "stock" => 55
         ]);
         Product::create([
@@ -64,7 +64,7 @@ class DatabaseSeeder extends Seeder
             "variant" => "papan pendek",
             "product_code" => "PapanKayu-003",
             "price" => 15000,
-            "discount" => 20.5,
+            "markup" => 20.5,
             "stock" => 60
         ]);
         Product::create([
@@ -74,7 +74,7 @@ class DatabaseSeeder extends Seeder
             "variant" => "zinc alum",
             "product_code" => "Seng-001",
             "price" => 70000,
-            "discount" => 5.5,
+            "markup" => 5.5,
             "stock" => 80
         ]);
 
@@ -126,23 +126,34 @@ class DatabaseSeeder extends Seeder
         ]);
         PurchaseProduct::create([
             "purchase_id" => 1,
-            "product_id" => 2
+            "product_id" => 2,
+            "discount"=> 20,
+            "quantity" => 10
         ]);
         PurchaseProduct::create([
             "purchase_id" => 1,
-            "product_id" => 4
+            "product_id" => 4,
+            "discount"=> 30,
+            "quantity" => 10
         ]);
         PurchaseProduct::create([
             "purchase_id" => 1,
-            "product_id" => 1
+            "product_id" => 1,
+            "discount"=> 20,
+            "quantity" => 80
+
         ]);
         PurchaseProduct::create([
             "purchase_id" => 2,
-            "product_id" => 2
+            "product_id" => 2,
+            "discount"=> 20,
+            "quantity" => 10
         ]);
         PurchaseProduct::create([
             "purchase_id" => 2,
-            "product_id" => 3
+            "product_id" => 3,
+            "discount"=> 20,
+            "quantity" => 10
         ]);
 
         DeliveryOrder::create([
@@ -157,7 +168,7 @@ class DatabaseSeeder extends Seeder
             "delivery_status" => "incomplete",
             "project_id" => 1,
         ]);
-        
+
         DeliveryOrderProduct::create([
             "delivery_order_id" => 1,
             "product_id" => 3

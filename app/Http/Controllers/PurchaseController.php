@@ -52,16 +52,16 @@ class PurchaseController extends Controller
         ]);
     }
 
-    public function viewitem($id){
-        $purchase = Purchase::where("id", $id)->first();
-        $products = $purchase->products;
+    // public function viewitem($id){
+    //     $purchase = Purchase::where("id", $id)->first();
+    //     $products = $purchase->products;
 
 
-        return view("pages.purchase.viewitem", [
-            "purchase" => $purchase,
-            "products" => $products
-        ]);
-    }
+    //     return view("pages.purchase.viewitem", [
+    //         "purchase" => $purchase,
+    //         "products" => $products
+    //     ]);
+    // }
 
     public function update(Request $request, $id){
         $validatedData = $request->validate([
