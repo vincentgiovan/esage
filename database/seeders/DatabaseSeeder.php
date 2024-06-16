@@ -128,32 +128,37 @@ class DatabaseSeeder extends Seeder
             "purchase_id" => 1,
             "product_id" => 2,
             "discount"=> 20,
-            "quantity" => 10
+            "quantity" => 10,
+            "price" => 69000
         ]);
         PurchaseProduct::create([
             "purchase_id" => 1,
             "product_id" => 4,
             "discount"=> 30,
-            "quantity" => 10
+            "quantity" => 10,
+            "price" => 69000
         ]);
         PurchaseProduct::create([
             "purchase_id" => 1,
             "product_id" => 1,
             "discount"=> 20,
-            "quantity" => 80
+            "quantity" => 80,
+            "price" => 69000
 
         ]);
         PurchaseProduct::create([
             "purchase_id" => 2,
             "product_id" => 2,
             "discount"=> 20,
-            "quantity" => 10
+            "quantity" => 10,
+            "price" => 69000
         ]);
         PurchaseProduct::create([
             "purchase_id" => 2,
             "product_id" => 3,
             "discount"=> 20,
-            "quantity" => 10
+            "quantity" => 10,
+            "price" => 69000
         ]);
 
         DeliveryOrder::create([

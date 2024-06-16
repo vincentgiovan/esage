@@ -34,16 +34,32 @@ class PurchaseProductController extends Controller
 
     // To store the existing product to the purchase
     public function store_existing_product(Request $request, $id){
-
-        $validatedData = $request->validate([
-            "product_name" => "required",
-            "price" => "required|numeric|not_in:0,min:1",
-            "discount" => "nullable|numeric|not_in:0",
-            "quantity" => "required|numeric|not_in:0,min:1"
-
+        $request->validate([
+            "products" => "required",
+            "discounts" => "required",
+            "quantities" => "required",
+            "prices" => "required",
         ]);
 
-        return $validatedData;
+        $purchase = Purchase::where("id",$id)->first();
+        foreach($request->products as $index=>$product_id){
+            PurchaseProduct::create([
+                "purchase_id" => $purchase->id,
+                "product_id" => $product_id,
+                "discount" => $request->discounts[$index],
+                "quantity" => $request->quantities[$index],
+                "price" => $request->prices[$index]
+            ]);
+
+            $oldstock = Product::where("id",$product_id)->first()->stock;
+            Product::where("id",$product_id)->update([
+                "stock" => $oldstock + $request->quantities[$index],
+                "price" => $request->prices[$index]
+            ]);
+        };
+
+
+        return redirect(route("purchaseproduct-viewitem", $purchase->id));
 
         // Purchase::create($validatedData);
         // return redirect(route("pages.transit.purchaseproduct.index"))->with("successAddPurchase", "Purchase added successfully!");
@@ -54,19 +70,53 @@ class PurchaseProductController extends Controller
 
     // To add an unexisting product to a purchase
     public function add_new_product($id){
-
+        $purchase = Purchase::where("id", $id)->first();
+        return view("pages.transit.purchaseproduct.addnewitem", [
+            "purchase" => $purchase,
+        ]);
     }
 
     // To store the unexisting product to the purchase also adding it to all products
     public function store_new_product(Request $request, $id){
+        // pr: tambahin diskontol uhahaha
+        $request->validate([
+            "product_name" => "required",
+            "unit" => "required",
+            "status" => "required",
+            "variant" => "required",
+            "product_code" => "required",
+            "price" => "required",
+            "markup" => "required",
+            "stock" => "required",
+        ]);
 
+        $purchase = Purchase::where("id",$id)->first();
+        foreach($request->products as $index=>$product_id){
+            // bikin new product
+
+            PurchaseProduct::create([
+                "purchase_id" => $purchase->id,
+                "product_id" => $product_id,
+                "discount" => $request->discounts[$index],
+                "quantity" => $request->quantities[$index],
+                "price" => $request->prices[$index]
+            ]);
+        };
+
+
+        return redirect(route("purchaseproduct-viewitem", $purchase->id));
     }
-
     // To remove a product from a purchase
-    public function destroy($id){
-        $pp = PurchaseProduct:: where("product_id", $id)->first();
-        $purchase=Purchase::where("id", $id)->first();
+    public function destroy($id, $pid){
+        $pp = PurchaseProduct::where("id", $pid)->first();
+
+        $oldstock = $pp->product->stock;
+        Product::where("id", $pp->product->id)->update([
+            "stock" => $oldstock - $pp->quantity
+        ]);
+
         PurchaseProduct::destroy("id", $pp->id);
-        return redirect(route("purchaseproduct-viewitem",$purchase->id))->with("successDeleteProduct", "Product deleted successfully!");
+
+        return redirect(route("purchaseproduct-viewitem", $id))->with("successDeleteProduct", "Product deleted successfully!");
     }
 }

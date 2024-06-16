@@ -4,7 +4,7 @@
 
     <div class="d-flex justify-content-center align-items-center" style="min-height:100vh">
     <div class="container border border-1 border-secondary rounded rounded-full p-5">
-        <h2 class="text-center fw-bold">ニュー プロダクト</h2>
+        <h2 class="text-center fw-bold">Add New Product</h2>
         <form method="POST" action="{{ route("product-store") }}">
 {{-- @csrf kepake untuk token ,wajib --}}
             @csrf

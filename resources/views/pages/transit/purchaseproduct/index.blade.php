@@ -46,19 +46,20 @@
                 <td class="border border-1 border-dark " >{{ $loop->iteration }}</td>
                 <td class="border border-1 border-dark " >{{ $purchase_product->product->product_name }}</td>
                 <td class="border border-1 border-dark " >{{ $purchase_product->product->product_code }}</td>
-                <td class="border border-1 border-dark " >Rp {{ $purchase_product->product->price }},00</td>
+                <td class="border border-1 border-dark " >Rp {{ $purchase_product->price }},00</td>
                 <td class="border border-1 border-dark " >{{ $purchase_product->discount }}</td>
                 <td class="border border-1 border-dark " >{{ $purchase_product->product->variant }}</td>
                 <td class="border border-1 border-dark " >{{ $purchase_product->quantity }}</td>
                 {{-- <td class="border border-1 border-dark " >{{ $p->user->name }}</td> --}}
                 <td class="border border-1 border-dark " >
                     <div class="d-flex gap-5 w-100 justify-content-center">
-
-                    <form action="{{ route("purchaseproduct-destroy", $purchase_product->product->id ) }}" method="POST">
-                        @csrf
-                        <button class="btn btn-danger text-white" style="font-size: 10pt " onclick="return confirm('Do you want to remove this item from the purchase?')">
-                            <i class="bi bi-trash"></i>
-                            Delete</button></form>
+                        <form action="{{ route("purchaseproduct-destroy", [$purchase->id, $purchase_product->id] ) }}" method="POST">
+                            @csrf
+                            <button class="btn btn-danger text-white" style="font-size: 10pt " onclick="return confirm('Do you want to remove this item from the purchase?')">
+                                <i class="bi bi-trash"></i>
+                                Delete
+                            </button>
+                        </form>
                     </div>
                 </td>
             </tr>

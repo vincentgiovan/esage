@@ -125,7 +125,7 @@ Route::middleware("auth")->group(function(){
     Route::post('/purchaseproduct/{id}/store2', [PurchaseProductController::class, "store_new_product"] )->name("purchaseproduct-store2");
 
     //delete data
-    Route::post('/purchaseproduct/{id}', [PurchaseProductController::class, "destroy"] )->name("purchaseproduct-destroy");
+    Route::post('/purchaseproduct/{id}/{pid}', [PurchaseProductController::class, "destroy"] )->name("purchaseproduct-destroy");
 
 
     // ===== DeliveryProduct ===== //
@@ -141,5 +141,5 @@ Route::middleware("auth")->group(function(){
     Route::post('/deliveryorderproduct/{id}/store2', [DeliveryOrderProductController::class, "store_new_product"] )->name("deliveryorderproduct-store2");
 
     //delete data
-    Route::post('/deliveryorderproduct/{id}', [DeliveryOrderProductController::class, "destroy"] )->name("deliveryorderproduct-destroy");
+    Route::post('/deliveryorderproduct/{id}/{pid}', [DeliveryOrderProductController::class, "destroy"] )->name("deliveryorderproduct-destroy");
 });

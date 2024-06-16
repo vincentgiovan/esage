@@ -22,7 +22,7 @@
 
 <a href="{{ route("product-create") }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
     <i class="bi bi-plus-square"></i>
-    Add New Purchase</a>
+    Add New Product</a>
 <br>
 <!-- tabel list data-->
 
