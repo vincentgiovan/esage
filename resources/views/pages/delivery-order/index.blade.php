@@ -4,6 +4,7 @@
 
 <br>
 <h1>Delivery Orders</h1>
+<hr>
 <br>
 
 {{-- <h5>welcome back, {{ Auth::user()->name }}! </h5> --}}

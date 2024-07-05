@@ -1,12 +1,13 @@
 
     <nav class="navbar navbar-expand-lg " style="background: rgb(95, 95, 95)">
-
-
         <div class="container-fluid">
         <a class="navbar-brand text-white mx-2 d-flex align-items-center gap-1" href={{ route("dashboard") }}>
             <img src="{{ asset("res/output-onlinepngtools.png") }}" width="25px" alt="">
             <span>eSage V2.0</span>
         </a>
+
+        <button class="px-3 py-2 mx-2 text-white border-0" style="top: 0; left: 180px;" type="button" id="sidebarToggler"><i class="bi bi-list"></i> Menu</button>
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 
             <i class="bi bi-list primary h3" style="color:white"></i>

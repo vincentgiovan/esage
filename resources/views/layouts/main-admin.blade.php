@@ -40,6 +40,18 @@
 				margin-top: 5px;
 				margin-right: 10px;
 			}
+
+            button#sidebarToggler {
+                background-color: rgb(95, 95, 95);
+                transition: all ease-in-out 150ms;
+                border-radius: 5px;
+            }
+
+            button#sidebarToggler:hover {
+                background-color: rgb(31, 31, 31);
+                transform: scale(105%);
+                font-weight: bold;
+            }
         </style>
 
         <!-- Include Select2 CSS -->
@@ -51,20 +63,20 @@
     </head>
 
     <body>
-
         <div class="container-scroller">
+
             <!-- Navbar -->
             @auth
                 @include("component.navbar")
             @endauth
 
-            <div class="container-fluid page-body-wrapper" style="padding: 0;">
+            <div class="container-fluid page-body-wrapper d-flex justify-content-center" style="padding: 0;">
                 @auth
                     @include("component.sidebar")
                 @endauth
 
                 <!-- Main content -->
-                <div class="main-panel">
+                <div class="main-panel grow">
                     <div class="content-wrapper">
                         @yield("content")
                     </div>
@@ -95,12 +107,16 @@
 
         <!-- Include Select2 JavaScript -->
 		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
+        <div style="color: rgb(197, 197, 197)"></div>
         <script>
             $(document).ready(() => {
                 $('#select-product-dropdown').select2({
                     placeholder: "Select a Student",
                     allowClear: false
+                });
+
+                $("#sidebarToggler").click(() => {
+                    $("#sidebar").fadeToggle("slow");
                 });
 
                 // $('#select-product-dropdown').next('.select2-container').find('.select2-selection').addClass('form-control py-3');

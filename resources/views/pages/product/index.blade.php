@@ -4,6 +4,7 @@
 
 <br>
 <h1>Warehouse Items</h1>
+<hr>
 <br>
 
 {{-- <h5>welcome back, {{ Auth::user()->name }}! </h5> --}}
@@ -46,7 +47,7 @@
             <td class="border border-1 border-dark " >{{ $p->product_name }}</td>
             <td class="border border-1 border-dark " >{{ $p->product_code }}</td>
             <td class="border border-1 border-dark " >{{ $p->stock }}</td>
-            <td class="border border-1 border-dark " >Rp {{ $p->price }},00</td>
+            <td class="border border-1 border-dark " >Rp {{ number_format($p->price, 2, ',' , '.') }}</td>
             <td class="border border-1 border-dark " >{{ $p->unit }}</td>
             <td class="border border-1 border-dark " >{{ $p->variant }}</td>
             <td class="border border-1 border-dark " >{{ $p->markup }}</td>
