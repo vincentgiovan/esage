@@ -7,7 +7,7 @@
     <div class="d-flex justify-content-center align-items-center" style="min-height:100vh">
     <div class="container border border-1 border-secondary rounded rounded-full p-5">
         <h2 class="text-center fw-bold">Create New Order</h2>
-        <form method="POST" action="{{ route("deliveryorder-store"{{-- ,$delivery_order->id--}} ) }}">
+        <form method="POST" action="{{ route("deliveryorder-store"{{-- ,$delivery_order->id--}} ) }}" id="bikindevor">
                         @csrf
             {{-- <div class="mt-3">
                 <select name="product_id" class="form-select">
@@ -39,10 +39,12 @@
                 @enderror
             </div>
             <div class="mt-3">
-                <input type="text" class="form-control" name="register" placeholder="Register"  value = "{{ old("register") }}">
-                @error("register")
-                <p style = "color: red; font-size: 10px;">{{$message }}</p>
-                @enderror
+                @php
+                        $today_date = date("dmY");
+                        $n = App\Models\DeliveryOrder::where("delivery_date", date("Y-m-d"))->get()->count();
+                        $generatedSKU = "DO/" . $today_date . "/" . ($n + 1);
+                    @endphp
+                <input type="text" class="form-control" name="fakeregister" placeholder="Register"  value = "{{ $generatedSKU }}" disabled>
             </div>
             <div class="mt-3">
                 {{-- <input type="text" class="form-control" name="status" placeholder="Status"  value = "{{ old("status") }}"> --}}
@@ -80,4 +82,22 @@
             });
         </script> --}}
     </div>
+
+    <script>
+        const purchaseForm = document.getElementById("bikindevor");
+        purchaseForm.addEventListener("submit", function(event){
+            event.preventDefault();
+            const hiddenInput = document.createElement("input");
+            hiddenInput.setAttribute("type", "hidden");
+            hiddenInput.setAttribute("name", "register");
+
+            const fakeRegister = document.querySelector('input[name="fakeregister"]');
+
+            hiddenInput.setAttribute("value", fakeRegister.value);
+
+            purchaseForm.appendChild(hiddenInput);
+
+            purchaseForm.submit();
+        })
+    </script>
 @endsection

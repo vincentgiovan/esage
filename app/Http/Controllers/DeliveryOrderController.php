@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Partner;
 use App\Models\Product;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use App\Models\DeliveryOrder;
-use App\Models\Partner;
-use App\Models\Purchase;
+use App\Models\DeliveryOrderProduct;
 
 class DeliveryOrderController extends Controller{
 
@@ -70,8 +70,19 @@ class DeliveryOrderController extends Controller{
         return redirect(route("deliveryorder-index"))->with("successEditOrder", "Order editted successfully!");
 
     }
+
     public function destroy($id){
+        $do = DeliveryOrderProduct::where("delivery_order_id", $id)->get();
+
+        foreach ($do as $data){
+            $product = Product::where("id", $data->product_id)->first();
+            $oldstock = $product->stock;
+            Product::where("id", $data->product_id)->update(["stock"=> ($oldstock +
+            $data->quantity)]);
+        }
+
         DeliveryOrder::destroy("id", $id);
+
         return redirect(route("deliveryorder-index"))->with("successDeleteOrder", "Order deleted successfully!");
     }
 }

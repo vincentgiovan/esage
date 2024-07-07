@@ -1,5 +1,8 @@
 @extends("layouts.main-admin")
 @section("content")
+    <a type="button" class="text-white px-3 py-2 btn btn-secondary rounded-lg" style="bottom: 10px; right: 10px; position: fixed;" href="#">
+        Top
+    </a>
     <div class="content-wrapper">
         <div class="row">
             <div class="col-md-12 grid-margin">

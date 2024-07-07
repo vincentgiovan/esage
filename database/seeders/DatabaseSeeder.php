@@ -176,15 +176,18 @@ class DatabaseSeeder extends Seeder
 
         DeliveryOrderProduct::create([
             "delivery_order_id" => 1,
-            "product_id" => 3
+            "product_id" => 3,
+            "quantity" => 4
         ]);
         DeliveryOrderProduct::create([
             "delivery_order_id" => 2,
-            "product_id" => 2
+            "product_id" => 2,
+            "quantity" => 1
         ]);
         DeliveryOrderProduct::create([
             "delivery_order_id" => 2,
-            "product_id" => 3
+            "product_id" => 3,
+            "quantity" => 5
         ]);
     }
 }

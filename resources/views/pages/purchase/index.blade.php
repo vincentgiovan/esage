@@ -50,6 +50,7 @@
                 <a href="{{ route("purchaseproduct-viewitem", $p->id ) }}" class="btn btn-success text-white" style="font-size: 10pt"><i class="bi bi-cart"></i>View Cart</a>
                 </div>
             </td>
+            
             <td class="border border-1 border-dark " >{{ $p->purchase_date }}</td>
             <td class="border border-1 border-dark " >{{ $p->note }}</td>
             <td class="border border-1 border-dark " >{{ $p->purchase_status }}</td>

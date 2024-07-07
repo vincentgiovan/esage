@@ -3,7 +3,7 @@
         <div class="container-fluid">
         <a class="navbar-brand text-white mx-2 d-flex align-items-center gap-1" href={{ route("dashboard") }}>
             <img src="{{ asset("res/output-onlinepngtools.png") }}" width="25px" alt="">
-            <span>eSage V2.0</span>
+            <span>eSage V2.3.x</span>
         </a>
 
         <button class="px-3 py-2 mx-2 text-white border-0" style="top: 0; left: 180px;" type="button" id="sidebarToggler"><i class="bi bi-list"></i> Menu</button>

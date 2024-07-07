@@ -43,7 +43,13 @@
             <td class="border border-1 border-dark " >{{ $loop->iteration }}</td>
             <td class="border border-1 border-dark " >{{ $p->delivery_date }}</td>
             <td class="border border-1 border-dark " >{{ $p->project->project_name }}</td>
-            <td class="border border-1 border-dark " >{{ $p->register }}</td>
+            <td class="border border-1 border-dark " >
+                <div class="d-flex gap-5 w-100 justify-content-center align-items-center">
+                    {{ $p->register }}
+                <a href="{{ route("deliveryorderproduct-viewitem", $p->id ) }}" class="btn btn-success text-white" style="font-size: 10pt"><i class="bi bi-cart"></i>View Cart</a>
+                </div>
+            </td>
+
             <td class="border border-1 border-dark " >{{ $p->delivery_status }}</td>
             <td class="border border-1 border-dark " >{{ $p->note }}</td>
             {{-- <td class="border border-1 border-dark " >{{ $p->user->name }}</td> --}}

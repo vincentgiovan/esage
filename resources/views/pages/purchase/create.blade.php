@@ -9,8 +9,8 @@
 
 {{-- @csrf kepake untuk token ,wajib --}}
 
-            <form method="POST" action="{{ route("purchase-store" ) }}">
-             {{-- @csrf kepake untuk token ,wajib --}}
+            <form method="POST" action="{{ route("purchase-store" ) }}" id="bikinpurchase">
+            {{-- @csrf kepake untuk token ,wajib --}}
                 @csrf
                 {{-- <div class="mt-3">
                     <select name="product_name" class="form-select">
@@ -42,10 +42,8 @@
                     @enderror
                 </div>
                 <div class="mt-3">
-                    <input type="text" class="form-control" name="register" placeholder="Register"  value = "{{ old("register") }}">
-                    @error("register")
-                    <p style = "color: red; font-size: 10px;">{{$message }}</p>
-                    @enderror
+
+                    <input type="text" class="form-control" name="fakeregister" placeholder="Register" disabled>
                 </div>
                 <div class="mt-3">
                     <input type="text" class="form-control" name="purchase_date" id="purchase_date" onfocus="(this.type='date')"
@@ -72,6 +70,25 @@
             </form>
         </div>
     </div>
+
+    <!-- Biar data register kekirim ke Laravel even its disabled, soalnya Laravel ga bakal nganggap input yang disabled -->
+    <script>
+        const purchaseForm = document.getElementById("bikinpurchase");
+        purchaseForm.addEventListener("submit", function(event){
+            event.preventDefault();
+            const hiddenInput = document.createElement("input");
+            hiddenInput.setAttribute("type", "hidden");
+            hiddenInput.setAttribute("name", "register");
+
+            const fakeRegister = document.querySelector('input[name="fakeregister"]');
+
+            hiddenInput.setAttribute("value", fakeRegister.value);
+
+            purchaseForm.appendChild(hiddenInput);
+
+            purchaseForm.submit();
+        })
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 

@@ -6,6 +6,8 @@ use App\Models\User;
 use App\Models\Partner;
 use App\Models\Purchase;
 use App\Models\Pembelian;
+use App\Models\Product;
+use App\Models\PurchaseProduct;
 use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
@@ -77,7 +79,17 @@ class PurchaseController extends Controller
 
     }
     public function destroy($id){
+        $pp = PurchaseProduct::where("purchase_id", $id)->get();
+
+        foreach ($pp as $data){
+            $product = Product::where("id", $data->product_id)->first();
+            $oldstock = $product->stock;
+            Product::where("id", $data->product_id)->update(["stock"=> ($oldstock -
+            $data->quantity)]);
+        }
+
         Purchase::destroy("id", $id);
+
         return redirect(route("purchase-index"))->with("successDeleteProduct", "Product deleted successfully!");
     }
 }
