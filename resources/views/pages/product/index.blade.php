@@ -25,6 +25,16 @@
     <i class="bi bi-plus-square"></i>
     Add New Product</a>
 <br>
+    <div class="d-flex gap-2 "  >
+        <form action="{{ route("product-index") }}" class="d-flex gap-2">
+            <input type="text" name="search" placeholder="Search products..." value="{{ request('search') }}" class="form-control border border-1 border-secondary">
+            <button class="btn " style="background-color: rgb(191, 191, 191)">Search</button>
+        </form>
+        <a href="{{ route("product-index") }}" class="btn" style="background-color: rgb(191, 191, 191)">Clear</a>
+    </div>
+<br>
+
+
 <!-- tabel list data-->
 
 <table class="w-100">

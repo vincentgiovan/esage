@@ -43,7 +43,7 @@
                 </div>
                 <div class="mt-3">
 
-                    <input type="text" class="form-control" name="fakeregister" placeholder="Register" disabled>
+                    <input type="text" class="form-control" id="fakeregister" name="fakeregister" placeholder="Register" disabled>
                 </div>
                 <div class="mt-3">
                     <input type="text" class="form-control" name="purchase_date" id="purchase_date" onfocus="(this.type='date')"
@@ -71,8 +71,33 @@
         </div>
     </div>
 
-    <!-- Biar data register kekirim ke Laravel even its disabled, soalnya Laravel ga bakal nganggap input yang disabled -->
     <script>
+        // Jika input delivery_date berubah, maka jalankan perintah berikut
+        const purchase_date = document.getElementById("purchase_date");
+        purchase_date.addEventListener("change", function(){
+
+            // Ambil data dari Laravel
+            const allpuchasedata = @json($purchases);
+
+            // Hitung berapa data delivery order yang punya delivery_date yang sama
+            let n = 0;
+            for(let purc of allpuchasedata) {
+                if(purc.purchase_date == purchase_date.value){
+                    n++;
+                }
+            }
+
+            // Formatting ulang data tanggal dari Y-M-D jadi DMY
+            const [year, month, day] = purchase_date.value.split('-');
+            const formattedDate = `${day}${month}${year}`;
+
+            // Generate SKU dan masukin hasilnya langsung ke input fakeregister (yang tampil di user)
+            const generatedsku = "PU/" + formattedDate + "/" + (n + 1);
+            const fakeregister = document.getElementById("fakeregister");
+            fakeregister.value = generatedsku;
+        });
+
+        // Biar data register kekirim ke Laravel even its disabled, soalnya Laravel ga bakal nganggap input yang disabled
         const purchaseForm = document.getElementById("bikinpurchase");
         purchaseForm.addEventListener("submit", function(event){
             event.preventDefault();

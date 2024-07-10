@@ -22,7 +22,8 @@ class DeliveryOrderController extends Controller{
     public function create(){
         return view("pages.delivery-order.create", [
             "products" => Product::all(),
-            "projects" => Project::all()
+            "projects" => Project::all(),
+            "delivery_orders" => DeliveryOrder::all(),
 
         ]);
     }

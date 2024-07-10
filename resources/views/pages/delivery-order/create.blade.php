@@ -21,7 +21,7 @@
                 @enderror
             </div> --}}
             <div class="mt-3">
-                <input type="date" class="form-control" name="delivery_date" placeholder="delivery_date"  value = "{{ old("delivery_date") }}">
+                <input type="date" class="form-control" id="delivery_date" name="delivery_date" placeholder="delivery_date"  value = "{{ old("delivery_date") }}">
 
                 @error("delivery_date")
                 <p style = "color: red; font-size: 10px;">{{$message }}</p>
@@ -39,12 +39,8 @@
                 @enderror
             </div>
             <div class="mt-3">
-                @php
-                        $today_date = date("dmY");
-                        $n = App\Models\DeliveryOrder::where("delivery_date", date("Y-m-d"))->get()->count();
-                        $generatedSKU = "DO/" . $today_date . "/" . ($n + 1);
-                    @endphp
-                <input type="text" class="form-control" name="fakeregister" placeholder="Register"  value = "{{ $generatedSKU }}" disabled>
+
+                <input type="text" class="form-control" id="fakeregister" name="fakeregister" placeholder="Register"  disabled>
             </div>
             <div class="mt-3">
                 {{-- <input type="text" class="form-control" name="status" placeholder="Status"  value = "{{ old("status") }}"> --}}
@@ -84,19 +80,49 @@
     </div>
 
     <script>
+        // Jika input delivery_date berubah, maka jalankan perintah berikut
+        const delivery_date = document.getElementById("delivery_date");
+        delivery_date.addEventListener("change", function(){
+
+            // Ambil data dari Laravel
+            const alldeliveryorderdata = @json($delivery_orders);
+
+            // Hitung berapa data delivery order yang punya delivery_date yang sama
+            let n = 0;
+            for(let delord of alldeliveryorderdata) {
+                if(delord.delivery_date == delivery_date.value){
+                    n++;
+                }
+            }
+
+            // Formatting ulang data tanggal dari Y-M-D jadi DMY
+            const [year, month, day] = delivery_date.value.split('-');
+            const formattedDate = `${day}${month}${year}`;
+
+            // Generate SKU dan masukin hasilnya langsung ke input fakeregister (yang tampil di user)
+            const generatedsku = "DO/"+ formattedDate +"/"+ (n+1);
+            const fakeregister = document.getElementById("fakeregister");
+            fakeregister.value = generatedsku;
+        });
+
+        // Jika form bikindevor di-submit, jalankan perintah berikut
         const purchaseForm = document.getElementById("bikindevor");
         purchaseForm.addEventListener("submit", function(event){
+            // Cegah form buat submit
             event.preventDefault();
+
+            // Ambil nilai SKU dari input fakeregister
+            const fakeRegister = document.querySelector('input[name="fakeregister"]');
+
+            // Bikin elemen input tersembunyi buat bantu kirim data ke Laravel (karena by default-nya Laravel ga nganggap disabled input) dan nilainya diambil dari fakeregister
             const hiddenInput = document.createElement("input");
             hiddenInput.setAttribute("type", "hidden");
             hiddenInput.setAttribute("name", "register");
-
-            const fakeRegister = document.querySelector('input[name="fakeregister"]');
-
             hiddenInput.setAttribute("value", fakeRegister.value);
 
             purchaseForm.appendChild(hiddenInput);
 
+            // Baru submit form-nya
             purchaseForm.submit();
         })
     </script>

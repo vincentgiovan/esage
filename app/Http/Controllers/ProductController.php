@@ -11,7 +11,8 @@ class ProductController extends Controller{
 
     public function index(){
         return view("pages.product.index", [
-            "products" => Product::all()
+            "products" => Product::filter(request(["search"]))->get()
+
         ]);
     }
 //create untuk kasih tampilan formnya

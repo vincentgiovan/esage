@@ -19,9 +19,11 @@ class PurchaseController extends Controller
     }
 
     public function create(){
-        return view("pages.purchase.create",
-        ["supplier" => Partner::all(),
-        "status" => ["Complete", "Incomplete"]]
+        return view("pages.purchase.create", [
+            "supplier" => Partner::all(),
+            "status" => ["Complete", "Incomplete"],
+            "purchases" => Purchase::all()
+        ]
     );
 
     }
