@@ -35,20 +35,21 @@
                     @enderror
                 </div>
                 <div class="mt-3">
-                    <input type="text" class="form-control" name="purchase_deadline" id="purchase_deadline" onfocus="(this.type='date')"
-                    onblur="(this.type='text')" placeholder="Purchase_deadine"  value = "{{ old("purchase_deadline") }}">
-                    @error("purchase_deadline")
+                    <input type="text" class="form-control" name="purchase_date" id="purchase_date" onfocus="(this.type='date')"
+                    onblur="(this.type='text')" placeholder="Purchase Date" value = "{{ old("purchase_date")}}">
+                    @error("purchase_date")
                     <p style = "color: red; font-size: 10px;">{{$message }}</p>
                     @enderror
                 </div>
+
                 <div class="mt-3">
 
                     <input type="text" class="form-control" id="fakeregister" name="fakeregister" placeholder="Register" disabled>
                 </div>
                 <div class="mt-3">
-                    <input type="text" class="form-control" name="purchase_date" id="purchase_date" onfocus="(this.type='date')"
-                    onblur="(this.type='text')" placeholder="Purchase Date" value = "{{ old("purchase_date")}}">
-                    @error("purchase_date")
+                    <input type="text" class="form-control" name="purchase_deadline" id="purchase_deadline" onfocus="(this.type='date')"
+                    onblur="(this.type='text')" placeholder="Purchase_deadine"  value = "{{ old("purchase_deadline") }}">
+                    @error("purchase_deadline")
                     <p style = "color: red; font-size: 10px;">{{$message }}</p>
                     @enderror
                 </div>

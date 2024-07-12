@@ -1,5 +1,9 @@
 @extends('layouts.main-admin')
 
+@section("bcd")
+    <span>> <a href="#">Edit</a></span>
+@endsection
+
 @section("content")
 
     <div class="d-flex justify-content-center align-items-center" style="min-height:100vh">

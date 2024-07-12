@@ -23,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        if (file_exists($breadcrumbs = base_path('routes/breadcrumb.php'))) {
+            require_once $breadcrumbs;
+        }
     }
 }

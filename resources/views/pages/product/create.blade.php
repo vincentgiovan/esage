@@ -1,5 +1,9 @@
 @extends('layouts.main-admin')
 
+@section("bcd")
+    <span>> <a href="#">Create</a></span>
+@endsection
+
 @section("content")
 
     <div class="d-flex justify-content-center align-items-center" style="min-height:100vh">
@@ -9,12 +13,14 @@
 {{-- @csrf kepake untuk token ,wajib --}}
             @csrf
             <div class="mt-3">
+                <label>Nama produk</label>
                 <input type="text" class="form-control" name="product_name" placeholder="Nama Barang" value = "{{ old("product_name" ) }}">
                 @error("product_name")
                 <p style = "color: red; font-size: 10px;">{{$message }}</p>
                 @enderror
             </div>
             <div class="mt-3">
+                <label>Satuan produk</label>
                 <input type="text" class="form-control" name="unit" placeholder="Unit"  value = "{{ old("unit") }}">
                 @error("unit")
                 <p style = "color: red; font-size: 10px;">{{$message }}</p>

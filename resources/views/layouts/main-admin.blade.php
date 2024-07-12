@@ -78,6 +78,34 @@
                 <!-- Main content -->
                 <div class="main-panel grow">
                     <div class="content-wrapper">
+                        {{-- {{ Breadcrumbs::render() }} --}}
+                        @if(Request::is("project*"))
+                            <x-projectbc>
+                                @yield("bcd")
+                            </x-projectbc>
+
+                        @elseif(Request::is("product*"))
+                            <x-productbc>
+                                @yield("bcd")
+                            </x-productbc>
+
+                        @elseif(Request::is("purchase*"))
+                            <x-purchasebc>
+                                @yield("bcd")
+                            </x-purchasebc>
+
+                        @elseif(Request::is("deliveryorder*"))
+                            <x-deliveryorderbc>
+                                @yield("bcd")
+                            </x-deliveryorderbc>
+
+                        @elseif(Request::is("partner*"))
+                            <x-partnerbc>
+                                @yield("bcd")
+                            </x-partnerbc>
+                            
+                        @endif
+
                         @yield("content")
                     </div>
                 </div>

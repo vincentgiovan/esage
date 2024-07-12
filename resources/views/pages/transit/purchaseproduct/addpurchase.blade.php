@@ -8,10 +8,10 @@
 
         <h2>Add New Purchase</h2>
             <div>
-                <div class="mt-3">
+                <div class="mt-3 ">
                     <select name="product_name" class="form-select" id="select-product-dropdown">
                         @foreach ($products as $product)
-                            <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} ({{ $product->variant }})</option>
+                            <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} ({{ $product->variant }})  (stok terakhir :  {{ $product->stock }})</option>
                         @endforeach
                     </select>
                     <p style = "color: red; font-size: 10px;"></p>

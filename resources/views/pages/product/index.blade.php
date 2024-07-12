@@ -1,6 +1,13 @@
 @extends('layouts.main-admin')
 
 @section("content")
+{{-- 
+@foreach (breadcrumbs('product-index', ['id' => $id]) as $breadcrumb)
+    <a href="{{ $breadcrumb['url'] }}">{{ $breadcrumb['title'] }}</a>
+    @if (!$loop->last)
+        &gt;
+    @endif
+@endforeach --}}
 
 <br>
 <h1>Warehouse Items</h1>
