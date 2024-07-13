@@ -1,8 +1,8 @@
 @extends("layouts.main-admin")
 @section("content")
-    <a type="button" class="text-white px-3 py-2 btn btn-secondary rounded-lg" style="bottom: 10px; right: 10px; position: fixed;" href="#">
-        Top
-    </a>
+    <a type="button" class="text-dark px-3 py-2 btn btn-light rounded-circle" style="bottom: 10px; right: 10px; position: fixed; background-color:transparent; " href="#">
+
+        <i class="bi bi-arrow-up-circle" style="font-size: 40px; z-index: 10;" ></i></a>
     <div class="content-wrapper">
         <div class="row">
             <div class="col-md-12 grid-margin">

@@ -41,7 +41,7 @@
                 </div>
                 <div class="mt-3">
                     <input type="number" class="form-control" name="stock"  id="stock" placeholder="Stok"  value = "{{ old("stock") }}">
-                    <p style = "color: red; font-size: 10px;" id="errStock"></p>
+                    <p style = "color: red; font-size: 10px;" id="errS.  tock"></p>
                 </div>
 
                 <div class="mt-3">
