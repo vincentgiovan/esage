@@ -62,21 +62,25 @@
 
     </head>
 
-    <body>
-        <div class="container-scroller">
-
+    <body style="min-height: 100vh;">
+        <div class="container-scroller h-100">
             <!-- Navbar -->
             @auth
-                @include("component.navbar")
+                <div class="fixed-top" style="z-index: 100;">
+                    @include("component.navbar")
+                </div>
             @endauth
 
-            <div class="container-fluid page-body-wrapper d-flex justify-content-center" style="padding: 0;">
+
+            <div class="container-fluid d-flex justify-content-center" style="padding: 0;">
                 @auth
-                    @include("component.sidebar")
+                    <div class="h-100">
+                        @include("component.sidebar")
+                    </div>
                 @endauth
 
                 <!-- Main content -->
-                <div class="main-panel grow">
+                <div class="main-panel w-100" style="padding-left: 250px; padding-top: 50px;" id="main-content-div">
                     <div class="content-wrapper">
                         {{-- {{ Breadcrumbs::render() }} --}}
                         @if(Request::is("project*"))
@@ -103,7 +107,7 @@
                             <x-partnerbc>
                                 @yield("bcd")
                             </x-partnerbc>
-                            
+
                         @endif
 
                         @yield("content")
@@ -144,7 +148,13 @@
                 });
 
                 $("#sidebarToggler").click(() => {
-                    $("#sidebar").fadeToggle("slow");
+                    $("#sidebar").fadeToggle("slow", function(){
+                        if($("#sidebar").is(":hidden")){
+                            $("#main-content-div").css({"padding-left": "0"});
+                        } else {
+                            $("#main-content-div").css({"padding-left": "250px"});
+                        }
+                    });
                 });
 
                 // $('#select-product-dropdown').next('.select2-container').find('.select2-selection').addClass('form-control py-3');

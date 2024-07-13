@@ -1,5 +1,5 @@
 
-    <nav class="navbar navbar-expand-lg " style="background: rgb(95, 95, 95)">
+    <nav class="navbar navbar-expand-lg w-100" style="background: rgb(95, 95, 95);">
         <div class="container-fluid">
         <a class="navbar-brand text-white mx-2 d-flex align-items-center gap-1" href={{ route("dashboard") }}>
             <img src="{{ asset("res/output-onlinepngtools.png") }}" width="25px" alt="">

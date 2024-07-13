@@ -1,4 +1,4 @@
-<nav class="sidebar sidebar-offcanvas" id="sidebar" style="background-color: rgb(197, 197, 197)">
+<nav class="sidebar sidebar-offcanvas fixed-top" id="sidebar" style="background-color: rgb(197, 197, 197); margin-top: 55px; z-index: 10;">
     <ul class="nav">
 
         <li class="nav-item">
