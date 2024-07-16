@@ -28,7 +28,7 @@
                 </ul>
             </li> --}}
             </ul>
-            <form class="nav-item ms-auto" action="/logout" method="post">
+            <form class="nav-item ms-auto" action="{{ route("keluar") }}" method="post">
                 @csrf
                 <button class="nav-link text-white text-decoration-none mx-2" href="#"><i class="bi bi-box-arrow-left"></i> Logout ({{ Auth::user()->name }})</button>
             </form>

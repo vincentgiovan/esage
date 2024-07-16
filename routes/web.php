@@ -20,7 +20,7 @@ Route::get('/', function(){
 
 Route::get('/login', [LoginController::class, "index"])->name("login")->middleware("guest");
 Route::post('/login', [LoginController::class, "checkLogin"])->name("checkLogin");
-Route::post('/logout', [LoginController::class, "logout"])->middleware("auth");
+Route::post('/logout', [LoginController::class, "logout"])->middleware("auth")->name("keluar");
 
 Route::get('/dashboard', function () {
     return view("pages.dashboard");
@@ -49,17 +49,18 @@ Route::middleware("auth")->group(function(){
     //show data
     Route::get('/product', [ProductController::class, "index"] )->name("product-index");
 
-    //create new data
-    Route::get('/product/create', [ProductController::class, "create"] )->name("product-create");
-    Route::post('/product/store', [ProductController::class, "store"] )->name("product-store");
+    Route::middleware("admin")->group(function(){
+        //create new data
+        Route::get('/product/create', [ProductController::class, "create"] )->name("product-create");
+        Route::post('/product/store', [ProductController::class, "store"] )->name("product-store");
 
-    //edit data
-    Route::get('/product/{id}/edit', [ProductController::class, "edit"] )->name("product-edit");
-    Route::post('/product/{id}/edit', [ProductController::class, "update"] )->name("product-update");
+        //edit data
+        Route::get('/product/{id}/edit', [ProductController::class, "edit"] )->name("product-edit");
+        Route::post('/product/{id}/edit', [ProductController::class, "update"] )->name("product-update");
 
-    //delete data
-    Route::post('/product/{id}', [ProductController::class, "destroy"] )->name("product-destroy");
-
+        //delete data
+        Route::post('/product/{id}', [ProductController::class, "destroy"] )->name("product-destroy");
+    });
 
     // ===== Partner ===== //
 
@@ -148,12 +149,13 @@ Route::middleware("auth")->group(function(){
     //account route
 
 
-    Route::middleware(['auth', 'role:admin'])->group(function () {
+    // Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/account', [AccountCreationController::class, 'index'])->name('account.index');
     Route::post('/account', [AccountCreationController::class, 'store'])->name('account.store');
+    Route::get("/account/{id}", [AccountCreationController::class, "show"])->name("account.show");
     Route::put('/account/{id}', [AccountCreationController::class, 'update'])->name('account.update');
     Route::delete('/account/{id}', [AccountCreationController::class, 'destroy'])->name('account.destroy');
-});
+// });
 
 
 

@@ -74,7 +74,7 @@
 
             <div class="container-fluid d-flex justify-content-center" style="padding: 0;">
                 @auth
-                    <div class="h-100">
+                    <div class="h-100 bg-primary">
                         @include("component.sidebar")
                     </div>
                 @endauth

@@ -1,6 +1,5 @@
-<nav class="sidebar sidebar-offcanvas fixed-top" id="sidebar" style="background-color: rgb(197, 197, 197); margin-top: 55px; z-index: 10;">
+<nav class="sidebar sidebar-offcanvas fixed-top h-100" id="sidebar" style="background-color: rgb(197, 197, 197); margin-top: 55px; z-index: 10;">
     <ul class="nav">
-
         <li class="nav-item">
             <a class="nav-link text-decoration-none mx-2 @if (Request::is("dashboard*")) @else text-dark @endif" href="{{ route("dashboard") }}"><i class="bi bi-grid-1x2 me-2"></i> Dashboard</a>
         </li>
@@ -23,6 +22,9 @@
 
         <li class="nav-item">
             <a class="nav-link text-decoration-none mx-2 @if (Request::is("project*")) @else text-dark @endif" href="{{ route("project-index") }}"><i class="bi bi-building me-2"></i> Proyek</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-decoration-none mx-2 @if (Request::is("account*")) @else text-dark @endif" href="{{ route("account.index") }}" ><i class="bi bi-person me-2"></i> Account</a>
         </li>
     </ul>
     {{-- <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">

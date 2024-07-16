@@ -1,15 +1,17 @@
+<?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-class AccountController extends Controller
+class AccountCreationController extends Controller
 {
     public function index()
     {
         $users = User::all();
-        return view('account.index', compact('users'));
+        return view('accounts.index', compact('users'));
     }
 
     public function store(Request $request)
@@ -18,32 +20,43 @@ class AccountController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            "role" => "required"
         ]);
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'user',
+            'role' => $request->role,
         ]);
 
         return redirect()->route('account.index');
     }
 
-    public function update(Request $request, $id)
-    {
+    public function show($id){
         $user = User::findOrFail($id);
 
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'password' => 'nullable|string|min:8|confirmed',
-        ]);
+        return view("accounts.show", ["user" => $user]);
+    }
 
-        $user->name = $request->name;
-        if ($request->password) {
-            $user->password = Hash::make($request->password);
+    public function update(Request $request, $id)
+    {
+        $user = User::where("id", $id);
+
+        $validationRule = [
+            'name' => 'required|string|max:255',
+            "email" => 'required|string|email|max:255'
+        ];
+
+        if($request->password){
+            $validationRule["password"] = 'string|min:8|confirmed';
         }
-        $user->save();
+
+        $validatedData = $request->validate($validationRule);
+
+        $validatedData["password"] = Hash::make($validatedData["password"]);
+
+        $user->update($validatedData);
 
         return redirect()->route('account.index');
     }
