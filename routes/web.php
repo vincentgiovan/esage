@@ -157,8 +157,4 @@ Route::middleware("auth")->group(function(){
     Route::delete('/account/{id}', [AccountCreationController::class, 'destroy'])->name('account.destroy');
 // });
 
-
-
-
-
 });

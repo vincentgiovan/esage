@@ -6,7 +6,7 @@
     <div class="container border border-1 border-secondary rounded rounded-full p-5">
         <h2 class="text-center fw-bold">Create New Order</h2>
         <form method="POST" action="{{ route("deliveryorder-store"{{-- ,$delivery_order->id--}} ) }}" id="bikindevor">
-                        @csrf
+            @csrf
             {{-- <div class="mt-3">
                 <select name="product_id" class="form-select">
                     @foreach ($products as $product)
