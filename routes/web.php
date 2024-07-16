@@ -12,6 +12,7 @@ use App\Http\Controllers\DeliveryOrderController;
 use App\Http\Controllers\DeliveryProductController;
 use App\Http\Controllers\PurchaseProductController;
 use App\Http\Controllers\DeliveryOrderProductController;
+use App\Http\Controllers\AccountCreationController;
 
 Route::get('/', function(){
     return redirect("/dashboard");
@@ -142,4 +143,20 @@ Route::middleware("auth")->group(function(){
 
     //delete data
     Route::post('/deliveryorderproduct/{id}/{pid}', [DeliveryOrderProductController::class, "destroy"] )->name("deliveryorderproduct-destroy");
+
+
+    //account route
+
+
+    Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/account', [AccountCreationController::class, 'index'])->name('account.index');
+    Route::post('/account', [AccountCreationController::class, 'store'])->name('account.store');
+    Route::put('/account/{id}', [AccountCreationController::class, 'update'])->name('account.update');
+    Route::delete('/account/{id}', [AccountCreationController::class, 'destroy'])->name('account.destroy');
+});
+
+
+
+
+
 });
