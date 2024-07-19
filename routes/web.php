@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -9,10 +10,10 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\DeliveryOrderController;
+use App\Http\Controllers\AccountCreationController;
 use App\Http\Controllers\DeliveryProductController;
 use App\Http\Controllers\PurchaseProductController;
 use App\Http\Controllers\DeliveryOrderProductController;
-use App\Http\Controllers\AccountCreationController;
 
 Route::get('/', function(){
     return redirect("/dashboard");
@@ -22,9 +23,7 @@ Route::get('/login', [LoginController::class, "index"])->name("login")->middlewa
 Route::post('/login', [LoginController::class, "checkLogin"])->name("checkLogin");
 Route::post('/logout', [LoginController::class, "logout"])->middleware("auth")->name("keluar");
 
-Route::get('/dashboard', function () {
-    return view("pages.dashboard");
-})->name("dashboard")->middleware("auth");
+Route::get('/dashboard', [DashboardController::class, "index"] )->name("dashboard")->middleware("auth");
 
 
 Route::middleware("auth")->group(function(){

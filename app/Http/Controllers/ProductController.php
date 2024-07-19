@@ -28,7 +28,7 @@ class ProductController extends Controller{
             "product_name" => "required|min:3",
             "price"=>"required|numeric|min:0|not_in:0",
             "variant" => "required|min:3",
-            "stock" => "required|numeric|min:0|not_in:0",
+            "stock" => "required|numeric|min:0",
             "markup" => "nullable|numeric",
             "status" => "required|min:3",
             "product_code" => "required|min:3",

@@ -52,7 +52,8 @@ class PurchaseController extends Controller
         return view("pages.purchase.edit", [
             "purchase" => Purchase::where("id", $id)->first(),
             "supplier" => Partner::all(),
-            "status" => ["Complete", "Incomplete"]
+            "status" => ["Complete", "Incomplete"],
+            "purchases" => Purchase::all()
         ]);
     }
 

@@ -52,6 +52,20 @@
                 transform: scale(105%);
                 font-weight: bold;
             }
+
+            #main-content-div {
+                padding-left: 250px; padding-top: 50px;
+            }
+
+            @media screen and (max-width: 600px) {
+                #sidebar {
+                    display: none;
+                }
+
+                #main-content-div {
+                    padding-left: 0;
+                }
+            }
         </style>
 
         <!-- Include Select2 CSS -->
@@ -71,8 +85,7 @@
                 </div>
             @endauth
 
-
-            <div class="container-fluid d-flex justify-content-center" style="padding: 0;">
+            <div class="container-fluid d-flex justify-content-center position-relative" style="padding: 0;">
                 @auth
                     <div class="h-100 bg-primary">
                         @include("component.sidebar")
@@ -80,7 +93,7 @@
                 @endauth
 
                 <!-- Main content -->
-                <div class="main-panel w-100" style="padding-left: 250px; padding-top: 50px;" id="main-content-div">
+                <div class="main-panel w-100" id="main-content-div">
                     <div class="content-wrapper">
                         {{-- {{ Breadcrumbs::render() }} --}}
                         @if(Request::is("project*"))

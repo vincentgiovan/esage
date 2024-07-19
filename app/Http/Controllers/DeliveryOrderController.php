@@ -55,7 +55,8 @@ class DeliveryOrderController extends Controller{
             "delivery_order" => DeliveryOrder::where("id", $id)->first(),
             // "products" => Product::all(),
             "projects" => Project::all(),
-            "status"=> ["complete", "incomplete"]
+            "status"=> ["complete", "incomplete"],
+            "delivery_orders" => DeliveryOrder::all(),
         ]);
     }
     public function update(Request $request, $id){
