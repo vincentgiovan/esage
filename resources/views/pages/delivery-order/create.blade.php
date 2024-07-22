@@ -7,17 +7,6 @@
         <h2 class="text-center fw-bold">Create New Order</h2>
         <form method="POST" action="{{ route("deliveryorder-store"{{-- ,$delivery_order->id--}} ) }}" id="bikindevor">
             @csrf
-            {{-- <div class="mt-3">
-                <select name="product_id" class="form-select">
-                    @foreach ($products as $product)
-                        <option value="{{ $product->id }}" >{{ $product->product_name }}</option>
-                    @endforeach
-
-                </select>
-                @error("product_id")
-                <p style = "color: red; font-size: 10px;">{{$message }}</p>
-                @enderror
-            </div> --}}
             <div class="mt-3">
                 <input type="date" class="form-control" id="delivery_date" name="delivery_date" placeholder="delivery_date"  value = "{{ old("delivery_date") }}">
 

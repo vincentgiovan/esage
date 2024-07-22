@@ -12,25 +12,31 @@ use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
 {
-    public function index(){
+    // Tabel list semua purchase
+    public function index()
+    {
+        // Tampilkan halaman pages/purchase/index.blade.php beserta data yang diperlukan di blade-nya:
         return view("pages.purchase.index", [
-            "purchases" => Purchase::all()
+            "purchases" => Purchase::all() // semua data purchases buat ditampilin satu-satu
         ]);
     }
 
-    public function create(){
+    // Form buat data purchase baru (kalo product harus tambahin di cart)
+    public function create()
+    {
+        // Tampilkan halaman pages/purchase/create.blade.php dan data-data yang diperlukan di blade-nya:
         return view("pages.purchase.create", [
-            "supplier" => Partner::all(),
-            "status" => ["Complete", "Incomplete"],
-            "purchases" => Purchase::all()
-        ]
-    );
-
+            "supplier" => Partner::all(), // data semua partner (supplier) untuk dropdown/select partner
+            "status" => ["Complete", "Incomplete"], // untuk dropdown status purchase
+            "purchases" => Purchase::all() // data semua purchase untuk auto generate SKU
+        ]);
     }
 
-    public function store(Request $request){
+    // Simpan data purchase baru ke database
+    public function store(Request $request)
+    {
+        // Validasi data, ga lolos ga lanjut
         $validatedData = $request->validate([
-            // "product_name" => "required|min:3",
             "purchase_date" => "required",
             "purchase_deadline" => "required",
             "register" => "required|min:3",
@@ -38,61 +44,63 @@ class PurchaseController extends Controller
             "purchase_status" => "required"
         ]);
 
-
-        // $user = User::where("name", session("logged_in_user"))->first();
-        // $validatedData["user_id"] = $user->id;
-
+        // Buat dan simpan data purchase baru ke tabel purchases
         Purchase::create($validatedData);
+
+        // Arahkan user kembali ke halaman pages/purchase/index.blade.php
         return redirect(route("purchase-index"))->with("successAddPurchase", "Purchase added successfully!");
-
-
     }
 
-    public function edit($id){
+    // Form edit data purchase
+    public function edit($id)
+    {
+        // Tampilkan halaman pages/purchase/edit.blade.php beserta data yang diperlukan di blade-nya:
         return view("pages.purchase.edit", [
-            "purchase" => Purchase::where("id", $id)->first(),
-            "supplier" => Partner::all(),
-            "status" => ["Complete", "Incomplete"],
-            "purchases" => Purchase::all()
+            "purchase" => Purchase::where("id", $id)->first(), // data purchase yang mau di-edit buat auto fill form
+            "supplier" => Partner::all(), // data semua partner (supplier) buat dropdown/select partner
+            "status" => ["Complete", "Incomplete"], // untuk dropdown status purchase
+            "purchases" => Purchase::all() // data semua purchase untuk auto generate SKU
         ]);
     }
 
-    // public function viewitem($id){
-    //     $purchase = Purchase::where("id", $id)->first();
-    //     $products = $purchase->products;
-
-
-    //     return view("pages.purchase.viewitem", [
-    //         "purchase" => $purchase,
-    //         "products" => $products
-    //     ]);
-    // }
-
-    public function update(Request $request, $id){
+    // Simpan perubahan data purchase ke database
+    public function update(Request $request, $id)
+    {
+        // Validasi data, ga lolos ga lanjut
         $validatedData = $request->validate([
-            // "product_name" => "required|min:3",
             "purchase_date" => "required",
             "purchase_deadline" => "required",
             "register" => "required|min:3",
             "partner_id" => "required",
             "purchase_status" => "required"
         ]);
-        Purchase::where("id", $id)->update($validatedData);
-        return redirect(route("purchase-index"))->with("successEditProduct", "Product editted successfully!");
 
+        // Simpan perubahannya di data yang sesuai di tabel purchases
+        Purchase::where("id", $id)->update($validatedData);
+
+        // Arahkan user kembali ke halaman pages/purchase/index.blade.php
+        return redirect(route("purchase-index"))->with("successEditProduct", "Product editted successfully!");
     }
-    public function destroy($id){
+
+    // Hapus data purchase dari database
+    public function destroy($id)
+    {
+        // Sebelumnya stok semua product yang ada di purchase harus dibalikin ke semula
+        // Pertama ambil semua data di tabel purchase product yang punya purchase id yang sama kayak purchase yang mau dihapus buat dapatin semua id produk yang terkait
         $pp = PurchaseProduct::where("purchase_id", $id)->get();
 
+        // Untuk setiap data yang kita peroleh lakukan:
         foreach ($pp as $data){
-            $product = Product::where("id", $data->product_id)->first();
-            $oldstock = $product->stock;
+            $product = Product::where("id", $data->product_id)->first(); // Targetkan data product di tabel aslinya
+            $oldstock = $product->stock; // Ambil data stok saat ini
             Product::where("id", $data->product_id)->update(["stock"=> ($oldstock -
-            $data->quantity)]);
+            $data->quantity)]); // Kembalikan stoknya ke jumlah yang seharusnya (dikurangin karena purchase membuat stok produk bertambah)
         }
 
+        // Hapus data purchase dari tabel purchases
         Purchase::destroy("id", $id);
 
+        // Arahkan user kembali ke halaman pages/purchase/index.blade.php
         return redirect(route("purchase-index"))->with("successDeleteProduct", "Product deleted successfully!");
     }
 }

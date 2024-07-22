@@ -8,51 +8,58 @@ use Illuminate\Http\Request;
 
 
 class ProductController extends Controller{
-
-    public function index(){
+    // Tabel list semua product
+    public function index()
+    {
+        // Tampilkan halaman pages/product/index.blade.php
         return view("pages.product.index", [
-            "products" => Product::filter(request(["search"]))->get()
-
+            "products" => Product::filter(request(["search"]))->get() // Data semua produk dari database buat ditampilin satu-satu (kalo user-nya searching tampilkan yang memenuhi keyword)
         ]);
     }
-//create untuk kasih tampilan formnya
-    public function create(){
+
+    // Form registrasi produk baru
+    public function create()
+    {
+        // Tampilkan halaman pages/product/create.blade.php
         return view("pages.product.create");
     }
 
-
-
-// store untuk memasukan data
-    public function store(Request $request){
+    // Simpan data produk baru ke database
+    public function store(Request $request)
+    {
+        // Validasi data, kalau ga lolos ga lanjut
         $validatedData = $request->validate([
             "product_name" => "required|min:3",
-            "price"=>"required|numeric|min:0|not_in:0",
+            "price" => "required|numeric|min:0|not_in:0",
             "variant" => "required|min:3",
             "stock" => "required|numeric|min:0",
             "markup" => "nullable|numeric",
             "status" => "required|min:3",
             "product_code" => "required|min:3",
-            "unit"=>"required"
-
+            "unit" => "required"
         ]);
 
-
-        // $user = User::where("name", session("logged_in_user"))->first();
-        // $validatedData["user_id"] = $user->id;
-
+        // Bikin dan simpan data produk baru di tabel products
         Product::create($validatedData);
+
+        // Arahkan user kembali ke halaman pages/product/index.blade.php
         return redirect(route("product-index"))->with("successAddProduct", "Product added successfully!");
-
-
     }
-    public function edit($id){
+
+    // Form edit data produk
+    public function edit($id)
+    {
+        // Tampilkan halaman pages/product/edit.blade.php beserta data yang diperlukan di blade-nya
         return view("pages.product.edit", [
-            "product" => Product::where("id", $id)->first(),
-            "status" => ["Ready", "Out Of Stock"]
+            "product" => Product::where("id", $id)->first(), // data product yang mau di-edit buat auto fill form-nya
+            "status" => ["Ready", "Out Of Stock"] // buat dropdown status product
         ]);
     }
 
-    public function update(Request $request, $id){
+    // Simpan perubahan data produk ke database
+    public function update(Request $request, $id)
+    {
+        // Validasi data, kalo ga lolos ga lanjut
         $validatedData = $request->validate([
             "product_name" => "required|min:3",
             "price"=>"required|numeric|min:0|not_in:0",
@@ -63,16 +70,21 @@ class ProductController extends Controller{
             "product_code" => "required|min:3",
             "unit"=>"required"
         ]);
-        Product::where("id", $id)->update($validatedData);
-        return redirect(route("product-index"))->with("successEditProduct", "Product editted successfully!");
 
+        // Simpan perubahan datanya di data produk yang ditargetkan di tabel products
+        Product::where("id", $id)->update($validatedData);
+
+        // Arahkan user kembali ke halaman pages/product/index.blade.php
+        return redirect(route("product-index"))->with("successEditProduct", "Product editted successfully!");
     }
-    public function destroy($id){
+
+    // Hapus data product dari database
+    public function destroy($id)
+    {
+        // Hapus data product yang ditargetkan dari tabel products
         Product::destroy("id", $id);
+
+        // Arahkan user kembali ke halaman pages/product/index.blade.php
         return redirect(route("product-index"))->with("successDeleteProduct", "Product deleted successfully!");
     }
-
-public function peon(){
-
-}
 }

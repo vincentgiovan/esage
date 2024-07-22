@@ -105,22 +105,22 @@
         // Biar data register kekirim ke Laravel even its disabled, soalnya Laravel ga bakal nganggap input yang disabled
         const purchaseForm = document.getElementById("bikinpurchase");
         purchaseForm.addEventListener("submit", function(event) {
-            event.preventDefault();
+            event.preventDefault(); // Jangan submit dulu
+
+            // Bikin hidden input buat dikirim ke Laravel
             const hiddenInput = document.createElement("input");
             hiddenInput.setAttribute("type", "hidden");
             hiddenInput.setAttribute("name", "register");
 
+            // Ambil nilainya dari auto generated SKU
             const fakeRegister = document.querySelector('input[name="fakeregister"]');
-
             hiddenInput.setAttribute("value", fakeRegister.value);
 
+            // Tambahin hidden input ke form
             purchaseForm.appendChild(hiddenInput);
 
+            // Baru submit form-nya
             purchaseForm.submit();
         })
-    </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
 @endsection
