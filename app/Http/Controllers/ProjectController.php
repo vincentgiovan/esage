@@ -8,21 +8,26 @@ use Illuminate\Http\Request;
 use App\Models\DeliveryOrder;
 
 class ProjectController extends Controller{
-
-    public function index(){
+    // Tabel list semua project
+    public function index()
+    {
+        // Tampilkan halaman pages/project/index.blade.php beserta data yang diperlukan:
         return view("pages.project.index", [
-            "projects" => Project::all()
+            "projects" => Project::all() // semua data project buat ditampilin satu-satu
         ]);
     }
 
-    public function create(){
+    // Form input project baru
+    public function create()
+    {
+        // Tampilkan halaman pages/project/create.blade.php
         return view("pages.project.create");
     }
 
-
-
-
-    public function store(Request $request){
+    // Simpan data project baru ke database
+    public function store(Request $request)
+    {
+        // Validasi data, kalo ga lolos ga lanjut
         $validatedData = $request->validate([
             "project_name" => "required|min:3",
             "location"=>"required",
@@ -30,36 +35,47 @@ class ProjectController extends Controller{
             "address" => "required"
         ]);
 
-
-        // $user = User::where("name", session("logged_in_user"))->first();
-        // $validatedData["user_id"] = $user->id;
-
+        // Buat dan tambahkan data project baru ke tabel projects
         Project::create($validatedData);
+
+        // Arahkan user kembali ke halaman pages/project/index.blade.php
         return redirect(route("project-index"))->with("successAddProject", "Project added successfully!");
-
-
     }
-    public function edit($id){
 
-
+    // Form edit data project
+    public function edit($id)
+    {
+        // Tampilkan halaman pages/project/edit.blade.php beserta data yang diperlukan di blade-nya:
         return view("pages.project.edit", [
-            "project" => Project::where("id", $id)->first()
+            "project" => Project::where("id", $id)->first() // data project yang mau di-edit buat autofill data di form
         ]);
-
     }
-    public function update(Request $request, $id){
+
+    // Simpan data project ke database
+    public function update(Request $request, $id)
+    {
+        // Validasi data, ga lolos ga lanjut
         $validatedData = $request->validate([
             "project_name" => "required|min:3",
             "location"=>"required",
             "PIC" => "required|min:3",
             "address" => "required"
         ]);
-        Project::where("id", $id)->update($validatedData);
-        return redirect(route("project-index"))->with("successEditProject", "Project editted successfully!");
 
+        // Simpan perubahan datanya di tabel projects
+        Project::where("id", $id)->update($validatedData);
+
+        // Arahkan user kembali ke halaman pages/project/index.blade.php
+        return redirect(route("project-index"))->with("successEditProject", "Project editted successfully!");
     }
-    public function destroy($id){
+
+    // Hapus data project dari database
+    public function destroy($id)
+    {
+        // Hapus data project yang mau dihapus dari tabel projects
         Project::destroy("id", $id);
+
+        // Arahkan user kembali ke halaman pages/project/index.blade.php
         return redirect(route("project-index"))->with("successDeleteProject", "Project deleted successfully!");
     }
 }
