@@ -2,54 +2,58 @@
 
 @section("content")
 
-    <div class="d-flex justify-content-center align-items-center" style="min-height:100vh">
-    <div class="container border border-1 border-secondary rounded rounded-full p-5">
-        <h2 class="text-center fw-bold">Create New Order</h2>
-        <form method="POST" action="{{ route("deliveryorder-store"{{-- ,$delivery_order->id--}} ) }}" id="bikindevor">
-            @csrf
-            <div class="mt-3">
-                <input type="date" class="form-control" id="delivery_date" name="delivery_date" placeholder="delivery_date"  value = "{{ old("delivery_date") }}">
+    <x-container-middle>
+        <div class="container rounded-4 p-5 bg-white">
+            <h2 class="text-center fw-bold">Create New Order</h2>
+            <form method="POST" action="{{ route("deliveryorder-store"{{-- ,$delivery_order->id--}} ) }}" id="bikindevor">
+                @csrf
+                <div class="mt-3">
+                    <label for="delivery_date">Tanggal Delivery</label>
+                    <input type="date" class="form-control" id="delivery_date" name="delivery_date" placeholder="delivery_date"  value = "{{ old("delivery_date") }}">
 
-                @error("delivery_date")
-                <p style = "color: red; font-size: 10px;">{{$message }}</p>
-                @enderror
-            </div>
-            <div class="mt-3">
-                <select name="project_id" class="form-select">
-                    @foreach ($projects as $pn)
-                        <option value="{{ $pn->id}}">{{ $pn->project_name }}</option>
-                    @endforeach
+                    @error("delivery_date")
+                    <p style = "color: red; font-size: 10px;">{{$message }}</p>
+                    @enderror
+                </div>
+                <div class="mt-3">
+                    <label for="project_id">Proyek</label>
+                    <select name="project_id" class="form-select" id="project_id">
+                        @foreach ($projects as $pn)
+                            <option value="{{ $pn->id}}">{{ $pn->project_name }}</option>
+                        @endforeach
 
-                </select>
-                @error("project_id")
-                <p style = "color: red; font-size: 10px;">{{$message }}</p>
-                @enderror
-            </div>
-            <div class="mt-3">
-
-                <input type="text" class="form-control" id="fakeregister" name="fakeregister" placeholder="Register"  disabled>
-            </div>
-            <div class="mt-3">
-                {{-- <input type="text" class="form-control" name="status" placeholder="Status"  value = "{{ old("status") }}"> --}}
-                <select name="delivery_status" class="form-select">
-                    <option value="Complete">Complete</option>
-                    <option value="Incomplete">Incomplete</option>
-                </select>
-                @error("delivery_status")
-                <p style = "color: red; font-size: 10px;">{{$message }}</p>
-                @enderror
-            </div>
-            <div class="mt-3">
-                <input type="text" class="form-control" name="note" placeholder="Note" value = "{{ old("note")}}">
-                @error("note")
-                <p style = "color: red; font-size: 10px;">{{$message }}</p>
-                @enderror
-            </div>
-            <div class="mt-3">
-                <input type="submit" class="btn btn-success px-3 py-1" value="add">
-            </div>
-        </form>
-    </div>
+                    </select>
+                    @error("project_id")
+                    <p style = "color: red; font-size: 10px;">{{$message }}</p>
+                    @enderror
+                </div>
+                <div class="mt-3">
+                    <label for="fakeregister">SKU</label>
+                    <input type="text" class="form-control" id="fakeregister" name="fakeregister" placeholder="Register"  disabled>
+                </div>
+                <div class="mt-3">
+                    {{-- <input type="text" class="form-control" name="status" placeholder="Status"  value = "{{ old("status") }}"> --}}
+                    <label for="delivery_status">Status Delivery</label>
+                    <select name="delivery_status" class="form-select" id="delivery_status">
+                        <option value="Complete">Complete</option>
+                        <option value="Incomplete">Incomplete</option>
+                    </select>
+                    @error("delivery_status")
+                    <p style = "color: red; font-size: 10px;">{{$message }}</p>
+                    @enderror
+                </div>
+                <div class="mt-3">
+                    <label for="note">Catatan</label>
+                    <input type="text" class="form-control" name="note" id="note" placeholder="Note" value = "{{ old("note")}}">
+                    @error("note")
+                    <p style = "color: red; font-size: 10px;">{{$message }}</p>
+                    @enderror
+                </div>
+                <div class="mt-3">
+                    <input type="submit" class="btn btn-success px-3 py-1" value="add">
+                </div>
+            </form>
+        </div>
 
 
         <!-- Bikin change button color on hover pake js -->
@@ -64,7 +68,7 @@
                 susbtn.classList.add("btn-success");
             });
         </script> --}}
-    </div>
+    </x-container-middle>
 
     <script>
         // Jika input delivery_date berubah, maka jalankan perintah berikut

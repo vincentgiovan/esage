@@ -1,7 +1,7 @@
 @extends('layouts.main-admin')
 
 @section("content")
-
+<x-container>
     <br>
     <h1>All Products in {{ $purchase->register }}</h1>
     <hr>
@@ -30,70 +30,72 @@
     <br>
     <!-- tabel list data-->
 
-    <table class="w-100">
-        <tr>
-            <th class="border border-1 border-dark ">Nomor</th>
-            <th class="border border-1 border-dark ">Nama Produk </th>
-            <th class="border border-1 border-dark ">SKU Produk </th>
-            <th class="border border-1 border-dark ">Harga Beli</th>
-            <th class="border border-1 border-dark ">Quantity</th>
-            <th class="border border-1 border-dark ">Diskon</th>
-            <th class="border border-1 border-dark ">Harga Setelah Diskon</th>
-            <th class="border border-1 border-dark ">Variant</th>
-            <th class="border border-1 border-dark ">Action</th>
-        </tr>
-
-        @foreach ($pp as $purchase_product)
+    <div class="overflow-x-auto">
+        <table class="w-100">
             <tr>
-                <td class="border border-1 border-dark " >{{ $loop->iteration }}</td>
-                <td class="border border-1 border-dark " >{{ $purchase_product->product->product_name }}</td>
-                <td class="border border-1 border-dark " >{{ $purchase_product->product->product_code }}</td>
-                <td class="border border-1 border-dark " >Rp {{ number_format($purchase_product->price, 2, ',' , '.') }}</td>
-                <td class="border border-1 border-dark " >{{ $purchase_product->quantity }}</td>
-                <td class="border border-1 border-dark " >{{ $purchase_product->discount }}%</td>
-                <td class="border border-1 border-dark " >Rp {{ number_format($purchase_product->price * (1 - ($purchase_product->discount / 100)), 2, ',' , '.') }}</td>
-                {{-- <td class="border border-1 border-dark " >{{ $purchase_product->product->markup }}%</td>
-                <td class="border border-1 border-dark " >Rp {{ $purchase_product->price * (1 + ($purchase_product->product->markup / 100)) }},00</td> --}}
-                <td class="border border-1 border-dark " >{{ $purchase_product->product->variant }}</td>
+                <th class="border border-1 border-dark ">Nomor</th>
+                <th class="border border-1 border-dark ">Nama Produk </th>
+                <th class="border border-1 border-dark ">SKU Produk </th>
+                <th class="border border-1 border-dark ">Harga Beli</th>
+                <th class="border border-1 border-dark ">Quantity</th>
+                <th class="border border-1 border-dark ">Diskon</th>
+                <th class="border border-1 border-dark ">Harga Setelah Diskon</th>
+                <th class="border border-1 border-dark ">Variant</th>
+                <th class="border border-1 border-dark ">Action</th>
+            </tr>
 
-                {{-- <td class="border border-1 border-dark " >{{ $p->user->name }}</td> --}}
-                <td class="border border-1 border-dark " >
-                    <div class="d-flex gap-5 w-100 justify-content-center">
-                        <form action="{{ route("purchaseproduct-destroy", [$purchase->id, $purchase_product->id] ) }}" method="POST">
-                            @csrf
-                            <button class="btn btn-danger text-white" style="font-size: 10pt " onclick="return confirm('Do you want to remove this item from the purchase?')">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </form>
+            @foreach ($pp as $purchase_product)
+                <tr>
+                    <td class="border border-1 border-dark " >{{ $loop->iteration }}</td>
+                    <td class="border border-1 border-dark " >{{ $purchase_product->product->product_name }}</td>
+                    <td class="border border-1 border-dark " >{{ $purchase_product->product->product_code }}</td>
+                    <td class="border border-1 border-dark " >Rp {{ number_format($purchase_product->price, 2, ',' , '.') }}</td>
+                    <td class="border border-1 border-dark " >{{ $purchase_product->quantity }}</td>
+                    <td class="border border-1 border-dark " >{{ $purchase_product->discount }}%</td>
+                    <td class="border border-1 border-dark " >Rp {{ number_format($purchase_product->price * (1 - ($purchase_product->discount / 100)), 2, ',' , '.') }}</td>
+                    {{-- <td class="border border-1 border-dark " >{{ $purchase_product->product->markup }}%</td>
+                    <td class="border border-1 border-dark " >Rp {{ $purchase_product->price * (1 + ($purchase_product->product->markup / 100)) }},00</td> --}}
+                    <td class="border border-1 border-dark " >{{ $purchase_product->product->variant }}</td>
+
+                    {{-- <td class="border border-1 border-dark " >{{ $p->user->name }}</td> --}}
+                    <td class="border border-1 border-dark " >
+                        <div class="d-flex gap-5 w-100 justify-content-center">
+                            <form action="{{ route("purchaseproduct-destroy", [$purchase->id, $purchase_product->id] ) }}" method="POST">
+                                @csrf
+                                <button class="btn btn-danger text-white" style="font-size: 10pt " onclick="return confirm('Do you want to remove this item from the purchase?')">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+
+            @endforeach
+
+            <tr>
+                <td colspan="9" style="height: 50px;">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="9" class="border border-1 border-dark" style="background: linear-gradient(to right, rgb(113, 113, 113), rgb(213, 207, 207));">
+                    <div class="d-flex h-100 w-100 justify-content-end gap-3 fw-bold" style="font-size: 14pt;">
+                        <div>
+                            Total:
+                        </div>
+                        <div>
+                            @php
+                                $total = 0;
+                                foreach ($pp as $purchase_product){
+                                    $total += $purchase_product->price * (1 - ($purchase_product->discount / 100));
+                                }
+
+                                echo "Rp " . number_format($total, 2, ',' , '.');
+                            @endphp
+                        </div>
                     </div>
                 </td>
             </tr>
-
-        @endforeach
-
-        <tr>
-            <td colspan="9" style="height: 50px;">
-            </td>
-        </tr>
-        <tr>
-            <td colspan="9" class="border border-1 border-dark" style="background: linear-gradient(to right, rgb(113, 113, 113), rgb(213, 207, 207));">
-                <div class="d-flex h-100 w-100 justify-content-end gap-3 fw-bold" style="font-size: 14pt;">
-                    <div>
-                        Total:
-                    </div>
-                    <div>
-                        @php
-                            $total = 0;
-                            foreach ($pp as $purchase_product){
-                                $total += $purchase_product->price * (1 - ($purchase_product->discount / 100));
-                            }
-
-                            echo "Rp " . number_format($total, 2, ',' , '.');
-                        @endphp
-                    </div>
-                </div>
-            </td>
-        </tr>
-    </table>
-
+        </table>
+    </div>
+</x-container>
 @endsection

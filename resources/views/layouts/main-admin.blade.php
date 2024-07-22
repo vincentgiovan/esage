@@ -80,7 +80,7 @@
     </head>
 
     <body style="min-height: 100vh;">
-        <div class="container-scroller h-100">
+        <div class="container-scroller h-100 w-100">
             <!-- Navbar -->
             @auth
                 <div class="fixed-top" style="z-index: 100;">
@@ -88,17 +88,15 @@
                 </div>
             @endauth
 
-            <div class="container-fluid d-flex justify-content-center position-relative" style="padding: 0;">
+            <div class="container-fluid d-flex justify-content-end position-relative w-100" style="padding: 0;">
                 <!-- Sidebar -->
                 @auth
-                    <div class="h-100 bg-primary">
-                        @include("component.sidebar")
-                    </div>
+                    @include("component.sidebar")
                 @endauth
 
                 <!-- Main -->
-                <div class="main-panel w-100" id="main-content-div">
-                    <div class="content-wrapper">
+                <div class="main-panel d-flex" id="main-content-div" style="min-height: 100vh; width: 85%; padding-left: 0;">
+                    <div class="content-wrapper d-flex flex-column gap-3" style="width: 100%;">
                         <!-- Breadcrumb -->
                         {{-- {{ Breadcrumbs::render() }} --}}
                         @if(Request::is("project*"))
@@ -129,7 +127,9 @@
                         @endif
 
                         <!-- Content -->
-                        @yield("content")
+                        <div class="flex-grow-1 d-flex flex-column">
+                            @yield("content")
+                        </div>
 
                     </div>
                 </div>
@@ -175,9 +175,9 @@
                 $("#sidebarToggler").click(() => {
                     $("#sidebar").fadeToggle("slow", function(){ // sembunyiin kalo diklik and munculin kalo diklik lagi
                         if($("#sidebar").is(":hidden")){
-                            $("#main-content-div").css({"padding-left": "0"}); // kalo sidebarnya hilang main kontennya dibalikin full screen
+                            $("#main-content-div").css({"width": "100%"}); // kalo sidebarnya hilang main kontennya dibalikin full screen
                         } else {
-                            $("#main-content-div").css({"padding-left": "250px"}); // kalo sidebarnya muncul main kontennya "digeser"
+                            $("#main-content-div").css({"width": "85%"}); // kalo sidebarnya muncul main kontennya "digeser"
                         }
                     });
                 });

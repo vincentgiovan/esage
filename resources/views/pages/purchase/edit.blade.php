@@ -1,8 +1,8 @@
 @extends('layouts.main-admin')
 
 @section('content')
-    <div class="d-flex justify-content-center align-items-center" style="min-height:100vh">
-        <div class="container">
+    <x-container-middle>
+        <div class="container bg-white p-5 rounded-4">
 
             <h2>Edit Item</h2>
 
@@ -23,9 +23,10 @@
                     @enderror
                 </div> --}}
                 <div class="mt-3">
-                    <select name="partner_id" class="form-select">
+                    <label for="partner_id">Nama Partner</label>
+                    <select name="partner_id" id="partner_id" class="form-select">
                         @foreach ($supplier as $s)
-                            <option value="{{ $s->id }}" @if ($supplier == old('partner_id')) selected @endif>
+                            <option value="{{ $s->id }}" @if ($s->id == old('partner_id')) selected @endif>
                                 {{ $s->partner_name }}</option>
                         @endforeach
 
@@ -35,6 +36,7 @@
                     @enderror
                 </div>
                 <div class="mt-3">
+                    <label for="purchase_deadline">Deadline Pembelian</label>
                     <input type="text" class="form-control" name="purchase_deadline" id="purchase_deadline"
                         onfocus="(this.type='date')" onblur="(this.type='text')" placeholder="Purchase_deadine"
                         value = "{{ old('purchase_deadline', $purchase->purchase_deadline) }}">
@@ -43,11 +45,12 @@
                     @enderror
                 </div>
                 <div class="mt-3">
-
+                    <label for="fakeregister">SKU</label>
                     <input type="text" class="form-control" id="fakeregister" name="fakeregister" placeholder="Register"
                         disabled value="{{ $purchase->register }}">
                 </div>
                 <div class="mt-3">
+                    <label for="purchase_date">Tanggal Pembelian</label>
                     <input type="text" class="form-control" name="purchase_date" id="purchase_date"
                         onfocus="(this.type='date')" onblur="(this.type='text')" placeholder="Purchase Date"
                         value = "{{ old('purchase_date', $purchase->purchase_date) }}">
@@ -56,7 +59,8 @@
                     @enderror
                 </div>
                 <div class="mt-3">
-                    <select name="purchase_status" class="form-select">
+                    <label for="purchase_status">Status</label>
+                    <select name="purchase_status" id="purchase_status" class="form-select">
                         @foreach ($status as $st)
                             <option value="{{ $st }}" @if ($st == old('purchase_status')) selected @endif>
                                 {{ $st }}</option>
@@ -73,7 +77,7 @@
                 </div>
             </form>
         </div>
-    </div>
+    </x-container-middle>
 
     <script>
         // Jika input delivery_date berubah, maka jalankan perintah berikut

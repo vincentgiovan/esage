@@ -1,8 +1,8 @@
 @extends('layouts.main-admin')
 
 @section('content')
-    <div class="d-flex justify-content-center align-items-center" style="min-height:100vh">
-        <div class="container">
+    <x-container-middle>
+        <div class="container bg-white p-5 rounded-4">
 
             <h2>Edit Item</h2>
 
@@ -22,6 +22,7 @@
                 @enderror
                 </div> --}}
                 <div class="mt-3">
+                    <label for="delivery_date">Tanggal Delivery</label>
                     <input type="date" class="form-control" id="delivery_date" name="delivery_date" placeholder="delivery_date"
                         value = "{{ old('delivery_date', $delivery_order->delivery_date) }}">
 
@@ -30,7 +31,8 @@
                     @enderror
                 </div>
                 <div class="mt-3">
-                    <select name="project_id" class="form-select">
+                    <label for="project_id">Proyek</label>
+                    <select name="project_id" id="project_id" class="form-select">
                         @foreach ($projects as $pn)
                             <option value="{{ $pn->id }}" @if ($delivery_order->project_id == $pn->id) selected @endif>
                                 {{ $pn->project_name }}</option>
@@ -42,12 +44,14 @@
                 </div>
                 <div class="mt-3">
                     <div class="mt-3">
+                        <label for="fakeregister">SKU</label>
                         <input type="text" class="form-control" id="fakeregister" name="fakeregister" placeholder="Register" value="{{ $delivery_order->register }}"  disabled>
                     </div>
                 </div>
                 <div class="mt-3">
+                    <label for="delivery_status">Status Delivery</label>
                     {{-- <input type="text" class="form-control" name="status" placeholder="Status"  value = "{{ old("status") }}"> --}}
-                    <select name="delivery_status" class="form-select">
+                    <select name="delivery_status" id="delivery_status" class="form-select">
                         <option value="Complete">Complete</option>
                         <option value="Incomplete">Incomplete</option>
                     </select>
@@ -56,7 +60,8 @@
                     @enderror
                 </div>
                 <div class="mt-3">
-                    <input type="text" class="form-control" name="note" placeholder="Note"
+                    <label for="note">Catatan</label>
+                    <input type="text" class="form-control" id="note" name="note" placeholder="Note"
                         value = "{{ old('note', $delivery_order->note) }}">
                     @error('note')
                         <p style = "color: red; font-size: 10px;">{{ $message }}</p>
@@ -67,7 +72,7 @@
                 </div>
             </form>
         </div>
-    </div>
+    </x-container-middle>
 
     <script>
         // Jika input delivery_date berubah, maka jalankan perintah berikut

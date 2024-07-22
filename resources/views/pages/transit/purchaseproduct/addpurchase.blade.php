@@ -3,67 +3,74 @@
 
 @section("content")
 
-    <div class="d-flex justify-content-center align-items-center" style="min-height:100vh">
-    <div class="container">
+    <x-container-middle>
+        <div class="container">
 
-        <h2>Add New Purchase</h2>
-            <div>
-                <div class="mt-3 ">
-                    <select name="product_name" class="form-select" id="select-product-dropdown">
-                        @foreach ($products as $product)
-                            <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} ({{ $product->variant }})  (stok terakhir :  {{ $product->stock }})</option>
-                        @endforeach
-                    </select>
-                    <p style = "color: red; font-size: 10px;"></p>
+            <h2>Add New Purchase</h2>
+                <div>
+                    <div class="mt-3 ">
+                        <label for="select-product-dropdown">Nama Produk</label>
+                        <select name="product_name" class="form-select" id="select-product-dropdown">
+                            @foreach ($products as $product)
+                                <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} ({{ $product->variant }})  (stok terakhir :  {{ $product->stock }})</option>
+                            @endforeach
+                        </select>
+                        <p style = "color: red; font-size: 10px;"></p>
+                    </div>
+                    <div class="mt-3">
+                        <label for="price">Harga</label>
+                        <input type="number" class="form-control" name="price" id="price"  placeholder="Price"  value = "{{ old("price") }}">
+                        <p style = "color: red; font-size: 10px;" id="errPrice"></p>
+                    </div>
+                    <div class="mt-3">
+                        <label for="discount">Diskon</label>
+                        <input type="number" class="form-control" name="discount"  id="discount" placeholder="Diskon"  value = "{{ old("discount") }}">
+                        <p style = "color: red; font-size: 10px;" id="errDiscount"></p>
+                    </div>
+                    <div class="mt-3">
+                        <label for="quantity">Jumlah</label>
+                        <input type="number" class="form-control" name="quantity" id="quantity"  placeholder="Quantity" value = "{{ old("quantity")}}">
+                        <p style = "color: red; font-size: 10px;" id="errQuantity"></p>
+                    </div>
+
+                        <div class="mt-3">
+                            <input type="button" id="addbutton" class="btn btn-primary px-3 py-1" value="Add Items">
+                        </div>
                 </div>
-                <div class="mt-3">
-                    <input type="number" class="form-control" name="price" id="price"  placeholder="Price"  value = "{{ old("price") }}">
-                    <p style = "color: red; font-size: 10px;" id="errPrice"></p>
+
+                <div class="overflow-x-auto">
+                    <table class="w-100 mt-4">
+                        <thead>
+                            <th>Nama Barang & Variant</th>
+                            <th>Price</th>
+                            <th>Diskon</th>
+                            <th>Quantity</th>
+                            <th>Action</th>
+                        </thead>
+                        <tbody id="isibody">
+
+                        </tbody>
+                    </table>
                 </div>
-                <div class="mt-3">
-                    <input type="number" class="form-control" name="discount"  id="discount" placeholder="Diskon"  value = "{{ old("discount") }}">
-                    <p style = "color: red; font-size: 10px;" id="errDiscount"></p>
-                </div>
-                <div class="mt-3">
-                    <input type="number" class="form-control" name="quantity" id="quantity"  placeholder="Quantity" value = "{{ old("quantity")}}">
-                    <p style = "color: red; font-size: 10px;" id="errQuantity"></p>
-                </div>
+
+                <form method="POST" action="{{ route("purchaseproduct-store1", $purchase->id ) }}" class="mt-5" id="peon">
+                {{-- @csrf kepake untuk token ,wajib --}}
+                    @csrf
 
                     <div class="mt-3">
-                        <input type="button" id="addbutton" class="btn btn-primary px-3 py-1" value="Add Items">
+                        <input type="submit" class="btn btn-success px-3 py-1" value="Proceed">
                     </div>
+                    @error("prices")
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                    <br>
+                    @error("quantities")
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </form>
             </div>
-
-            <table class="w-100 mt-4">
-                <thead>
-                    <th>Nama Barang & Variant</th>
-                    <th>Price</th>
-                    <th>Diskon</th>
-                    <th>Quantity</th>
-                    <th>Action</th>
-                </thead>
-                <tbody id="isibody">
-
-                </tbody>
-            </table>
-
-            <form method="POST" action="{{ route("purchaseproduct-store1", $purchase->id ) }}" class="mt-5" id="peon">
-            {{-- @csrf kepake untuk token ,wajib --}}
-                @csrf
-
-                <div class="mt-3">
-                    <input type="submit" class="btn btn-success px-3 py-1" value="Proceed">
-                </div>
-                @error("prices")
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
-                <br>
-                @error("quantities")
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
-            </form>
         </div>
-    </div>
+    </x-container-middle>
 
     <script>
         // Targetkan form buat submit data

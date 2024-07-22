@@ -5,72 +5,84 @@
 @endsection
 
 @section('content')
-    <div class="d-flex justify-content-center align-items-center" style="min-height:100vh">
-        <div class="container border border-1 border-secondary rounded rounded-full p-5">
+    <x-container-middle>
+        <div class="container bg-white rounded-4 p-5">
             <h2 class="text-center fw-bold">Add New Product</h2>
             <form method="POST" action="{{ route('product-store') }}">
                 {{-- @csrf kepake untuk token ,wajib --}}
                 @csrf
+
                 <div class="mt-3">
-                    <label>Nama produk</label>
-                    <input type="text" class="form-control" name="product_name" placeholder="Nama Barang"
-                        value = "{{ old('product_name') }}">
+                    <label for="product_name">Nama Produk</label>
+                    <input type="text" class="form-control" name="product_name" id="product_name" placeholder="Nama Barang"
+                        value="{{ old('product_name') }}">
                     @error('product_name')
-                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
+                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
+
                 <div class="mt-3">
-                    <label>Satuan produk</label>
-                    <input type="text" class="form-control" name="unit" placeholder="Unit"
-                        value = "{{ old('unit') }}">
+                    <label for="unit">Satuan Produk</label>
+                    <input type="text" class="form-control" name="unit" id="unit" placeholder="Unit"
+                        value="{{ old('unit') }}">
                     @error('unit')
-                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
+                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
-                {{-- membuat drop down untuk tabel --}}
+
                 <div class="mt-3">
-                    {{-- <input type="text" class="form-control" name="status" placeholder="Status"  value = "{{ old("status") }}"> --}}
-                    <select name="status" class="form-select">
+                    <label for="status">Status</label>
+                    <select name="status" id="status" class="form-select">
                         <option value="Ready">Ready</option>
                         <option value="Out Of Stock">Out Of Stock</option>
                     </select>
                     @error('status')
-                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
+                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
+
                 <div class="mt-3">
-                    <input type="text" class="form-control" name="variant" placeholder="Variant"
-                        value = "{{ old('variant') }}">
+                    <label for="variant">Variant</label>
+                    <input type="text" class="form-control" name="variant" id="variant" placeholder="Variant"
+                        value="{{ old('variant') }}">
                     @error('variant')
-                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
+                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
+
                 <div class="mt-3">
-                    <input type="text" class="form-control" name="product_code" placeholder="Kode Produk"
-                        value = "{{ old('product_code') }}">
+                    <label for="product_code">Kode Produk</label>
+                    <input type="text" class="form-control" name="product_code" id="product_code" placeholder="Kode Produk"
+                        value="{{ old('product_code') }}">
                     @error('product_code')
-                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
+                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
+
                 <div class="mt-3">
-                    <input type="number" class="form-control" name="price" placeholder="Harga"
-                        value = "{{ old('price') }}">
+                    <label for="price">Harga</label>
+                    <input type="number" class="form-control" name="price" id="price" placeholder="Harga"
+                        value="{{ old('price') }}">
                     @error('price')
-                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
+                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
+
                 <div class="mt-3">
-                    <input type="number" class="form-control" name="markup" placeholder="Markup"
-                        value = "{{ old('markup') }}">
+                    <label for="markup">Markup</label>
+                    <input type="number" class="form-control" name="markup" id="markup" placeholder="Markup"
+                        value="{{ old('markup') }}">
                     @error('markup')
-                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
+                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
+
                 <div class="mt-3">
-                    <input type="number" class="form-control" name="stock" placeholder="Stok"
-                        value = "{{ old('stock') }}">
+                    <label for="stock">Stok</label>
+                    <input type="number" class="form-control" name="stock" id="stock" placeholder="Stok"
+                        value="{{ old('stock') }}">
                     @error('stock')
-                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
+                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -78,41 +90,10 @@
                     @if (session()->has('passwordNotConfirmed'))
                         <p class="text-success fw-bold">{{ session('passwordNotConfirmed') }}</p>
                     @endif
-                    <input type="submit" class="btn btn-success px-3 py-1">
+                    <input type="submit" class="btn btn-success px-3 py-1" value="Submit">
                 </div>
             </form>
 
-            <!-- Bikin change button color on hover pake js -->
-            {{-- <script>
-            const susbtn = document.querySelector("#susbtn");
-            susbtn.addEventListener("mouseover", () => {
-                susbtn.classList.remove("btn-success");
-                susbtn.classList.add("btn-secondary");
-            });
-            susbtn.addEventListener("mouseout", () => {
-                susbtn.classList.remove("btn-secondary");
-                susbtn.classList.add("btn-success");
-            });
-        </script> --}}
-
-            <!-- FITUR KEREN bad ui design-->
-            {{-- <script>
-            const susbtn = document.querySelector("#susbtn");
-            susbtn.addEventListener("mouseover", () => {
-                let x = parseInt(Math.random() * 4);
-                let m = susbtn.style.marginTop;
-                console.log(x);
-                console.log(m);
-
-                switch(x){
-                    case 0: susbtn.style.marginTop = "50px"; break;
-                    case 1: susbtn.style.marginLeft = "50px"; break;
-                    case 2: susbtn.style.marginTop = "0px"; break;
-                    case 3: susbtn.style.marginLeft = "0px"; break;
-                }
-            });
-        </script> --}}
-
         </div>
-    </div>
+    </x-container-middle>
 @endsection
