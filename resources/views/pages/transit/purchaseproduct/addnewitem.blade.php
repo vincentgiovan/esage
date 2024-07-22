@@ -41,7 +41,11 @@
                 </div>
                 <div class="mt-3">
                     <input type="number" class="form-control" name="stock"  id="stock" placeholder="Stok"  value = "{{ old("stock") }}">
-                    <p style = "color: red; font-size: 10px;" id="errS.  tock"></p>
+                    <p style = "color: red; font-size: 10px;" id="errStock"></p>
+                </div>
+                <div class="mt-3">
+                    <input type="number" class="form-control" name="discount"  id="discount" placeholder="Diskon"  value = "{{ old("discount") }}">
+                    <p style = "color: red; font-size: 10px;" id="errDiscount"></p>
                 </div>
 
                 <div class="mt-3">
@@ -59,7 +63,8 @@
                     <th>Harga</th>
                     <th>Mark Up</th>
                     <th>Stok</th>
-
+                    <th>Diskon</th>
+                    <th>Action</th>
                 </thead>
                 <tbody id="isibody">
 
@@ -104,17 +109,28 @@
                 @error("stock")
                     <span class="text-danger">{{ $message }}</span>
                 @enderror
+                <br>
+                @error("discount")
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
 
             </form>
         </div>
     </div>
 
     <script>
+        // Targetkan form buat submit data
         const confirmationForm = document.getElementById("peon");
+
+        // Targetkan tombol add data
         const addbutton = document.getElementById("addbutton");
 
+        // Kalau tombol add data diklik maka lakukan:
         addbutton.addEventListener("click", function(){
+            // Targetkan tbody tabel (buat nanti display data)
             const tbody = document.getElementById("isibody");
+
+            // Targetkan elemen-elemen input data purchase produk yang diperlukan (buat nanti diambil nilainya)
             const input1 = document.getElementById("product_name");
             const input2 = document.getElementById("unit");
             const input3 = document.getElementById("status");
@@ -123,7 +139,9 @@
             const input6 = document.getElementById("price");
             const input7 = document.getElementById("markup");
             const input8 = document.getElementById("stock");
+            const input9 = document.getElementById("discount");
 
+            // Targetkan elemen-elemen error message (buat nanti display error message)
             const errProductName = document.getElementById("errProductName");
             const errUnit = document.getElementById("errUnit");
             const errStatus = document.getElementById("errStatus");
@@ -132,7 +150,9 @@
             const errPrice = document.getElementById("errPrice");
             const errMarkup = document.getElementById("errMarkup");
             const errStock = document.getElementById("errStock");
+            const errDiscount = document.getElementById("errDiscount");
 
+            // Hilangkan error message dan mark merah pada input dan error message sebelum validasi
             errProductName.innerText = "";
             errUnit.innerText = "";
             errStatus.innerText = "";
@@ -141,6 +161,8 @@
             errPrice.innerText = "";
             errMarkup.innerText = "";
             errStock.innerText = "";
+            errDiscount.innerText = "";
+
             input1.style.border = "none";
             input2.style.border = "none";
             input3.style.border = "none";
@@ -149,9 +171,12 @@
             input6.style.border = "none";
             input7.style.border = "none";
             input8.style.border = "none";
+            input9.style.border = "none";
 
+            // Validasi input
             let inputAman = true;
 
+            // Kalo product name kosong maka mark merah input dan tampilkan error message
             if(!input1.value){
                 input1.style.border = "solid 1px red";
                 errProductName.innerText = "Invalid input";
@@ -159,6 +184,7 @@
                 inputAman = false;
             }
 
+            // Kalo satuan kosong maka mark merah input dan tampilkan error message
             if(!input2.value){
                 input2.style.border = "solid 1px red";
                 errUnit.innerText = "Invalid input";
@@ -166,6 +192,7 @@
                 inputAman = false;
             }
 
+            // Kalo varian kosong maka mark merah input dan tampilkan error message
             if(!input4.value){
                 input4.style.border = "solid 1px red";
                 errVariant.innerText = "Invalid input";
@@ -173,6 +200,7 @@
                 inputAman = false;
             }
 
+            // Kalo kode produk kosong maka mark merah input dan tampilkan error message
             if(!input5.value){
                 input5.style.border = "solid 1px red";
                 errProductCode.innerText = "Invalid input";
@@ -180,6 +208,7 @@
                 inputAman = false;
             }
 
+            // Kalo harga kosong atau di bawah 1 maka mark merah input dan tampilkan error message
             if(!input6.value && input6.value < 1){
                 input6.style.border = "solid 1px red";
                 errPrice.innerText = "Invalid input";
@@ -187,6 +216,7 @@
                 inputAman = false;
             }
 
+            // Kalo markup kosong atau di bawah 1 maka mark merah input dan tampilkan error message
             if(input7.value && input7.value < 1){
                 input7.style.border = "solid 1px red";
                 errMarkup.innerText = "Invalid input";
@@ -194,6 +224,7 @@
                 inputAman = false;
             }
 
+            // Kalo stock kosong atau di bawah 1 maka mark merah input dan tampilkan error message
             if(!input8.value && input8.value < 1){
                 input8.style.border = "solid 1px red";
                 errStock.innerText = "Invalid input";
@@ -201,11 +232,20 @@
                 inputAman = false;
             }
 
+            // Kalo diskon kosong maka mark merah input dan tampilkan error message
+            if(!input9.value){
+                input9.style.border = "solid 1px red";
+                errDiscount.innerText = "Invalid input";
 
+                inputAman = false;
+            }
+
+            // Kalau misalkan ada 1 atau lebih input yang ga sesuai, jangan dilanjut
             if(!inputAman){
                 return;
             }
 
+            // Generate elemen <tr> dan <td> untuk membuat row tabel display
             const newRow = document.createElement("tr");
             const column1 = document.createElement("td");
             const column2 = document.createElement("td");
@@ -216,22 +256,27 @@
             const column7 = document.createElement("td");
             const column8 = document.createElement("td");
             const column9 = document.createElement("td");
+            const column10 = document.createElement("td");
 
-            column1.innerText = input1.value;
-            column2.innerText = input2.value;
-            column3.innerText = input3.value;
-            column4.innerText = input4.value;
+            // Untuk setiap kolom yang dibentuk masukkan data dari setiap input yang sesuai
+            column1.innerText = input1.value; // Misalnya kolom paling kiri yang pertama diisi sama nilai dari input 1 which is product name
+            column2.innerText = input2.value; // Then kolom kedua diisi sama nilai dari unit barang
+            column3.innerText = input3.value; // Then kolom ketiga diisi sama nilai dari status
+            column4.innerText = input4.value; // dan seterusnya ...
             column5.innerText = input5.value;
             column6.innerText = input6.value;
             column7.innerText = input7.value;
             column8.innerText = input8.value;
+            column9.innerText = input9.value;
 
+            // Buat tombol merah tong sampah buat nanti dipake buat hapus 1 row data
             const deleteButton = document.createElement("button");
             deleteButton.classList.add("btn", "btn-danger");
             deleteButton.setAttribute("type", "button");
             deleteButton.innerText = "Remove";
-            column9.appendChild(deleteButton);
+            column10.appendChild(deleteButton); // display tombol merah di kolom action
 
+            // Gabungkan semua kolom data menjadi 1 row data
             newRow.appendChild(column1);
             newRow.appendChild(column2);
             newRow.appendChild(column3);
@@ -241,8 +286,12 @@
             newRow.appendChild(column7);
             newRow.appendChild(column8);
             newRow.appendChild(column9);
+            newRow.appendChild(column10);
+
+            // Tambahkan row data baru ke tabel untuk di-display
             tbody.appendChild(newRow);
 
+            // Generate hidden input untuk kirim data ke Laravel (bikin something like <input type="hidden" name="variabel_data[]" value="nilai_dari_input"> buat setiap input yang ada)
             const susInput1 = document.createElement("input");
             susInput1.setAttribute("type", "hidden");
             susInput1.setAttribute("name", "product_name[]");
@@ -283,6 +332,12 @@
             susInput8.setAttribute("name", "stock[]");
             susInput8.setAttribute("value", input8.value);
 
+            const susInput9 = document.createElement("input");
+            susInput9.setAttribute("type", "hidden");
+            susInput9.setAttribute("name", "discount[]");
+            susInput9.setAttribute("value", input9.value);
+
+            // Tambahkan semua hidden input ke form submit
             confirmationForm.appendChild(susInput1);
             confirmationForm.appendChild(susInput2);
             confirmationForm.appendChild(susInput3);
@@ -291,9 +346,13 @@
             confirmationForm.appendChild(susInput6);
             confirmationForm.appendChild(susInput7);
             confirmationForm.appendChild(susInput8);
+            confirmationForm.appendChild(susInput9);
 
+            // Kalau tombol merah diklik maka lakukan:
             deleteButton.addEventListener("click", function(){
-                tbody.removeChild(newRow);
+                tbody.removeChild(newRow); // Hapus row data yang ada di tabel
+
+                // Hilangkan hidden input-nya juga
                 confirmationForm.removeChild(susInput1);
                 confirmationForm.removeChild(susInput2);
                 confirmationForm.removeChild(susInput3);
@@ -302,10 +361,9 @@
                 confirmationForm.removeChild(susInput6);
                 confirmationForm.removeChild(susInput7);
                 confirmationForm.removeChild(susInput8);
+                confirmationForm.appendChild(susInput9);
             });
         });
     </script>
-
-
-
+    
 @endsection

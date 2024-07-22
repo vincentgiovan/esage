@@ -100,32 +100,33 @@ class PurchaseProductController extends Controller
             "price" => "required",
             "markup" => "required",
             "stock" => "required",
+            "discount" => "required"
         ]);
 
         // Targetkan purchase yang cart-nya mau ditambahin
         $purchase = Purchase::where("id", $id)->first();
 
         // Untuk setiap data produk yang dikirimkan lakukan:
-        foreach($request->products as $index => $product_id){
+        foreach($request->product_name as $index => $product){
             // Bikin dan tambahkan data produk ke tabel products
             $new_product = Product::create([
-                "product_name" => $request->product_name,
-                "unit" => $request->unit,
-                "status" => $request->status,
-                "variant" => $request->variant,
-                "product_code" => $request->product_code,
-                "price" => $request->price,
-                "markup" => $request->markup,
-                "stock" => $request->stock,
+                "product_name" => $product,
+                "unit" => $request->unit[$index],
+                "status" => $request->status[$index],
+                "variant" => $request->variant[$index],
+                "product_code" => $request->product_code[$index],
+                "price" => $request->price[$index],
+                "markup" => $request->markup[$index],
+                "stock" => $request->stock[$index],
             ]);
 
             // Tambahkan data ke tabel purchase_product di mana id product sama dengan yang dibuat dan purchase sama dengan target cart purchase
             PurchaseProduct::create([
                 "purchase_id" => $purchase->id,
                 "product_id" => $new_product->id,
-                "discount" => $request->discounts[$index],
-                "quantity" => $request->quantities[$index],
-                "price" => $request->prices[$index]
+                "discount" => $request->discount[$index],
+                "quantity" => $request->stock[$index],
+                "price" => $request->price[$index]
             ]);
         };
 

@@ -1,20 +1,23 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <title>eSage</title>
-
+        <!-- Meta data & title -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+        <title>eSage</title>
+
+        <!-- Style punya template halaman -->
         <link rel="stylesheet" href="{{ asset("vendors/ti-icons/css/themify-icons.css") }}">
         <link rel="stylesheet" href="{{ asset("template/vendors/base/vendor.bundle.base.css") }}">
-
         <link rel="stylesheet" href="{{ asset("template/css/style.css") }}">
 
-        <link rel="shortcut icon" href="{{ asset("res/sageico.ico") }}" />
-
+        <!-- Bootstrap CSS & icon -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+        <!-- Original asset -->
+        <link rel="shortcut icon" href="{{ asset("res/sageico.ico") }}" />
         <link rel="stylesheet" href="style.css">
 
         <!-- Custom styles -->
@@ -86,15 +89,17 @@
             @endauth
 
             <div class="container-fluid d-flex justify-content-center position-relative" style="padding: 0;">
+                <!-- Sidebar -->
                 @auth
                     <div class="h-100 bg-primary">
                         @include("component.sidebar")
                     </div>
                 @endauth
 
-                <!-- Main content -->
+                <!-- Main -->
                 <div class="main-panel w-100" id="main-content-div">
                     <div class="content-wrapper">
+                        <!-- Breadcrumb -->
                         {{-- {{ Breadcrumbs::render() }} --}}
                         @if(Request::is("project*"))
                             <x-projectbc>
@@ -123,54 +128,41 @@
 
                         @endif
 
+                        <!-- Content -->
                         @yield("content")
+
                     </div>
                 </div>
             </div>
-
         </div>
 
-        <!-- plugins:js -->
+        <!-- Gatau buat apa -->
+        <div style="color: rgb(197, 197, 197)"></div>
+
+        <!-- Template halaman -->
         <script src="{{ asset("template/vendors/base/vendor.bundle.base.js") }}"></script>
-        <!-- endinject -->
-        <!-- Plugin js for this page-->
         <script src="{{ asset("template/vendors/chart.js/Chart.min.js") }}"></script>
         <script src="{{ asset("template/js/jquery.cookie.js") }}" type="text/javascript"></script>
-        <!-- End plugin js for this page-->
-        <!-- inject:js -->
         <script src="{{ asset("template/js/off-canvas.js") }}"></script>
         <script src="{{ asset("template/js/hoverable-collapse.js") }}"></script>
         <script src="{{ asset("template/js/template.js") }}"></script>
         <script src="{{ asset("template/js/todolist.js") }}"></script>
-        <!-- endinject -->
-        <!-- Custom js for this page-->
         <script src="{{ asset("template/js/dashboard.js") }}"></script>
-        <!-- End custom js for this page-->
 
         <!-- Import bootstrap -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
         <!-- Include Select2 JavaScript -->
 		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-        <div style="color: rgb(197, 197, 197)"></div>
+
+        <!-- Custom javascript -->
         <script>
             $(document).ready(() => {
+                // Buat ngubah dropdown select product jadi select2 (yang ada fitur searchnya) dan sedikit styling
                 $('#select-product-dropdown').select2({
                     placeholder: "Select a Student",
                     allowClear: false
                 });
-
-                $("#sidebarToggler").click(() => {
-                    $("#sidebar").fadeToggle("slow", function(){
-                        if($("#sidebar").is(":hidden")){
-                            $("#main-content-div").css({"padding-left": "0"});
-                        } else {
-                            $("#main-content-div").css({"padding-left": "250px"});
-                        }
-                    });
-                });
-
-                // $('#select-product-dropdown').next('.select2-container').find('.select2-selection').addClass('form-control py-3');
 
                 $('#select-product-dropdown').next('.select2-container').find('.select2-selection').css({
                     "height": "2.4rem",
@@ -178,8 +170,19 @@
                     "border": "none",
                     "width": "100%"
                 });
-            });
 
+                // Sidebar toggle
+                $("#sidebarToggler").click(() => {
+                    $("#sidebar").fadeToggle("slow", function(){ // sembunyiin kalo diklik and munculin kalo diklik lagi
+                        if($("#sidebar").is(":hidden")){
+                            $("#main-content-div").css({"padding-left": "0"}); // kalo sidebarnya hilang main kontennya dibalikin full screen
+                        } else {
+                            $("#main-content-div").css({"padding-left": "250px"}); // kalo sidebarnya muncul main kontennya "digeser"
+                        }
+                    });
+                });
+            });
         </script>
+
     </body>
 </html>
