@@ -28,6 +28,12 @@ class DatabaseSeeder extends Seeder
         "role" => 1,
         "password" => bcrypt("admin")]);
 
+        User::create([
+            "name" => "Vannes Theo S",
+            "email" => "vannestheo@gmail.com",
+            "role" => 1,
+            "password" => bcrypt("2132-tV@pA")]);
+
         Product::create([
             "product_name" => "papan kayu",
             "unit" => "batang",
