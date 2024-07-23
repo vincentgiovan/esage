@@ -1,62 +1,70 @@
 @extends('layouts.main-admin')
 
 @section('content')
-    <div class="d-flex justify-content-center align-items-center" style="min-height:100vh">
-        <div class="container border border-1 border-secondary rounded rounded-full p-5">
+    <x-container-middle>
+        <div class="container bg-white rounded-4 p-5">
             <h2 class="text-center fw-bold">Insert Partner</h2>
             <form method="POST" action="{{ route('partner-store') }}">
                 {{-- @csrf kepake untuk token ,wajib --}}
                 @csrf
                 <div class="mt-3">
-                    <input type="text" class="form-control" name="partner_name" placeholder="Nama Partner"
+                    <label for="partner_name">Nama Partner</label>
+                    <input type="text" class="form-control" name="partner_name" id="partner_name" placeholder="Nama Partner"
                         value = "{{ old('partner_name') }}">
                     @error('partner_name')
                         <p style = "color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
                 <div class="mt-3">
-                    <input type="text" class="form-control" name="role" placeholder="Role"
+                    <label for="role">Tipe Partner</label>
+                    <input type="text" class="form-control" name="role" id="role" placeholder="Role"
                         value = "{{ old('role') }}">
                     @error('role')
                         <p style = "color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
                 <div class="mt-3">
-                    <input type="text" class="form-control" name="remark" placeholder="Remark"
+                    <label for="remark">Remark</label>
+                    <input type="text" class="form-control" name="remark" id="remark" placeholder="Remark"
                         value = "{{ old('remark') }}">
                     @error('remark')
                         <p style = "color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
                 <div class="mt-3">
-                    <input type="text" class="form-control" name="address" placeholder="Alamat"
+                    <label for="address">Alamat</label>
+                    <input type="text" class="form-control" name="address" id="address" placeholder="Alamat"
                         value = "{{ old('address') }}">
                     @error('address')
                         <p style = "color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
                 <div class="mt-3">
-                    <input type="text" class="form-control" name="contact" placeholder="Kontak"
+                    <label for="contact">Kontak</label>
+                    <input type="text" class="form-control" name="contact" id="contact" placeholder="Kontak"
                         value = "{{ old('contact') }}">
                     @error('contact')
                         <p style = "color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
                 <div class="mt-3">
-                    <input type="text" class="form-control" name="phone" placeholder="No Telp"
+                    <label for="phone">Telepon</label>
+                    <input type="text" class="form-control" name="phone" id="phone" placeholder="No Telp"
                         value = "{{ old('phone') }}">
                     @error('phone')
                         <p style = "color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
                 <div class="mt-3">
-                    <input type="text" class="form-control" name="fax" placeholder="Fax"
+                    <label for="fax">Fax</label>
+                    <input type="text" class="form-control" name="fax" id="fax"  placeholder="Fax"
                         value = "{{ old('fax') }}">
                     @error('fax')
                         <p style = "color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
                 <div class="mt-3">
+                    <label for="email">Email</label>
                     <input type="email" class="form-control" name="email" placeholder="Email"
                         value = "{{ old('email') }}">
                     @error('email')
@@ -64,6 +72,7 @@
                     @enderror
                 </div>
                 <div class="mt-3">
+                    <label for="tempo">Tempo</label>
                     <input type="text" class="form-control" name="tempo" placeholder="Tempo"
                         value = "{{ old('tempo') }}">
                     @error('tempo')
@@ -80,5 +89,5 @@
             </form>
 
         </div>
-    </div>
+    </x-container-middle>
 @endsection

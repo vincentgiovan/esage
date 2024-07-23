@@ -1,8 +1,8 @@
 @extends('layouts.main-admin')
 
 @section('content')
-    <div class="d-flex justify-content-center align-items-center" style="min-height:100vh">
-        <div class="container">
+    <x-container-middle>
+        <div class="container bg-white p-5 rounded-4">
 
             <h2>Edit Item</h2>
 
@@ -12,6 +12,7 @@
                 {{-- @csrf kepake untuk token ,wajib --}}
                 @csrf
                 <div class="mt-3">
+                    <label for="partner_name">Nama Partner</label>
                     <input type="text" class="form-control" name="partner_name" placeholder="Nama Partner"
                         value = "{{ old('partner_name', $partner->partner_name) }}">
                     @error('partner_name')
@@ -19,6 +20,7 @@
                     @enderror
                 </div>
                 <div class="mt-3">
+                    <label for="role">Role</label>
                     <input type="text" class="form-control" name="role" placeholder="Role"
                         value = "{{ old('role', $partner->role) }}">
                     @error('role')
@@ -26,6 +28,7 @@
                     @enderror
                 </div>
                 <div class="mt-3">
+                    <label for="remark">Remark</label>
                     <input type="text" class="form-control" name="remark" placeholder="Remark"
                         value = "{{ old('remark', $partner->remark) }}">
                     @error('remark')
@@ -33,6 +36,7 @@
                     @enderror
                 </div>
                 <div class="mt-3">
+                    <label for="address">Alamat</label>
                     <input type="text" class="form-control" name="address" placeholder="Alamat"
                         value = "{{ old('address', $partner->address) }}">
                     @error('address')
@@ -40,6 +44,7 @@
                     @enderror
                 </div>
                 <div class="mt-3">
+                    <label for="contact">Kontak</label>
                     <input type="text" class="form-control" name="contact" placeholder="Kontak"
                         value = "{{ old('contact', $partner->contact) }}">
                     @error('contact')
@@ -47,6 +52,7 @@
                     @enderror
                 </div>
                 <div class="mt-3">
+                    <label for="phone">No Telp</label>
                     <input type="text" class="form-control" name="phone" placeholder="No Telp"
                         value = "{{ old('phone', $partner->phone) }}">
                     @error('phone')
@@ -54,6 +60,7 @@
                     @enderror
                 </div>
                 <div class="mt-3">
+                    <label for="fax">Fax</label>
                     <input type="text" class="form-control" name="fax" placeholder="Fax"
                         value = "{{ old('fax', $partner->fax) }}">
                     @error('fax')
@@ -61,6 +68,7 @@
                     @enderror
                 </div>
                 <div class="mt-3">
+                    <label for="email">Email</label>
                     <input type="email" class="form-control" name="email" placeholder="Email"
                         value = "{{ old('email', $partner->email) }}">
                     @error('email')
@@ -68,6 +76,7 @@
                     @enderror
                 </div>
                 <div class="mt-3">
+                    <label for="tempo">Tempo</label>
                     <input type="text" class="form-control" name="tempo" placeholder="Tempo"
                         value = "{{ old('tempo', $partner->tempo) }}">
                     @error('tempo')
@@ -80,6 +89,6 @@
                 </div>
             </form>
         </div>
-    </div>
+    </x-container-middle>
 
 @endsection

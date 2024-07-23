@@ -3,58 +3,63 @@
 
 @section("content")
 
-    <div class="d-flex justify-content-center align-items-center" style="min-height:100vh">
-    <div class="container">
+    <x-container-middle>
+        <div class="container bg-white rounded-4 p-5">
 
-        <h2>Add Product To Delivery Order</h2>
-            <div>
-                <div class="mt-3">
-                    <select name="product_name" class="form-select" id="select-product-dropdown">
-                        @foreach ($products as $product)
-                            <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} ({{ $product->variant }}) (Stok :  {{ $product->stock }})</option>
-                        @endforeach
-                    </select>
-                    <p style = "color: red; font-size: 10px;"></p>
-                </div>
-
-                <div class="mt-3">
-                    <input type="number" class="form-control" name="quantity" id="quantity"  placeholder="Quantity" value = "{{ old("quantity")}}">
-                    <p style = "color: red; font-size: 10px;" id="errQuantity"></p>
-                </div>
+            <h2>Add Product To Delivery Order</h2>
+                <div>
+                    <div class="mt-3">
+                        <label for="select-product-dropdown">Nama Produk</label>
+                        <select name="product_name" class="form-select" id="select-product-dropdown">
+                            @foreach ($products as $product)
+                                <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} ({{ $product->variant }}) (Stok :  {{ $product->stock }})</option>
+                            @endforeach
+                        </select>
+                        <p style = "color: red; font-size: 10px;"></p>
+                    </div>
 
                     <div class="mt-3">
-                        <input type="button" id="addbutton" class="btn btn-primary px-3 py-1" value="Add Items">
+                        <label for="quantity">Jumlah</label>
+                        <input type="number" class="form-control" name="quantity" id="quantity"  placeholder="Quantity" value = "{{ old("quantity")}}">
+                        <p style = "color: red; font-size: 10px;" id="errQuantity"></p>
                     </div>
-            </div>
 
-            <table class="w-100 mt-4">
-                <thead>
-                    <th>Nama Barang & Variant</th>
-                    <th>Quantity</th>
-                    <th>Action</th>
-                </thead>
-                <tbody id="isibody">
-
-                </tbody>
-            </table>
-
-            <form method="POST" action="{{ route("deliveryorderproduct-store1", $deliveryorder->id ) }}" class="mt-5" id="peon">
-            {{-- @csrf kepake untuk token ,wajib --}}
-                @csrf
-
-                <div class="mt-3">
-                    <input type="submit" class="btn btn-success px-3 py-1" value="Proceed">
+                        <div class="mt-3">
+                            <input type="button" id="addbutton" class="btn btn-primary px-3 py-1" value="Add Items">
+                        </div>
                 </div>
-                @error("prices")
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
-                <br>
-                @error("quantities")
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
-            </form>
+
+                <div class="overflow-x-auto">
+                    <table class="w-100 mt-4">
+                        <thead>
+                            <th>Nama Barang & Variant</th>
+                            <th>Quantity</th>
+                            <th>Action</th>
+                        </thead>
+                        <tbody id="isibody">
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <form method="POST" action="{{ route("deliveryorderproduct-store1", $deliveryorder->id ) }}" class="mt-5" id="peon">
+                {{-- @csrf kepake untuk token ,wajib --}}
+                    @csrf
+
+                    <div class="mt-3">
+                        <input type="submit" class="btn btn-success px-3 py-1" value="Proceed">
+                    </div>
+                    @error("prices")
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                    <br>
+                    @error("quantities")
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </form>
+            </div>
         </div>
-    </div>
+    </x-container-middle>
 
     <script>
         // Targetkan form buat submit data

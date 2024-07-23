@@ -1,8 +1,8 @@
 @extends('layouts.main-admin')
 
 @section('content')
-    <div class="d-flex justify-content-center align-items-center" style="min-height:100vh">
-        <div class="container">
+    <x-container-middle>
+        <div class="container bg-white rounded-4 p-5">
 
             <h2>Edit Project</h2>
 
@@ -11,32 +11,40 @@
             <form method="POST" action="{{ route('project-update', $project->id) }}">
                 {{-- @csrf kepake untuk token ,wajib --}}
                 @csrf
+
                 <div class="mt-3">
-                    <input type="text" class="form-control" name="project_name" placeholder="Nama Project"
-                        value = "{{ old('project_name', $project->project_name) }}">
+                    <label for="project_name">Project Name</label>
+                    <input type="text" class="form-control" id="project_name" name="project_name" placeholder="Nama Project"
+                        value="{{ old('project_name', $project->project_name) }}">
                     @error('project_name')
-                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
+                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
+
                 <div class="mt-3">
-                    <input type="text" class="form-control" name="location" placeholder="Location"
-                        value = "{{ old('location', $project->location) }}">
+                    <label for="location">Location</label>
+                    <input type="text" class="form-control" id="location" name="location" placeholder="Location"
+                        value="{{ old('location', $project->location) }}">
                     @error('location')
-                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
+                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
+
                 <div class="mt-3">
-                    <input type="text" class="form-control" name="PIC" placeholder="PIC Name"
-                        value = "{{ old('PIC', $project->PIC) }}">
+                    <label for="PIC">PIC Name</label>
+                    <input type="text" class="form-control" id="PIC" name="PIC" placeholder="PIC Name"
+                        value="{{ old('PIC', $project->PIC) }}">
                     @error('PIC')
-                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
+                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
+
                 <div class="mt-3">
-                    <input type="text" class="form-control" name="address" placeholder="Alamat"
-                        value = "{{ old('address', $project->address) }}">
+                    <label for="address">Address</label>
+                    <input type="text" class="form-control" id="address" name="address" placeholder="Alamat"
+                        value="{{ old('address', $project->address) }}">
                     @error('address')
-                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
+                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -47,6 +55,6 @@
 
             <script></script>
         </div>
-    </div>
+    </x-container-middle>
 
 @endsection
