@@ -96,7 +96,7 @@
 
                 <!-- Main -->
                 <div class="main-panel d-flex" id="main-content-div" style="min-height: 100vh; width: 85%; padding-left: 0;">
-                    <div class="content-wrapper d-flex flex-column gap-3" style="width: 100%;">
+                    <div class="content-wrapper d-flex flex-column" style="width: 100%;">
                         <!-- Breadcrumb -->
                         {{-- {{ Breadcrumbs::render() }} --}}
                         @if(Request::is("project*"))
@@ -139,22 +139,6 @@
         <!-- Gatau buat apa -->
         <div style="color: rgb(197, 197, 197)"></div>
 
-        <!-- Template halaman -->
-        <script src="{{ asset("template/vendors/base/vendor.bundle.base.js") }}"></script>
-        <script src="{{ asset("template/vendors/chart.js/Chart.min.js") }}"></script>
-        <script src="{{ asset("template/js/jquery.cookie.js") }}" type="text/javascript"></script>
-        <script src="{{ asset("template/js/off-canvas.js") }}"></script>
-        <script src="{{ asset("template/js/hoverable-collapse.js") }}"></script>
-        <script src="{{ asset("template/js/template.js") }}"></script>
-        <script src="{{ asset("template/js/todolist.js") }}"></script>
-        <script src="{{ asset("template/js/dashboard.js") }}"></script>
-
-        <!-- Import bootstrap -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
-        <!-- Include Select2 JavaScript -->
-		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
         <!-- Custom javascript -->
         <script>
             $(document).ready(() => {
@@ -167,7 +151,7 @@
                 $('#select-product-dropdown').next('.select2-container').find('.select2-selection').css({
                     "height": "2.4rem",
                     "padding-top": "0.3rem",
-                    "border": "none",
+                    "border": "#dee2e6 solid 1px",
                     "width": "100%"
                 });
 
@@ -183,6 +167,22 @@
                 });
             });
         </script>
+
+        <!-- Template halaman -->
+        <script src="{{ asset("template/vendors/base/vendor.bundle.base.js") }}"></script>
+        <script src="{{ asset("template/vendors/chart.js/Chart.min.js") }}"></script>
+        <script src="{{ asset("template/js/jquery.cookie.js") }}" type="text/javascript"></script>
+        <script src="{{ asset("template/js/off-canvas.js") }}"></script>
+        <script src="{{ asset("template/js/hoverable-collapse.js") }}"></script>
+        <script src="{{ asset("template/js/template.js") }}"></script>
+        <script src="{{ asset("template/js/todolist.js") }}"></script>
+        <script src="{{ asset("template/js/dashboard.js") }}"></script>
+
+        <!-- Include Select2 JavaScript -->
+		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+        <!-- Import bootstrap -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     </body>
 </html>

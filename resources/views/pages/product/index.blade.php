@@ -11,7 +11,27 @@
     <x-container>
         <br>
 
-        <h1>Warehouse Items</h1>
+        <div class="w-100 d-flex align-items-center justify-content-between">
+            <h1>Warehouse Items</h1>
+            <div class="position-relative d-flex flex-column align-items-end">
+                <button class="btn btn-secondary" type="button" id="dd-toggler">
+                    <i class="bi bi-file-earmark-arrow-up"></i> Export
+                </button>
+                <div class="bg-white rounded-lg position-absolute z-2 border border-1" id="dd-menu" style="display: none; top: 40px;">
+                    <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export", 2) }}" target="blank">Export (PDF Portrait)</a></li>
+                    <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export", 1) }}" target="blank">Export (PDF Landscape)</a></li>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            $(document).ready(() => {
+                $("#dd-toggler").click(function(){
+                    $("#dd-menu").toggle();
+                });
+            });
+        </script>
+
         <hr>
 
         <br>
@@ -66,7 +86,7 @@
 
                 @foreach ($products as $p)
                     <tr>
-                        <td class="border border-1 border-dark ">{{ $loop->iteration }}</td>
+                        <td class="border border-1 border-dark ">{{ $loop->iteration + ((request("page") - 1) * 5) }}</td>
                         <td class="border border-1 border-dark ">{{ $p->product_name }}</td>
                         <td class="border border-1 border-dark ">{{ $p->product_code }}</td>
                         <td class="border border-1 border-dark ">{{ $p->stock }}</td>
@@ -96,6 +116,9 @@
                     </tr>
                 @endforeach
             </table>
+        </div>
+        <div class="mt-4">
+            {{ $products->links() }}
         </div>
     </x-container>
 @endsection

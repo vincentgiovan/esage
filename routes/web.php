@@ -14,6 +14,8 @@ use App\Http\Controllers\AccountCreationController;
 use App\Http\Controllers\DeliveryProductController;
 use App\Http\Controllers\PurchaseProductController;
 use App\Http\Controllers\DeliveryOrderProductController;
+use App\Http\Controllers\PDFController;
+use App\Models\Product;
 
 Route::get('/', function(){
     return redirect("/dashboard");
@@ -42,7 +44,6 @@ Route::middleware("auth")->group(function(){
     //delete data
     Route::post('/deliveryorder/{id}', [DeliveryOrderController::class, "destroy"] )->name("deliveryorder-destroy");
 
-
     // ===== Product ===== //
 
     //show data
@@ -59,6 +60,9 @@ Route::middleware("auth")->group(function(){
 
         //delete data
         Route::post('/product/{id}', [ProductController::class, "destroy"] )->name("product-destroy");
+
+        //export
+        Route::get("/product/export/{mode}", [PDFController::class, "export_product"])->name("product-export");
     });
 
     // ===== Partner ===== //
@@ -128,6 +132,9 @@ Route::middleware("auth")->group(function(){
     //delete data
     Route::post('/purchaseproduct/{id}/{pid}', [PurchaseProductController::class, "destroy"] )->name("purchaseproduct-destroy");
 
+    //export data
+    Route::get("/purchaseproduct/{id}/export/{mode}", [PDFController::class, "export_purchase_product"])->name("purchaseproduct-export");
+
 
     // ===== DeliveryProduct ===== //
     //show data
@@ -144,6 +151,9 @@ Route::middleware("auth")->group(function(){
     //delete data
     Route::post('/deliveryorderproduct/{id}/{pid}', [DeliveryOrderProductController::class, "destroy"] )->name("deliveryorderproduct-destroy");
 
+    //export data
+    Route::get("/deliveryorderproduct/{id}/export/{mode}", [PDFController::class, "export_deliveryorder_product"])->name("deliveryorderproduct-export");
+
 
     //account route
 
@@ -155,5 +165,17 @@ Route::middleware("auth")->group(function(){
     Route::put('/account/{id}', [AccountCreationController::class, 'update'])->name('account.update');
     Route::delete('/account/{id}', [AccountCreationController::class, 'destroy'])->name('account.destroy');
 // });
+
+    Route::get("/request", function(){
+        return view("pages.request.index", [
+            "products" => Product::all()
+        ]);
+    })->name("request-index");
+
+    Route::get("/return", function(){
+        return view("pages.return.index", [
+            "products" => Product::all()
+        ]);
+    })->name("return-index");
 
 });

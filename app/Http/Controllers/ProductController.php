@@ -13,7 +13,7 @@ class ProductController extends Controller{
     {
         // Tampilkan halaman pages/product/index.blade.php
         return view("pages.product.index", [
-            "products" => Product::filter(request(["search"]))->get() // Data semua produk dari database buat ditampilin satu-satu (kalo user-nya searching tampilkan yang memenuhi keyword)
+            "products" => Product::filter(request(["search"]))->paginate(5) // Data semua produk dari database buat ditampilin satu-satu (kalo user-nya searching tampilkan yang memenuhi keyword)
         ]);
     }
 

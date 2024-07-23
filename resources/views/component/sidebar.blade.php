@@ -17,12 +17,21 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link text-decoration-none mx-2 @if (Request::is("product*")) @else text-dark @endif" href="{{ route("product-index") }}"><i class="bi bi-box me-2"></i> Produk</a>
+            <a class="nav-link text-decoration-none mx-2 @if (Request::is("product*")) @else text-dark @endif" href="{{ route("product-index") }}"><i class="bi bi-box-seam me-2"></i> Produk</a>
         </li>
 
         <li class="nav-item">
             <a class="nav-link text-decoration-none mx-2 @if (Request::is("project*")) @else text-dark @endif" href="{{ route("project-index") }}"><i class="bi bi-building me-2"></i> Proyek</a>
         </li>
+
+        <li class="nav-item">
+            <a class="nav-link text-decoration-none mx-2 @if (Request::is("request*")) @else text-dark @endif" href="{{ route("request-index") }}" ><i class="bi bi-bag-plus me-2"></i> Request Item</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link text-decoration-none mx-2 @if (Request::is("return*")) @else text-dark @endif" href="{{ route("return-index") }}" ><i class="bi bi-bag-dash me-2"></i> Return Item</a>
+        </li>
+
         <li class="nav-item">
             <a class="nav-link text-decoration-none mx-2 @if (Request::is("account*")) @else text-dark @endif" href="{{ route("account.index") }}" ><i class="bi bi-person me-2"></i> Account</a>
         </li>
