@@ -1,4 +1,4 @@
-<nav class="sidebar sidebar-offcanvas fixed-top h-100" id="sidebar" style="background-color: rgb(197, 197, 197); margin-top: 55px; z-index: 10; width: 15%;">
+<nav class="sidebar sidebar-offcanvas fixed-top h-100" id="sidebar" style="background-color: rgb(197, 197, 197); margin-top: 55px; z-index: 10;">
     <ul class="nav">
         <li class="nav-item">
             <a class="nav-link text-decoration-none mx-2 @if (Request::is("dashboard*")) @else text-dark @endif" href="{{ route("dashboard") }}"><i class="bi bi-grid-1x2 me-2"></i> Dashboard</a>

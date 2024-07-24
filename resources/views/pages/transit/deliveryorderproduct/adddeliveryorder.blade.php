@@ -80,6 +80,8 @@
             // Targetkan elemen-elemen error message (buat nanti display error message)
             const errQuantity = document.getElementById("errQuantity");
 
+            const converted = JSON.parse(input1.value); // value dari option yang dipilih itu konversi collection Laravel jadi JSON, tapi bentuknya masih teks, jadi perlu dikonversi ke format JSON beneran dulu biar lebih enak diolah
+
             // Hilangkan error message dan mark merah pada input dan error message sebelum validasi
             errQuantity.innerText = "";
             input4.style.border = "none";
@@ -88,9 +90,9 @@
             let inputAman = true; // Status apakah sudah terjadi kesalahan input atau belum
 
             // Kalau input quantity kosong atau nilainya di bawah 1 maka mark merah input dan tampilkan pesan error
-            if(!input4.value && input4.value < 1){
+            if(!input4.value || input4.value < 1 || input4.value > converted.stock){
                 input4.style.border = "solid 1px red";
-                errQuantity.innerText = "Invalid input :3";
+                errQuantity.innerText = "Invalid input";
 
                 inputAman = false;
             }
@@ -106,7 +108,6 @@
             const column4 = document.createElement("td");
             const column5 = document.createElement("td");
 
-            const converted = JSON.parse(input1.value); // value dari option yang dipilih itu konversi collection Laravel jadi JSON, tapi bentuknya masih teks, jadi perlu dikonversi ke format JSON beneran dulu biar lebih enak diolah
             column1.innerText = `${converted.product_name} (${converted.variant})`; // format teks yang tampil di kolom nama produk menjadi "nama_product (varian) dan tampilkan di row data baru di kolom nama produk"
             column4.innerText = input4.value; // ambil nilai dari input quantity dan tampilkan di kolom quantity
 

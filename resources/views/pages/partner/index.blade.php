@@ -7,9 +7,6 @@
         <hr>
         <br>
 
-
-        {{-- <h5>welcome back, {{ Auth::user()->name }}! </h5> --}}
-
         @if (session()->has('successAddPartner'))
             <p class="text-success fw-bold">{{ session('successAddPartner') }}</p>
         @elseif (session()->has('successEditPartner'))

@@ -31,11 +31,7 @@
                 });
             });
         </script>
-
-        <hr>
-
-        <br>
-
+        <hr class="mt-2">
         {{-- <h5>welcome back, {{ Auth::user()->name }}! </h5> --}}
 
         @if (session()->has('successAddProduct'))
@@ -46,22 +42,21 @@
             <p class="text-success fw-bold">{{ session('successDeleteProduct') }}</p>
         @endif
 
-        @can('admin')
-            <a href="{{ route('product-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
-                <i class="bi bi-plus-square"></i>
-                Add New Product
-            </a>
-
-            <br>
-        @endcan
-
-        <div class="d-flex gap-2 ">
-            <form action="{{ route('product-index') }}" class="d-flex gap-2">
-                <input type="text" name="search" placeholder="Search products..." value="{{ request('search') }}"
-                    class="form-control border border-1 border-secondary">
-                <button class="btn " style="background-color: rgb(191, 191, 191)">Search</button>
-            </form>
-            <a href="{{ route('product-index') }}" class="btn" style="background-color: rgb(191, 191, 191)">Clear</a>
+        <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-2 ">
+            <div class="d-flex gap-2 ">
+                <form action="{{ route('product-index') }}" class="d-flex gap-2">
+                    <input type="text" name="search" placeholder="Search products..." value="{{ request('search') }}"
+                        class="form-control border border-1 border-secondary">
+                    <button class="btn " style="background-color: rgb(191, 191, 191)">Search</button>
+                </form>
+                <a href="{{ route('product-index') }}" class="btn" style="background-color: rgb(191, 191, 191)">Clear</a>
+            </div>
+            @can('admin')
+                <a href="{{ route('product-create') }}" class="btn btn-primary text-white" style="font-size: 10pt">
+                    <i class="bi bi-plus-square"></i>
+                    Add New Product
+                </a>
+            @endcan
         </div>
 
         <br>

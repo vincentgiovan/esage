@@ -7,6 +7,9 @@
     </a>
 
     <div class="content-wrapper">
+            @if (session()->has('successfulLogin'))
+            <p class="text-success fs-5">{{ session('successfulLogin') }}</p>
+            @endif
         <div class="row">
             <div class="col-md-12 grid-margin">
                 <div class="d-flex justify-content-between align-items-center">

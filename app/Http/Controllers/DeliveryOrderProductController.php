@@ -62,11 +62,18 @@ class DeliveryOrderProductController extends Controller
 
             // Karena delivery order sifatnya mengurangi stok produk, maka update stok product di tabel aslinya:
             $oldstock = Product::where("id",$product_id)->first()->stock; // Ambil stok lama produk
-            Product::where("id",$product_id)->update(["stock" => $oldstock - $request->quantities[$index]]); // Update datanya
+            $newstock = $oldstock - $request->quantities[$index]; // Stok yang baru
+
+            $toUpdate = ["stock" => $newstock]; // Simpen kolom data yang mau di-update by default
+            if($newstock == 0){ // Kalo ternyata jumlah produk jadi 0 statusnya juga di-update
+                $toUpdate["status"] = "Out of Stock";
+            }
+
+            Product::where("id",$product_id)->update($toUpdate); // Update datanya
         };
 
         // Arahkan user kembali ke halaman pages/transit/deliveryorderproduct/index.blade.php
-        return redirect(route("deliveryorderproduct-viewitem", $deliveryorder->id));
+        return redirect(route("deliveryorderproduct-viewitem", $deliveryorder->id))->with("successAddProduct", "Product Added successfully!");
     }
 
     // Hapus produk dari cart delivery order
@@ -77,7 +84,12 @@ class DeliveryOrderProductController extends Controller
 
         // Kembalikan stok produk ke awal mula:
         $oldstock = $do->product->stock; // Ambil stok lama
-        Product::where("id", $do->product->id)->update(["stock" => $oldstock + $do->quantity]); // Update stok product di tabel aslinya
+        $newstock = $oldstock + $do->quantity;
+        $toUpdate = ["stock" => $newstock];
+        if($newstock > 0 && $do->product->status == "Out of Stock"){
+            $toUpdate["status"] = "Ready";
+        }
+        Product::where("id", $do->product->id)->update($toUpdate); // Update stok product di tabel aslinya
 
         // Kalau udah baru hapus data delivery order product-nya
         DeliveryOrderProduct::destroy("id", $do->id);

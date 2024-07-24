@@ -58,15 +58,22 @@
 
             #main-content-div {
                 padding-left: 250px; padding-top: 50px;
+                width: 85%;
+            }
+
+            #sidebar {
+                width: 15%;
             }
 
             @media screen and (max-width: 600px) {
                 #sidebar {
                     display: none;
+                    width: 50%;
                 }
 
                 #main-content-div {
                     padding-left: 0;
+                    width: 100%;
                 }
             }
         </style>
@@ -95,7 +102,7 @@
                 @endauth
 
                 <!-- Main -->
-                <div class="main-panel d-flex" id="main-content-div" style="min-height: 100vh; width: 85%; padding-left: 0;">
+                <div class="main-panel d-flex" id="main-content-div" style="min-height: 100vh; padding-left: 0;">
                     <div class="content-wrapper d-flex flex-column" style="width: 100%;">
                         <!-- Breadcrumb -->
                         {{-- {{ Breadcrumbs::render() }} --}}
@@ -181,9 +188,14 @@
                 $("#sidebarToggler").click(() => {
                     $("#sidebar").fadeToggle("slow", function(){ // sembunyiin kalo diklik and munculin kalo diklik lagi
                         if($("#sidebar").is(":hidden")){
-                            $("#main-content-div").css({"width": "100%"}); // kalo sidebarnya hilang main kontennya dibalikin full screen
+                            if($(window).width() > 600){
+                                $("#main-content-div").css({"width": "100%"}); // kalo sidebarnya hilang main kontennya dibalikin full screen
+                            }
+
                         } else {
-                            $("#main-content-div").css({"width": "85%"}); // kalo sidebarnya muncul main kontennya "digeser"
+                            if($(window).width() > 600){
+                                $("#main-content-div").css({"width": "85%"}); // kalo sidebarnya muncul main kontennya "digeser"
+                            }
                         }
                     });
                 });

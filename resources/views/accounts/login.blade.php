@@ -30,7 +30,7 @@
 
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <input id="password" type="password" class="pe-5 form-control border border-secondary position-relative z-0 rounded @error('password') is-invalid @enderror" name="password"  autocomplete="current-password">
+                                    <input id="password" type="password" name="password" class="pe-5 form-control position-relative z-0 rounded @error('password') is-invalid @else border border-secondary @enderror">
                                     <div class="input-group-append position-absolute z-1 end-0">
                                         <button type="button" class="btn" id="togglePassword">
                                             <i class="bi bi-eye-fill" id="toggleIcon"></i>
@@ -46,23 +46,26 @@
                             </div>
                         </div>
 
-                        <div class="form-group row mt-3">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="">
-                                    <input class="form-check-input border border-secondary" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
-                                </div>
-                            </div>
+                        <div class="">
+                            <input class="form-check-input border border-secondary" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+
+                            <label class="form-check-label" for="remember">
+                                {{ __('Remember Me') }}
+                            </label>
                         </div>
+
 
                         <div class="form-group row mb-0 mt-4">
                             <div class="col-md-8 offset-md-4">
+                                @if (session()->has('failMessage'))
+                                    <p class="text-danger fw-bold">{{ session('failMessage') }}</p>
+                                    @elseif (session()->has('failMessage'))
+                                @endif
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Login') }}
                                 </button>
+
                             </div>
                         </div>
                     </form>

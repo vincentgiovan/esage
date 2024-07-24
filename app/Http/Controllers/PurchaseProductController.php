@@ -65,10 +65,12 @@ class PurchaseProductController extends Controller
 
             // Update stok dan harga product:
             $oldstock = Product::where("id", $product_id)->first()->stock; // ambil stok product yang saat ini sedang ditambahkan ke cart purchase
-            Product::where("id",$product_id)->update([
-                "stock" => $oldstock + $request->quantities[$index],
-                "price" => $request->prices[$index]
-            ]); // then update stok dan harga-nya
+            $newstock = $oldstock + $request->quantities[$index];
+            $toUpdate = ["stock" => $newstock];
+            if($newstock > 0 && Product::where("id", $product_id)->first()->status == "Out of Stock"){
+                $toUpdate["status"] = "Ready";
+            }
+            Product::where("id",$product_id)->update($toUpdate); // then update stok dan harga-nya
         };
 
         // Arahkan user kembali ke pages/transit/purchaseproduct/index.blade.php
@@ -142,7 +144,14 @@ class PurchaseProductController extends Controller
 
         // Kembalikan stok produk yang ingin dihilangkan dari cart ke semula:
         $oldstock = $pp->product->stock; // Ambil stok saat ini
-        Product::where("id", $pp->product->id)->update(["stock" => $oldstock - $pp->quantity]); // Kembalikan stok ke semula (dikurangi karena purchase menambah stok)
+        $newstock = $oldstock - $pp->quantity; // Stok yang baru
+
+        $toUpdate = ["stock" => $newstock]; // Simpen kolom data yang mau di-update by default
+        if($newstock == 0){ // Kalo ternyata jumlah produk jadi 0 statusnya juga di-update
+            $toUpdate["status"] = "Out of Stock";
+        }
+
+        Product::where("id", $pp->product->id)->update($toUpdate); // Kembalikan stok ke semula (dikurangi karena purchase menambah stok)
 
         // Hapus data purchase produk
         PurchaseProduct::destroy("id", $pp->id);

@@ -32,7 +32,7 @@ class LoginController extends Controller
         // Kalau kredensial sesuai:
         if($valid){
             $request->session()->regenerate(); // Simpan data login user
-            return redirect()->intended(route("dashboard")); // Arahkan user ke halaman dashboard
+            return redirect()->intended(route("dashboard"))->with("successfulLogin", "Welcome back, " . Auth::user()->name . "!");; // Arahkan user ke halaman dashboard
         }
 
         // Kalo ga ada yang match sama sekali tampilkan pesan gagal login
