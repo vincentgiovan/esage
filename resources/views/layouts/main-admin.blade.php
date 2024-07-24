@@ -99,7 +99,7 @@
                     <div class="content-wrapper d-flex flex-column" style="width: 100%;">
                         <!-- Breadcrumb -->
                         {{-- {{ Breadcrumbs::render() }} --}}
-                        @if(Request::is("project*"))
+                        {{-- @if(Request::is("project*"))
                             <x-projectbc>
                                 @yield("bcd")
                             </x-projectbc>
@@ -124,6 +124,28 @@
                                 @yield("bcd")
                             </x-partnerbc>
 
+                        @endif --}}
+                        @if(!Request::is("dashboard"))
+                            <div class="d-flex gap-2">
+                                <a href="{{ route('dashboard') }}">Dashboard</a>
+                                <?php $link = "" ?>
+                                @foreach(Request::segments() as $index => $segment)
+                                    <!-- Construct the full URL -->
+                                    @php
+                                        $link .= "/" . $segment;
+                                    @endphp
+
+                                    <!-- Separator -->
+                                    >
+
+                                    <!-- Link activation logic -->
+                                    @if ($index < count(Request::segments()) - 1 && !is_numeric($segment))
+                                        <a href="{{ url($link) }}">{{ ucwords(str_replace('-', ' ', $segment)) }}</a>
+                                    @else
+                                        {{ ucwords(str_replace('-', ' ', $segment)) }}
+                                    @endif
+                                @endforeach
+                            </div>
                         @endif
 
                         <!-- Content -->

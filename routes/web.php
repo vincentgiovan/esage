@@ -31,18 +31,18 @@ Route::get('/dashboard', [DashboardController::class, "index"] )->name("dashboar
 Route::middleware("auth")->group(function(){
     // ===== DELIVERY ORDER ===== //
     //show data
-    Route::get('/deliveryorder', [DeliveryOrderController::class, "index"] )->name("deliveryorder-index");
+    Route::get('/delivery-order', [DeliveryOrderController::class, "index"] )->name("deliveryorder-index");
 
     //create new data
-    Route::get('/deliveryorder/create', [DeliveryOrderController::class, "create"] )->name("deliveryorder-create");
-    Route::post('/deliveryorder/store', [DeliveryOrderController::class, "store"] )->name("deliveryorder-store");
+    Route::get('/delivery-order/create', [DeliveryOrderController::class, "create"] )->name("deliveryorder-create");
+    Route::post('/delivery-order/store', [DeliveryOrderController::class, "store"] )->name("deliveryorder-store");
 
     //edit data
-    Route::get('/deliveryorder/{id}/edit', [DeliveryOrderController::class, "edit"] )->name("deliveryorder-edit");
-    Route::post('/deliveryorder/{id}/edit', [DeliveryOrderController::class, "update"] )->name("deliveryorder-update");
+    Route::get('/delivery-order/{id}/edit', [DeliveryOrderController::class, "edit"] )->name("deliveryorder-edit");
+    Route::post('/delivery-order/{id}/edit', [DeliveryOrderController::class, "update"] )->name("deliveryorder-update");
 
     //delete data
-    Route::post('/deliveryorder/{id}', [DeliveryOrderController::class, "destroy"] )->name("deliveryorder-destroy");
+    Route::post('/delivery-order/{id}', [DeliveryOrderController::class, "destroy"] )->name("deliveryorder-destroy");
 
     // ===== Product ===== //
 
@@ -119,40 +119,40 @@ Route::middleware("auth")->group(function(){
     // ===== PurchaseProduct ===== //
 
     //show data
-    Route::get('/purchaseproduct/{id}/viewitem', [PurchaseProductController::class, "view_items"] )->name("purchaseproduct-viewitem");
+    Route::get('/purchase-product/{id}/viewitem', [PurchaseProductController::class, "view_items"] )->name("purchaseproduct-viewitem");
 
     //add existing products to a purchase
-    Route::get('/purchaseproduct/{id}/create1', [PurchaseProductController::class, "add_existing_product"] )->name("purchaseproduct-create1");
-    Route::post('/purchaseproduct/{id}/store1', [PurchaseProductController::class, "store_existing_product"] )->name("purchaseproduct-store1");
+    Route::get('/purchase-product/{id}/create1', [PurchaseProductController::class, "add_existing_product"] )->name("purchaseproduct-create1");
+    Route::post('/purchase-product/{id}/store1', [PurchaseProductController::class, "store_existing_product"] )->name("purchaseproduct-store1");
 
     //add unexisting products to a purchase also to the product database
-    Route::get('/purchaseproduct/{id}/create2', [PurchaseProductController::class, "add_new_product"] )->name("purchaseproduct-create2");
-    Route::post('/purchaseproduct/{id}/store2', [PurchaseProductController::class, "store_new_product"] )->name("purchaseproduct-store2");
+    Route::get('/purchase-product/{id}/create2', [PurchaseProductController::class, "add_new_product"] )->name("purchaseproduct-create2");
+    Route::post('/purchase-product/{id}/store2', [PurchaseProductController::class, "store_new_product"] )->name("purchaseproduct-store2");
 
     //delete data
-    Route::post('/purchaseproduct/{id}/{pid}', [PurchaseProductController::class, "destroy"] )->name("purchaseproduct-destroy");
+    Route::post('/purchase-product/{id}/{pid}', [PurchaseProductController::class, "destroy"] )->name("purchaseproduct-destroy");
 
     //export data
-    Route::get("/purchaseproduct/{id}/export/{mode}", [PDFController::class, "export_purchase_product"])->name("purchaseproduct-export");
+    Route::get("/purchase-product/{id}/export/{mode}", [PDFController::class, "export_purchase_product"])->name("purchaseproduct-export");
 
 
     // ===== DeliveryProduct ===== //
     //show data
-    Route::get('/deliveryorderproduct/{id}/viewitem', [DeliveryOrderProductController::class, "view_items"] )->name("deliveryorderproduct-viewitem");
+    Route::get('/delivery-order-product/{id}/viewitem', [DeliveryOrderProductController::class, "view_items"] )->name("deliveryorderproduct-viewitem");
 
     //add existing products to a purchase
-    Route::get('/deliveryorderproduct/{id}/create1', [DeliveryOrderProductController::class, "add_existing_product"] )->name("deliveryorderproduct-create1");
-    Route::post('/deliveryorderproduct/{id}/store1', [DeliveryOrderProductController::class, "store_existing_product"] )->name("deliveryorderproduct-store1");
+    Route::get('/delivery-order-product/{id}/create1', [DeliveryOrderProductController::class, "add_existing_product"] )->name("deliveryorderproduct-create1");
+    Route::post('/delivery-order-product/{id}/store1', [DeliveryOrderProductController::class, "store_existing_product"] )->name("deliveryorderproduct-store1");
 
     //add unexisting products to a purchase also to the product database
-    Route::get('/deliveryorderproduct/{id}/create2', [DeliveryOrderProductController::class, "add_new_product"] )->name("deliveryorderproduct-create2");
-    Route::post('/deliveryorderproduct/{id}/store2', [DeliveryOrderProductController::class, "store_new_product"] )->name("deliveryorderproduct-store2");
+    Route::get('/delivery-order-product/{id}/create2', [DeliveryOrderProductController::class, "add_new_product"] )->name("deliveryorderproduct-create2");
+    Route::post('/delivery-order-product/{id}/store2', [DeliveryOrderProductController::class, "store_new_product"] )->name("deliveryorderproduct-store2");
 
     //delete data
-    Route::post('/deliveryorderproduct/{id}/{pid}', [DeliveryOrderProductController::class, "destroy"] )->name("deliveryorderproduct-destroy");
+    Route::post('/delivery-order-product/{id}/{pid}', [DeliveryOrderProductController::class, "destroy"] )->name("deliveryorderproduct-destroy");
 
     //export data
-    Route::get("/deliveryorderproduct/{id}/export/{mode}", [PDFController::class, "export_deliveryorder_product"])->name("deliveryorderproduct-export");
+    Route::get("/delivery-order-product/{id}/export/{mode}", [PDFController::class, "export_deliveryorder_product"])->name("deliveryorderproduct-export");
 
 
     //account route
@@ -177,5 +177,14 @@ Route::middleware("auth")->group(function(){
             "products" => Product::all()
         ]);
     })->name("return-index");
+
+
+    Route::get("/delivery-order-product", function(){
+        return redirect(route("deliveryorder-index"));
+    });
+
+    Route::get("/purchase-product", function(){
+        return redirect(route("purchase-index"));
+    });
 
 });
