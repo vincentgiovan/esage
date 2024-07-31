@@ -52,7 +52,7 @@ class LoginController extends Controller
 
     }
 
-    // ??
+    // ?? kayaknya ga kepake
     protected function credentials(Request $request)
     {
         return $request->only($this->username(), 'password', 'remember');

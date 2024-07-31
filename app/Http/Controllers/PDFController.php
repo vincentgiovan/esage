@@ -11,6 +11,7 @@ use App\Models\DeliveryOrderProduct;
 
 class PDFController extends Controller
 {
+    // Export data produk
     public function export_product($mode)
     {
         $data = [
@@ -22,6 +23,7 @@ class PDFController extends Controller
         return $pdf->stream('allproduct.pdf');
     }
 
+    // Export data purchase product
     public function export_purchase_product($id, $mode)
     {
         // Targetkan purchase yang ingin ditampilkan cart-nya
@@ -40,6 +42,7 @@ class PDFController extends Controller
         return $pdf->stream('purchaseproduct.pdf');
     }
 
+    // Export data delivery order product
     public function export_deliveryorder_product($id, $mode){
         // Targetkan delivery order yang dipilih yang mau dicek list produknya
         $deliveryorder = DeliveryOrder::where("id", $id)->first();
