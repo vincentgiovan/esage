@@ -9,7 +9,7 @@ use App\Models\DeliveryOrder;
 
 class DashboardController extends Controller
 {
-    // Halaman dashboard
+    // Halaman dashboard + logic penampilan data
     public function index()
     {
         // Ambil data bulan dan tahun lalu format menjadi yyyy-mm-
