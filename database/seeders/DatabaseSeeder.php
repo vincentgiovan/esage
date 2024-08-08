@@ -13,7 +13,7 @@ use App\Models\PurchaseProduct;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-//testus
+//testusgajadi
 
 class DatabaseSeeder extends Seeder
 {
