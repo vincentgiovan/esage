@@ -89,7 +89,7 @@
 
  --}}
 
- @extends('layouts.login-main-admin')
+@extends('layouts.login-main-admin')
 
 @section('content')
 <div class="container d-flex justify-content-center align-items-center" style="min-height:100vh;">
