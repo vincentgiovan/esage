@@ -34,9 +34,9 @@
                             <div class="col-md-8">
                                 <div class="input-group">
                                     <input id="password" type="password" name="password" class="form-control border border-2 @error('password') is-invalid @enderror" aria-describedby="togglePassword">
-                                    <button class="btn border border-2" type="button" id="togglePassword">
+                                    {{-- <button class="btn border border-2" type="button" id="togglePassword">
                                         <i class="bi bi-eye-fill" id="toggleIcon"></i>
-                                    </button>
+                                    </button> --}}
                                 </div>
                                 @error('password')
                                     <span class="invalid-feedback d-block" role="alert">
@@ -46,7 +46,8 @@
                             </div>
                         </div>
 
-                        <div class="form-group row mb-4 ">
+                        <br>
+                        {{-- <div class="form-group row mb-4 ">
                             <div class="col-md-8 offset-md-4">
                                 <div class="form-check">
                                     <input class="form-check-input border border-2" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
@@ -55,7 +56,7 @@
                                     </label>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
