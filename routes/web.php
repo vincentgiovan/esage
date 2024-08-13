@@ -1,34 +1,26 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
-use Illuminate\Auth\Events\Login;
+use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PDFController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeliveryOrderController;
 use App\Http\Controllers\AccountCreationController;
-use App\Http\Controllers\DeliveryProductController;
 use App\Http\Controllers\PurchaseProductController;
 use App\Http\Controllers\DeliveryOrderProductController;
-use App\Http\Controllers\PDFController;
-use App\Models\Product;
 
 Route::get('/', function(){
     return redirect("/dashboard");
 })->name("home");
 
-Route::get('/login', [LoginController::class, "index"])->name("login")->middleware("guest");
-Route::post('/login', [LoginController::class, "checkLogin"])->name("checkLogin");
-Route::post('/logout', [LoginController::class, "logout"])->middleware("auth")->name("keluar");
-
-Route::get('/dashboard', [DashboardController::class, "index"] )->name("dashboard")->middleware("auth");
-
-
-Route::middleware("auth")->group(function(){
+Route::middleware(["auth","verified"])->group(function(){
+    Route::get('/dashboard', [DashboardController::class, "index"] )->name("dashboard")->middleware("auth");
     // ===== DELIVERY ORDER ===== //
     //show data
     Route::get('/delivery-order', [DeliveryOrderController::class, "index"] )->name("deliveryorder-index");
@@ -188,3 +180,7 @@ Route::middleware("auth")->group(function(){
     });
 
 });
+
+Auth::routes(["verify"=>true]);
+require __DIR__.'/auth.php';
+

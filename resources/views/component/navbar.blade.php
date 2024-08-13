@@ -25,7 +25,7 @@
 
             </button>
             <div class="bg-white rounded-3 overflow-hidden position-absolute z-2 border border-1" id="prof-menu" style="display: none; top: 40px;">
-                <form class="dropdown-item border border-1" action="{{ route('keluar') }}" method="post">
+                <form class="dropdown-item border border-1" action="{{ route('logout') }}" method="post">
                     @csrf
                     <button type="submit" class="h-100 w-100 border-0 py-2 px-4"><i class="bi bi-box-arrow-left"></i> Logout</button>
                 </form>
