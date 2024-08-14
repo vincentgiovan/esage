@@ -14,13 +14,18 @@ use App\Http\Controllers\DeliveryOrderController;
 use App\Http\Controllers\AccountCreationController;
 use App\Http\Controllers\PurchaseProductController;
 use App\Http\Controllers\DeliveryOrderProductController;
+use App\Http\Controllers\TodoController;
 
 Route::get('/', function(){
     return redirect("/dashboard");
 })->name("home");
 
 Route::middleware(["auth","verified"])->group(function(){
-    Route::get('/dashboard', [DashboardController::class, "index"] )->name("dashboard")->middleware("auth");
+    Route::get('/dashboard', [DashboardController::class, "index"] )->name("dashboard");
+
+    Route::post("/dashboard/add-todo", [TodoController::class, "add_todo"])->name("todo.store");
+    Route::post("/dashboard/save-todo", [TodoController::class, "save_todo"])->name("todo.update");
+
     // ===== DELIVERY ORDER ===== //
     //show data
     Route::get('/delivery-order', [DeliveryOrderController::class, "index"] )->name("deliveryorder-index");

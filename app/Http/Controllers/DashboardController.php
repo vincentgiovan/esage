@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Todo;
 use App\Models\Product;
 use App\Models\Purchase;
 use Illuminate\Http\Request;
 use App\Models\DeliveryOrder;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -24,11 +26,15 @@ class DashboardController extends Controller
         // Jumlah purchase yang terjadi di bulan ini (ambil semua data dari tabel purchases yang purchase_date-nya punya tahun dan bulan yang sama seperti tanggal hari ini, lalu ambil jumlahnya)
         $totalPurchase = Purchase::where("purchase_date", "like", $currentMonth . "%")->get()->count();
 
+        // Ambil data todo list
+        $todos = Todo::where("user_id", Auth::user()->id)->get();
+
         // Tampilkan halaman pages/dashboard.blade.php beserta jumlah produk kosong juga total delivery order dan purchase di bulan ini
         return view("pages.dashboard", [
             "totalemptyproduct" => $totalEmptyProduct,
             "totaldelivery" => $totalDelivery,
-            "totalpurchase" => $totalPurchase
+            "totalpurchase" => $totalPurchase,
+            "todos" => $todos
         ]);
 
     }

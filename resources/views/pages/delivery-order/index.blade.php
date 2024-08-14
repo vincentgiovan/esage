@@ -9,12 +9,12 @@
 
         {{-- <h5>welcome back, {{ Auth::user()->name }}! </h5> --}}
 
-        @if (session()->has('successAddProduct'))
-            <p class="text-success fw-bold">{{ session('successAddProduct') }}</p>
-        @elseif (session()->has('successEditProduct'))
-            <p class="text-success fw-bold">{{ session('successEditProduct') }}</p>
-        @elseif (session()->has('successDeleteProduct'))
-            <p class="text-success fw-bold">{{ session('successDeleteProduct') }}</p>
+        @if (session()->has('successAddOrder'))
+            <p class="text-success fw-bold">{{ session('successAddOrder') }}</p>
+        @elseif (session()->has('successEditOrder'))
+            <p class="text-success fw-bold">{{ session('successEditOrder') }}</p>
+        @elseif (session()->has('successDeleteOrder'))
+            <p class="text-success fw-bold">{{ session('successDeleteOrder') }}</p>
         @endif
 
         <a href="{{ route('deliveryorder-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">

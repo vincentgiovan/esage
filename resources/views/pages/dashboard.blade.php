@@ -82,7 +82,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-md-6 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
@@ -146,9 +146,9 @@
                         </div>
                     </div>
                 </div>
-        </div>
+        </div> --}}
         <div class="row">
-            <div class="col-md-7 grid-margin stretch-card">
+            {{-- <div class="col-md-7 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
                         <p class="card-title mb-0">Top Products</p>
@@ -204,70 +204,49 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-5 grid-margin stretch-card">
+            </div> --}}
+            <!-- nanti ubah jadi col-md-5 kalo top product mau dimunculin -->
+            <div class="col-md-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">To Do Lists</h4>
-                        <div class="list-wrapper pt-2">
+                        <div class="list-wrapper pt-2 h-auto">
                             <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
-                                <li>
-                                    <div class="form-check form-check-flat">
-                                        <label class="form-check-label">
-                                            <input class="checkbox" type="checkbox">
-                                            Become A Travel Pro In One Easy Lesson
-                                        </label>
-                                    </div>
-                                    <i class="remove ti-trash"></i>
-                                </li>
-                                <li class="completed">
-                                    <div class="form-check form-check-flat">
-                                        <label class="form-check-label">
-                                            <input class="checkbox" type="checkbox" checked>
-                                            See The Unmatched Beauty Of The Great Lakes
-                                        </label>
-                                    </div>
-                                    <i class="remove ti-trash"></i>
-                                </li>
-                                <li>
-                                    <div class="form-check form-check-flat">
-                                        <label class="form-check-label">
-                                            <input class="checkbox" type="checkbox">
-                                            Copper Canyon
-                                        </label>
-                                    </div>
-                                    <i class="remove ti-trash"></i>
-                                </li>
-                                <li class="completed">
-                                    <div class="form-check form-check-flat">
-                                        <label class="form-check-label">
-                                            <input class="checkbox" type="checkbox" checked>
-                                            Top Things To See During A Holiday In Hong Kong
-                                        </label>
-                                    </div>
-                                    <i class="remove ti-trash"></i>
-                                </li>
-                                <li>
-                                    <div class="form-check form-check-flat">
-                                        <label class="form-check-label">
-                                            <input class="checkbox" type="checkbox">
-                                            Travelagent India
-                                        </label>
-                                    </div>
-                                    <i class="remove ti-trash"></i>
-                                </li>
+                                @forelse($todos as $todo)
+                                    <li class="{{ ($todo->status == 'done')? 'completed' : '' }})">
+                                        <div class="form-check form-check-flat">
+                                            <label class="form-check-label">
+                                                <input class="checkbox" type="checkbox">
+                                                {{ $todo->task }}
+                                            </label>
+                                        </div>
+                                        <i class="remove ti-trash"></i>
+                                    </li>
+                                @empty
+                                    <p>- N/A -</p>
+                                @endforelse
                             </ul>
                         </div>
-                        <div class="add-items d-flex mb-0 mt-4">
-                            <input type="text" class="form-control todo-list-input me-2" placeholder="Add new task">
-                            <button class="add btn btn-icon text-primary todo-list-add-btn bg-transparent"><i
-                                    class="ti-location-arrow"></i></button>
-                        </div>
+                        <form action="{{ route('todo.store') }}" method="post" class="add-items d-flex align-items-center mb-0 mt-4">
+                            @csrf
+                            <input type="text" name="new_task" class="form-control todo-list-input me-2" placeholder="Add new task">
+                            <button class="btn text-primary bg-transparent" type="submit">
+                                <i class="bi bi-plus"></i>
+                            </button>
+                        </form>
+                        <form action="{{ route('todo.update') }}" method="post" style="display: none" id="hiddenform">
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
+
+        <script>
+            const hiddenForm = document.querySelectorAll("input[type='checkbox']");
+            console.log(hiddenForm);
+        </script>
+
+        {{-- <div class="row">
             <div class="col-md-12 grid-margin stretch-card">
                 <div class="card position-relative">
                     <div class="card-body">
@@ -378,7 +357,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
     <!-- content-wrapper ends -->
     <!-- partial:partials/_footer.html -->

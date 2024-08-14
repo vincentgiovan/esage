@@ -38,7 +38,7 @@ class AccountCreationController extends Controller
         ]);
 
         // Arahin user balik ke halaman account/index.blade.php
-        return redirect()->route('account.index');
+        return redirect()->route('account.index')->with("successCreateAccount", "Successfully created new account");;
     }
 
     // Buat edit akun sekaligus tunjukin data akun
@@ -72,13 +72,15 @@ class AccountCreationController extends Controller
         $validatedData = $request->validate($validationRule);
 
         // Enkripsi password baru
-        $validatedData["password"] = Hash::make($validatedData["password"]);
+        if($request->password){
+            $validatedData["password"] = Hash::make($validatedData["password"]);
+        }
 
         // Kalo semuanya udah baru disimpan perubahannya di tabel users
         $user->update($validatedData);
 
         // Arahin user balik ke halaman accounts/index.blade.php
-        return redirect()->route('account.index');
+        return redirect()->route('account.index')->with("successEditAccount", "Successfully edited new account");
     }
 
     // Hapus akun
@@ -91,6 +93,6 @@ class AccountCreationController extends Controller
         $user->delete();
 
         // Arahkan user kembali ke halaman accounts/index.blade.php
-        return redirect()->route('account.index');
+        return redirect()->route('account.index')->with("successDeleteAccount", "Successfully deleted new account");
     }
 }

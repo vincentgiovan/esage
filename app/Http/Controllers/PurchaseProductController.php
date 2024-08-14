@@ -74,7 +74,7 @@ class PurchaseProductController extends Controller
         };
 
         // Arahkan user kembali ke pages/transit/purchaseproduct/index.blade.php
-        return redirect(route("purchaseproduct-viewitem", $purchase->id));
+        return redirect(route("purchaseproduct-viewitem", $purchase->id))->with("successAddProduct", "Product added successfully");
     }
 
     // Form penambahan produk ke cart purchase tapi produk belum terdaftar sama sekali sebelumnya
@@ -133,7 +133,7 @@ class PurchaseProductController extends Controller
         };
 
         // Arahkan user kembali ke halaman pages/transit/purchaseproduct/index.blade.php
-        return redirect(route("purchaseproduct-viewitem", $purchase->id));
+        return redirect(route("purchaseproduct-viewitem", $purchase->id))->with("successAddProduct", "Product added successfully");
     }
 
     // Hapus produk dari cart

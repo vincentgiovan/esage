@@ -47,6 +47,7 @@
                         @enderror
                     </div>
                 </div>
+
                 <div class="form-group d-flex flex-column mt-3">
                     <label for="password_confirmation" class="col-md-4 col-form-label text-md-right">{{ __('Password Confirmation') }}</label>
 

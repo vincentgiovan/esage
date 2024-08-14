@@ -79,7 +79,7 @@ class PurchaseController extends Controller
         Purchase::where("id", $id)->update($validatedData);
 
         // Arahkan user kembali ke halaman pages/purchase/index.blade.php
-        return redirect(route("purchase-index"))->with("successEditProduct", "Product editted successfully!");
+        return redirect(route("purchase-index"))->with("successEditPurchase", "Purchase editted successfully!");
     }
 
     // Hapus data purchase dari database
@@ -101,6 +101,6 @@ class PurchaseController extends Controller
         Purchase::destroy("id", $id);
 
         // Arahkan user kembali ke halaman pages/purchase/index.blade.php
-        return redirect(route("purchase-index"))->with("successDeleteProduct", "Product deleted successfully!");
+        return redirect(route("purchase-index"))->with("successDeletePurchase", "Purchase deleted successfully!");
     }
 }

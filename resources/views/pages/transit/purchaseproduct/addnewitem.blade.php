@@ -175,22 +175,22 @@
             errStock.innerText = "";
             errDiscount.innerText = "";
 
-            input1.style.border = "none";
-            input2.style.border = "none";
-            input3.style.border = "none";
-            input4.style.border = "none";
-            input5.style.border = "none";
-            input6.style.border = "none";
-            input7.style.border = "none";
-            input8.style.border = "none";
-            input9.style.border = "none";
+            input1.classList.remove("is-invalid");
+            input2.classList.remove("is-invalid");
+            input3.classList.remove("is-invalid");
+            input4.classList.remove("is-invalid");
+            input5.classList.remove("is-invalid");
+            input6.classList.remove("is-invalid");
+            input7.classList.remove("is-invalid");
+            input8.classList.remove("is-invalid");
+            input9.classList.remove("is-invalid");
 
             // Validasi input
             let inputAman = true;
 
             // Kalo product name kosong maka mark merah input dan tampilkan error message
             if(!input1.value){
-                input1.style.border = "solid 1px red";
+                input1.classList.add("is-invalid");
                 errProductName.innerText = "Invalid input";
 
                 inputAman = false;
@@ -198,7 +198,7 @@
 
             // Kalo satuan kosong maka mark merah input dan tampilkan error message
             if(!input2.value){
-                input2.style.border = "solid 1px red";
+                input2.classList.add("is-invalid");
                 errUnit.innerText = "Invalid input";
 
                 inputAman = false;
@@ -206,7 +206,7 @@
 
             // Kalo varian kosong maka mark merah input dan tampilkan error message
             if(!input4.value){
-                input4.style.border = "solid 1px red";
+                input4.classList.add("is-invalid");
                 errVariant.innerText = "Invalid input";
 
                 inputAman = false;
@@ -214,7 +214,7 @@
 
             // Kalo kode produk kosong maka mark merah input dan tampilkan error message
             if(!input5.value){
-                input5.style.border = "solid 1px red";
+                input5.classList.add("is-invalid");
                 errProductCode.innerText = "Invalid input";
 
                 inputAman = false;
@@ -222,7 +222,7 @@
 
             // Kalo harga kosong atau di bawah 1 maka mark merah input dan tampilkan error message
             if(!input6.value && input6.value < 1){
-                input6.style.border = "solid 1px red";
+                input6.classList.add("is-invalid");
                 errPrice.innerText = "Invalid input";
 
                 inputAman = false;
@@ -230,7 +230,7 @@
 
             // Kalo markup kosong atau di bawah 1 maka mark merah input dan tampilkan error message
             if(input7.value && input7.value < 1){
-                input7.style.border = "solid 1px red";
+                input7.classList.add("is-invalid");
                 errMarkup.innerText = "Invalid input";
 
                 inputAman = false;
@@ -238,7 +238,7 @@
 
             // Kalo stock kosong atau di bawah 1 maka mark merah input dan tampilkan error message
             if(!input8.value && input8.value < 1){
-                input8.style.border = "solid 1px red";
+                input8.classList.add("is-invalid");
                 errStock.innerText = "Invalid input";
 
                 inputAman = false;
@@ -246,7 +246,7 @@
 
             // Kalo diskon kosong maka mark merah input dan tampilkan error message
             if(!input9.value){
-                input9.style.border = "solid 1px red";
+                input9.classList.add("is-invalid");
                 errDiscount.innerText = "Invalid input";
 
                 inputAman = false;

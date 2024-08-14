@@ -14,31 +14,38 @@
         <div class="card-body">
             <form action="{{ route('account.store') }}" method="POST">
                 @csrf
-                <div class="form-group">
+                <div class="form-group mb-3">
                     <label for="name">Name</label>
-                    <input type="text" class="form-control" id="name" name="name" required value="{{ old("name") }}">
+                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old("name") }}">
                     @error("name")
-                        {{ $message }}
+                        <span class="invalid-feedback" role="alert">
+                            {{ $message }}
+                        </span>
                     @enderror
                 </div>
-                <div class="form-group">
+                <div class="form-group mb-3">
                     <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" required value="{{ old("email") }}">
+                    <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old("email") }}">
                     @error("email")
-                        {{ $message }}
+                        <span class="invalid-feedback" role="alert">
+                            {{ $message }}
+                        </span>
                     @enderror
                 </div>
-                <div class="form-group">
+                <div class="form-group mb-3">
                     <label for="role">Select Role</label>
-                    <select class="form-control" id="role" name="role" required>
+                    <select class="form-control" id="role" name="role">
                         <option value="1">Admin</option>
                         <option value="2" selected>User</option>
                     </select>
                     @error("role")
-                        {{ $message }}
+                        <span class="invalid-feedback" role="alert">
+                            {{ $message }}
+                        </span>
                     @enderror
                 </div>
-                <div class="form-group d-flex flex-column mt-3">
+
+                {{-- <div class="form-group mb-3 d-flex flex-column mt-3">
                     <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
                     <div class="w-100">
@@ -50,33 +57,48 @@
                                 </button>
                             </div>
                         </div>
-
-                        @error('password')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
                     </div>
-                </div>
-                <div class="form-group d-flex flex-column mt-3">
-                    <label for="password_confirmation" class="col-md-4 col-form-label text-md-right">{{ __('Password Confirmation') }}</label>
 
-                    <div class="w-100">
-                        <div class="input-group">
-                            <input id="password_confirmation" type="password" class="pe-5 form-control position-relative z-0 rounded @error('password_confirmation') is-invalid @enderror" name="password_confirmation"  autocomplete="current-password_confirmation">
-                            <div class="input-group-append position-absolute z-1 end-0">
-                                <button type="button" class="btn" id="togglePassword2">
-                                    <i class="bi bi-eye-fill" id="toggleIcon2"></i>
-                                </button>
-                            </div>
+                    <input id="password" type="password" class="pe-5 form-control position-relative z-0 rounded @error('password') is-invalid @enderror" name="password"  autocomplete="current-password">
+
+                    @error('password')
+                        <div class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
                         </div>
+                    @enderror
+                </div> --}}
+                <div class="form-group mb-3 row">
+                    <label for="password">Password</label>
 
-                        @error('password_confirmation')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                    <div class="input-group w-100">
+                        <input id="password" type="password" name="password" class="form-control @error('password') is-invalid @enderror" aria-describedby="togglePassword">
+                        {{-- <button class="btn border border-2" type="button" id="togglePassword">
+                            <i class="bi bi-eye-fill" id="toggleIcon"></i>
+                        </button> --}}
                     </div>
+                    @error('password')
+                        <span class="invalid-feedback d-block" role="alert">
+                            {{ $message }}
+                        </span>
+                    @enderror
+
+                </div>
+
+                <div class="form-group mb-4 row">
+                    <label for="password_confirmation">Password Confirmation</label>
+
+                    <div class="input-group w-100">
+                        <input id="password_confirmation" type="password" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" aria-describedby="togglePassword">
+                        {{-- <button class="btn border border-2" type="button" id="togglePassword">
+                            <i class="bi bi-eye-fill" id="toggleIcon"></i>
+                        </button> --}}
+                    </div>
+                    @error('password_confirmation')
+                        <span class="invalid-feedback d-block" role="alert">
+                            {{ $message }}
+                        </span>
+                    @enderror
+
                 </div>
 
                 <button type="submit" class="btn btn-primary">Add User</button>
@@ -90,6 +112,15 @@
             Registered Users
         </div>
         <div class="card-body">
+
+            @if (session()->has('successCreateAccount'))
+                <p class="text-success fw-bold">{{ session('successCreateAccount') }}</p>
+            @elseif (session()->has('successEditAccount'))
+                <p class="text-success fw-bold">{{ session('successEditAccount') }}</p>
+            @elseif (session()->has('successDeleteAccount'))
+                <p class="text-success fw-bold">{{ session('successDeleteAccount') }}</p>
+            @endif
+
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -131,9 +162,9 @@
                                             <form action="{{ route('account.update', $user->id) }}" method="POST">
                                                 @csrf
                                                 @method('PUT')
-                                                <div class="form-group">
+                                                <div class="form-group mb-3">
                                                     <label for="name">Name</label>
-                                                    <input type="text" class="form-control" id="name" name="name" value="{{ $user->name }}" required>
+                                                    <input type="text" class="form-control" id="name" name="name" value="{{ $user->name }}">
                                                 </div>
                                                 <div class="input-group">
                                                     <input id="password" type="password" class="pe-5 form-control border border-secondary position-relative z-0 rounded @error('password') is-invalid @enderror" name="password"  autocomplete="current-password">
@@ -143,7 +174,7 @@
                                                         </button>
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group mb-3">
                                                     <label for="password_confirmation">Confirm Password</label>
                                                     <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
                                                 </div>

@@ -10,7 +10,7 @@
 
                 <div class="mt-3">
                     <label for="project_name">Project Name</label>
-                    <input type="text" class="form-control" id="project_name" name="project_name" placeholder="Nama Project"
+                    <input type="text" class="form-control @error('project_name') is-invalid @enderror" id="project_name" name="project_name" placeholder="Nama Project"
                         value="{{ old('project_name') }}">
                     @error('project_name')
                         <p style="color: red; font-size: 10px;">{{ $message }}</p>
@@ -19,7 +19,7 @@
 
                 <div class="mt-3">
                     <label for="location">Location</label>
-                    <input type="text" class="form-control" id="location" name="location" placeholder="Location"
+                    <input type="text" class="form-control @error('location') is-invalid @enderror" id="location" name="location" placeholder="Location"
                         value="{{ old('location') }}">
                     @error('location')
                         <p style="color: red; font-size: 10px;">{{ $message }}</p>
@@ -28,7 +28,7 @@
 
                 <div class="mt-3">
                     <label for="PIC">PIC Name</label>
-                    <input type="text" class="form-control" id="PIC" name="PIC" placeholder="PIC Name"
+                    <input type="text" class="form-control @error('PIC') is-invalid @enderror" id="PIC" name="PIC" placeholder="PIC Name"
                         value="{{ old('PIC') }}">
                     @error('PIC')
                         <p style="color: red; font-size: 10px;">{{ $message }}</p>
@@ -37,7 +37,7 @@
 
                 <div class="mt-3">
                     <label for="address">Address</label>
-                    <input type="text" class="form-control" id="address" name="address" placeholder="Alamat"
+                    <input type="text" class="form-control @error('address') is-invalid @enderror" id="address" name="address" placeholder="Alamat"
                         value="{{ old('address') }}">
                     @error('address')
                         <p style="color: red; font-size: 10px;">{{ $message }}</p>
