@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Partner;
 use App\Models\Product;
+use App\Models\Project;
 use App\Models\Purchase;
 use App\Models\DeliveryOrder;
 use App\Models\PurchaseProduct;
@@ -58,5 +60,58 @@ class PDFController extends Controller
         $pdf = Pdf::loadView('pdf.deliveryorderproduct', $data)->setPaper("a4", ($mode == 1)? "landscape" : "portrait");
 
         return $pdf->stream('deliveryorderproduct.pdf');
+    }
+
+    // Export semua delvery order
+    public function export_deliveryorder($mode){
+        // Targetkan delivery order semua
+        $deliveryorders = DeliveryOrder::all();
+
+        $data = [
+            "deliveryorders" => $deliveryorders, // list product yang tercatat di delivery order yang ingin dicek cart-nya
+        ];
+
+        $pdf = Pdf::loadView('pdf.deliveryorder', $data)->setPaper("a4", ($mode == 1)? "landscape" : "portrait");
+
+        return $pdf->stream('deliveryorder.pdf');
+    }
+
+    public function export_purchase($mode){
+        // Targetkan delivery order semua
+        $purchases = Purchase::all();
+
+        $data = [
+            "purchases" => $purchases, // list product yang tercatat di delivery order yang ingin dicek cart-nya
+        ];
+
+        $pdf = Pdf::loadView('pdf.purchase', $data)->setPaper("a4", ($mode == 1)? "landscape" : "portrait");
+
+        return $pdf->stream('purchase.pdf');
+    }
+
+    public function export_partner($mode){
+        // Targetkan delivery order semua
+        $partners = Partner::all();
+
+        $data = [
+            "partners" => $partners, // list product yang tercatat di delivery order yang ingin dicek cart-nya
+        ];
+
+        $pdf = Pdf::loadView('pdf.partner', $data)->setPaper("a4", ($mode == 1)? "landscape" : "portrait");
+
+        return $pdf->stream('partner.pdf');
+    }
+
+    public function export_project($mode){
+        // Targetkan delivery order semua
+        $projects = Project::all();
+
+        $data = [
+            "projects" => $projects, // list product yang tercatat di delivery order yang ingin dicek cart-nya
+        ];
+
+        $pdf = Pdf::loadView('pdf.project', $data)->setPaper("a4", ($mode == 1)? "landscape" : "portrait");
+
+        return $pdf->stream('project.pdf');
     }
 }

@@ -1,35 +1,51 @@
-<x-guest-layout>
-    <x-auth-card>
-        
+@extends('layouts.login-main-admin')
 
-        <div class="mb-4 text-sm text-gray-600">
-            {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
-        </div>
+@section('content')
+<div class="container d-flex justify-content-center align-items-center" style="min-height:100vh;">
+    <div class="row justify-content-center w-75">
+        <div class="col-md-6">
+            <div class="card shadow-sm rounded-4 overflow-hidden">
+                <div class="card-header bg-secondary text-white fs-5 ">{{ __('Account Email Verification') }}</div>
 
-        @if (session('status') == 'verification-link-sent')
-            <div class="mb-4 font-medium text-sm text-green-600">
-                {{ __('A new verification link has been sent to the email address you provided during registration.') }}
-            </div>
-        @endif
+                <div class="card-body p-4">
 
-        <div class="mt-4 flex items-center justify-between">
-            <form method="POST" action="{{ route('verification.send') }}">
-                @csrf
+                    <div class="mb-4 text-sm text-gray-600">
+                        {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
+                    </div>
 
-                <div>
-                    <x-button>
-                        {{ __('Resend Verification Email') }}
-                    </x-button>
+                    @if (session('status') == 'verification-link-sent')
+                        <div class="mb-4 font-medium text-sm text-green-600">
+                            {{ __('A new verification link has been sent to the email address you provided during registration.') }}
+                        </div>
+                    @endif
+
+                    <div class="mt-4 flex items-center justify-between">
+                        <form method="POST" action="{{ route('verification.send') }}">
+                            @csrf
+
+                            <div class="flex items-center justify-end mt-4 btn btn-gray text-black">
+                                <x-button class="text-black">
+                                    {{ __('Resend Verificati1on Email') }}
+                                </x-button>
+                            </div>
+                        </form>
+
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+
+                            <button type="submit" class=" btn btn-primary ">
+                                {{ __('Log Out') }}
+                            </button>
+                        </form>
+                    </div>
+                    </form>
                 </div>
-            </form>
-
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-
-                <button type="submit" class="underline text-sm text-gray-600 hover:text-gray-900">
-                    {{ __('Log Out') }}
-                </button>
-            </form>
+            </div>
         </div>
-    </x-auth-card>
-</x-guest-layout>
+    </div>
+</div>
+@endsection
+
+
+
+

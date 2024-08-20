@@ -208,16 +208,18 @@
             <!-- nanti ubah jadi col-md-5 kalo top product mau dimunculin -->
             <div class="col-md-12 grid-margin stretch-card">
                 <div class="card">
-                    <div class="card-body">
+                    <form action="{{ route('todo.update') }}" method="post" class="card-body" id="porm">
+                        @csrf
                         <h4 class="card-title">To Do Lists</h4>
+
                         <div class="list-wrapper pt-2 h-auto">
                             <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
                                 @forelse($todos as $todo)
-                                    <li class="{{ ($todo->status == 'done')? 'completed' : '' }})">
-                                        <div class="form-check form-check-flat">
+                                    <li class="">
+                                        <div class="">
                                             <label class="form-check-label">
-                                                <input class="checkbox" type="checkbox">
-                                                {{ $todo->task }}
+                                                <input type="checkbox" name="checkbox{{ $todo->id }}" @if($todo->status == 'done') checked @endif>
+                                                <span class="@if($todo->status == 'done') text-decoration-line-through @endif">{{ $todo->task }}</span>
                                             </label>
                                         </div>
                                         <i class="remove ti-trash"></i>
@@ -227,23 +229,54 @@
                                 @endforelse
                             </ul>
                         </div>
-                        <form action="{{ route('todo.store') }}" method="post" class="add-items d-flex align-items-center mb-0 mt-4">
-                            @csrf
-                            <input type="text" name="new_task" class="form-control todo-list-input me-2" placeholder="Add new task">
-                            <button class="btn text-primary bg-transparent" type="submit">
-                                <i class="bi bi-plus"></i>
-                            </button>
-                        </form>
-                        <form action="{{ route('todo.update') }}" method="post" style="display: none" id="hiddenform">
-                        </form>
-                    </div>
+
+                        <div class="d-flex justify-content-end w-100">
+                            <button class="btn btn-primary mt-4" type="submit">Save</button>
+                        </div>
+                    </form>
+
+                    <form action="{{ route('todo.store') }}" method="post" class="add-items d-flex align-items-center px-4">
+                        @csrf
+                        <input type="text" name="new_task" class="form-control todo-list-input me-2" placeholder="Add new task">
+                        <button class="btn text-primary bg-transparent" type="submit">
+                            <i class="bi bi-plus"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
 
         <script>
-            const hiddenForm = document.querySelectorAll("input[type='checkbox']");
-            console.log(hiddenForm);
+            document.addEventListener("DOMContentLoaded", function(){
+                const form = document.querySelector("#porm");
+
+                form.addEventListener("submit", function(event){
+                    event.preventDefault();
+
+                    const allCheckbox = document.querySelectorAll("input[type='checkbox']");
+                    let cbvals = [];
+                    allCheckbox.forEach(element => {
+                        let cbval = (element.checked)? "on" : "off";
+
+                        cbvals.push(cbval);
+                    });
+
+                    for(let i = cbvals.length - 1; i >= 0; i--){
+                        const newHiddenInput = document.createElement("input");
+                        newHiddenInput.setAttribute("type", "hidden");
+                        newHiddenInput.setAttribute("name", "checkboxes[]");
+                        newHiddenInput.setAttribute("value", cbvals[i]);
+
+                        form.appendChild(newHiddenInput);
+                    }
+
+                    this.submit();
+
+                });
+
+
+            });
+
         </script>
 
         {{-- <div class="row">

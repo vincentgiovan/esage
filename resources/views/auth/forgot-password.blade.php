@@ -1,36 +1,3 @@
-<x-guest-layout>
-    {{-- <x-auth-card>
-
-
-        <div class="mb-4 text-sm text-gray-600">
-            {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
-        </div>
-
-        <!-- Session Status -->
-        <x-auth-session-status class="mb-4" :status="session('status')" />
-
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
-
-        <form method="POST" action="{{ route('password.email') }}">
-            @csrf
-
-            <!-- Email Address -->
-            <div>
-                <x-label for="email" :value="__('Email')" />
-
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <x-button>
-                    {{ __('Email Password Reset Link') }}
-                </x-button>
-            </div>
-        </form>
-    </x-auth-card>
-</x-guest-layout> --}}
-
 @extends('layouts.login-main-admin')
 
 @section('content')
@@ -38,14 +5,12 @@
     <div class="row justify-content-center w-75">
         <div class="col-md-6">
             <div class="card shadow-sm rounded-4 overflow-hidden">
-                <div class="card-header bg-secondary text-white fs-5 ">{{ __('Forgot Password') }}</div>
+                <div class="card-header bg-secondary text-white fs-5  ">{{ __('Forgot Password') }}</div>
 
-                    <div class="align items-center ms-3 me-2">
-                            <x-auth-card>
-                                <div class="mb-4 align-text-center text-gray-600">
-                                    {{ __('Forgot your password? No problem.') }}
-                                    <br>
-                                    {{ __('Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+                    <div class="align items-center ps-3 pe-2 ">
+                            <x-auth-card class="">
+                                <div class="mb-4 text-gray-600">
+                                    {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
                                 </div>
 
                                 <!-- Session Status -->
@@ -58,15 +23,15 @@
                                     @csrf
 
                                     <!-- Email Address -->
-                                    <div>
+                                    <div class="d-flex align-items-center gap-2">
                                         <i class="bi bi-envelope-fill"></i>
                                         <x-label for="email" :value="__('Email')" />
 
-                                        <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+                                        <x-input id="email" class="block mt-1 w-full form-control border border-1 border-black" type="email" name="email" :value="old('email')" required autofocus />
                                     </div>
 
                                     <div class="flex items-center justify-end mt-4">
-                                        <x-button>
+                                        <x-button class="bg-primary">
                                             {{ __('Email Password Reset Link') }}
                                         </x-button>
                                     </div>

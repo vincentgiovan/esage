@@ -41,6 +41,9 @@ Route::middleware(["auth","verified"])->group(function(){
     //delete data
     Route::post('/delivery-order/{id}', [DeliveryOrderController::class, "destroy"] )->name("deliveryorder-destroy");
 
+    //export
+    Route::get("/delivery-order/export/{mode}", [PDFController::class, "export_deliveryorder"])->name("deliveryorder-export");
+
     // ===== Product ===== //
 
     //show data
@@ -78,6 +81,9 @@ Route::middleware(["auth","verified"])->group(function(){
     //delete data
     Route::post('/partner/{id}', [PartnerController::class, "destroy"] )->name("partner-destroy");
 
+    //export
+    Route::get("/partner/export/{mode}", [PDFController::class, "export_partner"])->name("partner-export");
+
 
     // ===== Project ===== //
 
@@ -95,6 +101,9 @@ Route::middleware(["auth","verified"])->group(function(){
     //delete data
     Route::post('/project/{id}', [ProjectController::class, "destroy"] )->name("project-destroy");
 
+    //export
+    Route::get("/project/export/{mode}", [PDFController::class, "export_project"])->name("project-export");
+
 
     // ===== Purchase ===== //
 
@@ -111,6 +120,9 @@ Route::middleware(["auth","verified"])->group(function(){
 
     //delete data
     Route::post('/purchase/{id}', [PurchaseController::class, "destroy"] )->name("purchase-destroy");
+
+    //export
+    Route::get("/purchase/export/{mode}", [PDFController::class, "export_purchase"])->name("purchase-export");
 
 
     // ===== PurchaseProduct ===== //
