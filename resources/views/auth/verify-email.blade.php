@@ -23,18 +23,18 @@
                         <form method="POST" action="{{ route('verification.send') }}">
                             @csrf
 
-                            <div class="flex items-center justify-end mt-4 btn btn-gray text-black">
-                                <x-button class="text-black">
-                                    {{ __('Resend Verificati1on Email') }}
-                                </x-button>
+                            <div class="flex items-center justify-end mt-4 ">
+                                <button class="btn btn-secondary text-white">
+                                    {{('Resend Verification Email') }}
+                                </button>
                             </div>
                         </form>
-
+<br>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
 
                             <button type="submit" class=" btn btn-primary ">
-                                {{ __('Log Out') }}
+                                {{('Log Out') }}
                             </button>
                         </form>
                     </div>
