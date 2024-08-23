@@ -51,22 +51,22 @@
         <div class="overflow-x-auto">
             <table class="w-100">
                 <tr>
-                    <th class="border border-1 border-dark ">Nomor</th>
-                    <th class="border border-1 border-dark ">Nama Produk </th>
-                    <th class="border border-1 border-dark ">SKU Produk </th>
-                    <th class="border border-1 border-dark ">Quantity</th>
-                    <th class="border border-1 border-dark ">Variant</th>
-                    <th class="border border-1 border-dark ">Action</th>
+                    <th class="border border-1 border-secondary ">Nomor</th>
+                    <th class="border border-1 border-secondary ">Nama Produk </th>
+                    <th class="border border-1 border-secondary ">SKU Produk </th>
+                    <th class="border border-1 border-secondary ">Quantity</th>
+                    <th class="border border-1 border-secondary ">Variant</th>
+                    <th class="border border-1 border-secondary ">Action</th>
                 </tr>
 
                 @foreach ($do as $deliveryorder_product)
                     <tr>
-                        <td class="border border-1 border-dark " >{{ $loop->iteration }}</td>
-                        <td class="border border-1 border-dark " >{{ $deliveryorder_product->product->product_name }}</td>
-                        <td class="border border-1 border-dark " >{{ $deliveryorder_product->product->product_code }}</td>
-                        <td class="border border-1 border-dark " >{{ $deliveryorder_product->quantity }}</td>
-                        <td class="border border-1 border-dark " >{{ $deliveryorder_product->product->variant }}</td>
-                        <td class="border border-1 border-dark " >
+                        <td class="border border-1 border-secondary " >{{ $loop->iteration }}</td>
+                        <td class="border border-1 border-secondary " >{{ $deliveryorder_product->product->product_name }}</td>
+                        <td class="border border-1 border-secondary " >{{ $deliveryorder_product->product->product_code }}</td>
+                        <td class="border border-1 border-secondary " >{{ $deliveryorder_product->quantity }}</td>
+                        <td class="border border-1 border-secondary " >{{ $deliveryorder_product->product->variant }}</td>
+                        <td class="border border-1 border-secondary " >
                             <div class="d-flex gap-5 w-100 justify-content-center">
                                 <form action="{{ route("deliveryorderproduct-destroy", [$deliveryorder->id, $deliveryorder_product->id] ) }}" method="POST">
                                     @csrf
@@ -84,19 +84,16 @@
                     <td colspan="9" style="height: 50px;">
                     </td>
                 </tr>
-                <tr>
-                    <td colspan="9" class="border border-1 border-dark" style="background: linear-gradient(to right, rgb(113, 113, 113), rgb(213, 207, 207));">
-                        <div class="d-flex h-100 w-100 justify-content-end gap-3 fw-bold" style="font-size: 14pt;">
-                            <div>
-                                Total Items:
-                            </div>
-                            <div>
-                                {{ $do->count() }}
-                            </div>
-                        </div>
-                    </td>
-                </tr>
             </table>
+
+            <div class="d-flex h-100 w-100 justify-content-end gap-3 fw-bold border border-1 border-secondary px-2" style="font-size: 14pt; background: linear-gradient(to right, rgb(113, 113, 113), rgb(213, 207, 207));">
+                <div>
+                    Total Items:
+                </div>
+                <div>
+                    {{ $do->count() }}
+                </div>
+            </div>
         </div>
     </x-container>
 @endsection

@@ -44,26 +44,26 @@
         <div class="overflow-x-auto">
             <table class="w-100">
                 <tr>
-                    <th class="border border-1 border-dark ">Nomor</th>
-                    <th class="border border-1 border-dark ">Nama Project</th>
-                    <th class="border border-1 border-dark ">Location</th>
-                    <th class="border border-1 border-dark ">PIC Name</th>
-                    <th class="border border-1 border-dark ">Address</th>
-                    <th class="border border-1 border-dark ">Action</th>
+                    <th class="border border-1 border-secondary ">Nomor</th>
+                    <th class="border border-1 border-secondary ">Nama Project</th>
+                    <th class="border border-1 border-secondary ">Location</th>
+                    <th class="border border-1 border-secondary ">PIC Name</th>
+                    <th class="border border-1 border-secondary ">Address</th>
+                    <th class="border border-1 border-secondary ">Action</th>
                 </tr>
 
                 @foreach ($projects as $p)
                     <tr>
-                        <td class="border border-1 border-dark ">{{ $loop->iteration }}</td>
-                        <td class="border border-1 border-dark ">{{ $p->project_name }}</td>
-                        <td class="border border-1 border-dark ">{{ $p->location }}</td>
-                        <td class="border border-1 border-dark ">{{ $p->PIC }}</td>
-                        <td class="border border-1 border-dark ">{{ $p->address }}</td>
-                        {{-- <td class="border border-1 border-dark " >{{ $p->user->name }}</td> --}}
-                        <td class="border border-1 border-dark ">
+                        <td class="border border-1 border-secondary ">{{ $loop->iteration }}</td>
+                        <td class="border border-1 border-secondary ">{{ $p->project_name }}</td>
+                        <td class="border border-1 border-secondary ">{{ $p->location }}</td>
+                        <td class="border border-1 border-secondary ">{{ $p->PIC }}</td>
+                        <td class="border border-1 border-secondary ">{{ $p->address }}</td>
+                        {{-- <td class="border border-1 border-secondary " >{{ $p->user->name }}</td> --}}
+                        <td class="border border-1 border-secondary ">
                             <div class="d-flex gap-5 w-100 justify-content-center">
                                 <a href="{{ route('project-edit', $p->id) }}" class="btn btn-warning text-white"
-                                    style="font-size: 10pt">
+                                    style="font-size: 10pt; background-color: rgb(197, 167, 0);">
                                     <i class="bi bi-pencil"></i>
                                     Edit Data</a>
                                 <form action="{{ route('project-destroy', $p->id) }}" method="POST">

@@ -44,22 +44,22 @@
         <div class="overflow-x-auto">
             <table class="w-100">
                 <tr>
-                    <th class="border border-1 border-dark ">Nomor</th>
-                    <th class="border border-1 border-dark ">Supplier </th>
-                    <th class="border border-1 border-dark ">Purchase Deadline</th>
-                    <th class="border border-1 border-dark ">Register</th>
-                    <th class="border border-1 border-dark ">Purchase Date</th>
-                    <th class="border border-1 border-dark ">Note</th>
-                    <th class="border border-1 border-dark ">Purchase Status</th>
-                    <th class="border border-1 border-dark ">Action</th>
+                    <th class="border border-1 border-secondary ">Nomor</th>
+                    <th class="border border-1 border-secondary ">Supplier </th>
+                    <th class="border border-1 border-secondary ">Purchase Deadline</th>
+                    <th class="border border-1 border-secondary ">Register</th>
+                    <th class="border border-1 border-secondary ">Purchase Date</th>
+                    <th class="border border-1 border-secondary ">Note</th>
+                    <th class="border border-1 border-secondary ">Purchase Status</th>
+                    <th class="border border-1 border-secondary ">Action</th>
                 </tr>
 
                 @foreach ($purchases as $p)
                     <tr>
-                        <td class="border border-1 border-dark ">{{ $loop->iteration }}</td>
-                        <td class="border border-1 border-dark ">{{ $p->partner->partner_name }}</td>
-                        <td class="border border-1 border-dark ">{{ $p->purchase_deadline }}</td>
-                        <td class="border border-1 border-dark ">
+                        <td class="border border-1 border-secondary ">{{ $loop->iteration }}</td>
+                        <td class="border border-1 border-secondary ">{{ $p->partner->partner_name }}</td>
+                        <td class="border border-1 border-secondary ">{{ $p->purchase_deadline }}</td>
+                        <td class="border border-1 border-secondary ">
                             <div class="d-flex gap-5 w-100 justify-content-center align-items-center">
                                 {{ $p->register }}
                                 <a href="{{ route('purchaseproduct-viewitem', $p->id) }}" class="btn btn-success text-white"
@@ -67,15 +67,15 @@
                             </div>
                         </td>
 
-                        <td class="border border-1 border-dark ">{{ $p->purchase_date }}</td>
-                        <td class="border border-1 border-dark ">{{ $p->note }}</td>
-                        <td class="border border-1 border-dark ">{{ $p->purchase_status }}</td>
-                        {{-- <td class="border border-1 border-dark " >{{ $p->user->name }}</td> --}}
-                        <td class="border border-1 border-dark ">
+                        <td class="border border-1 border-secondary ">{{ $p->purchase_date }}</td>
+                        <td class="border border-1 border-secondary ">{{ $p->note }}</td>
+                        <td class="border border-1 border-secondary ">{{ $p->purchase_status }}</td>
+                        {{-- <td class="border border-1 border-secondary " >{{ $p->user->name }}</td> --}}
+                        <td class="border border-1 border-secondary ">
                             <div class="d-flex gap-5 w-100 justify-content-center">
 
-                                <a href="{{ route('purchase-edit', $p->id) }}" class="btn btn-warning text-white"
-                                    style="font-size: 10pt">
+                                <a href="{{ route('purchase-edit', $p->id) }}" class="btn text-white"
+                                    style="font-size: 10pt; background-color: rgb(197, 167, 0);">
                                     <i class="bi bi-pencil"></i>
                                     Edit Data</a>
                                 <form action="{{ route('purchase-destroy', $p->id) }}" method="POST">

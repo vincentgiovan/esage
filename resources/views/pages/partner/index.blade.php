@@ -42,36 +42,36 @@
         <div class="overflow-x-auto">
             <table class="w-100">
                 <tr>
-                    <th class="border border-1 border-dark ">Nomor</th>
-                    <th class="border border-1 border-dark ">Nama Partner</th>
-                    <th class="border border-1 border-dark ">Partner Role</th>
-                    <th class="border border-1 border-dark ">Remark</th>
-                    <th class="border border-1 border-dark ">Address</th>
-                    <th class="border border-1 border-dark ">Contact</th>
-                    <th class="border border-1 border-dark ">Phone</th>
-                    <th class="border border-1 border-dark ">Fax</th>
-                    <th class="border border-1 border-dark ">Email</th>
-                    <th class="border border-1 border-dark ">Tempo</th>
-                    <th class="border border-1 border-dark ">Action</th>
+                    <th class="border border-1 border-secondary ">Nomor</th>
+                    <th class="border border-1 border-secondary ">Nama Partner</th>
+                    <th class="border border-1 border-secondary ">Partner Role</th>
+                    <th class="border border-1 border-secondary ">Remark</th>
+                    <th class="border border-1 border-secondary ">Address</th>
+                    <th class="border border-1 border-secondary ">Contact</th>
+                    <th class="border border-1 border-secondary ">Phone</th>
+                    <th class="border border-1 border-secondary ">Fax</th>
+                    <th class="border border-1 border-secondary ">Email</th>
+                    <th class="border border-1 border-secondary ">Tempo</th>
+                    <th class="border border-1 border-secondary ">Action</th>
                 </tr>
 
                 @foreach ($partners as $p)
                     <tr>
-                        <td class="border border-1 border-dark ">{{ $loop->iteration }}</td>
-                        <td class="border border-1 border-dark ">{{ $p->partner_name }}</td>
-                        <td class="border border-1 border-dark ">{{ $p->role }}</td>
-                        <td class="border border-1 border-dark ">{{ $p->remark }}</td>
-                        <td class="border border-1 border-dark ">{{ $p->address }}</td>
-                        <td class="border border-1 border-dark ">{{ $p->contact }}</td>
-                        <td class="border border-1 border-dark ">{{ $p->phone }}</td>
-                        <td class="border border-1 border-dark ">{{ $p->fax }}</td>
-                        <td class="border border-1 border-dark ">{{ $p->email }}</td>
-                        <td class="border border-1 border-dark ">{{ $p->tempo }}</td>
-                        {{-- <td class="border border-1 border-dark " >{{ $p->user->name }}</td> --}}
-                        <td class="border border-1 border-dark ">
+                        <td class="border border-1 border-secondary ">{{ $loop->iteration }}</td>
+                        <td class="border border-1 border-secondary ">{{ $p->partner_name }}</td>
+                        <td class="border border-1 border-secondary ">{{ $p->role }}</td>
+                        <td class="border border-1 border-secondary ">{{ $p->remark }}</td>
+                        <td class="border border-1 border-secondary ">{{ $p->address }}</td>
+                        <td class="border border-1 border-secondary ">{{ $p->contact }}</td>
+                        <td class="border border-1 border-secondary ">{{ $p->phone }}</td>
+                        <td class="border border-1 border-secondary ">{{ $p->fax }}</td>
+                        <td class="border border-1 border-secondary ">{{ $p->email }}</td>
+                        <td class="border border-1 border-secondary ">{{ $p->tempo }}</td>
+                        {{-- <td class="border border-1 border-secondary " >{{ $p->user->name }}</td> --}}
+                        <td class="border border-1 border-secondary ">
                             <div class="d-flex gap-5 w-100 justify-content-center">
                                 <a href="{{ route('partner-edit', $p->id) }}" class="btn btn-warning text-white"
-                                    style="font-size: 10pt">
+                                    style="font-size: 10pt; background-color: rgb(197, 167, 0);">
                                     <i class="bi bi-pencil"></i>
                                     Edit Data</a>
                                 <form action="{{ route('partner-destroy', $p->id) }}" method="POST">

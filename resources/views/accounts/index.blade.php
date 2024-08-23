@@ -3,14 +3,20 @@
 @section('content')
 
 <!-- tes123456789 -->
-<div class="container">
-    <h1>Account Management</h1>
-
+<x-container>
+    <h1 class="my-4">Account Management</h1>
+    <hr class="mt-2">
+        <br>
     <!-- Add User Form -->
     <div class="card mb-4">
         <div class="card-header">
             Add New User
         </div>
+        <form action="{{ route("account.import") }}" method="post">
+            @csrf
+            <button class="btn btn-secondary">Tes excel</button>
+        </form>
+
         <div class="card-body">
             <form action="{{ route('account.store') }}" method="POST">
                 @csrf
@@ -107,7 +113,7 @@
     </div>
 
     <!-- Users List -->
-    <div class="card">
+    <div class="card mt-5">
         <div class="card-header">
             Registered Users
         </div>
@@ -121,77 +127,80 @@
                 <p class="text-success fw-bold">{{ session('successDeleteAccount') }}</p>
             @endif
 
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($users as $user)
-                    @if(Auth::user()->id == $user->id)
-                    @continue
-                    @endif
-                    <tr>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->email }}</td>
-                        <td>{{ ($user->role == 2)? "User" : "Admin" }}</td>
-                        <td>
-                            <form action="{{ route('account.destroy', $user->id) }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                            </form>
-                            {{-- <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editUserModal-{{ $user->id }}">Edit</button> --}}
-                            <a href="{{ route("account.show", $user->id) }}" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editUserModal-{{ $user->id }}">Edit</a>
-
-                            {{-- <!-- Edit User Modal -->
-                            <div class="modal fade" id="editUserModal-{{ $user->id }}" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form action="{{ route('account.update', $user->id) }}" method="POST">
-                                                @csrf
-                                                @method('PUT')
-                                                <div class="form-group mb-3">
-                                                    <label for="name">Name</label>
-                                                    <input type="text" class="form-control" id="name" name="name" value="{{ $user->name }}">
-                                                </div>
-                                                <div class="input-group">
-                                                    <input id="password" type="password" class="pe-5 form-control border border-secondary position-relative z-0 rounded @error('password') is-invalid @enderror" name="password"  autocomplete="current-password">
-                                                    <div class="input-group-append position-absolute z-1 end-0">
-                                                        <button type="button" class="btn" id="togglePassword">
-                                                            <i class="bi bi-eye-fill" id="toggleIcon"></i>
-                                                        </button>
+            <div class="w-full overflow-x-auto">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="border border-1 border-secondary" style="background: rgb(199, 199, 199)">Name</th>
+                            <th class="border border-1 border-secondary" style="background: rgb(199, 199, 199)">Email</th>
+                            <th class="border border-1 border-secondary" style="background: rgb(199, 199, 199)">Role</th>
+                            <th class="border border-1 border-secondary" style="background: rgb(199, 199, 199)">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($users as $user)
+                        @if(Auth::user()->id == $user->id)
+                            @continue
+                        @endif
+                        <tr>
+                            <td class="border border-1 border-secondary">{{ $user->name }}</td>
+                            <td class="border border-1 border-secondary">{{ $user->email }}</td>
+                            <td class="border border-1 border-secondary">{{ ($user->role == 2)? "User" : "Admin" }}</td>
+                            <td class="border border-1 border-secondary">
+                                <div class="d-flex w-100 align-items-center gap-3">
+                                    <form action="{{ route('account.destroy', $user->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger"><i class="bi bi-trash3"></i> Delete</button>
+                                    </form>
+                                    {{-- <button class="btn btn-warning" data-toggle="modal" data-target="#editUserModal-{{ $user->id }}">Edit</button> --}}
+                                    <a href="{{ route("account.show", $user->id) }}" class="btn text-white" data-toggle="modal" data-target="#editUserModal-{{ $user->id }}" style="background-color: rgb(197, 167, 0);"><i class="bi bi-pencil"></i> Edit</a>
+                                </div>
+                                {{-- <!-- Edit User Modal -->
+                                <div class="modal fade" id="editUserModal-{{ $user->id }}" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="{{ route('account.update', $user->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <div class="form-group mb-3">
+                                                        <label for="name">Name</label>
+                                                        <input type="text" class="form-control" id="name" name="name" value="{{ $user->name }}">
                                                     </div>
-                                                </div>
-                                                <div class="form-group mb-3">
-                                                    <label for="password_confirmation">Confirm Password</label>
-                                                    <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
-                                                </div>
-                                                <button type="submit" class="btn btn-primary">Save changes</button>
-                                            </form>
+                                                    <div class="input-group">
+                                                        <input id="password" type="password" class="pe-5 form-control border border-secondary position-relative z-0 rounded @error('password') is-invalid @enderror" name="password"  autocomplete="current-password">
+                                                        <div class="input-group-append position-absolute z-1 end-0">
+                                                            <button type="button" class="btn" id="togglePassword">
+                                                                <i class="bi bi-eye-fill" id="toggleIcon"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group mb-3">
+                                                        <label for="password_confirmation">Confirm Password</label>
+                                                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div> --}}
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                                </div> --}}
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
+</x-container>
 
 <script>
     document.getElementById('togglePassword').addEventListener('click', function (e) {

@@ -44,21 +44,21 @@
         <div class="overflow-x-auto">
             <table class="w-100">
                 <tr>
-                    <th class="border border-1 border-dark ">Nomor</th>
-                    <th class="border border-1 border-dark ">Delivery Date</th>
-                    <th class="border border-1 border-dark ">Project</th>
-                    <th class="border border-1 border-dark ">Register</th>
-                    <th class="border border-1 border-dark ">Delivery Status</th>
-                    <th class="border border-1 border-dark ">Note</th>
-                    <th class="border border-1 border-dark ">Action</th>
+                    <th class="border border-1 border-secondary ">Nomor</th>
+                    <th class="border border-1 border-secondary ">Delivery Date</th>
+                    <th class="border border-1 border-secondary ">Project</th>
+                    <th class="border border-1 border-secondary ">Register</th>
+                    <th class="border border-1 border-secondary ">Delivery Status</th>
+                    <th class="border border-1 border-secondary ">Note</th>
+                    <th class="border border-1 border-secondary ">Action</th>
                 </tr>
 
                 @foreach ($deliveryorders as $p)
                     <tr>
-                        <td class="border border-1 border-dark ">{{ $loop->iteration }}</td>
-                        <td class="border border-1 border-dark ">{{ $p->delivery_date }}</td>
-                        <td class="border border-1 border-dark ">{{ $p->project->project_name }}</td>
-                        <td class="border border-1 border-dark ">
+                        <td class="border border-1 border-secondary ">{{ $loop->iteration }}</td>
+                        <td class="border border-1 border-secondary ">{{ $p->delivery_date }}</td>
+                        <td class="border border-1 border-secondary ">{{ $p->project->project_name }}</td>
+                        <td class="border border-1 border-secondary ">
                             <div class="d-flex gap-5 w-100 justify-content-center align-items-center">
                                 {{ $p->register }}
                                 <a href="{{ route('deliveryorderproduct-viewitem', $p->id) }}" class="btn btn-success text-white"
@@ -66,13 +66,13 @@
                             </div>
                         </td>
 
-                        <td class="border border-1 border-dark ">{{ $p->delivery_status }}</td>
-                        <td class="border border-1 border-dark ">{{ $p->note }}</td>
-                        {{-- <td class="border border-1 border-dark " >{{ $p->user->name }}</td> --}}
-                        <td class="border border-1 border-dark">
+                        <td class="border border-1 border-secondary ">{{ $p->delivery_status }}</td>
+                        <td class="border border-1 border-secondary ">{{ $p->note }}</td>
+                        {{-- <td class="border border-1 border-secondary " >{{ $p->user->name }}</td> --}}
+                        <td class="border border-1 border-secondary">
                             <div class="d-flex gap-5 w-100 justify-content-center">
-                                <a href="{{ route('deliveryorder-edit', $p->id) }}" class="btn btn-warning text-white"
-                                    style="font-size: 10pt">
+                                <a href="{{ route('deliveryorder-edit', $p->id) }}" class="btn text-white"
+                                    style="font-size: 10pt; background-color: rgb(197, 167, 0);">
                                     <i class="bi bi-pencil"></i>
                                     Edit Data</a>
                                 <form action="{{ route('deliveryorder-destroy', $p->id) }}" method="POST">

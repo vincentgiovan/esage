@@ -12,14 +12,33 @@
             @endif
         <div class="row">
             <div class="col-md-12 grid-margin">
-                <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex justify-content-between align-items-center gap-3">
                     <div>
-                        <h4 class="font-weight-bold mb-0">eSage Summary</h4>
+                        <h4 class="font-weight-bold mb-0">WMS Sage Summary</h4>
                     </div>
                     <div>
-                        <button type="button" class="btn btn-primary btn-icon-text btn-rounded">
-                            <i class="ti-clipboard btn-icon-prepend"></i>Monthly Report
-                        </button>
+                        <div class="w-100 d-flex align-items-center justify-content-between">
+                            <div class="position-relative d-flex flex-column align-items-end">
+                                <button class="btn btn-primary" type="button" id="dd-toggler">
+                                    <i class="bi bi-file-earmark-arrow-up"></i> Monthly Report
+                                </button>
+                                <div class="bg-white rounded-lg position-absolute z-2 border border-1" id="dd-menu" style="display: none; top: 40px;">
+                                    <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("deliveryorder-export", 1) }}" target="blank">Delivery Order</a></li>
+                                    <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("purchase-export", 1) }}" target="blank">Purchase</a></li>
+                                    <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export", 1) }}" target="blank">Product</a></li>
+                                    <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("partner-export", 1) }}" target="blank">Partner</a></li>
+                                    <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("project-export", 1) }}" target="blank">Project</a></li>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            $(document).ready(() => {
+                                $("#dd-toggler").click(function(){
+                                    $("#dd-menu").toggle();
+                                });
+                            });
+                        </script>
                     </div>
                 </div>
             </div>
@@ -28,13 +47,13 @@
             <div class="col-md-3 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <p class="card-title text-md-center text-xl-left">Stok Kosong</p>
+                        <p class="card-title text-md-center text-xl-left fs-5"><i class="bi bi-clipboard-x"></i> Stok Kosong</p>
                         <div
-                            class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-                            <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{ $totalemptyproduct }}</h3>
+                            class="d-flex flex-wrap justify-content-md-center justify-content-xl-center align-items-center">
+                            <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-center fs-1">{{ $totalemptyproduct }}</h3>
                             <i class="ti-calendar icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
                         </div>
-                        <p class="mb-0 mt-2 text-danger">0.12% <span class="text-black ms-1"><small>(30 days)</small></span>
+                        <p class="mb-0 mt-2 text-center"><span class="text-black "><small>(30 days)</small></span>
                         </p>
                     </div>
                 </div>
@@ -42,13 +61,13 @@
             <div class="col-md-3 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <p class="card-title text-md-center text-xl-left">Total D.Order</p>
+                        <p class="card-title text-md-center text-xl-left fs-5"><i class="bi bi-truck"></i> Total D.Order</p>
                         <div
-                            class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-                            <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{ $totaldelivery }}</h3>
+                            class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-center align-items-center">
+                            <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-center fs-1">{{ $totaldelivery }}</h3>
                             <i class="ti-user icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
                         </div>
-                        <p class="mb-0 mt-2 text-danger">0.47% <span class="text-black ms-1"><small>(30 days)</small></span>
+                        <p class="mb-0 mt-2 text-center "><span class="text-black "><small>(30 days)</small></span>
                         </p>
                     </div>
                 </div>
@@ -56,13 +75,13 @@
             <div class="col-md-3 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <p class="card-title text-md-center text-xl-left">Total Purchase</p>
+                        <p class="card-title text-md-center text-xl-left fs-5"><i class="bi bi-cart4"></i> Total Purchase</p>
                         <div
-                            class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-                            <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{ $totalpurchase }}</h3>
+                            class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-center align-items-center">
+                            <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-center fs-1">{{ $totalpurchase }}</h3>
                             <i class="ti-agenda icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
                         </div>
-                        <p class="mb-0 mt-2 text-success">64.00%<span class="text-black ms-1"><small>(30
+                        <p class="mb-0 mt-2 text-center "><span class="text-black "><small>(30
                                     days)</small></span></p>
                     </div>
                 </div>
@@ -70,13 +89,13 @@
             <div class="col-md-3 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <p class="card-title text-md-center text-xl-left">New Projects</p>
+                        <p class="card-title text-md-center text-xl-left fs-5"><i class="bi bi-building"></i> New Projects</p>
                         <div
-                            class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-                            <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">6</h3>
+                            class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-center align-items-center">
+                            <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-center fs-1">{{ $totalnewproject }}</h3>
                             <i class="ti-layers-alt icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
                         </div>
-                        <p class="mb-0 mt-2 text-success">23.00%<span class="text-black ms-1"><small>(30
+                        <p class="mb-0 mt-2 text-center"><span class="text-black "><small>(30
                                     days)</small></span></p>
                     </div>
                 </div>
@@ -210,7 +229,7 @@
                 <div class="card">
                     <form action="{{ route('todo.update') }}" method="post" class="card-body" id="porm">
                         @csrf
-                        <h4 class="card-title">To Do Lists</h4>
+                        <h4 class="card-title fs-5"><i class="bi bi-journal-text"></i> To Do Lists</h4>
 
                         <div class="list-wrapper pt-2 h-auto">
                             <ul class="d-flex flex-column-reverse todo-list todo-list-custom">

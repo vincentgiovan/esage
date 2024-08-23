@@ -1,7 +1,7 @@
-<nav class="navbar navbar-expand-lg w-100" style="background: rgb(95, 95, 95);">
+<nav class="navbar navbar-expand-lg w-100" style="background: rgb(18, 53, 169);">
     <div class="container-fluid d-flex justify-content-between">
         <div class="d-flex">
-            <button class="px-3 py-2 text-white border-0" style="" type="button"
+            <button class="px-3 py-2 text-white border-0" style="background: none;" type="button"
                 id="sidebarToggler"><i class="bi bi-list"></i></button>
 
             <a class="navbar-brand text-white mx-2 d-flex align-items-center gap-1" href={{ route('dashboard') }}>

@@ -23,7 +23,7 @@
         <!-- Custom styles -->
         <style>
             body{
-                background-color: rgb(224, 224, 224)
+                background-color: white;
             }
 
             /* button[type="button"], button[type="submit"]:hover {
@@ -95,7 +95,7 @@
                 </div>
             @endauth
 
-            <div class="container-fluid d-flex justify-content-end position-relative w-100" style="padding: 0;">
+            <div class="container-fluid d-flex justify-content-end position-relative w-100" style="padding: 0; background: rgb(234, 234, 234)">
                 <!-- Sidebar -->
                 @auth
                     @include("component.sidebar")
@@ -133,8 +133,8 @@
 
                         @endif --}}
                         @if(!Request::is("dashboard"))
-                            <div class="d-flex gap-2">
-                                <a href="{{ route('dashboard') }}">Dashboard</a>
+                            <div class="d-flex gap-2 flex-wrap align-items-start fs-6">
+                                <a href="{{ route('dashboard') }}" class="text-decoration-none fw-semibold">Dashboard</a>
                                 <?php $link = "" ?>
                                 @foreach(Request::segments() as $index => $segment)
                                     <!-- Construct the full URL -->
@@ -143,7 +143,7 @@
                                     @endphp
 
                                     <!-- Separator -->
-                                    >
+                                    <span><i class="bi bi-chevron-right"></i></span>
 
                                     <!-- Link activation logic -->
                                     @if ($index < count(Request::segments()) - 1 && !is_numeric($segment))
