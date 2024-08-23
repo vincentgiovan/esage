@@ -29,7 +29,7 @@
                                 </button>
                             </div>
                         </form>
-<br>
+                        <br>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
 
