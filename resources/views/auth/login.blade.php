@@ -77,6 +77,8 @@
         </div>
     </div>
 </div>
+
+
 <script>
     document.getElementById('togglePassword').addEventListener('click', function (e) {
         const passwordInput = document.getElementById('password');

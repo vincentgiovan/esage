@@ -19,20 +19,22 @@
 
         <!-- Custom styles -->
         <style>
-            body{
-                background-color: rgb(209, 209, 209)
+            .darken-image{
+                filter: brightness(0.7);
             }
-
-            /* change button color on hover with style */
-            /* #susbtn:hover {
-                background-color: gray;
-                border-color: gray;
-            } */
         </style>
     </head>
 
-    <body>
-        @yield("content")
+    <body  class="img-fluid ">
+        <img src="{{ asset('res/FOTO_BG.png') }}" alt="alt_img" class="darken-image position-absolute vh-100 vw-100 z-0" >
+        <div class="z-10 position-absolute d-flex flex-column gap-3" style="bottom: 0px; right: 15px;">
+            <img src="{{ asset('res/output-onlinepngtools.png') }}" alt="logo" width="200px">
+            <p class="text-white fw-bold">Warehouse @ Soekarno Hatta</p>
+            <p class="text-white fw-bold">By PT Sage Konstruksi Indonesia</p>
+        </div>
+        <div class="z-10 position-absolute vw-100 darken">
+            @yield("content")
+        </div>
         <!-- Import bootstrap -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     </body>
