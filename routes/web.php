@@ -15,6 +15,7 @@ use App\Http\Controllers\DeliveryOrderController;
 use App\Http\Controllers\AccountCreationController;
 use App\Http\Controllers\PurchaseProductController;
 use App\Http\Controllers\DeliveryOrderProductController;
+use App\Models\DeliveryOrder;
 
 Route::get('/', function(){
     return redirect("/dashboard");
@@ -33,6 +34,10 @@ Route::middleware(["auth","verified"])->group(function(){
     //create new data
     Route::get('/delivery-order/create', [DeliveryOrderController::class, "create"] )->name("deliveryorder-create");
     Route::post('/delivery-order/store', [DeliveryOrderController::class, "store"] )->name("deliveryorder-store");
+
+    //import
+    Route::get("/delivery-order/import", [DeliveryOrderController::class, "import_deliveryorder_form"])->name("deliveryorder-import");
+    Route::post("/delivery-order/import", [DeliveryOrderController::class, "import_deliveryorder_store"])->name("deliveryorder-import-store");
 
     //edit data
     Route::get('/delivery-order/{id}/edit', [DeliveryOrderController::class, "edit"] )->name("deliveryorder-edit");
@@ -79,6 +84,10 @@ Route::middleware(["auth","verified"])->group(function(){
     Route::get('/partner/create', [PartnerController::class, "create"] )->name("partner-create");
     Route::post('/partner/store', [PartnerController::class, "store"] )->name("partner-store");
 
+    //import
+    Route::get("/partner/import", [PartnerController::class, "import_partner_form"])->name("partner-import");
+    Route::post("/partner/import", [PartnerController::class, "import_partner_store"])->name("partner-import-store");
+
     //edit data
     Route::get('/partner/{id}/edit', [PartnerController::class, "edit"] )->name("partner-edit");
     Route::post('/partner/{id}/edit', [PartnerController::class, "update"] )->name("partner-update");
@@ -99,6 +108,10 @@ Route::middleware(["auth","verified"])->group(function(){
     Route::get('/project/create', [ProjectController::class, "create"] )->name("project-create");
     Route::post('/project/store', [ProjectController::class, "store"] )->name("project-store");
 
+    //import
+    Route::get("/project/import", [ProjectController::class, "import_project_form"])->name("project-import");
+    Route::post("/project/import", [ProjectController::class, "import_project_store"])->name("project-import-store");
+
     //edit data
     Route::get('/project/{id}/edit', [ProjectController::class, "edit"] )->name("project-edit");
     Route::post('/project/{id}/edit', [ProjectController::class, "update"] )->name("project-update");
@@ -118,6 +131,10 @@ Route::middleware(["auth","verified"])->group(function(){
     //create new data
     Route::get('/purchase/create', [PurchaseController::class, "create"] )->name("purchase-create");
     Route::post('/purchase/store', [PurchaseController::class, "store"] )->name("purchase-store");
+
+    //import
+    Route::get("/purchase/import", [PurchaseController::class, "import_purchase_form"])->name("purchase-import");
+    Route::post("/purchase/import", [PurchaseController::class, "import_purchase_store"])->name("purchase-import-store");
 
     //edit data
     Route::get('/purchase/{id}/edit', [PurchaseController::class, "edit"] )->name("purchase-edit");
