@@ -6,16 +6,13 @@
 <x-container>
     <h1 class="my-4">Account Management</h1>
     <hr class="mt-2">
-        <br>
+    <br>
+    
     <!-- Add User Form -->
     <div class="card mb-4">
         <div class="card-header">
             Add New User
         </div>
-        <form action="{{ route("account.import") }}" method="post">
-            @csrf
-            <button class="btn btn-secondary">Tes excel</button>
-        </form>
 
         <div class="card-body">
             <form action="{{ route('account.store') }}" method="POST">

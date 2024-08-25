@@ -12,7 +12,7 @@
             <div class="bg-white rounded-lg position-absolute z-2 border border-1" id="dd-menu" style="display: none; top: 40px;">
                 <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("purchaseproduct-export", [$purchase->id, 2]) }}" target="blank">Export (PDF Portrait)</a></li>
                 <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("purchaseproduct-export", [$purchase->id, 1]) }}" target="blank">Export (PDF Landscape)</a></li>
-            </div>{{ w{{  }}
+            </div>
         </div>
     </div>
 

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg w-100" style="background: rgb(18, 53, 169);">
+<nav class="navbar navbar-expand-lg w-100" style="background: rgb(24, 147, 255);">
     <div class="container-fluid d-flex justify-content-between">
         <div class="d-flex">
             <button class="px-3 py-2 text-white border-0" style="background: none;" type="button"

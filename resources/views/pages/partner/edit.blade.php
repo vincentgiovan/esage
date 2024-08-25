@@ -2,7 +2,7 @@
 
 @section('content')
     <x-container-middle>
-        <div class="container bg-white p-5 rounded-4">
+        <div class="container bg-white p-5 rounded-4 mt-4">
 
             <h2>Edit Item</h2>
 

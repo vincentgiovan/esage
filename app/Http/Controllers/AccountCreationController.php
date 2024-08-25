@@ -95,4 +95,10 @@ class AccountCreationController extends Controller
         // Arahkan user kembali ke halaman accounts/index.blade.php
         return redirect()->route('account.index')->with("successDeleteAccount", "Successfully deleted new account");
     }
+
+    public function import_user_form(){
+        return view("accounts.import-data");
+    }
+
+    
 }

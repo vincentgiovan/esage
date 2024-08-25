@@ -2,7 +2,7 @@
 
 @section('content')
     <x-container-middle>
-        <div class="container bg-white rounded-4 p-5">
+        <div class="container bg-white rounded-4 p-5 mt-4">
             <h2 class="text-center fw-bold">Insert Partner</h2>
             <form method="POST" action="{{ route('partner-store') }}">
                 {{-- @csrf kepake untuk token ,wajib --}}

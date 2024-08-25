@@ -147,7 +147,7 @@
 
                                     <!-- Link activation logic -->
                                     @if ($index < count(Request::segments()) - 1 && !is_numeric($segment))
-                                        <a href="{{ url($link) }}">{{ ucwords(str_replace('-', ' ', $segment)) }}</a>
+                                        <a href="{{ url($link) }}" class="text-decoration-none fw-semibold">{{ ucwords(str_replace('-', ' ', $segment)) }}</a>
                                     @else
                                         {{ ucwords(str_replace('-', ' ', $segment)) }}
                                     @endif

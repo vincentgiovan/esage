@@ -1,13 +1,6 @@
 @extends('layouts.main-admin')
 
 @section('content')
-    {{--
-    @foreach (breadcrumbs('product-index', ['id' => $id]) as $breadcrumb)
-        <a href="{{ $breadcrumb['url'] }}">{{ $breadcrumb['title'] }}</a>
-        @if (!$loop->last)
-            &gt;
-        @endif
-    @endforeach --}}
     <x-container>
         <div class="w-100 d-flex align-items-center justify-content-between">
             <h1 class="mt-4">Warehouse Items</h1>
@@ -87,7 +80,7 @@
                         <td class="border border-1 border-secondary ">
                             @php
                                 if(request("page")){
-                                    echo $loop->iteration + ((request("page") - 1) * 5);
+                                    echo $loop->iteration + ((request("page") - 1) * $n_pagination);
                                 } else {
                                     echo $loop->iteration;
                                 }

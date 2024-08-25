@@ -11,7 +11,6 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ExcelImportController;
 use App\Http\Controllers\DeliveryOrderController;
 use App\Http\Controllers\AccountCreationController;
 use App\Http\Controllers\PurchaseProductController;
@@ -55,6 +54,10 @@ Route::middleware(["auth","verified"])->group(function(){
         Route::get('/product/create', [ProductController::class, "create"] )->name("product-create");
         Route::post('/product/store', [ProductController::class, "store"] )->name("product-store");
 
+        //import
+        Route::get("/product/import", [ProductController::class, "import_product_form"])->name("product-import");
+        Route::post("/product/import", [ProductController::class, "import_product_store"])->name("product-import-store");
+
         //edit data
         Route::get('/product/{id}/edit', [ProductController::class, "edit"] )->name("product-edit");
         Route::post('/product/{id}/edit', [ProductController::class, "update"] )->name("product-update");
@@ -65,9 +68,6 @@ Route::middleware(["auth","verified"])->group(function(){
         //export
         Route::get("/product/export/{mode}", [PDFController::class, "export_product"])->name("product-export");
 
-        //import
-        Route::get("/product/import", [ExcelImportController::class, "import_product"])->name("product-import");
-        Route::post("/product/import", [ExcelImportController::class, "import_product_store"])->name("product-import-store");
     });
 
     // ===== Partner ===== //
@@ -175,10 +175,12 @@ Route::middleware(["auth","verified"])->group(function(){
     // Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/account', [AccountCreationController::class, 'index'])->name('account.index');
     Route::post('/account', [AccountCreationController::class, 'store'])->name('account.store');
+    Route::get("/account/import-data", [AccountCreationController::class, "import_user_form"])->name("account.import.form");
+    Route::post("/account/import-data", [AccountCreationController::class, "import_user_store"])->name("account.import.store");
     Route::get("/account/{id}", [AccountCreationController::class, "show"])->name("account.show");
     Route::put('/account/{id}', [AccountCreationController::class, 'update'])->name('account.update');
     Route::delete('/account/{id}', [AccountCreationController::class, 'destroy'])->name('account.destroy');
-    Route::post("/account/import-excel", [ExcelImportController::class, "import_user"])->name("account.import");
+
 // });
 
     Route::get("/request", function(){
