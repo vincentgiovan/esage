@@ -65,6 +65,11 @@
                 width: 15%;
             }
 
+
+            .nav-link:hover{
+                background-color: rgb(100, 100, 100);
+            }
+
             @media screen and (max-width: 600px) {
                 #sidebar {
                     display: none;
@@ -87,7 +92,7 @@
     </head>
 
     <body style="min-height: 100vh;">
-        <div class="container-scroller h-100 w-100">
+        <div class="h-100 w-100">
             <!-- Navbar -->
             @auth
                 <div class="fixed-top" style="z-index: 100;">
@@ -95,43 +100,15 @@
                 </div>
             @endauth
 
-            <div class="container-fluid d-flex justify-content-end position-relative w-100" style="padding: 0; background: rgb(234, 234, 234)">
+            <div class="container-fluid d-flex justify-content-end position-relative w-100" style="padding: 0;">
                 <!-- Sidebar -->
                 @auth
                     @include("component.sidebar")
                 @endauth
 
                 <!-- Main -->
-                <div class="main-panel d-flex" id="main-content-div" style="min-height: 100vh; padding-left: 0;">
-                    <div class="content-wrapper d-flex flex-column" style="width: 100%;">
-                        <!-- Breadcrumb -->
-                        {{-- {{ Breadcrumbs::render() }} --}}
-                        {{-- @if(Request::is("project*"))
-                            <x-projectbc>
-                                @yield("bcd")
-                            </x-projectbc>
-
-                        @elseif(Request::is("product*"))
-                            <x-productbc>
-                                @yield("bcd")
-                            </x-productbc>
-
-                        @elseif(Request::is("purchase*"))
-                            <x-purchasebc>
-                                @yield("bcd")
-                            </x-purchasebc>
-
-                        @elseif(Request::is("deliveryorder*"))
-                            <x-deliveryorderbc>
-                                @yield("bcd")
-                            </x-deliveryorderbc>
-
-                        @elseif(Request::is("partner*"))
-                            <x-partnerbc>
-                                @yield("bcd")
-                            </x-partnerbc>
-
-                        @endif --}}
+                <div class="d-flex flex-column" id="main-content-div" style="min-height: 100vh; padding-left: 0;">
+                    <div class="content-wrapper d-flex flex-column bg-light" style="width: 100%;">
                         @if(!Request::is("dashboard"))
                             <div class="d-flex gap-2 flex-wrap align-items-start fs-6">
                                 <a href="{{ route('dashboard') }}" class="text-decoration-none fw-semibold">Dashboard</a>
@@ -159,8 +136,10 @@
                         <div class="flex-grow-1 d-flex flex-column">
                             @yield("content")
                         </div>
-
                     </div>
+
+                    @include("component.footer")
+
                 </div>
             </div>
         </div>

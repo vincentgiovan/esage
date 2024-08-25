@@ -4,7 +4,7 @@
 <div class="container d-flex justify-content-center align-items-center" style="min-height:100vh;">
     <div class="row justify-content-center w-75">
         <div class="col-md-6">
-            <div class="card shadow-sm rounded-4 overflow-hidden">
+            <div class="card shadow-sm rounded-4 overflow-hidden border-0">
                 <div class="card-header bg-secondary text-white fs-5 ">{{ __('Admin Login') }}</div>
 
                 <div class="card-body p-4">
@@ -54,19 +54,16 @@
                             </label>
                         </div>
 
-                        <div class="flex items-center justify-end mt-4">
+                        <div class="d-flex justify-content-end">
                             @if (Route::has('password.request'))
                                 <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
                                     {{ __('Forgot your password?') }}
                                 </a>
                             @endif
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                @if (session()->has('failMessage'))
-                                    <p class="text-danger fw-bold">{{ session('failMessage') }}</p>
-                                @endif
-                                <button type="submit" class="btn btn-primary w-100">
+                        </div>
+                        <div class="form-group row mb-0 mt-4">
+                            <div class="d-flex w-100 justify-content-center">
+                                <button type="submit" class="btn btn-primary col-md-6">
                                     {{ __('Login') }}
                                 </button>
                             </div>

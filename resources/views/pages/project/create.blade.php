@@ -2,7 +2,7 @@
 
 @section('content')
     <x-container-middle>
-        <div class="container bg-white rounded-4 p-5">
+        <div class="container bg-white rounded-4 p-5 border border-1 card">
             <h2 class="text-center fw-bold">Insert Project</h2>
             <form method="POST" action="{{ route('project-store') }}">
                 {{-- @csrf kepake untuk token ,wajib --}}

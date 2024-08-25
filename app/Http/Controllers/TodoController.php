@@ -21,9 +21,13 @@ class TodoController extends Controller
     }
 
     public function save_todo(Request $request){
-        foreach(Todo::where("user_id", Auth::user()->id)->get() as $i => $todo){
+        $all_todos = Todo::where("user_id", Auth::user()->id)->get();
+        $i = $all_todos->count() - 1;
+        foreach($all_todos as $todo){
             $new_status = ($request->checkboxes[$i] == "on")? "done" : "undone";
             Todo::where("id", $todo->id)->update(["status" => $new_status]);
+
+            $i--;
         }
 
         return redirect("/dashboard");

@@ -1,15 +1,16 @@
 @extends('layouts.main-admin')
 @section('content')
     {{-- Back to top --}}
-    <a type="button" class="text-dark px-3 py-2 border-0 btn btn-light rounded-circle"
+    {{-- <a type="button" class="text-info px-3 py-2 border-0 btn btn-light rounded-circle"
         style="bottom: 10px; right: 10px; position: fixed; background-color:transparent; " href="#">
         <i class="bi bi-arrow-up-circle" style="font-size: 40px; z-index: 10;"></i>
-    </a>
+    </a> --}}
 
-    <div class="content-wrapper">
-            @if (session()->has('successfulLogin'))
+    <div>
+        @if (session()->has('successfulLogin'))
             <p class="text-success fs-5">{{ session('successfulLogin') }}</p>
-            @endif
+        @endif
+
         <div class="row">
             <div class="col-md-12 grid-margin">
                 <div class="d-flex justify-content-between align-items-center gap-3">
@@ -238,19 +239,19 @@
                                         <div class="">
                                             <label class="form-check-label">
                                                 <input type="checkbox" name="checkbox{{ $todo->id }}" @if($todo->status == 'done') checked @endif>
-                                                <span class="@if($todo->status == 'done') text-decoration-line-through @endif">{{ $todo->task }}</span>
+                                                <span class="@if($todo->status == 'done') text-decoration-line-through @endif todo-detail">{{ $todo->task }}</span>
                                             </label>
                                         </div>
                                         <i class="remove ti-trash"></i>
                                     </li>
                                 @empty
-                                    <p>- N/A -</p>
+                                    <p class="text-center">- No to do lists -</p>
                                 @endforelse
                             </ul>
                         </div>
 
                         <div class="d-flex justify-content-end w-100">
-                            <button class="btn btn-primary mt-4" type="submit">Save</button>
+                            <button class="btn btn-primary mt-4" type="submit" style="display: none;" id="save-btn">Save</button>
                         </div>
                     </form>
 
@@ -267,6 +268,21 @@
 
         <script>
             document.addEventListener("DOMContentLoaded", function(){
+                const allCheckbox = document.querySelectorAll("input[type='checkbox']");
+
+                allCheckbox.forEach(element => {
+                    element.addEventListener("change", function() {
+                        $("#save-btn").show();
+                        if($(this).is(":checked")){
+                            $(this).closest("label").find(".todo-detail").addClass("text-decoration-line-through");
+                        }
+                        else {
+                            $(this).closest("label").find(".todo-detail").removeClass("text-decoration-line-through");
+                        }
+
+                    });
+                });
+
                 const form = document.querySelector("#porm");
 
                 form.addEventListener("submit", function(event){
@@ -415,5 +431,4 @@
     <!-- partial:partials/_footer.html -->
 
     <!-- partial -->
-    </div>
 @endsection

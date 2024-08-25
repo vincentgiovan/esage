@@ -3,7 +3,7 @@
 @section("content")
 
     <x-container-middle>
-        <div class="container rounded-4 p-5 bg-white">
+        <div class="container rounded-4 p-5 bg-white border border-1 card">
             <h2 class="text-center fw-bold">Create New Order</h2>
             <form method="POST" action="{{ route("deliveryorder-store"{{-- ,$delivery_order->id--}} ) }}" id="bikindevor">
                 @csrf

@@ -4,7 +4,7 @@
 @section("content")
 
     <x-container-middle>
-        <div class="container bg-white rounded-4 p-5">
+        <div class="container bg-white rounded-4 p-5 border border-1 card">
 
             <h2>Add Product To Delivery Order</h2>
                 <div>
