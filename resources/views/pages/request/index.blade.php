@@ -63,7 +63,7 @@
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </form>
-            </div>
+
         </div>
     </x-container-middle>
 
