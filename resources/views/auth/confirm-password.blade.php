@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container d-flex justify-content-center align-items-center" style="min-height:100vh;">
-    <div class="row justify-content-center w-75">
+    <div class="row justify-content-center " id="login-container">
         <div class="col-md-6">
             <div class="card shadow-sm rounded-4 overflow-hidden">
                 <div class="card-header bg-secondary text-white fs-5 ">{{ __('Admin Login') }}</div>
