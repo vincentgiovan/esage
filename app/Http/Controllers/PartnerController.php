@@ -34,11 +34,11 @@ class PartnerController extends Controller{
             "partner_name" => "required|min:1",
             "role" => "required",
             "remark" => "nullable",
-            "address" => "required|min:0",
-            "contact" => "required|numeric|min:7|not_in:0",
-            "phone" => "required|numeric|min:1|not_in:0",
-            "fax" => "required|numeric|min:1|not_in:0",
-            "email" => "required|email:dns",
+            "address" => "nullable|min:0",
+            "contact" => "nullable|numeric|min:7|not_in:0",
+            "phone" => "nullable|numeric|min:1|not_in:0",
+            "fax" => "nullable|numeric|min:1|not_in:0",
+            "email" => "nullable|email:dns",
             "tempo" => "nullable"
         ]);
 
@@ -66,11 +66,11 @@ class PartnerController extends Controller{
             "partner_name" => "required|min:1",
             "role"=>"required",
             "remark" => "nullable",
-            "address" => "required|min:0",
-            "contact"=>"required|min:7|not_in:0",
-            "phone"=>"required|min:1|not_in:0",
-            "fax"=>"required|min:1|not_in:0",
-            "email" => "required|email:dns",
+            "address" => "nullable|min:0",
+            "contact"=>"nullable|min:7|not_in:0",
+            "phone"=>"nullable|min:1|not_in:0",
+            "fax"=>"nullable|min:1|not_in:0",
+            "email" => "nullable|email:dns",
             "tempo" => "nullable"
         ]);
 
@@ -136,17 +136,21 @@ class PartnerController extends Controller{
 
                 while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
                     // Insert into the partners table
-                    Partner::create([
-                        'partner_name' => $data[0],
-                        'role' => $data[1],
-                        "remark" => $data[2],
-                        "address" => $data[3],
-                        "contact" => $data[4],
-                        "phone" => $data[5],
-                        "fax" => $data[6],
-                        "email" => $data[7],
-                        "tempo" => $data[8],
-                    ]);
+                    Partner::updateOrCreate(
+                        [
+                            'partner_name' => $data[0]
+                        ],
+                        [
+                            'role' => $data[1],
+                            "remark" => $data[2],
+                            "address" => $data[3],
+                            "contact" => $data[4],
+                            "phone" => $data[5],
+                            "fax" => $data[6],
+                            "email" => $data[7],
+                            "tempo" => $data[8],
+                        ]
+                    );
                 }
 
                 fclose($handle);

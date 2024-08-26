@@ -125,12 +125,15 @@ class ProjectController extends Controller{
 
                 while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
                     // Insert into the projects table
-                    Project::create([
-                        'project_name' => $data[0],
-                        'location' => $data[1],
-                        "PIC" => $data[2],
-                        "address" => $data[3],
-                    ]);
+                    Project::updateOrCreate(
+                        [
+                            'project_name' => $data[0],
+                        ], [
+                            'location' => $data[1],
+                            "PIC" => $data[2],
+                            "address" => $data[3],
+                        ]
+                    );
                 }
 
                 fclose($handle);

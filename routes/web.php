@@ -152,6 +152,10 @@ Route::middleware(["auth","verified"])->group(function(){
     //show data
     Route::get('/purchase-product/{id}/viewitem', [PurchaseProductController::class, "view_items"] )->name("purchaseproduct-viewitem");
 
+    //import
+    Route::get("/purchase-product/{id}/import", [PurchaseProductController::class, "import_purchaseproduct_form"])->name("purchaseproduct-import");
+    Route::post("/purchase-product/{id}/import", [PurchaseProductController::class, "import_purchaseproduct_store"])->name("purchaseproduct-import");
+
     //add existing products to a purchase
     Route::get('/purchase-product/{id}/create1', [PurchaseProductController::class, "add_existing_product"] )->name("purchaseproduct-create1");
     Route::post('/purchase-product/{id}/store1', [PurchaseProductController::class, "store_existing_product"] )->name("purchaseproduct-store1");

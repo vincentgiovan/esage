@@ -4,7 +4,7 @@
 @section("content")
 
     <x-container-middle>
-        <div class="container bg-white p-5 rounded-4 border border-1 card">
+        <div class="container bg-white p-5 rounded-4 border border-1 card mt-4">
 
             <h2>Add New Purchase</h2>
                 <div>
@@ -126,7 +126,7 @@
                     @enderror
 
                 </form>
-            </div>
+
         </div>
     </x-container-middle>
 

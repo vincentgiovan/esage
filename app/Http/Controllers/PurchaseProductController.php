@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Purchase;
 use Illuminate\Http\Request;
 use App\Models\PurchaseProduct;
+use Illuminate\Support\Facades\Storage;
 
 class PurchaseProductController extends Controller
 {
@@ -158,5 +159,88 @@ class PurchaseProductController extends Controller
 
         // Arahkan kembali user ke pages/transit/purchaseproduct/index.blade.php
         return redirect(route("purchaseproduct-viewitem", $id))->with("successDeleteProduct", "Product deleted successfully!");
+    }
+
+    // READ DATA FROM CSV
+    public function import_purchaseproduct_form($purchase_id){
+        return view("pages.purchaseproduct.import-data");
+    }
+
+    public function import_purchaseproduct_store(Request $request, $purchase_id)
+    {
+        // Validate the uploaded file
+        $request->validate([
+            'csv_file' => 'required|file|mimes:csv,txt',
+        ]);
+
+        // Store the file
+        $file = $request->file('csv_file');
+        $path = $file->store('csv_files');
+
+        // Process the CSV file
+        $this->processPurchaseProductDataCsv(storage_path('app/' . $path), $purchase_id);
+
+        // Delete the stored file after processing
+        Storage::delete($path);
+
+        return redirect(route("purchaseproduct-index", $purchase_id))->with('success', 'CSV file uploaded and products added successfully.');
+    }
+
+    private function processPurchaseProductDataCsv($filePath, $purchase_id)
+    {
+        if (($handle = fopen($filePath, 'r')) !== FALSE) {
+            // Read the entire CSV file content
+            $fileContent = file_get_contents($filePath);
+
+            // Replace semicolons with commas
+            $fileContent = str_replace(';', ',', $fileContent);
+
+            // Create a temporary file with the corrected content
+            $tempFilePath = tempnam(sys_get_temp_dir(), 'csv');
+            file_put_contents($tempFilePath, $fileContent);
+
+            // Re-open the temporary file for processing
+            if (($handle = fopen($tempFilePath, 'r')) !== FALSE) {
+                // Skip the header row if it exists
+                $header = fgetcsv($handle);
+
+                while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
+                    $new_item = [
+                        'product_name' => $data[0],
+                        'unit' => $data[1],
+                        "status" => $data[2],
+                        "variant" => $data[3],
+                        "product_code" => $data[4],
+                        "price" => intval($data[5]),
+                        "markup" => floatval(str_replace(',', '.', $data[6])),
+                        "stock" => intval($data[7]),
+                    ];
+
+                    $new_pp = [
+                        "purchase_id" => $purchase_id,
+                        "discount" => floatval(str_replace(',', '.', $data[8]))
+                    ];
+
+                    $existing_product = Product::where("product_code", $data[4])->get();
+                    if($existing_product->count()){
+                        Product::where("product_code", $data[4])->update($new_item);
+
+                        $new_pp["product_id"] = $existing_product->first()->id;
+                    }
+                    else {
+                        $new_prod = Product::create($new_item);
+
+                        $new_pp["product_id"] = $new_prod->first()->id;
+                    }
+
+                    PurchaseProduct::create($new_pp);
+                }
+
+                fclose($handle);
+            }
+
+            // Remove the temporary file
+            unlink($tempFilePath);
+        }
     }
 }

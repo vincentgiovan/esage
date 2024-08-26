@@ -19,11 +19,11 @@ return new class extends Migration
             $table->string("role");
             $table->string("partner_name");
             $table->string("remark")->nullable();
-            $table->longText("address");
-            $table->longText("contact");
-            $table->string("phone");
-            $table->string("fax");
-            $table->string("email");
+            $table->longText("address")->nullable();
+            $table->longText("contact")->nullable();
+            $table->string("phone")->nullable();
+            $table->string("fax")->nullable();
+            $table->string("email")->nullable();
             $table->string("tempo")->nullable();
         });
     }

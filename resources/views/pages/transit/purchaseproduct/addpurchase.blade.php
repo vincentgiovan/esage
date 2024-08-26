@@ -4,7 +4,7 @@
 @section("content")
 
     <x-container-middle>
-        <div class="container border border-1 card">
+        <div class="container border border-1 card p-5">
 
             <h2>Add New Purchase</h2>
                 <div>
@@ -68,7 +68,7 @@
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </form>
-            </div>
+
         </div>
     </x-container-middle>
 

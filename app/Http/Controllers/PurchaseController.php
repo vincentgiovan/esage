@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Partner;
+use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\Pembelian;
-use App\Models\Product;
-use App\Models\PurchaseProduct;
 use Illuminate\Http\Request;
+use App\Models\PurchaseProduct;
+use Illuminate\Support\Facades\Storage;
 
 class PurchaseController extends Controller
 {
@@ -102,5 +103,85 @@ class PurchaseController extends Controller
 
         // Arahkan user kembali ke halaman pages/purchase/index.blade.php
         return redirect(route("purchase-index"))->with("successDeletePurchase", "Purchase deleted successfully!");
+    }
+
+    // READ DATA FROM CSV
+    public function import_purchase_form(){
+        return view("pages.purchase.import-data");
+    }
+
+    public function import_purchase_store(Request $request)
+    {
+        // Validate the uploaded file
+        $request->validate([
+            'csv_file' => 'required|file|mimes:csv,txt',
+        ]);
+
+        // Store the file
+        $file = $request->file('csv_file');
+        $path = $file->store('csv_files');
+
+        // Process the CSV file
+        $this->processpurchaseDataCsv(storage_path('app/' . $path));
+
+        // Delete the stored file after processing
+        Storage::delete($path);
+
+        return redirect(route("purchase-index"))->with('success', 'CSV file uploaded and purchases added successfully.');
+    }
+
+    private function processpurchaseDataCsv($filePath)
+    {
+        if (($handle = fopen($filePath, 'r')) !== FALSE) {
+            // Read the entire CSV file content
+            $fileContent = file_get_contents($filePath);
+
+            // Replace semicolons with commas
+            $fileContent = str_replace(';', ',', $fileContent);
+
+            // Create a temporary file with the corrected content
+            $tempFilePath = tempnam(sys_get_temp_dir(), 'csv');
+            file_put_contents($tempFilePath, $fileContent);
+
+            // Re-open the temporary file for processing
+            if (($handle = fopen($tempFilePath, 'r')) !== FALSE) {
+                // Skip the header row if it exists
+                $header = fgetcsv($handle);
+
+                while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
+                    $new_purchase = [
+                        'purchase_date' => $data[3],
+                        "purchase_deadline" => $data[4],
+                        "purchase_status" => $data[5]
+                    ];
+
+                    // Insert into the products table
+                    $existing_partner = Partner::where("partner_name", $data[0])->where("role", $data[1])->get();
+                    if($existing_partner->count()){
+                        $new_purchase["partner_id"] = $existing_partner->first()->id;
+                    }
+                    else {
+                        $newPartner = Partner::create([
+                            "role" => $data[1],
+                            "partner_name" => $data[0]
+                        ]);
+
+                        $new_purchase["partner_id"] = $newPartner->id;
+                    }
+
+                    Purchase::updateOrCreate(
+                        [
+                            "register" => $data[2]
+                        ],
+                        $new_purchase
+                    );
+                }
+
+                fclose($handle);
+            }
+
+            // Remove the temporary file
+            unlink($tempFilePath);
+        }
     }
 }

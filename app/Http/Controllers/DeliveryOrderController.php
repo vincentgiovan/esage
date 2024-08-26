@@ -9,6 +9,7 @@ use App\Models\Project;
 use Illuminate\Http\Request;
 use App\Models\DeliveryOrder;
 use App\Models\DeliveryOrderProduct;
+use Illuminate\Support\Facades\Storage;
 
 class DeliveryOrderController extends Controller{
 
@@ -103,5 +104,86 @@ class DeliveryOrderController extends Controller{
 
         // Arahkan user kembali ke halaman pages/delivery-order/index.blade.php
         return redirect(route("deliveryorder-index"))->with("successDeleteOrder", "Order deleted successfully!");
+    }
+
+    // READ DATA FROM CSV
+    public function import_deliveryorder_form(){
+        return view("pages.delivery-order.import-data");
+    }
+
+    public function import_deliveryorder_store(Request $request)
+    {
+        // Validate the uploaded file
+        $request->validate([
+            'csv_file' => 'required|file|mimes:csv,txt',
+        ]);
+
+        // Store the file
+        $file = $request->file('csv_file');
+        $path = $file->store('csv_files');
+
+        // Process the CSV file
+        $this->processdeliveryorderDataCsv(storage_path('app/' . $path));
+
+        // Delete the stored file after processing
+        Storage::delete($path);
+
+        return redirect(route("deliveryorder-index"))->with('success', 'CSV file uploaded and delivery orders added successfully.');
+    }
+
+    private function processdeliveryorderDataCsv($filePath)
+    {
+        if (($handle = fopen($filePath, 'r')) !== FALSE) {
+            // Read the entire CSV file content
+            $fileContent = file_get_contents($filePath);
+
+            // Replace semicolons with commas
+            $fileContent = str_replace(';', ',', $fileContent);
+
+            // Create a temporary file with the corrected content
+            $tempFilePath = tempnam(sys_get_temp_dir(), 'csv');
+            file_put_contents($tempFilePath, $fileContent);
+
+            // Re-open the temporary file for processing
+            if (($handle = fopen($tempFilePath, 'r')) !== FALSE) {
+                // Skip the header row if it exists
+                $header = fgetcsv($handle);
+
+                while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
+                    $new_delivery_order = [
+                        "delivery_date" => $data[1],
+                        "delivery_status" => $data[2],
+                    ];
+
+                    // Insert into the products table
+                    $existing_project = Project::where("project_name", $data[3])->get();
+                    if($existing_project->count()){
+                        $new_delivery_order["project_id"] = $existing_project->first()->id;
+                    }
+                    else {
+                        $newProject = Project::create([
+                            "project_name" => $data[3],
+                            "location" => $data[4],
+                            "PIC" => $data[5],
+                            "address" => $data[6]
+                        ]);
+
+                        $new_delivery_order["project_id"] = $newProject->id;
+                    }
+
+                    DeliveryOrder::updateOrCreate(
+                        [
+                            'register' => $data[0],
+                        ],
+                        $new_delivery_order
+                    );
+                }
+
+                fclose($handle);
+            }
+
+            // Remove the temporary file
+            unlink($tempFilePath);
+        }
     }
 }

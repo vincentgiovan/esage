@@ -27,10 +27,9 @@
 
     <body  class="img-fluid ">
         <img src="{{ asset('res/FOTO_BG.png') }}" alt="alt_img" class="darken-image position-absolute vh-100 vw-100 z-0" >
-        <div class="z-10 position-absolute d-flex flex-column gap-3" style="bottom: 0px; right: 15px;">
-            <img src="{{ asset('res/output-onlinepngtools.png') }}" alt="logo" width="200px">
-            <p class="text-white fw-bold">Warehouse @ Soekarno Hatta</p>
-            <p class="text-white fw-bold">By PT Sage Konstruksi Indonesia</p>
+        <div class="z-10 position-absolute d-flex flex-column align-items-center gap-2" style="bottom: 0px; right: 15px; width: 250px">
+            <img src="{{ asset('res/PNG_SAGE.png') }}" alt="logo" width="80%">
+            <p class="text-white fw-bold fs-6 text-center">PT Sage Konstruksi Indonesia</p>
         </div>
         <div class="z-10 position-absolute vw-100 darken">
             @yield("content")

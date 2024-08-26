@@ -142,16 +142,20 @@ class ProductController extends Controller{
 
                 while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
                     // Insert into the products table
-                    Product::create([
-                        'product_name' => $data[0],
-                        'unit' => $data[1],
-                        "status" => $data[2],
-                        "variant" => $data[3],
-                        "product_code" => $data[4],
-                        "price" => intval($data[5]),
-                        "markup" => floatval(str_replace(',', '.', $data[6])),
-                        "stock" => intval($data[7])
-                    ]);
+                    Product::updateOrCreate(
+                        [
+                            "product_code" => $data[4],
+                        ],
+                        [
+                            'product_name' => $data[0],
+                            'unit' => $data[1],
+                            "status" => $data[2],
+                            "variant" => $data[3],
+                            "price" => intval($data[5]),
+                            "markup" => floatval(str_replace(',', '.', $data[6])),
+                            "stock" => intval($data[7])
+                        ]
+                    );
                 }
 
                 fclose($handle);
