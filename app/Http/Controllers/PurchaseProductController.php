@@ -162,11 +162,11 @@ class PurchaseProductController extends Controller
     }
 
     // READ DATA FROM CSV
-    public function import_purchaseproduct_form($purchase_id){
-        return view("pages.purchaseproduct.import-data");
+    public function import_purchaseproduct_form($id){
+        return view("pages.transit.purchaseproduct.import-data", ["purchase" => Purchase::find($id)]);
     }
 
-    public function import_purchaseproduct_store(Request $request, $purchase_id)
+    public function import_purchaseproduct_store(Request $request, $id)
     {
         // Validate the uploaded file
         $request->validate([
@@ -178,12 +178,12 @@ class PurchaseProductController extends Controller
         $path = $file->store('csv_files');
 
         // Process the CSV file
-        $this->processPurchaseProductDataCsv(storage_path('app/' . $path), $purchase_id);
+        $this->processPurchaseProductDataCsv(storage_path('app/' . $path), $id);
 
         // Delete the stored file after processing
         Storage::delete($path);
 
-        return redirect(route("purchaseproduct-index", $purchase_id))->with('success', 'CSV file uploaded and products added successfully.');
+        return redirect(route("purchaseproduct-viewitem", $id))->with('success', 'CSV file uploaded and products added successfully.');
     }
 
     private function processPurchaseProductDataCsv($filePath, $purchase_id)
@@ -218,11 +218,15 @@ class PurchaseProductController extends Controller
 
                     $new_pp = [
                         "purchase_id" => $purchase_id,
-                        "discount" => floatval(str_replace(',', '.', $data[8]))
+                        "discount" => floatval(str_replace(',', '.', $data[8])),
+                        "quantity" => intval($data[9]),
+                        "price" => intval($data[5])
                     ];
 
                     $existing_product = Product::where("product_code", $data[4])->get();
                     if($existing_product->count()){
+                        $old_stock = $existing_product->first->stock;
+                        $new_item["stock"] += $old_stock;
                         Product::where("product_code", $data[4])->update($new_item);
 
                         $new_pp["product_id"] = $existing_product->first()->id;
@@ -230,7 +234,7 @@ class PurchaseProductController extends Controller
                     else {
                         $new_prod = Product::create($new_item);
 
-                        $new_pp["product_id"] = $new_prod->first()->id;
+                        $new_pp["product_id"] = $new_prod->id;
                     }
 
                     PurchaseProduct::create($new_pp);

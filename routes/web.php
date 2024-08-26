@@ -40,14 +40,14 @@ Route::middleware(["auth","verified"])->group(function(){
     Route::post("/delivery-order/import", [DeliveryOrderController::class, "import_deliveryorder_store"])->name("deliveryorder-import-store");
 
     //edit data
-    Route::get('/delivery-order/{id}/edit', [DeliveryOrderController::class, "edit"] )->name("deliveryorder-edit");
-    Route::post('/delivery-order/{id}/edit', [DeliveryOrderController::class, "update"] )->name("deliveryorder-update");
+    Route::get('/delivery-order/{id}/edit', [DeliveryOrderController::class, "edit"] )->name("deliveryorder-edit")->whereNumber("id");
+    Route::post('/delivery-order/{id}/edit', [DeliveryOrderController::class, "update"] )->name("deliveryorder-update")->whereNumber("id");
 
     //delete data
-    Route::post('/delivery-order/{id}', [DeliveryOrderController::class, "destroy"] )->name("deliveryorder-destroy");
+    Route::post('/delivery-order/{id}', [DeliveryOrderController::class, "destroy"] )->name("deliveryorder-destroy")->whereNumber("id");
 
     //export
-    Route::get("/delivery-order/export/{mode}", [PDFController::class, "export_deliveryorder"])->name("deliveryorder-export");
+    Route::get("/delivery-order/export/{mode}", [PDFController::class, "export_deliveryorder"])->name("deliveryorder-export")->whereNumber("mode");
 
     // ===== Product ===== //
 
@@ -64,14 +64,14 @@ Route::middleware(["auth","verified"])->group(function(){
         Route::post("/product/import", [ProductController::class, "import_product_store"])->name("product-import-store");
 
         //edit data
-        Route::get('/product/{id}/edit', [ProductController::class, "edit"] )->name("product-edit");
-        Route::post('/product/{id}/edit', [ProductController::class, "update"] )->name("product-update");
+        Route::get('/product/{id}/edit', [ProductController::class, "edit"] )->name("product-edit")->whereNumber("id");
+        Route::post('/product/{id}/edit', [ProductController::class, "update"] )->name("product-update")->whereNumber("id");
 
         //delete data
-        Route::post('/product/{id}', [ProductController::class, "destroy"] )->name("product-destroy");
+        Route::post('/product/{id}', [ProductController::class, "destroy"] )->name("product-destroy")->whereNumber("id");
 
         //export
-        Route::get("/product/export/{mode}", [PDFController::class, "export_product"])->name("product-export");
+        Route::get("/product/export/{mode}", [PDFController::class, "export_product"])->name("product-export")->whereNumber("mode");
 
     });
 
@@ -89,14 +89,14 @@ Route::middleware(["auth","verified"])->group(function(){
     Route::post("/partner/import", [PartnerController::class, "import_partner_store"])->name("partner-import-store");
 
     //edit data
-    Route::get('/partner/{id}/edit', [PartnerController::class, "edit"] )->name("partner-edit");
-    Route::post('/partner/{id}/edit', [PartnerController::class, "update"] )->name("partner-update");
+    Route::get('/partner/{id}/edit', [PartnerController::class, "edit"] )->name("partner-edit")->whereNumber("id");
+    Route::post('/partner/{id}/edit', [PartnerController::class, "update"] )->name("partner-update")->whereNumber("id");
 
     //delete data
-    Route::post('/partner/{id}', [PartnerController::class, "destroy"] )->name("partner-destroy");
+    Route::post('/partner/{id}', [PartnerController::class, "destroy"] )->name("partner-destroy")->whereNumber("id");
 
     //export
-    Route::get("/partner/export/{mode}", [PDFController::class, "export_partner"])->name("partner-export");
+    Route::get("/partner/export/{mode}", [PDFController::class, "export_partner"])->name("partner-export")->whereNumber("mode");
 
 
     // ===== Project ===== //
@@ -113,14 +113,14 @@ Route::middleware(["auth","verified"])->group(function(){
     Route::post("/project/import", [ProjectController::class, "import_project_store"])->name("project-import-store");
 
     //edit data
-    Route::get('/project/{id}/edit', [ProjectController::class, "edit"] )->name("project-edit");
-    Route::post('/project/{id}/edit', [ProjectController::class, "update"] )->name("project-update");
+    Route::get('/project/{id}/edit', [ProjectController::class, "edit"] )->name("project-edit")->whereNumber("id");
+    Route::post('/project/{id}/edit', [ProjectController::class, "update"] )->name("project-update")->whereNumber("id");
 
     //delete data
-    Route::post('/project/{id}', [ProjectController::class, "destroy"] )->name("project-destroy");
+    Route::post('/project/{id}', [ProjectController::class, "destroy"] )->name("project-destroy")->whereNumber("id");
 
     //export
-    Route::get("/project/export/{mode}", [PDFController::class, "export_project"])->name("project-export");
+    Route::get("/project/export/{mode}", [PDFController::class, "export_project"])->name("project-export")->whereNumber("mode");
 
 
     // ===== Purchase ===== //
@@ -137,57 +137,61 @@ Route::middleware(["auth","verified"])->group(function(){
     Route::post("/purchase/import", [PurchaseController::class, "import_purchase_store"])->name("purchase-import-store");
 
     //edit data
-    Route::get('/purchase/{id}/edit', [PurchaseController::class, "edit"] )->name("purchase-edit");
-    Route::post('/purchase/{id}/edit', [PurchaseController::class, "update"] )->name("purchase-update");
+    Route::get('/purchase/{id}/edit', [PurchaseController::class, "edit"] )->name("purchase-edit")->whereNumber("id");
+    Route::post('/purchase/{id}/edit', [PurchaseController::class, "update"] )->name("purchase-update")->whereNumber("id");
 
     //delete data
-    Route::post('/purchase/{id}', [PurchaseController::class, "destroy"] )->name("purchase-destroy");
+    Route::post('/purchase/{id}', [PurchaseController::class, "destroy"] )->name("purchase-destroy")->whereNumber("id");
 
     //export
-    Route::get("/purchase/export/{mode}", [PDFController::class, "export_purchase"])->name("purchase-export");
+    Route::get("/purchase/export/{mode}", [PDFController::class, "export_purchase"])->name("purchase-export")->whereNumber("mode");
 
 
     // ===== PurchaseProduct ===== //
 
     //show data
-    Route::get('/purchase-product/{id}/viewitem', [PurchaseProductController::class, "view_items"] )->name("purchaseproduct-viewitem");
+    Route::get('/purchase-product/{id}/viewitem', [PurchaseProductController::class, "view_items"] )->name("purchaseproduct-viewitem")->whereNumber("id");
 
     //import
-    Route::get("/purchase-product/{id}/import", [PurchaseProductController::class, "import_purchaseproduct_form"])->name("purchaseproduct-import");
-    Route::post("/purchase-product/{id}/import", [PurchaseProductController::class, "import_purchaseproduct_store"])->name("purchaseproduct-import");
+    Route::get("/purchase-product/{id}/import", [PurchaseProductController::class, "import_purchaseproduct_form"])->name("purchaseproduct-import")->whereNumber("id");
+    Route::post("/purchase-product/{id}/import", [PurchaseProductController::class, "import_purchaseproduct_store"])->name("purchaseproduct-import-store")->whereNumber("id");
 
     //add existing products to a purchase
-    Route::get('/purchase-product/{id}/create1', [PurchaseProductController::class, "add_existing_product"] )->name("purchaseproduct-create1");
-    Route::post('/purchase-product/{id}/store1', [PurchaseProductController::class, "store_existing_product"] )->name("purchaseproduct-store1");
+    Route::get('/purchase-product/{id}/create1', [PurchaseProductController::class, "add_existing_product"] )->name("purchaseproduct-create1")->whereNumber("id");
+    Route::post('/purchase-product/{id}/store1', [PurchaseProductController::class, "store_existing_product"] )->name("purchaseproduct-store1")->whereNumber("id");
 
     //add unexisting products to a purchase also to the product database
-    Route::get('/purchase-product/{id}/create2', [PurchaseProductController::class, "add_new_product"] )->name("purchaseproduct-create2");
-    Route::post('/purchase-product/{id}/store2', [PurchaseProductController::class, "store_new_product"] )->name("purchaseproduct-store2");
+    Route::get('/purchase-product/{id}/create2', [PurchaseProductController::class, "add_new_product"] )->name("purchaseproduct-create2")->whereNumber("id");
+    Route::post('/purchase-product/{id}/store2', [PurchaseProductController::class, "store_new_product"] )->name("purchaseproduct-store2")->whereNumber("id");
 
     //delete data
-    Route::post('/purchase-product/{id}/{pid}', [PurchaseProductController::class, "destroy"] )->name("purchaseproduct-destroy");
+    Route::post('/purchase-product/{id}/{pid}', [PurchaseProductController::class, "destroy"] )->name("purchaseproduct-destroy")->whereNumber("pid");
 
     //export data
-    Route::get("/purchase-product/{id}/export/{mode}", [PDFController::class, "export_purchase_product"])->name("purchaseproduct-export");
+    Route::get("/purchase-product/{id}/export/{mode}", [PDFController::class, "export_purchase_product"])->name("purchaseproduct-export")->whereNumber("id");
 
 
     // ===== DeliveryProduct ===== //
     //show data
-    Route::get('/delivery-order-product/{id}/viewitem', [DeliveryOrderProductController::class, "view_items"] )->name("deliveryorderproduct-viewitem");
+    Route::get('/delivery-order-product/{id}/viewitem', [DeliveryOrderProductController::class, "view_items"] )->name("deliveryorderproduct-viewitem")->whereNumber("id");
+
+    //import
+    Route::get("/delivery-order-product/{id}/import", [DeliveryOrderProductController::class, "import_deliveryorderproduct_form"])->name("deliveryorderproduct-import")->whereNumber("id");
+    Route::post("/delivery-order-product/{id}/import", [DeliveryOrderProductController::class, "import_deliveryorderproduct_store"])->name("deliveryorderproduct-import-store")->whereNumber("id");
 
     //add existing products to a purchase
-    Route::get('/delivery-order-product/{id}/create1', [DeliveryOrderProductController::class, "add_existing_product"] )->name("deliveryorderproduct-create1");
-    Route::post('/delivery-order-product/{id}/store1', [DeliveryOrderProductController::class, "store_existing_product"] )->name("deliveryorderproduct-store1");
+    Route::get('/delivery-order-product/{id}/create1', [DeliveryOrderProductController::class, "add_existing_product"] )->name("deliveryorderproduct-create1")->whereNumber("id");
+    Route::post('/delivery-order-product/{id}/store1', [DeliveryOrderProductController::class, "store_existing_product"] )->name("deliveryorderproduct-store1")->whereNumber("id");
 
     //add unexisting products to a purchase also to the product database
-    Route::get('/delivery-order-product/{id}/create2', [DeliveryOrderProductController::class, "add_new_product"] )->name("deliveryorderproduct-create2");
-    Route::post('/delivery-order-product/{id}/store2', [DeliveryOrderProductController::class, "store_new_product"] )->name("deliveryorderproduct-store2");
+    Route::get('/delivery-order-product/{id}/create2', [DeliveryOrderProductController::class, "add_new_product"] )->name("deliveryorderproduct-create2")->whereNumber("id");
+    Route::post('/delivery-order-product/{id}/store2', [DeliveryOrderProductController::class, "store_new_product"] )->name("deliveryorderproduct-store2")->whereNumber("id");
 
     //delete data
-    Route::post('/delivery-order-product/{id}/{pid}', [DeliveryOrderProductController::class, "destroy"] )->name("deliveryorderproduct-destroy");
+    Route::post('/delivery-order-product/{id}/{pid}', [DeliveryOrderProductController::class, "destroy"] )->name("deliveryorderproduct-destroy")->whereNumber("id")->whereNumber("pid");
 
     //export data
-    Route::get("/delivery-order-product/{id}/export/{mode}", [PDFController::class, "export_deliveryorder_product"])->name("deliveryorderproduct-export");
+    Route::get("/delivery-order-product/{id}/export/{mode}", [PDFController::class, "export_deliveryorder_product"])->name("deliveryorderproduct-export")->whereNumber("id")->whereNumber("mode");
 
 
     //account route
@@ -198,9 +202,9 @@ Route::middleware(["auth","verified"])->group(function(){
     Route::post('/account', [AccountCreationController::class, 'store'])->name('account.store');
     Route::get("/account/import-data", [AccountCreationController::class, "import_user_form"])->name("account.import.form");
     Route::post("/account/import-data", [AccountCreationController::class, "import_user_store"])->name("account.import.store");
-    Route::get("/account/{id}", [AccountCreationController::class, "show"])->name("account.show");
-    Route::put('/account/{id}', [AccountCreationController::class, 'update'])->name('account.update');
-    Route::delete('/account/{id}', [AccountCreationController::class, 'destroy'])->name('account.destroy');
+    Route::get("/account/{id}", [AccountCreationController::class, "show"])->name("account.show")->whereNumber("id");
+    Route::put('/account/{id}', [AccountCreationController::class, 'update'])->name('account.update')->whereNumber("id");
+    Route::delete('/account/{id}', [AccountCreationController::class, 'destroy'])->name('account.destroy')->whereNumber("id");
 
 // });
 
