@@ -51,10 +51,10 @@
     <h3 style="margin-top: 40px;">List Barang</h3>
     <table>
         <tr>
-            <th>Nomor</t{{  }}  }}
-            <th>Nama Pro{{  }}{{  }}>
-            <th>SKU Prod{{  }}{{  }}
-            <th>Quantity{{  }}{{  }}
+            <th>Nomor</th>
+            <th>Nama Produk</th>
+            <th>SKU Produk</th>
+            <th>Quantity</th>
             <th>Variant</th>
         </tr>
 
