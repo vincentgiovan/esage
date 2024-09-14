@@ -99,4 +99,16 @@
             </form>
         </div>
     </x-container-middle>
+
+    <script>
+        $("#stock").change(function(){
+            if($(this).val() == 0){
+                $("#status").find('option[value="Out of Stock"]').prop("selected", true);
+                $("#status").find('option[value="Ready"]').prop("selected", false);
+            } else {
+                $("#status").find('option[value="Out of Stock"]').prop("selected", false);
+                $("#status").find('option[value="Ready"]').prop("selected", true);
+            }
+        });
+    </script>
 @endsection

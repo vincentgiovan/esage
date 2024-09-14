@@ -16,7 +16,7 @@ class ProductController extends Controller{
         $n_pagination = 10;
         // Tampilkan halaman pages/product/index.blade.php
         return view("pages.product.index", [
-            "products" => Product::filter(request(["search"]))->paginate($n_pagination), // Data semua produk dari database buat ditampilin satu-satu (kalo user-nya searching tampilkan yang memenuhi keyword)
+            "products" => Product::filter(request(["search"]))->orderByRaw('CASE WHEN status = "Out of Stock" THEN 0 ELSE 1 END')->orderBy("product_name")->paginate($n_pagination), // Data semua produk dari database buat ditampilin satu-satu (kalo user-nya searching tampilkan yang memenuhi keyword)
             "n_pagination" => $n_pagination
         ]);
     }
@@ -25,7 +25,9 @@ class ProductController extends Controller{
     public function create()
     {
         // Tampilkan halaman pages/product/create.blade.php
-        return view("pages.product.create");
+        return view("pages.product.create", [
+            "products" => Product::all()
+        ]);
     }
 
     // Simpan data produk baru ke database

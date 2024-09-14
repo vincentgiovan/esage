@@ -13,8 +13,6 @@ use App\Models\PurchaseProduct;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-//testusgajadi
-
 class DatabaseSeeder extends Seeder
 {
     /**

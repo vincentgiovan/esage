@@ -1,159 +1,97 @@
 @extends('layouts.main-admin')
 
-@section("content")
-
-    <x-container-middle>
-        <div class="container bg-white rounded-4 p-5">
-
-            <h2>Return Items</h2>
-                <div>
-                    <div class="mt-3">
-                        <label for="select-product-dropdown">Nama Produk</label>
-                        <select name="product_name" class="form-select" id="select-product-dropdown">
-                            @foreach ($products as $product)
-                                <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} ({{ $product->variant }}) (Stok :  {{ $product->stock }})</option>
-                            @endforeach
-                        </select>
-                        <p style = "color: red; font-size: 10px;"></p>
+@section('content')
+    <x-container>
+        <br>
+        <div class="w-100 d-flex align-items-center justify-content-between">
+            <h1>Return Items</h1>
+            <div class="d-flex gap-3">
+                <a class="btn btn-secondary" href="{{ route('') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
+                <div class="position-relative d-flex flex-column align-items-end">
+                    <button class="btn btn-secondary" type="button" id="dd-toggler">
+                        <i class="bi bi-file-earmark-arrow-up"></i> Export
+                    </button>
+                    <div class="bg-white rounded-lg position-absolute z-2 border border-1" id="dd-menu" style="display: none; top: 40px;">
+                        <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("deliveryorder-export", 2) }}" target="blank">Export (PDF Portrait)</a></li>
+                        <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("deliveryorder-export", 1) }}" target="blank">Export (PDF Landscape)</a></li>
                     </div>
-
-                    <div class="mt-3">
-                        <label for="quantity">Jumlah</label>
-                        <input type="number" class="form-control" name="quantity" id="quantity"  placeholder="Quantity" value = "{{ old("quantity")}}">
-                        <p style = "color: red; font-size: 10px;" id="errQuantity"></p>
-                    </div>
-
-                    <div class="mt-3">
-                        <input type="button" id="addbutton" class="btn btn-primary px-3 py-1" value="Add Items">
-                    </div>
-
                 </div>
-
-                <div class="overflow-x-auto">
-                    <table class="w-100 mt-4">
-                        <thead>
-                            <th>Nama Barang & Variant</th>
-                            <th>Quantity</th>
-                            <th>Action</th>
-                            <th>Notes</th>
-                        </thead>
-                        <tbody id="isibody">
-
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="">
-                    <label for="cart_notes">Cart Notes</label>
-                    <textarea id="cart_notes" class="form-control" name="cart_notes"></textarea>
-                </div>
-
-                <form method="POST" action="#" class="mt-5" id="peon">
-                {{-- @csrf kepake untuk token ,wajib --}}
-                    @csrf
-
-                    <div class="mt-3">
-                        <input type="submit" class="btn btn-success px-3 py-1" value="Proceed">
-                    </div>
-                    @error("prices")
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                    <br>
-                    @error("quantities")
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </form>
+            </div>
         </div>
-    </x-container-middle>
-
-    <script>
-        // Targetkan form buat submit data
-        const confirmationForm = document.getElementById("peon");
-
-        // Targetkan tombol add data
-        const addbutton = document.getElementById("addbutton");
-
-        // Kalau tombol add data diklik maka lakukan:
-        addbutton.addEventListener("click", function(){
-            // Targetkan tbody tabel (buat nanti display data)
-            const tbody = document.getElementById("isibody");
-
-            // Targetkan elemen-elemen input data purchase produk yang diperlukan (buat nanti diambil nilainya)
-            const input1 = document.getElementById("select-product-dropdown");
-            const input4 = document.getElementById("quantity");
-
-            // Targetkan elemen-elemen error message (buat nanti display error message)
-            const errQuantity = document.getElementById("errQuantity");
-
-            // Hilangkan error message dan mark merah pada input dan error message sebelum validasi
-            errQuantity.innerText = "";
-            input4.style.border = "none";
-
-            // Validasi input
-            let inputAman = true; // Status apakah sudah terjadi kesalahan input atau belum
-
-            // Kalau input quantity kosong atau nilainya di bawah 1 maka mark merah input dan tampilkan pesan error
-            if(!input4.value && input4.value < 1){
-                input4.style.border = "solid 1px red";
-                errQuantity.innerText = "Invalid input :3";
-
-                inputAman = false;
-            }
-
-            // Kalau misalkan ada 1 atau lebih input yang ga sesuai, jangan dilanjut
-            if(!inputAman){
-                return;
-            }
-
-            // Generate elemen <tr> dan <td> untuk membuat row tabel display
-            const newRow = document.createElement("tr");
-            const column1 = document.createElement("td");
-            const column4 = document.createElement("td");
-            const column5 = document.createElement("td");
-
-            const converted = JSON.parse(input1.value); // value dari option yang dipilih itu konversi collection Laravel jadi JSON, tapi bentuknya masih teks, jadi perlu dikonversi ke format JSON beneran dulu biar lebih enak diolah
-            column1.innerText = ${converted.product_name} (${converted.variant}); // format teks yang tampil di kolom nama produk menjadi "nama_product (varian) dan tampilkan di row data baru di kolom nama produk"
-            column4.innerText = input4.value; // ambil nilai dari input quantity dan tampilkan di kolom quantity
-
-            // Buat tombol merah tong sampah buat nanti dipake buat hapus 1 row data
-            const deleteButton = document.createElement("button");
-            deleteButton.classList.add("btn", "btn-danger");
-            deleteButton.setAttribute("type", "button");
-            deleteButton.innerText = "Remove";
-            column5.appendChild(deleteButton); // display tombol merah di kolom action
-
-            // Gabungkan semua kolom data menjadi 1 row data
-            newRow.appendChild(column1);
-            newRow.appendChild(column4);
-            newRow.appendChild(column5);
-
-            // Tambahkan row data baru ke tabel untuk di-display
-            tbody.appendChild(newRow);
-
-            // Generate hidden input untuk kirim data ke Laravel (bikin something like <input type="hidden" name="variabel_data[]" value="nilai_dari_input"> buat setiap input yang ada)
-            const susInput = document.createElement("input");
-            susInput.setAttribute("type", "hidden");
-            susInput.setAttribute("name", "products[]");
-            susInput.setAttribute("value", converted.id);
-
-            const susInput3 = document.createElement("input");
-            susInput3.setAttribute("type", "hidden");
-            susInput3.setAttribute("name", "quantities[]");
-            susInput3.setAttribute("value", input4.value);
-
-            // Tambahkan semua hidden input ke form submit
-            confirmationForm.appendChild(susInput);
-            confirmationForm.appendChild(susInput3);
-
-            // Kalau tombol merah diklik maka lakukan:
-            deleteButton.addEventListener("click", function(){
-                tbody.removeChild(newRow); // Hapus row data yang ada di tabel
-
-                // Hilangkan hidden input-nya juga
-                confirmationForm.removeChild(susInput);
-                confirmationForm.removeChild(susInput3);
+        <script>
+            $(document).ready(() => {
+                $("#dd-toggler").click(function(){
+                    $("#dd-menu").toggle();
+                });
             });
-        });
-    </script>
+        </script>
+        <hr>
+        <br>
 
+        {{-- <h5>welcome back, {{ Auth::user()->name }}! </h5> --}}
+
+        @if (session()->has('successAddOrder'))
+            <p class="text-success fw-bold">{{ session('successAddOrder') }}</p>
+        @elseif (session()->has('successEditOrder'))
+            <p class="text-success fw-bold">{{ session('successEditOrder') }}</p>
+        @elseif (session()->has('successDeleteOrder'))
+            <p class="text-success fw-bold">{{ session('successDeleteOrder') }}</p>
+        @endif
+
+        <a href="{{ route('deliveryorder-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
+            <i class="bi bi-plus-square"></i>
+            Return New Items</a>
+        <br>
+        <!-- tabel list data-->
+
+        <div class="overflow-x-auto">
+            <table class="w-100">
+                <tr>
+                    <th class="border border-1 border-secondary ">Nomor</th>
+                    <th class="border border-1 border-secondary ">Return Date</th>
+                    <th class="border border-1 border-secondary ">Project</th>
+                    <th class="border border-1 border-secondary ">Register</th>
+                    <th class="border border-1 border-secondary ">Return Status</th>
+                    <th class="border border-1 border-secondary ">Note</th>
+                    <th class="border border-1 border-secondary ">PIC</th>
+                    <th class="border border-1 border-secondary ">Action</th>
+                </tr>
+
+                @foreach ($deliveryorders as $p)
+                    <tr>
+                        <td class="border border-1 border-secondary ">{{ $loop->iteration }}</td>
+                        <td class="border border-1 border-secondary ">{{ $p->return_date }}</td>
+                        <td class="border border-1 border-secondary ">{{ $p->project->project_name }}</td>
+                        <td class="border border-1 border-secondary ">
+                            <div class="d-flex gap-5 w-100 justify-content-center align-items-center">
+                                {{ $p->register }}
+                                <a href="{{ route('deliveryorderproduct-viewitem', $p->id) }}" class="btn btn-success text-white"
+                                    style="font-size: 10pt"><i class="bi bi-cart"></i>View Cart</a>
+                            </div>
+                        </td>
+
+                        <td class="border border-1 border-secondary ">{{ $p->return_status }}</td>
+                        <td class="border border-1 border-secondary ">{{ $p->note }}</td>
+                        <td class="border border-1 border-secondary ">{{ $p->user->name}}</td>
+                        <td class="border border-1 border-secondary">
+                            <div class="d-flex gap-5 w-100 justify-content-center">
+                                <a href="{{ route('deliveryorder-edit', $p->id) }}" class="btn text-white"
+                                    style="font-size: 10pt; background-color: rgb(197, 167, 0);">
+                                    <i class="bi bi-pencil"></i>
+                                    Edit Data</a>
+                                <form action="{{ route('deliveryorder-destroy', $p->id) }}" method="POST">
+                                    @csrf
+                                    <button class="btn btn-danger text-white" style="font-size: 10pt "
+                                        onclick="return confirm('Do you want to delete this item?')">
+                                        <i class="bi bi-trash"></i>
+                                        Delete</button>
+                                </form>
+                            </div>
+                        </td>
+
+                    </tr>
+                @endforeach
+            </table>
+        </div>
+    </x-container>
 @endsection

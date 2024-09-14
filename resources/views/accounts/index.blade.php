@@ -7,7 +7,7 @@
     <h1 class="my-4">Account Management</h1>
     <hr class="mt-2">
     <br>
-    
+
     <!-- Add User Form -->
     <div class="card mb-4">
         <div class="card-header">
@@ -148,7 +148,7 @@
                                     <form action="{{ route('account.destroy', $user->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger"><i class="bi bi-trash3"></i> Delete</button>
+                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this account?');"><i class="bi bi-trash3"></i> Delete</button>
                                     </form>
                                     {{-- <button class="btn btn-warning" data-toggle="modal" data-target="#editUserModal-{{ $user->id }}">Edit</button> --}}
                                     <a href="{{ route("account.show", $user->id) }}" class="btn text-white" data-toggle="modal" data-target="#editUserModal-{{ $user->id }}" style="background-color: rgb(197, 167, 0);"><i class="bi bi-pencil"></i> Edit</a>

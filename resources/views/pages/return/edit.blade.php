@@ -1,80 +1,83 @@
 @extends('layouts.main-admin')
 
-@section("content")
-
+@section('content')
     <x-container-middle>
-        <div class="container rounded-4 p-5 bg-white border border-1 card">
-            <h2 class="text-center fw-bold">Create New Order</h2>
-            <form method="POST" action="{{ route("deliveryorder-store"{{-- ,$delivery_order->id--}} ) }}" id="bikindevor">
+        <div class="container bg-white p-5 rounded-4 border border-1 card">
+
+            <h2>Edit Item</h2>
+
+            {{-- @csrf kepake untuk token ,wajib --}}
+
+            <form method="POST" action="{{ route('deliveryorder-update', $delivery_order->id) }}" id="bikindevor">
                 @csrf
+                {{-- <div class="mt-3">
+                <select name="product_id" class="form-select">
+                @foreach ($products as $product)
+                    <option value="{{ $product->id }}" @if ($delivery_order->product_id == $product->id) selected @endif >{{ $product->product_name }}</option>
+                @endforeach
+
+                </select>
+                @error('product_id')
+                <p style = "color: red; font-size: 10px;">{{$message }}</p>
+                @enderror
+                </div> --}}
                 <div class="mt-3">
                     <label for="delivery_date">Tanggal Delivery</label>
-                    <input type="date" class="form-control" id="delivery_date" name="delivery_date" placeholder="delivery_date"  value = "{{ old("delivery_date") }}">
+                    <input type="date" class="form-control" id="delivery_date" name="delivery_date" placeholder="delivery_date"
+                        value = "{{ old('delivery_date', $delivery_order->delivery_date) }}">
 
-                    @error("delivery_date")
-                    <p style = "color: red; font-size: 10px;">{{$message }}</p>
+                    @error('delivery_date')
+                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
                 <div class="mt-3">
                     <label for="project_id">Proyek</label>
-                    <select name="project_id" class="form-select" id="project_id">
+                    <select name="project_id" id="project_id" class="form-select">
                         @foreach ($projects as $pn)
-                            <option value="{{ $pn->id}}">{{ $pn->project_name }}</option>
+                            <option value="{{ $pn->id }}" @if ($delivery_order->project_id == $pn->id) selected @endif>
+                                {{ $pn->project_name }}</option>
                         @endforeach
-
                     </select>
-                    @error("project_id")
-                    <p style = "color: red; font-size: 10px;">{{$message }}</p>
+                    @error('project_id')
+                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
                 <div class="mt-3">
-                    <label for="fakeregister">SKU</label>
-                    <input type="text" class="form-control" id="fakeregister" name="fakeregister" placeholder="Register"  disabled>
+                    <div class="mt-3">
+                        <label for="fakeregister">SKU</label>
+                        <input type="text" class="form-control" id="fakeregister" name="fakeregister" placeholder="Register" value="{{ $delivery_order->register }}"  disabled>
+                    </div>
                 </div>
                 <div class="mt-3">
-                    {{-- <input type="text" class="form-control" name="status" placeholder="Status"  value = "{{ old("status") }}"> --}}
                     <label for="delivery_status">Status Delivery</label>
-                    <select name="delivery_status" class="form-select" id="delivery_status">
+                    {{-- <input type="text" class="form-control" name="status" placeholder="Status"  value = "{{ old("status") }}"> --}}
+                    <select name="delivery_status" id="delivery_status" class="form-select">
                         <option value="Complete">Complete</option>
                         <option value="Incomplete">Incomplete</option>
                     </select>
-                    @error("delivery_status")
-                    <p style = "color: red; font-size: 10px;">{{$message }}</p>
+                    @error('delivery_status')
+                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
                 <div class="mt-3">
                     <label for="note">Catatan</label>
-                    <input type="text" class="form-control" name="note" id="note" placeholder="Note" value = "{{ old("note")}}">
-                    @error("note")
-                    <p style = "color: red; font-size: 10px;">{{$message }}</p>
+                    <input type="text" class="form-control" id="note" name="note" placeholder="Note"
+                        value = "{{ old('note', $delivery_order->note) }}">
+                    @error('note')
+                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
                 <div class="mt-3">
-                    <input type="submit" class="btn btn-success px-3 py-1" value="add">
+                    <input type="submit" class="btn btn-success px-3 py-1" value="Edit">
                 </div>
             </form>
         </div>
-
-
-        <!-- Bikin change button color on hover pake js -->
-        {{-- <script>
-            const susbtn = document.querySelector("#susbtn");
-            susbtn.addEventListener("mouseover", () => {
-                susbtn.classList.remove("btn-success");
-                susbtn.classList.add("btn-secondary");
-            });
-            susbtn.addEventListener("mouseout", () => {
-                susbtn.classList.remove("btn-secondary");
-                susbtn.classList.add("btn-success");
-            });
-        </script> --}}
     </x-container-middle>
 
     <script>
         // Jika input delivery_date berubah, maka jalankan perintah berikut
         const delivery_date = document.getElementById("delivery_date");
         delivery_date.addEventListener("change", function(){
-
             // Ambil data dari Laravel
             const alldeliveryorderdata = @json($delivery_orders);
 
@@ -91,14 +94,14 @@
             const formattedDate = `${day}${month}${year}`;
 
             // Generate SKU dan masukin hasilnya langsung ke input fakeregister (yang tampil di user)
-            const generatedsku = "DO/"+ formattedDate +"/"+ (n + 1);
+            const generatedsku = "DO/"+ formattedDate +"/"+ (n+1);
             const fakeregister = document.getElementById("fakeregister");
             fakeregister.value = generatedsku;
         });
 
         // Jika form bikindevor di-submit, jalankan perintah berikut
-        const purchaseForm = document.getElementById("bikindevor");
-        purchaseForm.addEventListener("submit", function(event){
+        const daForm = document.getElementById("bikindevor");
+        daForm.addEventListener("submit", function(event){
             // Cegah form buat submit
             event.preventDefault();
 
@@ -111,10 +114,11 @@
             hiddenInput.setAttribute("name", "register");
             hiddenInput.setAttribute("value", fakeRegister.value);
 
-            purchaseForm.appendChild(hiddenInput);
+            daForm.appendChild(hiddenInput);
 
             // Baru submit form-nya
-            purchaseForm.submit();
+            daForm.submit();
         })
     </script>
+
 @endsection

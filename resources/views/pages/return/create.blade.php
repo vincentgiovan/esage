@@ -91,7 +91,7 @@
             const formattedDate = `${day}${month}${year}`;
 
             // Generate SKU dan masukin hasilnya langsung ke input fakeregister (yang tampil di user)
-            const generatedsku = "DO/"+ formattedDate +"/"+ (n + 1);
+            const generatedsku = "DO/"+ formattedDate +"/"+ (n+1);
             const fakeregister = document.getElementById("fakeregister");
             fakeregister.value = generatedsku;
         });
