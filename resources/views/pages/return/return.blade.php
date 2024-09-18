@@ -12,7 +12,7 @@
                         <select name="product_name" class="form-select" id="select-product-dropdown">
                             @foreach ($products as $product)
                                 <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} ({{ $product->variant }}) (Stok :  {{ $product->stock }})</option>
-                            @endforeach
+                            @endforeach{{  }}
                         </select>
                         <p style = "color: red; font-size: 10px;"></p>
                     </div>

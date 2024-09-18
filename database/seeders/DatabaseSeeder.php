@@ -391,7 +391,7 @@ class DatabaseSeeder extends Seeder
             "register" => "PU/25052024/2",
             "purchase_deadline" => "2024-05-28",
             "purchase_date" => "2024-05-26",
-            "purchase_status" => "retreived",
+            "purchase_status" => "retrieved",
         ]);
         PurchaseProduct::create([
             "purchase_id" => 1,
@@ -404,17 +404,18 @@ class DatabaseSeeder extends Seeder
             "purchase_id" => 1,
             "product_id" => 4,
             "discount"=> 30,
-            "quantity" => 10,
+            "quantity" => 35,
             "price" => 69000
         ]);
         PurchaseProduct::create([
             "purchase_id" => 1,
             "product_id" => 1,
             "discount"=> 20,
-            "quantity" => 7,
+            "quantity" => 12,
             "price" => 69000
 
         ]);
+        
         PurchaseProduct::create([
             "purchase_id" => 2,
             "product_id" => 2,

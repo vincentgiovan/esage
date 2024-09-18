@@ -55,23 +55,55 @@ class PurchaseProductController extends Controller
 
         // Untuk setiap input product yang diterima lakukan:
         foreach($request->products as $index => $product_id){
-            // Buat data purchase product baru di mana id purchase-nya sama kayak purchase yang mau ditambahin cart-nya dan product id sama kayak product yang mau ditambahin ke cart
-            PurchaseProduct::create([
-                "purchase_id" => $purchase->id,
-                "product_id" => $product_id,
-                "discount" => $request->discounts[$index],
-                "quantity" => $request->quantities[$index],
-                "price" => $request->prices[$index]
-            ]);
-
+            $exprod = Product::where("id", $product_id)->first();
             // Update stok dan harga product:
-            $oldstock = Product::where("id", $product_id)->first()->stock; // ambil stok product yang saat ini sedang ditambahkan ke cart purchase
-            $newstock = $oldstock + $request->quantities[$index];
-            $toUpdate = ["stock" => $newstock];
-            if($newstock > 0 && Product::where("id", $product_id)->first()->status == "Out of Stock"){
-                $toUpdate["status"] = "Ready";
+            $old_price = $exprod->price;
+
+            if($request->prices[$index] != $old_price){
+                $lastSlashPosition = strrpos($exprod->product_code, '/');
+                // Extract the part after the last '/'
+                $lastPart = substr($exprod->product_code, $lastSlashPosition + 1);
+
+                // Extract the part before the last '/'
+                $firstPart = substr($exprod->product_code, 0, $lastSlashPosition + 1);
+
+                $newseparatedprod = Product::create([
+                    "product_name" => $exprod->product_name,
+                    "price" => $request->prices[$index],
+                    "variant" => $exprod->variant,
+                    "stock" => $request->quantities[$index],
+                    "markup" => $exprod->markup,
+                    "status" => $exprod->status,
+                    "product_code" => $firstPart . (intval($lastPart) + 1),
+                    "unit" => $exprod->unit
+                ]);
+
+                PurchaseProduct::create([
+                    "purchase_id" => $purchase->id,
+                    "product_id" => $newseparatedprod->id,
+                    "discount" => $request->discounts[$index],
+                    "quantity" => $request->quantities[$index],
+                    "price" => $request->prices[$index]
+                ]);
             }
-            Product::where("id",$product_id)->update($toUpdate); // then update stok dan harga-nya
+            else {
+                // Buat data purchase product baru di mana id purchase-nya sama kayak purchase yang mau ditambahin cart-nya dan product id sama kayak product yang mau ditambahin ke cart
+                PurchaseProduct::create([
+                    "purchase_id" => $purchase->id,
+                    "product_id" => $product_id,
+                    "discount" => $request->discounts[$index],
+                    "quantity" => $request->quantities[$index],
+                    "price" => $request->prices[$index]
+                ]);
+
+                $oldstock = $exprod->stock; // ambil stok product yang saat ini sedang ditambahkan ke cart purchase
+                $newstock = $oldstock + $request->quantities[$index];
+                $toUpdate = ["stock" => $newstock];
+                if($newstock > 0 && $exprod->status == "Out of Stock"){
+                    $toUpdate["status"] = "Ready";
+                }
+                Product::where("id",$product_id)->update($toUpdate); // then update stok dan harga-nya
+            }
         };
 
         // Arahkan user kembali ke pages/transit/purchaseproduct/index.blade.php

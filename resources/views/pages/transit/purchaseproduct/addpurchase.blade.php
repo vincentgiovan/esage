@@ -12,7 +12,7 @@
                         <label for="select-product-dropdown">Nama Produk</label>
                         <select name="product_name" class="form-select" id="select-product-dropdown">
                             @foreach ($products as $product)
-                                <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} ({{ $product->variant }})  (stok terakhir :  {{ $product->stock }})</option>
+                                <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} - {{ $product->variant }}  (Harga: {{ number_format($product->price, 2, ',', '.') }}, Stok:  {{ $product->stock }})</option>
                             @endforeach
                         </select>
                         <p style = "color: red; font-size: 10px;"></p>
@@ -73,6 +73,13 @@
     </x-container-middle>
 
     <script>
+        function formatNumber(number) {
+            return new Intl.NumberFormat('de-DE', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            }).format(number);
+        }
+        
         // Targetkan form buat submit data
         const confirmationForm = document.getElementById("peon");
 
@@ -139,7 +146,7 @@
             const column5 = document.createElement("td");
 
             const converted = JSON.parse(input1.value); // value dari option yang dipilih itu konversi collection Laravel jadi JSON, tapi bentuknya masih teks, jadi perlu dikonversi ke format JSON beneran dulu biar lebih enak diolah
-            column1.innerText = `${converted.product_name} (${converted.variant})`; // format teks yang tampil di kolom nama produk menjadi "nama_product (varian) dan tampilkan di row data baru di kolom nama produk"
+            column1.innerText = `${converted.product_name} - ${converted.variant} (Harga: ${formatNumber(converted.price)}, Stok: ${converted.stock})`; // format teks yang tampil di kolom nama produk menjadi "nama_product (varian) dan tampilkan di row data baru di kolom nama produk"
             column2.innerText = input2.value; // ambil nilai dari input price dan tampilkan di kolom harga
             column3.innerText = input3.value; // ambil nilai dari input diskon dan tampilkan di kolom diskon
             column4.innerText = input4.value; // ambil nilai dari input quantity dan tampilkan di kolom quantity

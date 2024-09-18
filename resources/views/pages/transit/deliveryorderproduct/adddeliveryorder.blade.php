@@ -11,7 +11,7 @@
                     <label for="select-product-dropdown">Nama Produk</label>
                     <select name="product_name" class="form-select" id="select-product-dropdown">
                         @foreach ($products as $product)
-                            <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} ({{ $product->variant }}) (Stok :  {{ $product->stock }})</option>
+                            <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} - {{ $product->variant }} (Harga: Rp {{ number_format($product->price, 2, ',', '.') }}, Stok:  {{ $product->stock }})</option>
                         @endforeach
                     </select>
                     <p style = "color: red; font-size: 10px;"></p>
@@ -60,6 +60,13 @@
     </x-container-middle>
 
     <script>
+        function formatNumber(number) {
+            return new Intl.NumberFormat('de-DE', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            }).format(number);
+        }
+
         // Targetkan form buat submit data
         const confirmationForm = document.getElementById("peon");
 
@@ -106,7 +113,7 @@
             const column4 = document.createElement("td");
             const column5 = document.createElement("td");
 
-            column1.innerText = `${converted.product_name} (${converted.variant})`; // format teks yang tampil di kolom nama produk menjadi "nama_product (varian) dan tampilkan di row data baru di kolom nama produk"
+            column1.innerText = `${converted.product_name} - ${converted.variant} (Harga: ${formatNumber(converted.price)}, Stok: ${converted.stock})`; // format teks yang tampil di kolom nama produk menjadi "nama_product (varian) dan tampilkan di row data baru di kolom nama produk"
             column4.innerText = input4.value; // ambil nilai dari input quantity dan tampilkan di kolom quantity
 
             // Buat tombol merah tong sampah buat nanti dipake buat hapus 1 row data

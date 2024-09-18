@@ -21,7 +21,7 @@ Route::get('/', function(){
     return redirect("/dashboard");
 })->name("home");
 
-Route::middleware(["auth","verified"])->group(function(){
+Route::middleware(["auth", "verified"])->group(function(){
     Route::get('/dashboard', [DashboardController::class, "index"] )->name("dashboard");
 
     Route::post("/dashboard/add-todo", [TodoController::class, "add_todo"])->name("todo.store");
@@ -73,6 +73,8 @@ Route::middleware(["auth","verified"])->group(function(){
         //export
         Route::get("/product/export/{mode}", [PDFController::class, "export_product"])->name("product-export")->whereNumber("mode");
 
+        //transaction history
+        Route::get("/product/{id}/transaction", [ProductController::class, "view_transaction"])->name("product-transaction")->whereNumber("id");
     });
 
     // ===== Partner ===== //
@@ -219,15 +221,6 @@ Route::middleware(["auth","verified"])->group(function(){
             "products" => Product::all()
         ]);
     })->name("return-index");
-
-
-    Route::get("/delivery-order-product", function(){
-        return redirect(route("deliveryorder-index"));
-    });
-
-    Route::get("/purchase-product", function(){
-        return redirect(route("purchase-index"));
-    });
 
 });
 

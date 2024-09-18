@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Product;
+use App\Models\PurchaseProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -168,4 +169,9 @@ class ProductController extends Controller{
         }
     }
 
+    public function view_transaction($id){
+        $purchaseproducts = PurchaseProduct::where("product_id", $id)->get();
+
+        return view("pages.product.transaction", ["purchaseproducts" => $purchaseproducts]);
+    }
 }

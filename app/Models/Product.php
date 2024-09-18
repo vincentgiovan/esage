@@ -11,7 +11,7 @@ class Product extends Model
     protected $guarded = ["id"];
 
     public function purchases(){
-        return $this->belongsToMany(Purchase::class);
+        return $this->belongsToMany(Purchase::class, "purchase_products");
     }
 
     public function delivery_orders(){
