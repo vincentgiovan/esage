@@ -15,9 +15,27 @@ class ProductController extends Controller{
     public function index()
     {
         $n_pagination = 10;
+        $products = Product::filter(request(["search"]))->orderByRaw('CASE WHEN status = "Out of Stock" THEN 0 ELSE 1 END')->orderBy("product_name")->get(); // Data semua produk dari database buat ditampilin satu-satu (kalo user-nya searching tampilkan yang memenuhi keyword)
+
+        $all_products = [];
+        foreach($products as $product){
+            $pae = false;
+            foreach($all_products as $ap){
+                if($product->product_variant == $ap->product_variant && $product->product_name == $ap->product_name){
+                    $ap["stock"] += $product->stock;
+                    $ap["price"] = $product->price;
+                    $pae = true;
+                }
+            }
+
+            if(!$pae){
+                array_push($all_products, $product);
+            }
+        }
+
         // Tampilkan halaman pages/product/index.blade.php
         return view("pages.product.index", [
-            "products" => Product::filter(request(["search"]))->orderByRaw('CASE WHEN status = "Out of Stock" THEN 0 ELSE 1 END')->orderBy("product_name")->paginate($n_pagination), // Data semua produk dari database buat ditampilin satu-satu (kalo user-nya searching tampilkan yang memenuhi keyword)
+            "products" => collect($all_products),
             "n_pagination" => $n_pagination
         ]);
     }
@@ -170,8 +188,18 @@ class ProductController extends Controller{
     }
 
     public function view_transaction($id){
-        $purchaseproducts = PurchaseProduct::where("product_id", $id)->get();
+        $product = Product::find($id);
 
-        return view("pages.product.transaction", ["purchaseproducts" => $purchaseproducts]);
+        $similars = Product::where("product_name", $product->product_name)->where("variant", $product->variant)->get();
+
+        $purchaseproducts = [];
+        foreach($similars as $s){
+            $pp = PurchaseProduct::where("product_id", $s->id)->get();
+            foreach($pp as $p){
+                array_push($purchaseproducts, $p);
+            }
+        }
+
+        return view("pages.product.transaction", ["purchaseproducts" => collect($purchaseproducts)]);
     }
 }

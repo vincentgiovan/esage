@@ -12,7 +12,7 @@
 
             {{-- @csrf kepake untuk token ,wajib --}}
 
-            <form method="POST" action="{{ route('product-edit', $product->id) }}">
+            <form method="POST" action="{{ route('product-edit', $product->id) }}" id="folm">
                 {{-- @csrf kepake untuk token ,wajib --}}
                 @csrf
 
@@ -58,9 +58,9 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="product_code">Kode Produk</label>
-                    <input type="text" class="form-control" name="product_code" id="product_code" placeholder="Kode Produk"
-                        value="{{ old('product_code', $product->product_code) }}">
+                    <label for="fake_product_code">Kode Produk</label>
+                    <input type="text" class="form-control" name="fake_product_code" id="fake_product_code" placeholder="Kode Produk"
+                        value="{{ old('product_code', $product->product_code) }}" disabled>
                     @error('product_code')
                         <p style="color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
@@ -109,6 +109,14 @@
                 $("#status").find('option[value="Out of Stock"]').prop("selected", false);
                 $("#status").find('option[value="Ready"]').prop("selected", true);
             }
+        });
+
+        $("#folm").on("submit", function(event){
+            event.preventDefault();
+
+            $(this).append($("<input>").attr({"type":"hidden", "name": "product_code", "value": $("#fake_product_code").val()}));
+
+            this.submit();
         });
     </script>
 @endsection

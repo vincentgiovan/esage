@@ -63,7 +63,6 @@
                 <tr>
                     <th class="border border-1 border-secondary ">Nomor</th>
                     <th class="border border-1 border-secondary ">Nama Produk </th>
-                    <th class="border border-1 border-secondary ">SKU Produk </th>
                     <th class="border border-1 border-secondary ">Stok</th>
                     <th class="border border-1 border-secondary ">Harga</th>
                     <th class="border border-1 border-secondary ">Unit</th>
@@ -87,8 +86,12 @@
 
                             @endphp
                         </td>
-                        <td class="border border-1 border-secondary "><a href="{{ route('product-transaction', $p->id) }}">{{ $p->product_name }}</a></td>
-                        <td class="border border-1 border-secondary ">{{ $p->product_code }}</td>
+                        <td class="border border-1 border-secondary ">
+                            <div class="w-100 d-flex justify-content-between align-items-center">
+                                <div>{{ $p->product_name }}</div>
+                                <a href="{{ route('product-transaction', $p->id) }}" class="btn btn-success">View Log</a>
+                            </div>
+                        </td>
                         <td class="border border-1 border-secondary ">{{ $p->stock }}</td>
                         <td class="border border-1 border-secondary ">Rp {{ number_format($p->price, 2, ',', '.') }}</td>
                         <td class="border border-1 border-secondary ">{{ $p->unit }}</td>
@@ -117,8 +120,8 @@
                 @endforeach
             </table>
         </div>
-        <div class="mt-4">
+        {{-- <div class="mt-4">
             {{ $products->links() }}
-        </div>
+        </div> --}}
     </x-container>
 @endsection

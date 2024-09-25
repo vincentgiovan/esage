@@ -26,7 +26,6 @@
             });
         </script> --}}
         <hr class="mt-2">
-        {{-- <h5>welcome back, {{ Auth::user()->name }}! </h5> --}}
 
         {{-- @if (session()->has('successAddProduct'))
             <p class="text-success fw-bold">{{ session('successAddProduct') }}</p>
@@ -38,39 +37,44 @@
 
         <br>
 
-        {{-- <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-2">
-            <div class="d-flex gap-2 ">
-                <form action="{{ route('product-index') }}" class="d-flex gap-2">
-                    <input type="text" name="search" placeholder="Search products..." value="{{ request('search') }}"
-                        class="form-control border border-1 border-secondary">
-                    <button class="btn " style="background-color: rgb(191, 191, 191)">Search</button>
-                </form>
-                <a href="{{ route('product-index') }}" class="btn" style="background-color: rgb(191, 191, 191)">Clear</a>
-            </div>
-            @can('admin')
-                <a href="{{ route('product-create') }}" class="btn btn-primary text-white" style="font-size: 10pt">
-                    <i class="bi bi-plus-square"></i>
-                    Add New Product
-                </a>
-            @endcan
-        </div> --}}
-
-        <br>
-
         <!-- tabel list data-->
-        <div class="overflow-x-auto">
+        @php
+            $total = 0;
+        @endphp
+
+        @if($purchaseproducts->count())
+            <table class="w-100">
+                <tr>
+                    <th class="border border-1 border-secondary w-25">Product name:</th>
+                    <td class="border border-1 border-secondary">{{ $purchaseproducts[0]->product->product_name }}</td>
+
+                </tr>
+                <tr>
+                    <th class="border border-1 border-secondary w-25">Product variant:</th>
+                    <td class="border border-1 border-secondary">{{ $purchaseproducts[0]->product->variant }}</td>
+                </tr>
+            </table>
+        @endif
+
+        <div class="overflow-x-auto mt-5">
             <table class="w-100">
                 <tr>
                     <th class="border border-1 border-secondary ">Nomor</th>
-                    <th class="border border-1 border-secondary ">SKU Pembelian </th>
-                    <th class="border border-1 border-secondary ">Nama Produk </th>
-                    <th class="border border-1 border-secondary ">SKU Produk </th>
-                    <th class="border border-1 border-secondary ">Harga </th>
-                    <th class="border border-1 border-secondary ">Stok </th>
-
+                    <th class="border border-1 border-secondary ">SKU Pembelian</th>
+                    <th class="border border-1 border-secondary ">SKU Produk</th>
+                    <th class="border border-1 border-secondary ">Harga</th>
+                    <th class="border border-1 border-secondary ">Diskon</th>
+                    <th class="border border-1 border-secondary ">Harga Diskon</th>
+                    <th class="border border-1 border-secondary ">Stok</th>
+                    <th class="border border-1 border-secondary ">Subtotal</th>
                 </tr>
 
                 @foreach ($purchaseproducts as $pp)
+                    @php
+                        $disc_price = ((100 - $pp->discount) / 100) * $pp->price;
+                        $subtotal = $disc_price * $pp->quantity;
+                        $total += $subtotal;
+                    @endphp
                     <tr>
                         <td class="border border-1 border-secondary ">
                             @php
@@ -83,10 +87,12 @@
                             @endphp
                         </td>
                         <td class="border border-1 border-secondary ">{{ $pp->purchase->register }}</td>
-                        <td class="border border-1 border-secondary ">{{ $pp->product->product_name }}</td>
                         <td class="border border-1 border-secondary ">{{ $pp->product->product_code }}</td>
                         <td class="border border-1 border-secondary ">Rp {{ number_format($pp->price, 2, ',', '.') }}</td>
+                        <td class="border border-1 border-secondary ">{{ $pp->discount }}</td>
+                        <td class="border border-1 border-secondary ">Rp {{ number_format($disc_price, 2, ',', '.') }}</td>
                         <td class="border border-1 border-secondary ">{{ $pp->quantity }}</td>
+                        <td class="border border-1 border-secondary ">Rp {{ number_format($subtotal, 2, ',', '.') }}</td>
                     </tr>
                 @endforeach
             </table>
@@ -94,5 +100,11 @@
         {{-- <div class="mt-4">
             {{ $products->links() }}
         </div> --}}
+
+        <div class="d-flex w-100 justify-content-end mt-4 gap-2 fs-4 fw-bold">
+            <div class="">Total: </div>
+            <div class="">Rp {{ number_format($total, 2, ',', '.') }}</div>
+        </div>
+
     </x-container>
 @endsection
