@@ -74,8 +74,8 @@ Route::middleware(["auth", "verified"])->group(function(){
         //export
         Route::get("/product/export/{mode}", [PDFController::class, "export_product"])->name("product-export")->whereNumber("mode");
 
-        //transaction history
-        Route::get("/product/{id}/transaction", [ProductController::class, "view_transaction"])->name("product-transaction")->whereNumber("id");
+        //purchase log
+        Route::get("/product/{id}/log", [ProductController::class, "view_log"])->name("product-log")->whereNumber("id");
     });
 
     // ===== Partner ===== //
@@ -124,6 +124,9 @@ Route::middleware(["auth", "verified"])->group(function(){
 
     //export
     Route::get("/project/export/{mode}", [PDFController::class, "export_project"])->name("project-export")->whereNumber("mode");
+
+    //project log
+    Route::get("/project/{id}/log", [ProjectController::class, "view_log"])->name("project-log")->whereNumber("id");
 
 
     // ===== Purchase ===== //

@@ -143,4 +143,8 @@ class ProjectController extends Controller{
             unlink($tempFilePath);
         }
     }
+
+    public function view_log($id){
+        return view("pages.project.log", ["project" => Project::find($id)]);
+    }
 }
