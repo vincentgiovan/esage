@@ -29,7 +29,7 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link text-decoration-none fs-6 px-4" style="color: white; font-weight: bold; @if (Request::is("return*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("return-index") }}" ><i class="bi bi-bag-dash me-2"></i> Return Item</a>
+            <a class="nav-link text-decoration-none fs-6 px-4" style="color: white; font-weight: bold; @if (Request::is("return*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("return-item-index") }}" ><i class="bi bi-bag-dash me-2"></i> Return Item</a>
         </li>
 
         <li class="nav-item">
