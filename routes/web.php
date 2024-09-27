@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Product;
+use App\Models\DeliveryOrder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PDFController;
@@ -11,11 +12,11 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ReturnItemController;
 use App\Http\Controllers\DeliveryOrderController;
 use App\Http\Controllers\AccountCreationController;
 use App\Http\Controllers\PurchaseProductController;
 use App\Http\Controllers\DeliveryOrderProductController;
-use App\Models\DeliveryOrder;
 
 Route::get('/', function(){
     return redirect("/dashboard");
@@ -195,6 +196,30 @@ Route::middleware(["auth", "verified"])->group(function(){
     //export data
     Route::get("/delivery-order-product/{id}/export/{mode}", [PDFController::class, "export_deliveryorder_product"])->name("deliveryorderproduct-export")->whereNumber("id")->whereNumber("mode");
 
+    // ===== RETURN ITEM ===== //
+    //show data
+    Route::get('/return-item', [ReturnItemController::class, "index"] )->name("return-item-index");
+
+    //create new data
+    Route::get('/return-item/create', [ReturnItemController::class, "create"] )->name("return-item-create");
+    Route::post('/return-item/store', [ReturnItemController::class, "store"] )->name("return-item-store");
+
+    //import
+    Route::get("/return-item/import", [ReturnItemController::class, "import_returnitem_form"])->name("return-item-import");
+    Route::post("/return-item/import", [ReturnItemController::class, "import_returnitem_store"])->name("return-item-import-store");
+
+    //edit data
+    Route::get('/return-item/{id}/edit', [ReturnItemController::class, "edit"] )->name("return-item-edit")->whereNumber("id");
+    Route::post('/return-item/{id}/edit', [ReturnItemController::class, "update"] )->name("return-item-update")->whereNumber("id");
+
+    //delete data
+    Route::post('/return-item/{id}', [ReturnItemController::class, "destroy"] )->name("return-item-destroy")->whereNumber("id");
+
+    //export
+    Route::get("/return-item/export/{mode}", [PDFController::class, "export_returnitem"])->name("return-item-export")->whereNumber("mode");
+
+
+
 
     //account route
 
@@ -216,11 +241,6 @@ Route::middleware(["auth", "verified"])->group(function(){
         ]);
     })->name("request-index");
 
-    Route::get("/return", function(){
-        return view("pages.return.index", [
-            "products" => Product::all()
-        ]);
-    })->name("return-index");
 
 });
 
