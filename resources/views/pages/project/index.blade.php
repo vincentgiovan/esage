@@ -58,7 +58,12 @@
                 @foreach ($projects as $p)
                     <tr>
                         <td class="border border-1 border-secondary ">{{ $loop->iteration }}</td>
-                        <td class="border border-1 border-secondary ">{{ $p->project_name }}</td>
+                        <td class="border border-1 border-secondary ">
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                {{ $p->project_name }}
+                                <a href="{{ route('project-log', $p->id) }}" class="btn btn-success">View Items</a>
+                            </div>
+                        </td>
                         <td class="border border-1 border-secondary ">{{ $p->location }}</td>
                         <td class="border border-1 border-secondary ">{{ $p->PIC }}</td>
                         <td class="border border-1 border-secondary ">{{ $p->address }}</td>

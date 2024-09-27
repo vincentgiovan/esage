@@ -187,7 +187,7 @@ class ProductController extends Controller{
         }
     }
 
-    public function view_transaction($id){
+    public function view_log($id){
         $product = Product::find($id);
 
         $similars = Product::where("product_name", $product->product_name)->where("variant", $product->variant)->get();
@@ -200,6 +200,6 @@ class ProductController extends Controller{
             }
         }
 
-        return view("pages.product.transaction", ["purchaseproducts" => collect($purchaseproducts)]);
+        return view("pages.product.log", ["purchaseproducts" => collect($purchaseproducts)]);
     }
 }

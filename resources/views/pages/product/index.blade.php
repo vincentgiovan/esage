@@ -89,7 +89,7 @@
                         <td class="border border-1 border-secondary ">
                             <div class="w-100 d-flex justify-content-between align-items-center">
                                 <div>{{ $p->product_name }}</div>
-                                <a href="{{ route('product-transaction', $p->id) }}" class="btn btn-success">View Log</a>
+                                <a href="{{ route('product-log', $p->id) }}" class="btn btn-success">View Log</a>
                             </div>
                         </td>
                         <td class="border border-1 border-secondary ">{{ $p->stock }}</td>

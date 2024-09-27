@@ -45,12 +45,12 @@
         @if($purchaseproducts->count())
             <table class="w-100">
                 <tr>
-                    <th class="border border-1 border-secondary w-25">Product name:</th>
+                    <th class="border border-1 border-secondary w-25">Product name</th>
                     <td class="border border-1 border-secondary">{{ $purchaseproducts[0]->product->product_name }}</td>
 
                 </tr>
                 <tr>
-                    <th class="border border-1 border-secondary w-25">Product variant:</th>
+                    <th class="border border-1 border-secondary w-25">Product variant</th>
                     <td class="border border-1 border-secondary">{{ $purchaseproducts[0]->product->variant }}</td>
                 </tr>
             </table>
