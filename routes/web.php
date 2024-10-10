@@ -17,6 +17,7 @@ use App\Http\Controllers\DeliveryOrderController;
 use App\Http\Controllers\AccountCreationController;
 use App\Http\Controllers\PurchaseProductController;
 use App\Http\Controllers\DeliveryOrderProductController;
+use App\Http\Controllers\EmployeeController;
 
 Route::get('/', function(){
     return redirect("/dashboard");
@@ -222,12 +223,8 @@ Route::middleware(["auth", "verified"])->group(function(){
     Route::get("/return-item/export/{mode}", [PDFController::class, "export_returnitem"])->name("return-item-export")->whereNumber("mode");
 
 
-
-
     //account route
 
-
-    // Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/account', [AccountCreationController::class, 'index'])->name('account.index');
     Route::post('/account', [AccountCreationController::class, 'store'])->name('account.store');
     Route::get("/account/import-data", [AccountCreationController::class, "import_user_form"])->name("account.import.form");
@@ -236,7 +233,10 @@ Route::middleware(["auth", "verified"])->group(function(){
     Route::put('/account/{id}', [AccountCreationController::class, 'update'])->name('account.update')->whereNumber("id");
     Route::delete('/account/{id}', [AccountCreationController::class, 'destroy'])->name('account.destroy')->whereNumber("id");
 
-// });
+    Route::get("/employee", [EmployeeController::class, "index"])->name("employee-index");
+    Route::get("/employee/{id}", [EmployeeController::class, "show"])->name("employee-show");
+    Route::get("/employee/{id}/edit", [EmployeeController::class, "edit"])->name("employee-edit");
+    Route::post("/employee/{id}/edit", [EmployeeController::class, "update"])->name("employee-update");
 
     Route::get("/request", function(){
         return view("pages.request.index", [
