@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -30,12 +31,14 @@ class AccountCreationController extends Controller
         ]);
 
         // Kalo validasi lolos berarti langsung bikin dan tambahin datanya ke tabel users
-        User::create([
+        $new_user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
         ]);
+
+        Employee::create(["user_id" => $new_user->id]);
 
         // Arahin user balik ke halaman account/index.blade.php
         return redirect()->route('account.index')->with("successCreateAccount", "Successfully created new account");;
@@ -100,5 +103,5 @@ class AccountCreationController extends Controller
         return view("accounts.import-data");
     }
 
-    
+
 }

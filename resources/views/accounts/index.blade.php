@@ -37,7 +37,7 @@
                 </div>
                 <div class="form-group mb-3">
                     <label for="role">Select Role</label>
-                    <select class="form-control" id="role" name="role">
+                    <select class="form-control text-black" id="role" name="role">
                         <option value="1">Admin</option>
                         <option value="2" selected>User</option>
                     </select>
@@ -153,42 +153,6 @@
                                     {{-- <button class="btn btn-warning" data-toggle="modal" data-target="#editUserModal-{{ $user->id }}">Edit</button> --}}
                                     <a href="{{ route("account.show", $user->id) }}" class="btn text-white" data-toggle="modal" data-target="#editUserModal-{{ $user->id }}" style="background-color: rgb(197, 167, 0);"><i class="bi bi-pencil"></i> Edit</a>
                                 </div>
-                                {{-- <!-- Edit User Modal -->
-                                <div class="modal fade" id="editUserModal-{{ $user->id }}" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <form action="{{ route('account.update', $user->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <div class="form-group mb-3">
-                                                        <label for="name">Name</label>
-                                                        <input type="text" class="form-control" id="name" name="name" value="{{ $user->name }}">
-                                                    </div>
-                                                    <div class="input-group">
-                                                        <input id="password" type="password" class="pe-5 form-control border border-secondary position-relative z-0 rounded @error('password') is-invalid @enderror" name="password"  autocomplete="current-password">
-                                                        <div class="input-group-append position-absolute z-1 end-0">
-                                                            <button type="button" class="btn" id="togglePassword">
-                                                                <i class="bi bi-eye-fill" id="toggleIcon"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group mb-3">
-                                                        <label for="password_confirmation">Confirm Password</label>
-                                                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
-                                                    </div>
-                                                    <button type="submit" class="btn btn-primary">Save changes</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> --}}
                             </td>
                         </tr>
                         @endforeach

@@ -71,7 +71,7 @@
 
                 @foreach ($purchaseproducts as $pp)
                     @php
-                        $disc_price = ((100 - $pp->discount) / 100) * $pp->price;
+                        $disc_price = ((100 - $pp->product->discount) / 100) * $pp->product->price;
                         $subtotal = $disc_price * $pp->quantity;
                         $total += $subtotal;
                     @endphp
@@ -88,8 +88,8 @@
                         </td>
                         <td class="border border-1 border-secondary ">{{ $pp->purchase->register }}</td>
                         <td class="border border-1 border-secondary ">{{ $pp->product->product_code }}</td>
-                        <td class="border border-1 border-secondary ">Rp {{ number_format($pp->price, 2, ',', '.') }}</td>
-                        <td class="border border-1 border-secondary ">{{ $pp->discount }}</td>
+                        <td class="border border-1 border-secondary ">Rp {{ number_format($pp->product->price, 2, ',', '.') }}</td>
+                        <td class="border border-1 border-secondary ">{{ $pp->product->discount }}%</td>
                         <td class="border border-1 border-secondary ">Rp {{ number_format($disc_price, 2, ',', '.') }}</td>
                         <td class="border border-1 border-secondary ">{{ $pp->quantity }}</td>
                         <td class="border border-1 border-secondary ">Rp {{ number_format($subtotal, 2, ',', '.') }}</td>

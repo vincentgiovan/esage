@@ -56,11 +56,13 @@ class PurchaseProductController extends Controller
         // Untuk setiap input product yang diterima lakukan:
         foreach($request->products as $index => $product_id){
             $exprod = Product::where("id", $product_id)->first();
+
             // Update stok dan harga product:
             $old_price = $exprod->price;
 
             if($request->prices[$index] != $old_price){
                 $lastSlashPosition = strrpos($exprod->product_code, '/');
+
                 // Extract the part after the last '/'
                 $lastPart = substr($exprod->product_code, $lastSlashPosition + 1);
 
@@ -102,7 +104,8 @@ class PurchaseProductController extends Controller
                 if($newstock > 0 && $exprod->status == "Out of Stock"){
                     $toUpdate["status"] = "Ready";
                 }
-                Product::where("id",$product_id)->update($toUpdate); // then update stok dan harga-nya
+
+                Product::where("id", $product_id)->update($toUpdate); // then update stok dan status-nya
             }
         };
 
