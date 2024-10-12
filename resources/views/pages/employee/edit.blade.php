@@ -89,7 +89,7 @@
                         @foreach($specialities as $s)
                             @if($s->status == "on")
                                 <div class="d-flex gap-2 rounded-3 border border-2 py-2 px-3">
-                                    <input type="checkbox" class="form-check-input border border-2" id="scb-{{ $s->id }}" name="selected_speciality[]" @if(in_array($s->speciality_name, $prev_sel_sp)) checked @endif>
+                                    <input type="checkbox" class="form-check-input border border-2" id="scb-{{ $s->id }}" name="selected_speciality[]" @if($employee->keahlian && in_array($s->speciality_name, $prev_sel_sp)) checked @endif>
                                     <label class="form-check-label" for="scb-{{ $s->id }}">{{ $s->speciality_name }}</label>
                                 </div>
                             @endif
