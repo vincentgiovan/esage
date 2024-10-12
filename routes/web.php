@@ -204,12 +204,12 @@ Route::middleware(["auth", "verified"])->group(function(){
     Route::get('/return-item', [ReturnItemController::class, "index"] )->name("return-item-index");
 
     //create new data
-    Route::get('/return-item/create', [ReturnItemController::class, "create"] )->name("return-item-create");
-    Route::post('/return-item/store', [ReturnItemController::class, "store"] )->name("return-item-store");
+    Route::get('/return-item/create', [ReturnItemController::class, "create"] )->name("returnitem-create");
+    Route::post('/return-item/store', [ReturnItemController::class, "store"] )->name("returnitem-store");
 
     //import
-    Route::get("/return-item/import", [ReturnItemController::class, "import_returnitem_form"])->name("return-item-import");
-    Route::post("/return-item/import", [ReturnItemController::class, "import_returnitem_store"])->name("return-item-import-store");
+    Route::get("/return-item/import", [ReturnItemController::class, "import_returnitem_form"])->name("returnitem-import");
+    Route::post("/return-item/import", [ReturnItemController::class, "import_returnitem_store"])->name("returnitem-import-store");
 
     //edit data
     Route::get('/return-item/{id}/edit', [ReturnItemController::class, "edit"] )->name("return-item-edit")->whereNumber("id");
