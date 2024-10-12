@@ -16,7 +16,13 @@
             </tr>
             <tr>
                 <th class="border border-1 border-secondary w-25">Foto KTP</th>
-                <td class="border border-1 border-secondary">{{ $employee->foto_ktp ?? "N/A" }}</td>
+                <td class="border border-1 border-secondary">
+                    @if($employee->foto_ktp)
+                        <img class="w-50" src="{{ Storage::url('app/public/' . $employee->foto_ktp) }}">
+                    @else
+                        N/A
+                    @endif
+                </td>
             </tr>
             <tr>
                 <th class="border border-1 border-secondary w-25">Kalkulasi Gaji</th>

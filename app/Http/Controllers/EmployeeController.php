@@ -34,7 +34,7 @@ class EmployeeController extends Controller
         $validated_data = $request->validate([
             "nama" => "required|min:3",
             "NIK" => "nullable|min:16",
-            "foto_ktp" => "nullable|file|image|max:4096",
+            "image" => "nullable|file|image|max:4096",
             "kalkulasi_gaji" => "required",
             "jabatan" => "nullable",
             "pokok" => "nullable|numeric|min:0",
@@ -62,6 +62,11 @@ class EmployeeController extends Controller
             }
         }
         $validated_data["keahlian"] = serialize($selected_specialities);
+
+        if($request->file("image")){
+			$validated_data["foto_ktp"] = $request->file("image")->store("images");
+            unset($validated_data["image"]);
+		}
 
         $employee->update($validated_data);
 

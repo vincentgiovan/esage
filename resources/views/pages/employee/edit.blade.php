@@ -36,12 +36,13 @@
 
                 <div class="mt-3">
                     <label for="foto_ktp">Foto KTP</label>
-                    <input type="file" class="form-control" name="foto_ktp" id="foto_ktp"
-                        value="{{ old('foto_ktp', $employee->foto_ktp) }}">
-                    @error('foto_ktp')
+                    <input type="file" class="form-control" name="image" id="image">
+                    @error('image')
                         <p style="color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
+
+                <img id="img-preview" class="w-25 mt-2" src="{{ Storage::url('app/public/' . $employee->foto_ktp) }}">
 
                 <div class="mt-3">
                     <label>Kalkulasi Gaji</label>
@@ -201,6 +202,15 @@
     </x-container-middle>
 
     <script>
+        $("#image").on("change", function(){
+			const oFReader = new FileReader();
+			oFReader.readAsDataURL(image.files[0]);
+
+			oFReader.onload = function(oFEvent){
+				$("#img-preview").attr("src", oFEvent.target.result);
+			}
+		});
+
         function retrieveCBV(){
             cbval = [];
             $('input[type="checkbox"]').each(function(){
