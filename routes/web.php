@@ -234,16 +234,23 @@ Route::middleware(["auth", "verified"])->group(function(){
     Route::delete('/account/{id}', [AccountCreationController::class, 'destroy'])->name('account.destroy')->whereNumber("id");
 
     Route::get("/employee", [EmployeeController::class, "index"])->name("employee-index");
-    Route::get("/employee/{id}", [EmployeeController::class, "show"])->name("employee-show");
-    Route::get("/employee/{id}/edit", [EmployeeController::class, "edit"])->name("employee-edit");
-    Route::post("/employee/{id}/edit", [EmployeeController::class, "update"])->name("employee-update");
+    Route::get("/employee/{id}", [EmployeeController::class, "show"])->name("employee-show")->whereNumber("id");
+    Route::get("/employee/{id}/edit", [EmployeeController::class, "edit"])->name("employee-edit")->whereNumber("id");
+    Route::post("/employee/{id}/edit", [EmployeeController::class, "update"])->name("employee-update")->whereNumber("id");
+
+    Route::get("/employee/manage-form", [EmployeeController::class, "manage_form"])->name("employee-manageform");
+    Route::post("/employee/manage-form/add-position", [EmployeeController::class, "manage_form_add_position"])->name("employee-manageform-addposition");
+    Route::post("/employee/manage-form/add-speciality", [EmployeeController::class, "manage_form_add_speciality"])->name("employee-manageform-addspeciality");
+    Route::post("/employee/manage-form/{id}/edit-position", [EmployeeController::class, "manage_form_edit_position"])->name("employee-manageform-editposition")->whereNumber("id");
+    Route::post("/employee/manage-form/{id}/edit-speciality", [EmployeeController::class, "manage_form_edit_speciality"])->name("employee-manageform-editspeciality")->whereNumber("id");
+    Route::post("/employee/manage-form/{id}/delete-position", [EmployeeController::class, "manage_form_delete_position"])->name("employee-manageform-deleteposition")->whereNumber("id");
+    Route::post("/employee/manage-form/{id}/delete-speciality", [EmployeeController::class, "manage_form_delete_speciality"])->name("employee-manageform-deletespeciality")->whereNumber("id");
 
     Route::get("/request", function(){
         return view("pages.request.index", [
             "products" => Product::all()
         ]);
     })->name("request-index");
-
 
 });
 

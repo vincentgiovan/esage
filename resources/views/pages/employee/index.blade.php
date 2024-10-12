@@ -3,7 +3,10 @@
 @section("content")
     <x-container>
         <br>
-        <h1>Sage Employees</h1>
+        <div class="w-100 d-flex justify-content-between align-items-center">
+            <h1>Sage Employees</h1>
+            <a href="{{ route('employee-manageform') }}" class="btn btn-primary">Positions & Specialities</a>
+        </div>
 
         @if (session()->has('success-edit-employee'))
             <p class="text-success fw-bold">{{ session('success-edit-employee') }}</p>
@@ -31,12 +34,12 @@
                         <td class="border border-1 border-secondary ">{{ $e->user->name }}</td>
                         <td class="border border-1 border-secondary ">{{ $e->NIK }}</td>
                         <td class="border border-1 border-secondary ">{{ $e->jabatan }}</td>
-                        <td class="border border-1 border-secondary ">{{ $e->pokok }}</td>
-                        <td class="border border-1 border-secondary ">{{ $e->lembur }}</td>
-                        <td class="border border-1 border-secondary ">{{ $e->lembur_panjang }}</td>
-                        <td class="border border-1 border-secondary ">{{ $e->performa }}</td>
-                        <td class="border border-1 border-secondary ">{{ $e->payroll }}</td>
-                        <td class="border border-1 border-secondary ">{{ $e->kasbon }}</td>
+                        <td class="border border-1 border-secondary ">{{ __("Rp " . number_format($e->pokok, 2, ',', '.')) }}</td>
+                        <td class="border border-1 border-secondary ">{{ __("Rp " . number_format($e->lembur, 2, ',', '.')) }}</td>
+                        <td class="border border-1 border-secondary ">{{ __("Rp " . number_format($e->lembur_panjang, 2, ',', '.')) }}</td>
+                        <td class="border border-1 border-secondary ">{{ __("Rp " . number_format($e->performa, 2, ',', '.')) }}</td>
+                        <td class="border border-1 border-secondary ">{{ ($e->payroll == "on")? "Ya" : "Tidak" }}</td>
+                        <td class="border border-1 border-secondary ">{{ __(("Rp " .  number_format($e->kasbon, 2, ',', '.'))) }}</td>
                         <td class="border border-1 border-secondary ">
                             <div class="d-flex gap-2 w-100 justify-content-center">
                                 <a href="{{ route('employee-show', $e->id) }}" class="btn btn-success text-white"

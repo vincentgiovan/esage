@@ -64,7 +64,7 @@
 
                 <div class="mt-3">
                     <label for="jabatan">Jabatan</label>
-                    <select class="form-control text-black" name="jabatan" id="jabatan">
+                    <select class="form-select text-black" name="jabatan" id="jabatan">
                         @foreach($positions as $p)
                             @php
                                 $position = App\Models\Position::where("position_name", $employee->jabatan)->first();
