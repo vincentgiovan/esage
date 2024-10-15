@@ -6,7 +6,7 @@
         <i class="bi bi-arrow-up-circle" style="font-size: 40px; z-index: 10;"></i>
     </a> --}}
 
-    <div>
+    <div class="px-5">
         @if (session()->has('successfulLogin'))
             <p class="text-success fs-5">{{ session('successfulLogin') }}</p>
         @endif
@@ -46,7 +46,7 @@
         </div>
         <div class="row">
             <div class="col-md-3 grid-margin stretch-card">
-                <div class="card">
+                <div class="card pe-4">
                     <div class="card-body">
                         <p class="card-title text-md-center text-xl-left fs-5"><i class="bi bi-clipboard-x"></i> Stok Kosong</p>
                         <div
@@ -59,7 +59,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 grid-margin stretch-card">
+            <div class="col-md-3 px-4 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
                         <p class="card-title text-md-center text-xl-left fs-5"><i class="bi bi-truck"></i> Total D.Order</p>
@@ -73,7 +73,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 grid-margin stretch-card">
+            <div class="col-md-3 px-4 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
                         <p class="card-title text-md-center text-xl-left fs-5"><i class="bi bi-cart4"></i> Total Purchase</p>
@@ -87,7 +87,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 grid-margin stretch-card">
+            <div class="col-md-3 ps-4 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
                         <p class="card-title text-md-center text-xl-left fs-5"><i class="bi bi-building"></i> New Projects</p>
@@ -167,7 +167,7 @@
                     </div>
                 </div>
         </div> --}}
-        <div class="row">
+        <div class="row mt-4">
             {{-- <div class="col-md-7 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">

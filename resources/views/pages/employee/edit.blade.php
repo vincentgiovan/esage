@@ -19,7 +19,7 @@
                 <div class="mt-3">
                     <label for="nama">Nama</label>
                     <input type="text" class="form-control" name="nama" id="nama" placeholder="Nama Pegawai"
-                        value="{{ old('nama', $employee->user->name) }}">
+                        value="{{ old('nama', $employee->nama) }}">
                     @error('nama')
                         <p style="color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
@@ -42,7 +42,10 @@
                     @enderror
                 </div>
 
-                <img id="img-preview" class="w-25 mt-2" src="{{ Storage::url('app/public/' . $employee->foto_ktp) }}">
+                <img id="img-preview" class="w-25 mt-2" src="{{ asset("storage/" . $employee->foto_ktp) }}">
+                {{-- <img id="img-preview" class="w-25 mt-2" src="{{ Storage::url('app/public/' . $employee->foto_ktp) }}"> --}}
+                <p>{{ Storage::url('app/public/' . $employee->foto_ktp) }}</p>
+                <p>{{ asset("storage/" . $employee->foto_ktp) }}</p>
 
                 <div class="mt-3">
                     <label>Kalkulasi Gaji</label>

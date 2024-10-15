@@ -50,9 +50,6 @@ class EmployeeController extends Controller
 
         $employee = Employee::find($id);
 
-        User::find($employee->user_id)->update(["name" => $validated_data["nama"]]);
-        unset($validated_data["nama"]);
-
         $validated_data["jabatan"] = Position::find($validated_data["jabatan"])->position_name;
 
         $selected_specialities = [];
