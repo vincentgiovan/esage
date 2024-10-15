@@ -61,7 +61,7 @@ class EmployeeController extends Controller
         $validated_data["keahlian"] = serialize($selected_specialities);
 
         if($request->file("image")){
-			$validated_data["foto_ktp"] = $request->file("image")->store("images");
+			$validated_data["foto_ktp"] = $request->file("image")->store("public/images");
             unset($validated_data["image"]);
 		}
 
