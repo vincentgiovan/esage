@@ -51,13 +51,11 @@
 
                 @foreach ($project->delivery_orders as $do)
                     @foreach($do->products as $prd)
-                        {{-- @php
-                            $disc_price = ((100 - $pp->discount) / 100) * $pp->price;
-                            $subtotal = $disc_price * $pp->quantity;
-                            $total += $subtotal;
-                        @endphp --}}
                         @php
-                            $dop = App\Models\DeliveryOrderProduct::where("product_id", $prd->id)->where("delivery_order_id", $do->id)->first()
+                            $dop = App\Models\DeliveryOrderProduct::where("product_id", $prd->id)->where("delivery_order_id", $do->id)->first();
+                            $disc_price = ((100 - $prd->discount) / 100) * $prd->price;
+                            $subtotal = $disc_price * $dop->quantity;
+                            $total += $subtotal;
                         @endphp
                         <tr>
                             <td class="border border-1 border-secondary ">{{ $loop->iteration }}</td>
@@ -65,7 +63,7 @@
                             <td class="border border-1 border-secondary ">{{ $prd->product_code }}</td>
                             <td class="border border-1 border-secondary ">{{ $prd->product_name }}</td>
                             <td class="border border-1 border-secondary ">{{ $prd->variant }}</td>
-                            <td class="border border-1 border-secondary "></td>
+                            <td class="border border-1 border-secondary ">Rp {{ number_format($subtotal, 2, ',', '.') }}<br><i style="font-weight: 600;">(Price: {{ $prd->price }}, disc: {{ $prd->discount }}%, qty: {{ $dop->quantity }})</i></td>
                             <td class="border border-1 border-secondary ">{{ $dop->quantity }}</td>
                         </tr>
                     @endforeach

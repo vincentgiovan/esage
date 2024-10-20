@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Models\Product;
 use App\Models\DeliveryOrder;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +15,6 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReturnItemController;
 use App\Http\Controllers\DeliveryOrderController;
-use App\Http\Controllers\AccountCreationController;
 use App\Http\Controllers\PurchaseProductController;
 use App\Http\Controllers\DeliveryOrderProductController;
 use App\Http\Controllers\EmployeeController;
@@ -26,9 +26,11 @@ Route::get('/', function(){
 Route::middleware(["auth", "verified"])->group(function(){
     Route::get('/dashboard', [DashboardController::class, "index"] )->name("dashboard");
 
-    Route::post("/dashboard/add-todo", [TodoController::class, "add_todo"])->name("todo.store");
-    Route::post("/dashboard/save-todo", [TodoController::class, "save_todo"])->name("todo.update");
+    Route::post("/dashboard/add-todo", [TodoController::class, "add_todo"])->name("todo-store");
+    Route::post("/dashboard/save-todo", [TodoController::class, "save_todo"])->name("todo-update");
 
+    Route::get("/profile", [AccountController::class, "edit_profile"])->name("profile-edit");
+    Route::post("/profile", [AccountController::class, "update_profile"])->name("profile-update");
 
     // ===== DELIVERY ORDER ===== //
 
@@ -108,6 +110,9 @@ Route::middleware(["auth", "verified"])->group(function(){
 
         //export
         Route::get("/partner/export/{mode}", [PDFController::class, "export_partner"])->name("partner-export")->whereNumber("mode");
+
+        //partner log
+        Route::get("/partner/{id}/log", [PartnerController::class, "view_log"])->name("partner-log")->whereNumber("id");
     });
 
 
@@ -247,13 +252,13 @@ Route::middleware(["auth", "verified"])->group(function(){
     Route::middleware("admin")->group(function(){
         // ===== ACCOUNTS ===== //
 
-        Route::get('/account', [AccountCreationController::class, 'index'])->name('account.index');
-        Route::post('/account', [AccountCreationController::class, 'store'])->name('account.store');
-        Route::get("/account/import-data", [AccountCreationController::class, "import_user_form"])->name("account.import.form");
-        Route::post("/account/import-data", [AccountCreationController::class, "import_user_store"])->name("account.import.store");
-        Route::get("/account/{id}", [AccountCreationController::class, "show"])->name("account.show")->whereNumber("id");
-        Route::put('/account/{id}', [AccountCreationController::class, 'update'])->name('account.update')->whereNumber("id");
-        Route::delete('/account/{id}', [AccountCreationController::class, 'destroy'])->name('account.destroy')->whereNumber("id");
+        Route::get('/account', [AccountController::class, 'index'])->name('account.index');
+        Route::post('/account', [AccountController::class, 'store'])->name('account.store');
+        Route::get("/account/import-data", [AccountController::class, "import_user_form"])->name("account.import.form");
+        Route::post("/account/import-data", [AccountController::class, "import_user_store"])->name("account.import.store");
+        Route::get("/account/{id}", [AccountController::class, "show"])->name("account.show")->whereNumber("id");
+        Route::put('/account/{id}', [AccountController::class, 'update'])->name('account.update')->whereNumber("id");
+        Route::delete('/account/{id}', [AccountController::class, 'destroy'])->name('account.destroy')->whereNumber("id");
 
         // ===== EMPLOYEES ===== //
         Route::get("/employee", [EmployeeController::class, "index"])->name("employee-index");

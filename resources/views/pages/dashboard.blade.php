@@ -228,7 +228,7 @@
             <!-- nanti ubah jadi col-md-5 kalo top product mau dimunculin -->
             <div class="col-md-12 grid-margin stretch-card">
                 <div class="card">
-                    <form action="{{ route('todo.update') }}" method="post" class="card-body" id="porm">
+                    <form action="{{ route('todo-update') }}" method="post" class="card-body" id="porm">
                         @csrf
                         <h4 class="card-title fs-5"><i class="bi bi-journal-text"></i> To Do Lists</h4>
 
@@ -255,7 +255,7 @@
                         </div>
                     </form>
 
-                    <form action="{{ route('todo.store') }}" method="post" class="add-items d-flex align-items-center px-4">
+                    <form action="{{ route('todo-store') }}" method="post" class="add-items d-flex align-items-center px-4">
                         @csrf
                         <input type="text" name="new_task" class="form-control todo-list-input me-2" placeholder="Add new task">
                         <button class="btn text-primary bg-transparent" type="submit">

@@ -54,10 +54,7 @@
                     <th class="border border-1 border-secondary ">Partner Role</th>
                     <th class="border border-1 border-secondary ">Remark</th>
                     <th class="border border-1 border-secondary ">Address</th>
-                    <th class="border border-1 border-secondary ">Contact</th>
-                    <th class="border border-1 border-secondary ">Phone</th>
-                    <th class="border border-1 border-secondary ">Fax</th>
-                    <th class="border border-1 border-secondary ">Email</th>
+                    <th class="border border-1 border-secondary ">Contacts</th>
                     <th class="border border-1 border-secondary ">Tempo</th>
                     @can('admin')
                         <th class="border border-1 border-secondary ">Action</th>
@@ -67,14 +64,24 @@
                 @foreach ($partners as $p)
                     <tr>
                         <td class="border border-1 border-secondary ">{{ $loop->iteration }}</td>
-                        <td class="border border-1 border-secondary ">{{ $p->partner_name }}</td>
+                        <td class="border border-1 border-secondary ">
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                {{ $p->partner_name }}
+                                @can('admin')
+                                    <a href="{{ route('partner-log', $p->id) }}" class="btn btn-success">View Log</a>
+                                @endcan
+                            </div>
+                        </td>
                         <td class="border border-1 border-secondary ">{{ $p->role }}</td>
                         <td class="border border-1 border-secondary ">{{ $p->remark }}</td>
                         <td class="border border-1 border-secondary ">{{ $p->address }}</td>
-                        <td class="border border-1 border-secondary ">{{ $p->contact }}</td>
-                        <td class="border border-1 border-secondary ">{{ $p->phone }}</td>
-                        <td class="border border-1 border-secondary ">{{ $p->fax }}</td>
-                        <td class="border border-1 border-secondary ">{{ $p->email }}</td>
+                        <td class="border border-1 border-secondary ">
+                            <ul>
+                                <li>Email: {{ $p->email ?? "N/A" }}</li>
+                                <li>Fax: {{ $p->fax ?? "N/A" }}</li>
+                                <li>Mobile/Telephone: {{ $p->phone ?? "N/A" }}/{{ $p->contact ?? "N/A" }}</li>
+                            </ul>
+                        </td>
                         <td class="border border-1 border-secondary ">{{ $p->tempo }}</td>
                         {{-- <td class="border border-1 border-secondary " >{{ $p->user->name }}</td> --}}
                         @can('admin')
