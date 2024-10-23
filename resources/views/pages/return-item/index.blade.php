@@ -57,7 +57,7 @@
                     <th class="border border-1 border-secondary ">Action</th>
                 </tr>
 
-                @foreach ($deliveryorders as $p)
+                @foreach ($returnitems as $p)
                     <tr>
                         <td class="border border-1 border-secondary ">{{ $loop->iteration }}</td>
                         <td class="border border-1 border-secondary ">{{ $p->delivery_date }}</td>

@@ -29,6 +29,7 @@ class ReturnItemController extends Controller{
         return view("pages.delivery-order.create", [
             "products" => Product::all(), // Semua data project (buat dropdown/select project)
             "delivery_orders" => ReturnItem::all(), // Semua data delivery order (buat auto generate SKU)
+            "projects" => Project::all(),
         ]);
     }
 
