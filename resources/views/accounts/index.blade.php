@@ -11,10 +11,10 @@
     <!-- Add User Form -->
     <div class="card mb-4">
         <div class="card-header">
-            Add New User
+            <button class="w-100 h-100 btn text-start" type="button" id="add-new-user-btn">Add New User <i class="bi bi-chevron-down"></i></button>
         </div>
 
-        <div class="card-body">
+        <div class="card-body" id="add-user-form" style="display: none;">
             <form action="{{ route('account.store') }}" method="POST">
                 @csrf
                 <div class="form-group mb-3">
@@ -75,9 +75,9 @@
 
                     <div class="input-group w-100">
                         <input id="password" type="password" name="password" class="form-control @error('password') is-invalid @enderror" aria-describedby="togglePassword">
-                        {{-- <button class="btn border border-2" type="button" id="togglePassword">
+                        <button class="btn border border-2" type="button" id="togglePassword">
                             <i class="bi bi-eye-fill" id="toggleIcon"></i>
-                        </button> --}}
+                        </button>
                     </div>
                     @error('password')
                         <span class="invalid-feedback d-block" role="alert">
@@ -92,9 +92,9 @@
 
                     <div class="input-group w-100">
                         <input id="password_confirmation" type="password" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" aria-describedby="togglePassword">
-                        {{-- <button class="btn border border-2" type="button" id="togglePassword">
-                            <i class="bi bi-eye-fill" id="toggleIcon"></i>
-                        </button> --}}
+                        <button class="btn border border-2" type="button" id="togglePassword2">
+                            <i class="bi bi-eye-fill" id="toggleIcon2"></i>
+                        </button>
                     </div>
                     @error('password_confirmation')
                         <span class="invalid-feedback d-block" role="alert">
@@ -181,5 +181,12 @@
         passwordIcon.classList.toggle('bi-eye-fill');
         passwordIcon.classList.toggle('bi-eye-slash-fill');
     });
+
+    $(document).ready(() => {
+        $("#add-new-user-btn").click(() => {
+            $("#add-user-form").slideToggle();
+        })
+    });
+
 </script>
 @endsection

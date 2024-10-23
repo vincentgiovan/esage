@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Employee;
 use Illuminate\Http\Request;
-use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class AccountCreationController extends Controller
+class AccountController extends Controller
 {
     // Form buat bikin akun baru + list semua akun yang ada
     public function index()
@@ -103,5 +104,28 @@ class AccountCreationController extends Controller
         return view("accounts.import-data");
     }
 
+    public function edit_profile(){
+        return view("pages.profile");
+    }
 
+    public function update_profile(Request $request){
+        $validatedData = $request->validate([
+            "name" => "required|min:3",
+            "email" => "required|email:dns"
+        ]);
+
+        $email_changed = false;
+        if(Auth::user()->email != $validatedData["email"]){
+            $email_changed = true;
+        }
+
+        $user = User::find(Auth::user()->id);
+        $user->update($validatedData);
+
+        if($email_changed){
+            $user->update(["email_verified_at" => null]);
+        }
+
+        return back()->with("successEditProfile", "Profile edited successfully!");
+    }
 }
