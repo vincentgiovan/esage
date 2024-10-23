@@ -32,8 +32,8 @@
                         <p style = "color: red; font-size: 10px;" id="errVariant"></p>
                     </div>
                     <div class="mt-3">
-                        <label for="product_code">SKU</label>
-                        <input type="text" class="form-control" name="product_code" id="product_code" placeholder="Kode Produk"  value = "{{ old("product_code") }}">
+                        <label for="fake_product_code">SKU</label>
+                        <input type="text" class="form-control" name="fake_product_code" id="fake_product_code" placeholder="Kode Produk" disabled>
                         <p style = "color: red; font-size: 10px;" id="errProductCode"></p>
                     </div>
                     <div class="mt-3">
@@ -131,6 +131,49 @@
     </x-container-middle>
 
     <script>
+        function makeCapitalizedEachWordAndNoSpace(text){
+            // Remove extra spaces, split into words, capitalize each, and join back together
+            const processedText = text
+                .trim() // Trim any leading/trailing spaces
+                .split(/\s+/) // Split by any space characters
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize each word
+                .join(''); // Join without spaces
+
+            return processedText;
+        }
+
+        $("#product_name, #variant").change(function(){
+            const inputProductName = $("#product_name").val();
+            const inputVariant = $("#variant").val();
+
+            if(!inputProductName || !inputVariant){
+                $("#fake_product_code").val("");
+
+                return;
+            }
+
+            const allProducts = @json($products);
+
+            let n = 1;
+            for (let product of allProducts) {
+                if (product.product_name == inputProductName && product.variant == inputVariant) {
+                    n++;
+                }
+            }
+
+            let productCode = `${makeCapitalizedEachWordAndNoSpace(inputProductName)}/${makeCapitalizedEachWordAndNoSpace(inputVariant)}/${n.toString()}`;
+
+            $("#fake_product_code").val(productCode);
+        });
+
+        // $("#folm").on("submit", function(event){
+        //     event.preventDefault();
+
+        //     $(this).append($("<input>").attr({"type":"hidden", "name": "product_code", "value": $("#fake_product_code").val()}));
+
+        //     this.submit();
+        // });
+
         // Targetkan form buat submit data
         const confirmationForm = document.getElementById("peon");
 
@@ -147,7 +190,7 @@
             const input2 = document.getElementById("unit");
             const input3 = document.getElementById("status");
             const input4 = document.getElementById("variant");
-            const input5 = document.getElementById("product_code");
+            const input5 = document.getElementById("fake_product_code");
             const input6 = document.getElementById("price");
             const input7 = document.getElementById("markup");
             const input8 = document.getElementById("stock");
@@ -208,14 +251,6 @@
             if(!input4.value){
                 input4.classList.add("is-invalid");
                 errVariant.innerText = "Invalid input";
-
-                inputAman = false;
-            }
-
-            // Kalo kode produk kosong maka mark merah input dan tampilkan error message
-            if(!input5.value){
-                input5.classList.add("is-invalid");
-                errProductCode.innerText = "Invalid input";
 
                 inputAman = false;
             }
