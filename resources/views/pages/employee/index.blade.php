@@ -31,7 +31,7 @@
                 @foreach ($employees as $e)
                     <tr>
                         <td class="border border-1 border-secondary ">{{ $loop->iteration }}</td>
-                        <td class="border border-1 border-secondary ">{{ $e->user->name }}</td>
+                        <td class="border border-1 border-secondary ">{{ $e->nama }}</td>
                         <td class="border border-1 border-secondary ">{{ $e->NIK }}</td>
                         <td class="border border-1 border-secondary ">{{ $e->jabatan }}</td>
                         <td class="border border-1 border-secondary ">{{ __("Rp " . number_format($e->pokok, 2, ',', '.')) }}</td>

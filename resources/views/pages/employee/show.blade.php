@@ -8,7 +8,7 @@
         <table class="w-100 mt-4">
             <tr>
                 <th class="border border-1 border-secondary w-25">Nama</th>
-                <td class="border border-1 border-secondary">{{ $employee->user->name }}</td>
+                <td class="border border-1 border-secondary">{{ $employee->nama }}</td>
             </tr>
             <tr>
                 <th class="border border-1 border-secondary w-25">NIK</th>
@@ -18,7 +18,7 @@
                 <th class="border border-1 border-secondary w-25">Foto KTP</th>
                 <td class="border border-1 border-secondary">
                     @if($employee->foto_ktp)
-                        <img class="w-50" src="{{ Storage::url('app/public/' . $employee->foto_ktp) }}">
+                        <img class="w-50" src="{{ asset(str_replace("public", "storage", $employee->foto_ktp)) }}">
                     @else
                         N/A
                     @endif

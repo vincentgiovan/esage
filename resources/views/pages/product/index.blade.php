@@ -4,18 +4,20 @@
     <x-container>
         <div class="w-100 d-flex align-items-center justify-content-between">
             <h1 class="mt-4">Warehouse Items</h1>
-            <div class="d-flex gap-3">
-                <a class="btn btn-secondary" href="{{ route('product-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
-                <div class="position-relative d-flex flex-column align-items-end">
-                    <button class="btn btn-secondary" type="button" id="dd-toggler">
-                        <i class="bi bi-file-earmark-arrow-up"></i> Export
-                    </button>
-                    <div class="bg-white rounded-lg position-absolute z-2 border border-1" id="dd-menu" style="display: none; top: 40px;">
-                        <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export", 2) }}" target="blank">Export (PDF Portrait)</a></li>
-                        <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export", 1) }}" target="blank">Export (PDF Landscape)</a></li>
+            @can('admin')
+                <div class="d-flex gap-3">
+                    <a class="btn btn-secondary" href="{{ route('product-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
+                    <div class="position-relative d-flex flex-column align-items-end">
+                        <button class="btn btn-secondary" type="button" id="dd-toggler">
+                            <i class="bi bi-file-earmark-arrow-up"></i> Export
+                        </button>
+                        <div class="bg-white rounded-lg position-absolute z-2 border border-1" id="dd-menu" style="display: none; top: 40px;">
+                            <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export", 2) }}" target="blank">Export (PDF Portrait)</a></li>
+                            <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export", 1) }}" target="blank">Export (PDF Landscape)</a></li>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endcan
         </div>
 
         <script>
@@ -89,7 +91,9 @@
                         <td class="border border-1 border-secondary ">
                             <div class="w-100 d-flex justify-content-between align-items-center">
                                 <div>{{ $p->product_name }}</div>
-                                <a href="{{ route('product-log', $p->id) }}" class="btn btn-success">View Log</a>
+                                @can('admin')
+                                    <a href="{{ route('product-log', $p->id) }}" class="btn btn-success">View Log</a>
+                                @endcan
                             </div>
                         </td>
                         <td class="border border-1 border-secondary ">{{ $p->stock }}</td>

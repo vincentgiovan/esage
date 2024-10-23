@@ -55,29 +55,33 @@ class PurchaseProductController extends Controller
 
         // Untuk setiap input product yang diterima lakukan:
         foreach($request->products as $index => $product_id){
-            $exprod = Product::where("id", $product_id)->first();
+            $exprod = Product::find($product_id);
+            $clones = Product::where("product_name", $exprod->product_name)->where("variant", $exprod->variant)->orderBy("product_code")->get();
+            $lastprod = $clones[$clones->count() - 1];
 
             // Update stok dan harga product:
-            $old_price = $exprod->price;
+            $old_price = $lastprod->price;
+            $old_discount = $lastprod->discount;
 
-            if($request->prices[$index] != $old_price){
-                $lastSlashPosition = strrpos($exprod->product_code, '/');
+            if($request->prices[$index] != $old_price || $request->discounts[$index] != $old_discount){
+                $lastSlashPosition = strrpos($lastprod->product_code, '/');
 
                 // Extract the part after the last '/'
-                $lastPart = substr($exprod->product_code, $lastSlashPosition + 1);
+                $lastPart = substr($lastprod->product_code, $lastSlashPosition + 1);
 
                 // Extract the part before the last '/'
-                $firstPart = substr($exprod->product_code, 0, $lastSlashPosition + 1);
+                $firstPart = substr($lastprod->product_code, 0, $lastSlashPosition + 1);
 
                 $newseparatedprod = Product::create([
-                    "product_name" => $exprod->product_name,
+                    "product_name" => $lastprod->product_name,
                     "price" => $request->prices[$index],
-                    "variant" => $exprod->variant,
+                    "variant" => $lastprod->variant,
                     "stock" => $request->quantities[$index],
-                    "markup" => $exprod->markup,
-                    "status" => $exprod->status,
+                    "markup" => $lastprod->markup,
+                    "status" => $lastprod->status,
                     "product_code" => $firstPart . (intval($lastPart) + 1),
-                    "unit" => $exprod->unit
+                    "unit" => $lastprod->unit,
+                    "discount" => $request->discounts[$index]
                 ]);
 
                 PurchaseProduct::create([
@@ -122,6 +126,7 @@ class PurchaseProductController extends Controller
         // Tampilkan halaman pages/transit/purchaseproduct/addnewitem.blade.php beserta data yang diperlukan di blade-nya:
         return view("pages.transit.purchaseproduct.addnewitem", [
             "purchase" => $purchase, // data purchase yang ingin ditambahkan cart-nya
+            "products" => Product::all()
         ]);
     }
 

@@ -13,4 +13,12 @@ class Partner extends Model
     public function purchases(){
         return $this->hasMany(Purchase::class);
     }
+
+    public function scopeFilter($query, array $filters){
+        $query->when($filters["search"]?? false, function($query, $search) {
+            return $query->where(function($query) use($search) {
+                $query->where("partner_name", "like", "%". $search. "%");
+            });
+        });
+    }
 }

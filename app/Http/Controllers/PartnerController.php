@@ -160,4 +160,10 @@ class PartnerController extends Controller{
             unlink($tempFilePath);
         }
     }
+
+    public function view_log($id){
+        return view("pages.partner.log", [
+            "partner" => Partner::find($id),
+        ]);
+    }
 }

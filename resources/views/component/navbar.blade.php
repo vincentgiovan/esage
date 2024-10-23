@@ -29,7 +29,7 @@
                     @csrf
                     <button type="submit" class="h-100 w-100 border-0 py-2 px-4"><i class="bi bi-box-arrow-left"></i> Logout</button>
                 </form>
-                <a class="dropdown-item border border-1 py-2 px-4" href="#" target="blank"><i class="bi bi-person-vcard"></i> Profile</a></li>
+                <a class="dropdown-item border border-1 py-2 px-4" href="{{ route('profile-edit') }}" target="blank"><i class="bi bi-person-vcard"></i> Profile</a></li>
             </div>
         </div>
 
