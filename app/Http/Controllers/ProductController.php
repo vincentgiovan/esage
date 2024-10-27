@@ -21,7 +21,7 @@ class ProductController extends Controller{
         foreach($products as $product){
             $pae = false;
             foreach($all_products as $ap){
-                if($product->product_variant == $ap->product_variant && $product->product_name == $ap->product_name){
+                if($product->variant == $ap->variant && $product->product_name == $ap->product_name){
                     $ap["stock"] += $product->stock;
                     $ap["price"] = $product->price;
                     $pae = true;
@@ -149,8 +149,8 @@ class ProductController extends Controller{
             // Read the entire CSV file content
             $fileContent = file_get_contents($filePath);
 
-            // Replace semicolons with commas
-            $fileContent = str_replace(';', ',', $fileContent);
+            // // Replace semicolons with commas
+            // $fileContent = str_replace(';', ',', $fileContent);
 
             // Create a temporary file with the corrected content
             $tempFilePath = tempnam(sys_get_temp_dir(), 'csv');
@@ -161,7 +161,7 @@ class ProductController extends Controller{
                 // Skip the header row if it exists
                 $header = fgetcsv($handle);
 
-                while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
+                while (($data = fgetcsv($handle, 1000, ';')) !== FALSE) {
                     // Insert into the products table
                     Product::updateOrCreate(
                         [
@@ -173,8 +173,9 @@ class ProductController extends Controller{
                             "status" => $data[2],
                             "variant" => $data[3],
                             "price" => intval($data[5]),
-                            "markup" => floatval(str_replace(',', '.', $data[6])),
-                            "stock" => intval($data[7])
+                            "discount" => floatval(str_replace(',', '.', $data[6])),
+                            "markup" => floatval(str_replace(',', '.', $data[7])),
+                            "stock" => intval($data[8])
                         ]
                     );
                 }

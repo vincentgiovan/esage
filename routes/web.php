@@ -46,6 +46,10 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::get("/delivery-order/import", [DeliveryOrderController::class, "import_deliveryorder_form"])->name("deliveryorder-import");
         Route::post("/delivery-order/import", [DeliveryOrderController::class, "import_deliveryorder_store"])->name("deliveryorder-import-store");
 
+        //import with products
+        Route::get("/delivery-order-product/import-wp", [DeliveryOrderController::class, "import_with_product_form"])->name("deliveryorder-importwpform");
+        Route::post("/delivery-order-product/import-wp", [DeliveryOrderController::class, "import_with_product_store"])->name("deliveryorder-importwpstore");
+
         //edit data
         Route::get('/delivery-order/{id}/edit', [DeliveryOrderController::class, "edit"] )->name("deliveryorder-edit")->whereNumber("id");
         Route::post('/delivery-order/{id}/edit', [DeliveryOrderController::class, "update"] )->name("deliveryorder-update")->whereNumber("id");
@@ -158,6 +162,10 @@ Route::middleware(["auth", "verified"])->group(function(){
         //import
         Route::get("/purchase/import", [PurchaseController::class, "import_purchase_form"])->name("purchase-import");
         Route::post("/purchase/import", [PurchaseController::class, "import_purchase_store"])->name("purchase-import-store");
+
+        //import with products
+        Route::get("/purchase/import-wp", [PurchaseController::class, "import_with_product_form"])->name("purchase-importwpform");
+        Route::post("/purchase/import-wp", [PurchaseController::class, "import_with_product_store"])->name("purchase-importwpstore");
 
         //edit data
         Route::get('/purchase/{id}/edit', [PurchaseController::class, "edit"] )->name("purchase-edit")->whereNumber("id");
