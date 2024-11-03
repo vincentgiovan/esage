@@ -51,6 +51,8 @@
             <p class="text-success fw-bold">{{ session('successEditOrder') }}</p>
         @elseif (session()->has('successDeleteOrder'))
             <p class="text-success fw-bold">{{ session('successDeleteOrder') }}</p>
+        @elseif (session()->has('successImportDevor'))
+            <p class="text-success fw-bold">{{ session('successImportDevor') }}</p>
         @endif
 
         @can("admin")

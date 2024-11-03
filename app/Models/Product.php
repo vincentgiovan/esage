@@ -26,6 +26,14 @@ class Product extends Model
         return $this->hasMany(PurchaseProduct::class);
     }
 
+    public function request_items(){
+        return $this->belongsToMany(RequestItem::class, "request_item_products");
+    }
+
+    public function request_item_products(){
+        return $this->hasMany(RequestItemProduct::class);
+    }
+
     public function scopeFilter($query, array $filters){
         $query->when($filters["search"]?? false, function($query, $search) {
             return $query->where(function($query) use($search) {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\User;
 use App\Models\Partner;
 use App\Models\Product;
@@ -9,6 +10,7 @@ use App\Models\Purchase;
 use App\Models\Pembelian;
 use Illuminate\Http\Request;
 use App\Models\PurchaseProduct;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class PurchaseController extends Controller
@@ -131,7 +133,7 @@ class PurchaseController extends Controller
         // Delete the stored file after processing
         Storage::delete($path);
 
-        return redirect(route("purchase-index"))->with('success', 'CSV file uploaded and purchases added successfully.');
+        return redirect(route("purchase-index"))->with('successImportPurchase', 'CSV file uploaded and purchases added successfully.');
     }
 
     private function processpurchaseDataCsv($filePath)
@@ -189,7 +191,7 @@ class PurchaseController extends Controller
         }
     }
 
-    public function import_with_data_store(Request $request)
+    public function import_with_product_store(Request $request)
     {
         // Validate the uploaded file
         $request->validate([
@@ -206,7 +208,7 @@ class PurchaseController extends Controller
         // Delete the stored file after processing
         Storage::delete($path);
 
-        return redirect(route("purchase-index"))->with('success', 'CSV file uploaded and purchases added successfully.');
+        return redirect(route("purchase-index"))->with('successImportPurchase', 'CSV file uploaded and purchases added successfully.');
     }
 
     private function processpurchaseDataCsv2($filePath)
@@ -228,32 +230,41 @@ class PurchaseController extends Controller
                 $header = fgetcsv($handle);
 
                 while (($data = fgetcsv($handle, 1000, ';')) !== FALSE) {
-                    // $new_purchase = [
-                    //     'purchase_date' => $data[3],
-                    //     "purchase_deadline" => $data[4],
-                    //     "purchase_status" => $data[5]
-                    // ];
+                    $purchase = Purchase::where("register", $data[0])->first();
+                    if(!$purchase){
+                        continue;
+                    }
 
-                    // // Insert into the products table
-                    // $existing_partner = Partner::where("partner_name", $data[0])->where("role", $data[1])->get();
-                    // if($existing_partner->count()){
-                    //     $new_purchase["partner_id"] = $existing_partner->first()->id;
-                    // }
-                    // else {
-                    //     $newPartner = Partner::create([
-                    //         "role" => $data[1],
-                    //         "partner_name" => $data[0]
-                    //     ]);
+                    $targetted_product = null;
+                    $product_already_exists = Product::where("product_code", $data[5])->first();
+                    if(!$product_already_exists){
+                        $newProduct = Product::create([
+                            "product_name" => $data[1],
+                            "unit" => $data[2],
+                            "status" => $data[3],
+                            "variant" => $data[4],
+                            "product_code" => $data[5],
+                            "price" => intval($data[6]),
+                            "markup" => floatval($data[7]),
+                            "discount" => floatval($data[8]),
+                            "stock" => intval($data[9])
+                        ]);
 
-                    //     $new_purchase["partner_id"] = $newPartner->id;
-                    // }
+                        $targetted_product = $newProduct;
+                    }
+                    else {
+                        $targetted_product = $product_already_exists;
+                        $prevStock = $targetted_product->stock;
 
-                    // Purchase::updateOrCreate(
-                    //     [
-                    //         "register" => $data[2]
-                    //     ],
-                    //     $new_purchase
-                    // );
+                        Product::find($targetted_product->id)->update(["stock" => $prevStock + intval($data[9])]);
+                    }
+
+                    PurchaseProduct::create([
+                        "purchase_id" => $purchase->id,
+                        "product_id" => $targetted_product->id,
+                        "quantity" => intval($data[9])
+                    ]);
+
                 }
 
                 fclose($handle);

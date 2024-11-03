@@ -25,7 +25,7 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link text-decoration-none fs-6 px-4" style="color: white; font-weight: bold; @if (Request::is("request*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("request-index") }}" ><i class="bi bi-bag-plus me-2"></i> Request Item</a>
+            <a class="nav-link text-decoration-none fs-6 px-4" style="color: white; font-weight: bold; @if (Request::is("request*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("requestitem-index") }}" ><i class="bi bi-bag-plus me-2"></i> Request Item</a>
         </li>
 
         <li class="nav-item">

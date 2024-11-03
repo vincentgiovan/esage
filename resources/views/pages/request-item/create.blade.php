@@ -7,48 +7,65 @@
 
             <h2>Request Items</h2>
                 <div>
-                    <div class="mt-3">
-                        <label for="select-product-dropdown">Nama Produk</label>
-                        <select name="product_name" class="form-select" id="select-product-dropdown">
-                            @foreach ($products as $product)
-                                <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} ({{ $product->variant }}) (Stok :  {{ $product->stock }})</option>
-                            @endforeach
-                        </select>
-                        <p style = "color: red; font-size: 10px;"></p>
+                    <div class="p-3 border border-2 rounded-4 mt-4">
+                        <h5>Target Project</h5>
+                        <hr>
+                        <div class="mt-3">
+                            <label for="select-product-dropdown">Project</label>
+                            <select name="project_name" class="form-select" id="select-project-dropdown">
+                                @foreach ($projects as $project)
+                                    <option value="{{ $project->id }}{{-- $project->toJson() --}}" @if ($project->project_name == old("project_name")) selected @endif>{{ $project->project_name }} ({{ $project->location }}) (PIC :  {{ $project->PIC }})</option>
+                                @endforeach
+                            </select>
+                            <p style = "color: red; font-size: 10px;"></p>
+                        </div>
+
+                        <div class="mt-3">
+                            <label for="cart_notes">Cart Notes</label>
+                            <textarea id="cart_notes" class="form-control" name="cart_notes" rows="4"></textarea>
+                        </div>
                     </div>
 
-                    <div class="mt-3">
-                        <label for="quantity">Jumlah</label>
-                        <input type="number" class="form-control" name="quantity" id="quantity"  placeholder="Quantity" value = "{{ old("quantity")}}">
-                        <p style = "color: red; font-size: 10px;" id="errQuantity"></p>
-                    </div>
+                    <div class="p-3 border border-2 rounded-4 mt-4" >
+                        <h5>Product List</h5>
+                        <hr>
+                        <div class="mt-3">
+                            <label for="select-product-dropdown">Nama Produk</label>
+                            <select name="product_name" class="form-select" id="select-product-dropdown">
+                                @foreach ($products as $product)
+                                    <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} ({{ $product->variant }}) (Stok :  {{ $product->stock }})</option>
+                                @endforeach
+                            </select>
+                            <p style = "color: red; font-size: 10px;"></p>
+                        </div>
 
-                    <div class="mt-3">
-                        <input type="button" id="addbutton" class="btn btn-primary px-3 py-1" value="Add Items">
+                        <div class="mt-3">
+                            <label for="quantity">Jumlah</label>
+                            <input type="number" class="form-control" name="quantity" id="quantity"  placeholder="Quantity" value = "{{ old("quantity")}}">
+                            <p style = "color: red; font-size: 10px;" id="errQuantity"></p>
+                        </div>
+
+                        <div class="mt-3">
+                            <input type="button" id="addbutton" class="btn btn-primary px-3 py-1" value="Add Items">
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-100 mt-4">
+                                <thead>
+                                    <th>Nama Barang & Variant</th>
+                                    <th>Quantity</th>
+                                    <th>Action</th>
+                                </thead>
+                                <tbody id="isibody">
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                 </div>
 
-                <div class="overflow-x-auto">
-                    <table class="w-100 mt-4">
-                        <thead>
-                            <th>Nama Barang & Variant</th>
-                            <th>Quantity</th>
-                            <th>Action</th>
-                            <th>Notes</th>
-                        </thead>
-                        <tbody id="isibody">
-
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="">
-                    <label for="cart_notes">Cart Notes</label>
-                    <textarea id="cart_notes" class="form-control" name="cart_notes"></textarea>
-                </div>
-
-                <form method="POST" action="#" class="mt-5" id="peon">
+                <form method="POST" action="{{ route('requestitem-store') }}" class="mt-5" id="peon">
                 {{-- @csrf kepake untuk token ,wajib --}}
                     @csrf
 
@@ -113,7 +130,7 @@
             const column5 = document.createElement("td");
 
             const converted = JSON.parse(input1.value); // value dari option yang dipilih itu konversi collection Laravel jadi JSON, tapi bentuknya masih teks, jadi perlu dikonversi ke format JSON beneran dulu biar lebih enak diolah
-            column1.innerText = ${converted.product_name} (${converted.variant}); // format teks yang tampil di kolom nama produk menjadi "nama_product (varian) dan tampilkan di row data baru di kolom nama produk"
+            column1.innerText = `${converted.product_name} (${converted.variant})`; // format teks yang tampil di kolom nama produk menjadi "nama_product (varian) dan tampilkan di row data baru di kolom nama produk"
             column4.innerText = input4.value; // ambil nilai dari input quantity dan tampilkan di kolom quantity
 
             // Buat tombol merah tong sampah buat nanti dipake buat hapus 1 row data
@@ -154,6 +171,27 @@
                 confirmationForm.removeChild(susInput);
                 confirmationForm.removeChild(susInput3);
             });
+        });
+
+        $(confirmationForm).on("submit", function(e){
+            e.preventDefault();
+
+            const input2 = document.getElementById("select-project-dropdown");
+            const input3 = document.getElementById("cart_notes");
+
+            const susInput2 = document.createElement("input");
+            susInput2.setAttribute("type", "hidden");
+            susInput2.setAttribute("name", "notes");
+            susInput2.setAttribute("value", input3.value);
+
+            const susInput4 = document.createElement("input");
+            susInput4.setAttribute("type", "hidden");
+            susInput4.setAttribute("name", "project_id");
+            susInput4.setAttribute("value", input2.value);
+
+            $(this).append(susInput2).append(susInput4);
+
+            this.submit();
         });
     </script>
 

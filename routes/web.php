@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AccountController;
 use App\Models\Product;
 use App\Models\DeliveryOrder;
 use Illuminate\Support\Facades\Auth;
@@ -8,16 +7,18 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReturnItemController;
+use App\Http\Controllers\RequestItemController;
 use App\Http\Controllers\DeliveryOrderController;
 use App\Http\Controllers\PurchaseProductController;
 use App\Http\Controllers\DeliveryOrderProductController;
-use App\Http\Controllers\EmployeeController;
 
 Route::get('/', function(){
     return redirect("/dashboard");
@@ -241,19 +242,29 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::get('/return-item/create', [ReturnItemController::class, "create"] )->name("returnitem-create");
         Route::post('/return-item/store', [ReturnItemController::class, "store"] )->name("returnitem-store");
 
-        //import
-        Route::get("/return-item/import", [ReturnItemController::class, "import_returnitem_form"])->name("returnitem-import");
-        Route::post("/return-item/import", [ReturnItemController::class, "import_returnitem_store"])->name("returnitem-import-store");
-
         //edit data
-        Route::get('/return-item/{id}/edit', [ReturnItemController::class, "edit"] )->name("return-item-edit")->whereNumber("id");
-        Route::post('/return-item/{id}/edit', [ReturnItemController::class, "update"] )->name("return-item-update")->whereNumber("id");
+        Route::get('/return-item/{id}/edit', [ReturnItemController::class, "edit"] )->name("returnitem-edit")->whereNumber("id");
+        Route::post('/return-item/{id}/edit', [ReturnItemController::class, "update"] )->name("returnitem-update")->whereNumber("id");
 
         //delete data
-        Route::post('/return-item/{id}', [ReturnItemController::class, "destroy"] )->name("return-item-destroy")->whereNumber("id");
+        Route::post('/return-item/{id}', [ReturnItemController::class, "destroy"] )->name("returnitem-destroy")->whereNumber("id");
+    });
 
-        //export
-        Route::get("/return-item/export/{mode}", [PDFController::class, "export_returnitem"])->name("return-item-export")->whereNumber("mode");
+
+    // ===== REQUEST ITEM ===== //
+    Route::get("/request-item", [RequestItemController::class, "index"])->name("requestitem-index");
+
+    Route::middleware("admin")->group(function(){
+        //create new data
+        Route::get('/request-item/create', [RequestItemController::class, "create"] )->name("requestitem-create");
+        Route::post('/request-item/store', [RequestItemController::class, "store"] )->name("requestitem-store");
+
+        //edit data
+        Route::get('/request-item/{id}/edit', [RequestItemController::class, "edit"] )->name("requestitem-edit")->whereNumber("id");
+        Route::post('/request-item/{id}/edit', [RequestItemController::class, "update"] )->name("requestitem-update")->whereNumber("id");
+
+        //delete data
+        Route::post('/request-item/{id}', [RequestItemController::class, "destroy"] )->name("requestitem-destroy")->whereNumber("id");
     });
 
 

@@ -132,7 +132,7 @@ class DeliveryOrderController extends Controller{
         // Delete the stored file after processing
         Storage::delete($path);
 
-        return redirect(route("deliveryorder-index"))->with('success', 'CSV file uploaded and delivery orders added successfully.');
+        return redirect(route("deliveryorder-index"))->with('successImportDevor', 'CSV file uploaded and delivery orders added successfully.');
     }
 
     private function processdeliveryorderDataCsv($filePath)
@@ -208,7 +208,7 @@ class DeliveryOrderController extends Controller{
         // Delete the stored file after processing
         Storage::delete($path);
 
-        return redirect(route("deliveryorder-index"))->with('success', 'CSV file uploaded and delivery orders added successfully.');
+        return redirect(route("deliveryorder-index"))->with('successImportDevor', 'CSV file uploaded and delivery orders added successfully.');
     }
 
     private function processdeliveryorderDataCsv2($filePath)
@@ -230,33 +230,24 @@ class DeliveryOrderController extends Controller{
                 $header = fgetcsv($handle);
 
                 while (($data = fgetcsv($handle, 1000, ';')) !== FALSE) {
-                    $new_delivery_order = [
-                        "delivery_date" => $data[1],
-                        "delivery_status" => $data[2],
-                    ];
+                    $product = Product::where("product_code", $data[1])->first();
+                    $devor = DeliveryOrder::where("register", $data[0])->first();
 
-                    // Insert into the products table
-                    $existing_project = Project::where("project_name", $data[3])->get();
-                    if($existing_project->count()){
-                        $new_delivery_order["project_id"] = $existing_project->first()->id;
+                    if(!$product || !$devor){
+                        continue;
                     }
-                    else {
-                        $newProject = Project::create([
-                            "project_name" => $data[3],
-                            "location" => $data[4],
-                            "PIC" => $data[5],
-                            "address" => $data[6]
+
+                    $old_stock = $product->stock;
+
+                    if($old_stock - intval($data[2]) >= 0){
+                        Product::find($product->id)->update(["stock" => $old_stock - intval($data[2])]);
+
+                        DeliveryOrderProduct::create([
+                            "delivery_order_id" => $devor->id,
+                            "product_id" => $product->id,
+                            "quantity" => intval($data[2])
                         ]);
-
-                        $new_delivery_order["project_id"] = $newProject->id;
                     }
-
-                    DeliveryOrder::updateOrCreate(
-                        [
-                            'register' => $data[0],
-                        ],
-                        $new_delivery_order
-                    );
                 }
 
                 fclose($handle);
