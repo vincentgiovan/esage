@@ -1,12 +1,14 @@
 <?php
 
 use App\Models\Product;
+use App\Models\Attendance;
 use App\Models\DeliveryOrder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\SalaryController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\ProductController;
@@ -14,6 +16,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ReturnItemController;
 use App\Http\Controllers\RequestItemController;
 use App\Http\Controllers\DeliveryOrderController;
@@ -270,7 +273,6 @@ Route::middleware(["auth", "verified"])->group(function(){
 
     Route::middleware("admin")->group(function(){
         // ===== ACCOUNTS ===== //
-
         Route::get('/account', [AccountController::class, 'index'])->name('account.index');
         Route::post('/account', [AccountController::class, 'store'])->name('account.store');
         Route::get("/account/import-data", [AccountController::class, "import_user_form"])->name("account.import.form");
@@ -292,6 +294,19 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::post("/employee/manage-form/{id}/edit-speciality", [EmployeeController::class, "manage_form_edit_speciality"])->name("employee-manageform-editspeciality")->whereNumber("id");
         Route::post("/employee/manage-form/{id}/delete-position", [EmployeeController::class, "manage_form_delete_position"])->name("employee-manageform-deleteposition")->whereNumber("id");
         Route::post("/employee/manage-form/{id}/delete-speciality", [EmployeeController::class, "manage_form_delete_speciality"])->name("employee-manageform-deletespeciality")->whereNumber("id");
+
+        // ===== SALARY ===== //
+        Route::get("/salary", [SalaryController::class, "index"])->name("salary-index");
+        Route::get("/salary/{id}/edit", [SalaryController::class, "edit"])->name("salary-edit")->whereNumber("id");
+        Route::post("/salary/{id}/edit", [SalaryController::class, "update"])->name("salary-update")->whereNumber("id");
+
+        // ===== ATTENDANCE ===== //
+        Route::get("/attendance", [AttendanceController::class, "index"])->name("attendance-index");
+        Route::get("/attendance/create", [AttendanceController::class, "create"])->name("attendance-create")->whereNumber("id");
+        Route::post("/attendance/create", [AttendanceController::class, "store"])->name("attendance-store")->whereNumber("id");
+        Route::get("/attendance/{id}/edit", [AttendanceController::class, "edit"])->name("attendance-edit")->whereNumber("id");
+        Route::post("/attendance/{id}/edit", [AttendanceController::class, "update"])->name("attendance-update")->whereNumber("id");
+        Route::post("/attendance/{id}/delete", [AttendanceController::class, "destroy"])->name("attendance-destroy")->whereNumber("id");
     });
 
 
