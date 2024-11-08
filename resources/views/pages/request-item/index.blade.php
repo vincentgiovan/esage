@@ -25,33 +25,31 @@
             <table class="w-100">
                 <tr>
                     <th class="border border-1 border-secondary ">#</th>
+                    <th class="border border-1 border-secondary ">Request Date</th>
                     <th class="border border-1 border-secondary ">Project Name</th>
                     <th class="border border-1 border-secondary ">Project Location</th>
-                    <th class="border border-1 border-secondary ">Product Name</th>
-                    <th class="border border-1 border-secondary ">Product Variant</th>
-                    <th class="border border-1 border-secondary ">Price</th>
-                    <th class="border border-1 border-secondary ">Discount</th>
-                    <th class="border border-1 border-secondary ">Qty</th>
-                    <th class="border border-1 border-secondary ">Note</th>
+                    <th class="border border-1 border-secondary ">PIC</th>
+                    <th class="border border-1 border-secondary ">Notes</th>
                     <th class="border border-1 border-secondary ">Actions</th>
                 </tr>
 
                 @foreach ($requests as $r)
                     <tr>
                         <td class="border border-1 border-secondary ">{{ $loop->iteration }}</td>
-                        <td class="border border-1 border-secondary ">{{ $r->request_item->project->project_name }}</td>
-                        <td class="border border-1 border-secondary ">{{ $r->request_item->project->location }}</td>
-                        <td class="border border-1 border-secondary ">{{ $r->product->product_name }}</td>
-                        <td class="border border-1 border-secondary ">{{ $r->product->variant }}</td>
-                        <td class="border border-1 border-secondary ">{{ $r->product->price }}</td>
-                        <td class="border border-1 border-secondary ">{{ $r->product->discount }}</td>
-                        <td class="border border-1 border-secondary ">{{ $r->quantity }}</td>
+                        <td class="border border-1 border-secondary ">{{ $r->request_date }}</td>
+                        <td class="border border-1 border-secondary ">{{ $r->project->project_name }}</td>
+                        <td class="border border-1 border-secondary ">{{ $r->project->location }}</td>
+                        <td class="border border-1 border-secondary ">{{ $r->PIC }}</td>
                         <td class="border border-1 border-secondary ">{{ $r->notes }}</td>
                         <td class="border border-1 border-secondary ">
                             <div class="d-flex gap-2 w-100 justify-content-center">
-                                <a href="{{ route('requestitem-edit', $r->id) }}" class="btn btn-success text-white"
+                                <a href="{{ route('requestitem-show', $r->id) }}" class="btn btn-success text-white"
                                     style="font-size: 10pt;">
                                     <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{{ route('requestitem-edit', $r->id) }}" class="btn btn-warning text-white"
+                                    style="font-size: 10pt; background-color: rgb(197, 167, 0);">
+                                    <i class="bi bi-pencil"></i>
                                 </a>
                                 <form action="{{ route('requestitem-destroy', $r->id) }}" method="post">
                                     @csrf

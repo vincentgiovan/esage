@@ -258,6 +258,9 @@ Route::middleware(["auth", "verified"])->group(function(){
     Route::get("/request-item", [RequestItemController::class, "index"])->name("requestitem-index");
 
     Route::middleware("admin")->group(function(){
+        // List of items in the request
+        Route::get("/request-item/{id}", [RequestItemController::class, "show"])->name("requestitem-show")->whereNumber("id");
+
         //create new data
         Route::get('/request-item/create', [RequestItemController::class, "create"] )->name("requestitem-create");
         Route::post('/request-item/store', [RequestItemController::class, "store"] )->name("requestitem-store");

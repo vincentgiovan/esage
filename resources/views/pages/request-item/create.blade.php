@@ -5,82 +5,95 @@
     <x-container-middle>
         <div class="container bg-white rounded-4 p-5">
 
-            <h2>Request Items</h2>
-                <div>
-                    <div class="p-3 border border-2 rounded-4 mt-4">
-                        <h5>Target Project</h5>
-                        <hr>
-                        <div class="mt-3">
-                            <label for="select-product-dropdown">Project</label>
-                            <select name="project_name" class="form-select" id="select-project-dropdown">
-                                @foreach ($projects as $project)
-                                    <option value="{{ $project->id }}{{-- $project->toJson() --}}" @if ($project->project_name == old("project_name")) selected @endif>{{ $project->project_name }} ({{ $project->location }}) (PIC :  {{ $project->PIC }})</option>
-                                @endforeach
-                            </select>
-                            <p style = "color: red; font-size: 10px;"></p>
-                        </div>
+            <h2>Add Request Items</h2>
 
-                        <div class="mt-3">
-                            <label for="cart_notes">Cart Notes</label>
-                            <textarea id="cart_notes" class="form-control" name="cart_notes" rows="4"></textarea>
-                        </div>
+            <div>
+                <div class="p-3 border border-2 rounded-4 mt-4">
+                    <h5>Target Project</h5>
+                    <hr>
+                    <div class="mt-3">
+                        <label for="request_date">Request Date</label>
+                        <input type="date" id="request_date" class="form-control" placeholder="Input request_date"/>
+                        <p style="color: red; font-size: 10px;" id="err-request-date"></p>
                     </div>
-
-                    <div class="p-3 border border-2 rounded-4 mt-4" >
-                        <h5>Product List</h5>
-                        <hr>
-                        <div class="mt-3">
-                            <label for="select-product-dropdown">Nama Produk</label>
-                            <select name="product_name" class="form-select" id="select-product-dropdown">
-                                @foreach ($products as $product)
-                                    <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} ({{ $product->variant }}) (Stok :  {{ $product->stock }})</option>
-                                @endforeach
-                            </select>
-                            <p style = "color: red; font-size: 10px;"></p>
-                        </div>
-
-                        <div class="mt-3">
-                            <label for="quantity">Jumlah</label>
-                            <input type="number" class="form-control" name="quantity" id="quantity"  placeholder="Quantity" value = "{{ old("quantity")}}">
-                            <p style = "color: red; font-size: 10px;" id="errQuantity"></p>
-                        </div>
-
-                        <div class="mt-3">
-                            <input type="button" id="addbutton" class="btn btn-primary px-3 py-1" value="Add Items">
-                        </div>
-
-                        <div class="overflow-x-auto">
-                            <table class="w-100 mt-4">
-                                <thead>
-                                    <th>Nama Barang & Variant</th>
-                                    <th>Quantity</th>
-                                    <th>Action</th>
-                                </thead>
-                                <tbody id="isibody">
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                </div>
-
-                <form method="POST" action="{{ route('requestitem-store') }}" class="mt-5" id="peon">
-                {{-- @csrf kepake untuk token ,wajib --}}
-                    @csrf
 
                     <div class="mt-3">
-                        <input type="submit" class="btn btn-success px-3 py-1" value="Proceed">
+                        <label for="select-project-dropdown">Project</label>
+                        <select name="project_name" class="form-select" id="select-project-dropdown">
+                            @foreach ($projects as $project)
+                                <option value="{{ $project->id }}{{-- $project->toJson() --}}" @if ($project->project_name == old("project_name")) selected @endif>{{ $project->project_name }} ({{ $project->location }}) (PIC :  {{ $project->PIC }})</option>
+                            @endforeach
+                        </select>
+                        <p style="color: red; font-size: 10px;" id="err-project-name"></p>
                     </div>
-                    @error("prices")
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                    <br>
-                    @error("quantities")
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </form>
 
+                    <div class="mt-3">
+                        <label for="PIC">PIC</label>
+                        <input type="text" id="PIC" class="form-control" placeholder="Input PIC"/>
+                        <p style="color: red; font-size: 10px;" id="err-pic"></p>
+                    </div>
+
+                    <div class="mt-3">
+                        <label for="cart_notes">Cart Notes</label>
+                        <textarea id="cart_notes" class="form-control" name="cart_notes" rows="4"></textarea>
+                        <p style="color: red; font-size: 10px;" id="err-cart-notes"></p>
+                    </div>
+                </div>
+
+                <div class="p-3 border border-2 rounded-4 mt-4" >
+                    <h5>Product List</h5>
+                    <hr>
+                    <div class="mt-3">
+                        <label for="select-product-dropdown">Nama Produk</label>
+                        <select name="product_name" class="form-select" id="select-product-dropdown">
+                            @foreach ($products as $product)
+                                <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} ({{ $product->variant }}) (Stok :  {{ $product->stock }})</option>
+                            @endforeach
+                        </select>
+                        <p style="color: red; font-size: 10px;" id="err-product-name"></p>
+                    </div>
+
+                    <div class="mt-3">
+                        <label for="quantity">Jumlah</label>
+                        <input type="number" class="form-control" name="quantity" id="quantity"  placeholder="Quantity" value = "{{ old("quantity")}}">
+                        <p style="color: red; font-size: 10px;" id="errQuantity"></p>
+                    </div>
+
+                    <div class="mt-3">
+                        <input type="button" id="addbutton" class="btn btn-primary px-3 py-1" value="Add Items">
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-100 mt-4">
+                            <thead>
+                                <th>Nama Barang & Variant</th>
+                                <th>Quantity</th>
+                                <th>Action</th>
+                            </thead>
+                            <tbody id="isibody">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <form method="POST" action="{{ route('requestitem-store') }}" class="mt-5" id="peon">
+            {{-- @csrf kepake untuk token ,wajib --}}
+                @csrf
+
+                <div class="mt-3">
+                    <input type="submit" class="btn btn-success px-3 py-1" value="Proceed">
+                </div>
+                @error("prices")
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+                <br>
+                @error("quantities")
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </form>
         </div>
     </x-container-middle>
 
@@ -97,22 +110,31 @@
             const tbody = document.getElementById("isibody");
 
             // Targetkan elemen-elemen input data purchase produk yang diperlukan (buat nanti diambil nilainya)
-            const input1 = document.getElementById("select-product-dropdown");
-            const input4 = document.getElementById("quantity");
+            const input5 = document.getElementById("select-product-dropdown");
+            const input6 = document.getElementById("quantity");
 
             // Targetkan elemen-elemen error message (buat nanti display error message)
+            const errProductName = document.getElementById("err-product-name");
             const errQuantity = document.getElementById("errQuantity");
 
             // Hilangkan error message dan mark merah pada input dan error message sebelum validasi
+            errProductName.innerText = "";
             errQuantity.innerText = "";
-            input4.style.border = "none";
+            input5.style.border = "none";
+            input6.style.border = "none";
 
             // Validasi input
             let inputAman = true; // Status apakah sudah terjadi kesalahan input atau belum
 
-            // Kalau input quantity kosong atau nilainya di bawah 1 maka mark merah input dan tampilkan pesan error
-            if(!input4.value && input4.value < 1){
-                input4.style.border = "solid 1px red";
+            if(!input5.value){
+                input5.style.border = "solid 1px red";
+                errProductName.innerText = "Invalid input :3";
+
+                inputAman = false;
+            }
+
+            if(!input6.value && input6.value <= 0){
+                input6.style.border = "solid 1px red";
                 errQuantity.innerText = "Invalid input :3";
 
                 inputAman = false;
@@ -129,9 +151,9 @@
             const column4 = document.createElement("td");
             const column5 = document.createElement("td");
 
-            const converted = JSON.parse(input1.value); // value dari option yang dipilih itu konversi collection Laravel jadi JSON, tapi bentuknya masih teks, jadi perlu dikonversi ke format JSON beneran dulu biar lebih enak diolah
+            const converted = JSON.parse(input5.value); // value dari option yang dipilih itu konversi collection Laravel jadi JSON, tapi bentuknya masih teks, jadi perlu dikonversi ke format JSON beneran dulu biar lebih enak diolah
             column1.innerText = `${converted.product_name} (${converted.variant})`; // format teks yang tampil di kolom nama produk menjadi "nama_product (varian) dan tampilkan di row data baru di kolom nama produk"
-            column4.innerText = input4.value; // ambil nilai dari input quantity dan tampilkan di kolom quantity
+            column4.innerText = input6.value; // ambil nilai dari input quantity dan tampilkan di kolom quantity
 
             // Buat tombol merah tong sampah buat nanti dipake buat hapus 1 row data
             const deleteButton = document.createElement("button");
@@ -157,7 +179,7 @@
             const susInput3 = document.createElement("input");
             susInput3.setAttribute("type", "hidden");
             susInput3.setAttribute("name", "quantities[]");
-            susInput3.setAttribute("value", input4.value);
+            susInput3.setAttribute("value", input6.value);
 
             // Tambahkan semua hidden input ke form submit
             confirmationForm.appendChild(susInput);
@@ -176,20 +198,79 @@
         $(confirmationForm).on("submit", function(e){
             e.preventDefault();
 
-            const input2 = document.getElementById("select-project-dropdown");
-            const input3 = document.getElementById("cart_notes");
+            const input1 = $("#request_date");
+            const input2 = $("#select-project-dropdown");
+            const input3 = $("#PIC");
+            const input4 = $("#cart_notes");
 
-            const susInput2 = document.createElement("input");
-            susInput2.setAttribute("type", "hidden");
-            susInput2.setAttribute("name", "notes");
-            susInput2.setAttribute("value", input3.value);
+            const errRequestDate = $("#err-request-date");
+            const errProjectName = $("#err-project-name");
+            const errPIC = $("#err-pic");
+            const errCartNotes = $("#err-cart-notes");
 
-            const susInput4 = document.createElement("input");
-            susInput4.setAttribute("type", "hidden");
-            susInput4.setAttribute("name", "project_id");
-            susInput4.setAttribute("value", input2.value);
+            errRequestDate.innerText = "";
+            errProjectName.innerText = "";
+            errPIC.innerText = "";
+            errCartNotes.innerText = "";
+            $(input1).css("border", "none");
+            $(input2).css("border", "none");
+            $(input3).css("border", "none");
+            $(input4).css("border", "none");
 
-            $(this).append(susInput2).append(susInput4);
+            // Validasi input
+            let inputAman = true; // Status apakah sudah terjadi kesalahan input atau belum
+
+            if(!$(input1).val()){
+                $(input1).css("border", "solid 1px red");
+                $(errRequestDate).text("Invalid input :3");
+
+                inputAman = false;
+            }
+
+            if(!$(input2).val()){
+                $(input2).css("border", "solid 1px red");
+                $(errProjectName).text("Invalid input :3");
+
+                inputAman = false;
+            }
+
+            if(!$(input3).val()){
+                $(input3).css("border", "solid 1px red");
+                $(errPIC).text("Invalid input :3");
+
+                inputAman = false;
+            }
+
+            if(!inputAman){
+                return;
+            }
+
+            $(confirmationForm)
+                .append(
+                    $("<input>").attr({
+                        "type": "hidden",
+                        "name": "request_date",
+                        "value": $(input1).val()
+                    })
+                ).append(
+                    $("<input>").attr({
+                        "type": "hidden",
+                        "name": "project_id",
+                        "value": $(input2).val()
+                    })
+                ).append(
+                    $("<input>").attr({
+                        "type": "hidden",
+                        "name": "PIC",
+                        "value": $(input3).val()
+                    })
+                ).append(
+                    $("<input>").attr({
+                        "type": "hidden",
+                        "name": "notes",
+                        "value": $(input4).val()
+                    })
+                );
 
             this.submit();
         });
