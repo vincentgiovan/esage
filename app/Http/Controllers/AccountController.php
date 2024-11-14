@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Salary;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,7 +40,8 @@ class AccountController extends Controller
             'role' => $request->role,
         ]);
 
-        Employee::create(["user_id" => $new_user->id]);
+        $new_employee = Employee::create(["user_id" => $new_user->id]);
+        Salary::create(["employee_id" => $new_employee->id]);
 
         // Arahin user balik ke halaman account/index.blade.php
         return redirect()->route('account.index')->with("successCreateAccount", "Successfully created new account");;

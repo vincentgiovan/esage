@@ -7,14 +7,14 @@
 @section('content')
     <x-container-middle>
         <div class="container bg-white rounded-4 p-5 mt-4 border border-1 card">
-            <h2 class="text-center fw-bold">Import Products Data to {{ $deliveryorder->register }}</h2>
+            <h2 class="text-center fw-bold">Import Delivery Orders Data With Products</h2>
 
             <p class="fs-6 mt-4">Please make sure the columns order is the same as the shown image before saving as .csv file:</p>
-            <img src="{{ asset('res/guide-importcsv-devorproduct.png') }}" alt="guide-importcsv" class="w-50">
+            <img src="{{ asset('res/guide-importcsv-devorwp.png') }}" class="w-50" alt="guide-importcsv">
 
             <p class="fs-6 mt-4">Please upload in .csv file format.</p>
 
-            <form action="{{ route('deliveryorderproduct-import-store', $deliveryorder->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('deliveryorder-importwpstore') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="file" class="form-control @error("csv_file") is-invalid @enderror" name="csv_file" accept=".csv" />
                 @error("csv_file")

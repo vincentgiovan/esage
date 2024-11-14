@@ -7,7 +7,16 @@
             <h1>Warehouse Items</h1>
             @can("admin")
                 <div class="d-flex gap-3">
-                    <a class="btn btn-secondary" href="{{ route('purchase-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
+                    {{-- <a class="btn btn-secondary" href="{{ route('purchase-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a> --}}
+                    <div class="position-relative d-flex flex-column align-items-end">
+                        <button class="btn btn-secondary" type="button" id="import-toggler">
+                            <i class="bi bi-file-earmark-arrow-down"></i> Import
+                        </button>
+                        <div class="bg-white rounded-lg position-absolute z-2 border border-1" id="import-menu" style="display: none; top: 40px;">
+                            <a class="dropdown-item border border-1 py-2 px-3" href="{{ route('purchase-import') }}">Purchase Data Only</a></li>
+                            <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("purchase-importwpform") }}">With Products</a></li>
+                        </div>
+                    </div>
                     <div class="position-relative d-flex flex-column align-items-end">
                         <button class="btn btn-secondary" type="button" id="dd-toggler">
                             <i class="bi bi-file-earmark-arrow-up"></i> Export
@@ -25,6 +34,10 @@
                 $("#dd-toggler").click(function(){
                     $("#dd-menu").toggle();
                 });
+
+                $("#import-toggler").click(function(){
+                    $("#import-menu").toggle();
+                });
             });
         </script>
         <hr>
@@ -38,6 +51,8 @@
             <p class="text-success fw-bold">{{ session('successEditPurchase') }}</p>
         @elseif (session()->has('successDeletePurchase'))
             <p class="text-success fw-bold">{{ session('successDeletePurchase') }}</p>
+        @elseif (session()->has('successImportPurchase'))
+            <p class="text-success fw-bold">{{ session('successImportPurchase') }}</p>
         @endif
 
         @can("admin")

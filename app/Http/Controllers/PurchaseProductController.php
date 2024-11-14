@@ -233,7 +233,7 @@ class PurchaseProductController extends Controller
             $fileContent = file_get_contents($filePath);
 
             // Replace semicolons with commas
-            $fileContent = str_replace(';', ',', $fileContent);
+            // $fileContent = str_replace(';', ',', $fileContent);
 
             // Create a temporary file with the corrected content
             $tempFilePath = tempnam(sys_get_temp_dir(), 'csv');
@@ -244,7 +244,7 @@ class PurchaseProductController extends Controller
                 // Skip the header row if it exists
                 $header = fgetcsv($handle);
 
-                while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
+                while (($data = fgetcsv($handle, 1000, ';')) !== FALSE) {
                     $new_item = [
                         'product_name' => $data[0],
                         'unit' => $data[1],
@@ -252,15 +252,14 @@ class PurchaseProductController extends Controller
                         "variant" => $data[3],
                         "product_code" => $data[4],
                         "price" => intval($data[5]),
+                        "discount" => floatval(str_replace(',', '.', $data[7])),
                         "markup" => floatval(str_replace(',', '.', $data[6])),
-                        "stock" => intval($data[7]),
+                        "stock" => intval($data[8])
                     ];
 
                     $new_pp = [
                         "purchase_id" => $purchase_id,
-                        "discount" => floatval(str_replace(',', '.', $data[8])),
-                        "quantity" => intval($data[9]),
-                        "price" => intval($data[5])
+                        "quantity" => intval($data[8]),
                     ];
 
                     $existing_product = Product::where("product_code", $data[4])->get();

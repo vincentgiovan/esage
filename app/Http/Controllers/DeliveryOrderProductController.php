@@ -132,7 +132,7 @@ class DeliveryOrderProductController extends Controller
             $fileContent = file_get_contents($filePath);
 
             // Replace semicolons with commas
-            $fileContent = str_replace(';', ',', $fileContent);
+            // $fileContent = str_replace(';', ',', $fileContent);
 
             // Create a temporary file with the corrected content
             $tempFilePath = tempnam(sys_get_temp_dir(), 'csv');
@@ -143,7 +143,7 @@ class DeliveryOrderProductController extends Controller
                 // Skip the header row if it exists
                 $header = fgetcsv($handle);
 
-                while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
+                while (($data = fgetcsv($handle, 1000, ';')) !== FALSE) {
                     $product = Product::where("product_code", $data[0])->get();
                     if($product->count()){
                         $prod = $product->first();
