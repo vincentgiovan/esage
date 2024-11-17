@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Employee;
 use App\Models\Position;
 use App\Models\Speciality;
-use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class EmployeeController extends Controller
 {
@@ -61,7 +62,12 @@ class EmployeeController extends Controller
         $validated_data["keahlian"] = serialize($selected_specialities);
 
         if($request->file("image")){
-			$validated_data["foto_ktp"] = $request->file("image")->store("public/images");
+			$validated_data["foto_ktp"] = $request->file("image")->store("images");
+
+            if($employee->foto_ktp){
+                Storage::delete($employee->foto_ktp);
+            }
+
             unset($validated_data["image"]);
 		}
 

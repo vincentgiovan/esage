@@ -42,7 +42,7 @@
                     @enderror
                 </div>
 
-                <img id="img-preview" class="w-25 mt-2" src="{{ asset(str_replace("public", "storage", $employee->foto_ktp)) }}">
+                <img id="img-preview" class="w-25 mt-2" src="{{ Storage::url("app/public/" . $employee->foto_ktp) }}">
                 {{-- <p>http://localhost/esage/public/storage/images/sPH95rX9pSEUT2QBjDUPO0vJoyCqu25UKRSfiFcH.png</p> --}}
 
                 <div class="mt-3">
