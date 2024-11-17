@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Salary;
 use App\Models\Employee;
 use App\Models\Position;
 use App\Models\Speciality;
@@ -21,6 +22,52 @@ class EmployeeController extends Controller
         return view("pages.employee.show", [
             "employee" => Employee::find($id)
         ]);
+    }
+
+    public function create(){
+        return view("pages.employee.create", [
+            "positions" => Position::all(),
+            "specialities" => Speciality::all()
+        ]);
+    }
+
+    public function store(Request $request){
+        $validated_data = $request->validate([
+            "nama" => "required|min:3",
+            "NIK" => "nullable|min:16",
+            "image" => "nullable|file|image|max:4096",
+            "kalkulasi_gaji" => "required",
+            "jabatan" => "nullable",
+            "pokok" => "nullable|numeric|min:0",
+            "lembur" => "nullable|numeric|min:0",
+            "lembur_panjang" => "nullable|numeric|min:0",
+            "performa" => "nullable|numeric|min:0",
+            "kasbon" => "nullable|numeric|min:0",
+            "payroll" => "required",
+            "masuk" => "nullable|date",
+            "keluar" => "nullable|date",
+            "keterangan" => "nullable",
+        ]);
+
+        if($request->file("image")){
+			$validated_data["foto_ktp"] = $request->file("image")->store("images");
+            unset($validated_data["image"]);
+		}
+
+        $validated_data["jabatan"] = Position::find($validated_data["jabatan"])->position_name;
+
+        $selected_specialities = [];
+        foreach(Speciality::where("status", "on")->get() as $i => $spc){
+            if($request->specialities[$i] == "on"){
+                array_push($selected_specialities, $spc->speciality_name);
+            }
+        }
+        $validated_data["keahlian"] = serialize($selected_specialities);
+
+        $new_employee = Employee::create($validated_data);
+        Salary::create(["employee_id" => $new_employee->id]);
+
+        return redirect(route("employee-index"))->with("success-add-employee-data", "Employee data added successfully");
     }
 
     public function edit($id){
@@ -73,7 +120,7 @@ class EmployeeController extends Controller
 
         $employee->update($validated_data);
 
-        return redirect(route("employee-index"))->with("success-edit-employee-data");
+        return redirect(route("employee-index"))->with("success-edit-employee-data", "Employee data edited successfully");
     }
 
     public function manage_form(){

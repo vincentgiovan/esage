@@ -40,9 +40,6 @@ class AccountController extends Controller
             'role' => $request->role,
         ]);
 
-        $new_employee = Employee::create(["user_id" => $new_user->id]);
-        Salary::create(["employee_id" => $new_employee->id]);
-
         // Arahin user balik ke halaman account/index.blade.php
         return redirect()->route('account.index')->with("successCreateAccount", "Successfully created new account");;
     }

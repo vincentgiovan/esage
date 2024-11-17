@@ -12,7 +12,11 @@
             <p class="text-success fw-bold">{{ session('success-edit-employee') }}</p>
         @endif
 
-        <div class="overflow-x-auto mt-5">
+        <div class="mt-4">
+            <a href="{{ route('employee-create') }}" class="btn btn-primary"><i class="bi bi-plus-square"></i> New Employee Data</a>
+        </div>
+
+        <div class="overflow-x-auto mt-3">
             <table class="w-100">
                 <tr>
                     <th class="border border-1 border-secondary ">#</th>

@@ -287,6 +287,8 @@ Route::middleware(["auth", "verified"])->group(function(){
         // ===== EMPLOYEES ===== //
         Route::get("/employee", [EmployeeController::class, "index"])->name("employee-index");
         Route::get("/employee/{id}", [EmployeeController::class, "show"])->name("employee-show")->whereNumber("id");
+        Route::get("/employee/create", [EmployeeController::class, "create"])->name("employee-create");
+        Route::post("/employee/create", [EmployeeController::class, "store"])->name("employee-store");
         Route::get("/employee/{id}/edit", [EmployeeController::class, "edit"])->name("employee-edit")->whereNumber("id");
         Route::post("/employee/{id}/edit", [EmployeeController::class, "update"])->name("employee-update")->whereNumber("id");
 
