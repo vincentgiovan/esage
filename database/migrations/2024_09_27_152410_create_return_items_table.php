@@ -15,6 +15,18 @@ return new class extends Migration
     {
         Schema::create('return_items', function (Blueprint $table) {
             $table->id();
+
+            $table->unsignedBigInteger("delivery_order_product_id");
+            $table->foreign("delivery_order_product_id")->references("id")->on("delivery_order_products");
+
+            $table->unsignedBigInteger("product_id");
+            $table->foreign("product_id")->references("id")->on("products");
+
+            $table->string("foto");
+            $table->string("PIC");
+            $table->string("status");
+            $table->unsignedInteger("quantity");
+
             $table->timestamps();
         });
     }

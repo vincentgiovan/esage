@@ -49,37 +49,50 @@
                 <tr>
                     <th class="border border-1 border-secondary ">No</th>
                     <th class="border border-1 border-secondary ">Proyek Asal</th>
+                    <th class="border border-1 border-secondary ">Produk</th>
                     <th class="border border-1 border-secondary ">Foto</th>
                     <th class="border border-1 border-secondary ">PIC Return</th>
-                    {{-- <th class="border border-1 border-secondary ">Nama Produk</th>
-                    <th class="border border-1 border-secondary ">Quantity</th>
-                    <th class="border border-1 border-secondary ">Variant</th> --}}
+                    <th class="border border-1 border-secondary ">Status</th>
                     <th class="border border-1 border-secondary ">Action</th>
                 </tr>
 
-                @foreach ($returnitems as $p)
+                @foreach ($return_items as $ri)
                     <tr>
                         <td class="border border-1 border-secondary ">{{ $loop->iteration }}</td>
-                        <td class="border border-1 border-secondary ">{{ $p->delivery_date }}</td>
-                        <td class="border border-1 border-secondary ">{{ $p->project->project_name }}</td>
                         <td class="border border-1 border-secondary ">
-                            <div class="d-flex gap-5 w-100 justify-content-center align-items-center">
-                                {{ $p->register }}
-                                <a href="{{ route('deliveryorderproduct-viewitem', $p->id) }}" class="btn btn-success text-white"
-                                    style="font-size: 10pt"><i class="bi bi-cart"></i>View Cart</a>
-                            </div>
-                        </td>
+                            <ul>
+                                <li>Proyek: {{ $ri->delivery_order_product->delivery_order->project->project_name }}</li>
+                                <li>Tanggal: {{ $ri->delivery_order_product->delivery_order->delivery_date }}</li>
+                                <li>SKU Order: {{ $ri->delivery_order_product->delivery_order->register }}</li>
+                            </ul>
 
-                        <td class="border border-1 border-secondary ">{{ $p->delivery_status }}</td>
-                        <td class="border border-1 border-secondary ">{{ $p->note }}</td>
-                        {{-- <td class="border border-1 border-secondary " >{{ $p->user->name }}</td> --}}
+                        </td>
+                        <td class="border border-1 border-secondary ">
+                            <ul>
+                                <li>Nama: {{ $ri->product->product_name }}</li>
+                                <li>Varian: {{ $ri->product->variant }}</li>
+                                <li>Harga: Rp {{ number_format($ri->product->price, "2", ",", ".") }}</li>
+                                <li>Diskon: {{ $ri->product->discount }}%</li>
+                                <li>Jumlah: {{ $ri->quantity }}</li>
+                            </ul>
+                        </td>
+                        <td class="border border-1 border-secondary" style="max-width: 200px;">
+                            @if($ri->foto)
+                                <img class="w-100" src="{{ Storage::url("app/public/" . $ri->foto) }}">
+                            @else
+                                N/A
+                            @endif
+                        </td>
+                        <td class="border border-1 border-secondary ">{{ $ri->PIC }}</td>
+                        <td class="border border-1 border-secondary ">{{ $ri->status }}</td>
+
                         <td class="border border-1 border-secondary">
                             <div class="d-flex gap-5 w-100 justify-content-center">
-                                <a href="{{ route('deliveryorder-edit', $p->id) }}" class="btn text-white"
+                                <a href="{{ route('returnitem-edit', $ri->id) }}" class="btn text-white"
                                     style="font-size: 10pt; background-color: rgb(197, 167, 0);">
                                     <i class="bi bi-pencil"></i>
                                     Edit Data</a>
-                                <form action="{{ route('deliveryorder-destroy', $p->id) }}" method="POST">
+                                <form action="{{ route('returnitem-destroy', $ri->id) }}" method="POST">
                                     @csrf
                                     <button class="btn btn-danger text-white" style="font-size: 10pt "
                                         onclick="return confirm('Do you want to delete this item?')">

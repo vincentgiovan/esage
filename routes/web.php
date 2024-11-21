@@ -238,7 +238,7 @@ Route::middleware(["auth", "verified"])->group(function(){
     // ===== RETURN ITEM ===== //
 
     //show data
-    Route::get('/return-item', [ReturnItemController::class, "index"] )->name("return-item-index");
+    Route::get('/return-item', [ReturnItemController::class, "index"] )->name("returnitem-index");
 
     Route::middleware("admin")->group(function(){
         //create new data
