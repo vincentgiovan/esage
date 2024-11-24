@@ -30,12 +30,12 @@
 
         {{-- <h5>welcome back, {{ Auth::user()->name }}! </h5> --}}
 
-        @if (session()->has('successAddOrder'))
-            <p class="text-success fw-bold">{{ session('successAddOrder') }}</p>
-        @elseif (session()->has('successEditOrder'))
-            <p class="text-success fw-bold">{{ session('successEditOrder') }}</p>
-        @elseif (session()->has('successDeleteOrder'))
-            <p class="text-success fw-bold">{{ session('successDeleteOrder') }}</p>
+        @if (session()->has('successAddReturnItem'))
+            <p class="text-success fw-bold">{{ session('successAddReturnItem') }}</p>
+        @elseif (session()->has('successEditReturnItem'))
+            <p class="text-success fw-bold">{{ session('successEditReturnItem') }}</p>
+        @elseif (session()->has('successDeleteReturnItem'))
+            <p class="text-success fw-bold">{{ session('successDeleteReturnItem') }}</p>
         @endif
 
         <a href="{{ route('returnitem-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">

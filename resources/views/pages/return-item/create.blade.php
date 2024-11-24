@@ -43,8 +43,8 @@
                 <div class="mt-3">
                     <label for="status">Status</label>
                     <select name="status" class="form-select" id="status">
-                        <option value="Complete">Ready to pickup</option>
-                        <option value="Incomplete">Not ready yet</option>
+                        <option value="Ready to pickup" @if(old('status') == "Ready to pickup") selected @endif>Ready to pickup</option>
+                        <option value="Not ready yet" @if(old('status') == "Not ready yet") selected @endif>Not ready yet</option>
                     </select>
                     @error("status")
                     <p style = "color: red; font-size: 10px;">{{$message }}</p>
@@ -101,8 +101,14 @@
                     const prod_dd = $("#product");
                     prod_dd.html("");
 
+                    const formatter = new Intl.NumberFormat('id-ID', {
+                        style: 'currency',
+                        currency: 'IDR',
+                        minimumFractionDigits: 2
+                    });
+
                     for(let pl of product_list){
-                        prod_dd.append($("<option>").attr("value", pl.id).text(`${pl.product_name}`));
+                        prod_dd.append($("<option>").attr("value", pl.id).text(`${pl.product_name} (Variant: ${pl.variant}, Harga: ${formatter.format(pl.price)}, Diskon: ${pl.discount}%)`));
                     }
                 }
             });

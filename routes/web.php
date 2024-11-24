@@ -313,14 +313,6 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::post("/attendance/{id}/edit", [AttendanceController::class, "update"])->name("attendance-update")->whereNumber("id");
         Route::post("/attendance/{id}/delete", [AttendanceController::class, "destroy"])->name("attendance-destroy")->whereNumber("id");
     });
-
-
-    Route::get("/request", function(){
-        return view("pages.request.index", [
-            "products" => Product::all()
-        ]);
-    })->name("request-index");
-
 });
 
 Auth::routes(["verify"=>true]);

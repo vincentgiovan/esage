@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\DeliveryOrderProduct;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use PhpParser\Node\Stmt\Return_;
 
 class ReturnItemController extends Controller {
     public function index(){
@@ -110,6 +111,62 @@ class ReturnItemController extends Controller {
         }
 
         return redirect(route("returnitem-index"))->with("successAddReturnItem", "New return item data successfully added!");
+    }
+
+    public function edit($id){
+        return view("pages.return-item.edit", [
+            "return_item" => ReturnItem::find($id),
+            "delivery_orders" => DeliveryOrder::all()
+        ]);
+    }
+
+    public function update(Request $request, $id){
+        $return_item = ReturnItem::find($id);
+
+        $validation_rule = [
+            "status" => "required",
+            "PIC" => "required|min:3",
+            "quantity" => "required|numeric|min:0|not_in:0"
+        ];
+
+        if(!$return_item->foto){
+            $validation_rule["image"] = "required|image";
+        }
+        else {
+            $validation_rule["image"] = "nullable|image";
+        }
+
+        $validated_data = $request->validate($validation_rule);
+
+        if($request->file("image")){
+            if($return_item->foto && $return_item->foto != ""){
+                Storage::delete($return_item->foto);
+            }
+
+            $validated_data["foto"] = $request->file("image")->store("images");
+            unset($validated_data["image"]);
+        }
+
+        $return_item->update($validated_data);
+
+        return redirect(route("returnitem-index"))->with("successEditReturnItem", "Return item data edited succesfully!");
+    }
+
+    public function destroy($id){
+        $return_item = ReturnItem::find($id);
+        $existingReturnedProduct = Product::find($return_item->product->id);
+
+        if($return_item->quantity < $existingReturnedProduct->stock){
+            $prevStock = $existingReturnedProduct->stock;
+            $existingReturnedProduct->update(["stock" => $prevStock - $return_item->quantity]);
+            $return_item->delete();
+        }
+        else {
+            $existingReturnedProduct->delete();
+            $return_item->delete();
+        }
+
+        return redirect(route("returnitem-index"))->with("successDeleteReturnItem", "Return item data deleted successfully");
     }
 }
 

@@ -34,9 +34,9 @@
                             <div class="col-md-8">
                                 <div class="input-group">
                                     <input id="password" type="password" name="password" class="form-control border border-2 @error('password') is-invalid @enderror" aria-describedby="togglePassword">
-                                    {{-- <button class="btn border border-2" type="button" id="togglePassword">
+                                    <button class="btn border border-2" type="button" id="togglePassword">
                                         <i class="bi bi-eye-fill" id="toggleIcon"></i>
-                                    </button> --}}
+                                    </button>
                                 </div>
                                 @error('password')
                                     <span class="invalid-feedback d-block" role="alert">
@@ -75,8 +75,12 @@
     </div>
 </div>
 
-
 <script>
+    let detectedIP = "";
+    let detectedLocation = "";
+    let detectedDevice = "";
+    let detectedOS = "";
+
     document.getElementById('togglePassword').addEventListener('click', function (e) {
         const passwordInput = document.getElementById('password');
         const passwordIcon = document.getElementById('toggleIcon');
@@ -85,63 +89,60 @@
         passwordIcon.classList.toggle('bi-eye-fill');
         passwordIcon.classList.toggle('bi-eye-slash-fill');
     });
+
+    // Fetch user's real IP and other details from ip-api.com
+    fetch('http://ip-api.com/json')
+        .then(response => response.json())
+        .then(data => {
+            console.log('IP:', data.query); // Output: Mobile, Tablet, Desktop, or Unknown
+            console.log('City:', data.city); // Output: Platform name (e.g., 'Win32', 'MacIntel', 'Linux')
+            console.log('Region:', data.regionName); // Output: Mobile, Tablet, Desktop, or Unknown
+            console.log('Country:', data.country); // Output: Platform name (e.g., 'Win32', 'MacIntel', 'Linux')
+
+            detectedIP = data.query;
+            detectedLocation = `${data.city}, ${data.regionName}, ${data.country}`;
+        })
+        .catch(error => console.error('Error fetching IP data:', error));
+
+    const deviceType = (() => {
+        const ua = navigator.userAgent;
+
+        // Check if the device is mobile (Android, iPhone, iPad, iPod)
+        if (/Mobile|Android|iP(hone|od|ad)/.test(ua)) {
+            return 'Mobile';
+        }
+        // Check if the device is a tablet
+        else if (/Tablet/.test(ua)) {
+            return 'Tablet';
+        }
+        // Check for common desktop OS (Windows, Mac, Linux)
+        else if (/Windows|Mac|Linux/.test(navigator.platform)) {
+            return 'Desktop';
+        }
+        // If it doesn't match any of the above, return 'Unknown'
+        else {
+            return 'Unknown';
+        }
+    })();
+
+    const os = navigator.platform; // Get the platform (e.g., 'Win32', 'MacIntel', 'Linux')
+
+    detectedDevice = deviceType;
+    detectedOS = os;
+
+    console.log('Device Type:', deviceType); // Output: Mobile, Tablet, Desktop, or Unknown
+    console.log('OS:', os); // Output: Platform name (e.g., 'Win32', 'MacIntel', 'Linux')
+
+    $("form").on("submit", function(e){
+        e.preventDefault();
+
+        $(this).append($("<input>").attr({"type": "hidden", "name": "IP", "value": detectedIP}));
+        $(this).append($("<input>").attr({"type": "hidden", "name": "location", "value": detectedLocation}));
+
+        $(this).append($("<input>").attr({"type": "hidden", "name": "OS", "value": detectedOS}));
+        $(this).append($("<input>").attr({"type": "hidden", "name": "device", "value": detectedDevice}));
+
+        this.submit();
+    });
 </script>
 @endsection
-
-
-{{-- <x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
-
-        <!-- Session Status -->
-        <x-auth-session-status class="mb-4" :status="session('status')" />
-
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
-
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
-
-            <!-- Email Address -->
-            <div>
-                <x-label for="email" :value="__('Email')" />
-
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            </div>
-
-            <!-- Password -->
-            <div class="mt-4">
-                <x-label for="password" :value="__('Password')" />
-
-                <x-input id="password" class="block mt-1 w-full"
-                                type="password"
-                                name="password"
-                                required autocomplete="current-password" />
-            </div>
-
-            <!-- Remember Me -->
-            <div class="block mt-4">
-                <label for="remember_me" class="inline-flex items-center">
-                    <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="remember">
-                    <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
-                    </a>
-                @endif
-
-                <x-button class="ml-3">
-                    {{ __('Log in') }}
-                </x-button>
-            </div>
-        </form>
-    </x-auth-card>
-</x-guest-layout> --}}
