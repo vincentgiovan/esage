@@ -104,26 +104,31 @@
         })
         .catch(error => console.error('Error fetching IP data:', error));
 
-    const deviceType = (() => {
-        const ua = navigator.userAgent;
+        const deviceType = (() => {
+            const ua = navigator.userAgent;
+            const platform = navigator.platform.toLowerCase();
 
-        // Check if the device is mobile (Android, iPhone, iPad, iPod)
-        if (/Mobile|Android|iP(hone|od|ad)/.test(ua)) {
-            return 'Mobile';
-        }
-        // Check if the device is a tablet
-        else if (/Tablet/.test(ua)) {
-            return 'Tablet';
-        }
-        // Check for common desktop OS (Windows, Mac, Linux)
-        else if (/Windows|Mac|Linux/.test(navigator.platform)) {
-            return 'Desktop';
-        }
-        // If it doesn't match any of the above, return 'Unknown'
-        else {
-            return 'Unknown';
-        }
-    })();
+            // Check if the device is mobile (Android, iPhone, iPad, iPod)
+            if (/Mobile|Android|iP(hone|od|ad)/.test(ua)) {
+                return 'Mobile';
+            }
+            // Check if the device is a tablet
+            else if (/Tablet/.test(ua)) {
+                return 'Tablet';
+            }
+            // Check for Windows OS (Win32 or Win64)
+            else if (platform.includes('win')) {
+                return 'Desktop';
+            }
+            // Check for other common desktop OS (Mac, Linux)
+            else if (/mac|linux/.test(platform)) {
+                return 'Desktop';
+            }
+            // If it doesn't match any of the above, return 'Unknown'
+            else {
+                return 'Unknown';
+            }
+        })();
 
     const os = navigator.platform; // Get the platform (e.g., 'Win32', 'MacIntel', 'Linux')
 
