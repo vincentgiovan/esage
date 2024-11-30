@@ -1,9 +1,15 @@
 <IfModule mod_rewrite.c>
+    Options +FollowSymLinks
+
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
     </IfModule>
 
     RewriteEngine On
+
+    # Allow access to storage folder symbolic link
+    RewriteCond %{REQUEST_URI} ^/storage/
+    RewriteRule .* - [L]
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
@@ -19,3 +25,4 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+

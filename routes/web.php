@@ -238,7 +238,7 @@ Route::middleware(["auth", "verified"])->group(function(){
     // ===== RETURN ITEM ===== //
 
     //show data
-    Route::get('/return-item', [ReturnItemController::class, "index"] )->name("return-item-index");
+    Route::get('/return-item', [ReturnItemController::class, "index"] )->name("returnitem-index");
 
     Route::middleware("admin")->group(function(){
         //create new data
@@ -287,6 +287,8 @@ Route::middleware(["auth", "verified"])->group(function(){
         // ===== EMPLOYEES ===== //
         Route::get("/employee", [EmployeeController::class, "index"])->name("employee-index");
         Route::get("/employee/{id}", [EmployeeController::class, "show"])->name("employee-show")->whereNumber("id");
+        Route::get("/employee/create", [EmployeeController::class, "create"])->name("employee-create");
+        Route::post("/employee/create", [EmployeeController::class, "store"])->name("employee-store");
         Route::get("/employee/{id}/edit", [EmployeeController::class, "edit"])->name("employee-edit")->whereNumber("id");
         Route::post("/employee/{id}/edit", [EmployeeController::class, "update"])->name("employee-update")->whereNumber("id");
 
@@ -310,15 +312,10 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::get("/attendance/{id}/edit", [AttendanceController::class, "edit"])->name("attendance-edit")->whereNumber("id");
         Route::post("/attendance/{id}/edit", [AttendanceController::class, "update"])->name("attendance-update")->whereNumber("id");
         Route::post("/attendance/{id}/delete", [AttendanceController::class, "destroy"])->name("attendance-destroy")->whereNumber("id");
+
+        // ===== VISIT LOG ===== //
+        Route::get("/visit-log", [AccountController::class, "visit_log"])->name("visitlog-index");
     });
-
-
-    Route::get("/request", function(){
-        return view("pages.request.index", [
-            "products" => Product::all()
-        ]);
-    })->name("request-index");
-
 });
 
 Auth::routes(["verify"=>true]);

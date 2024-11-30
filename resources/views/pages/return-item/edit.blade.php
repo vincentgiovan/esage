@@ -1,124 +1,125 @@
 @extends('layouts.main-admin')
 
-@section('content')
+@section("content")
+
     <x-container-middle>
-        <div class="container bg-white p-5 rounded-4 border border-1 card">
+        <div class="container rounded-4 p-5 bg-white border border-1 card">
+            <h2 class="text-center fw-bold">New Return Item</h2>
 
-            <h2>Edit Item</h2>
-
-            {{-- @csrf kepake untuk token ,wajib --}}
-
-            <form method="POST" action="{{ route('deliveryorder-update', $delivery_order->id) }}" id="bikindevor">
+            <form method="POST" action="{{ route('returnitem-update', $return_item->id) }}" enctype="multipart/form-data">
                 @csrf
-                {{-- <div class="mt-3">
-                <select name="product_id" class="form-select">
-                @foreach ($products as $product)
-                    <option value="{{ $product->id }}" @if ($delivery_order->product_id == $product->id) selected @endif >{{ $product->product_name }}</option>
-                @endforeach
 
-                </select>
-                @error('product_id')
-                <p style = "color: red; font-size: 10px;">{{$message }}</p>
-                @enderror
-                </div> --}}
                 <div class="mt-3">
-                    <label for="delivery_date">Tanggal Delivery</label>
-                    <input type="date" class="form-control" id="delivery_date" name="delivery_date" placeholder="delivery_date"
-                        value = "{{ old('delivery_date', $delivery_order->delivery_date) }}">
-
-                    @error('delivery_date')
-                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
-                    @enderror
-                </div>
-                <div class="mt-3">
-                    <label for="project_id">Proyek</label>
-                    <select name="project_id" id="project_id" class="form-select">
-                        @foreach ($projects as $pn)
-                            <option value="{{ $pn->id }}" @if ($delivery_order->project_id == $pn->id) selected @endif>
-                                {{ $pn->project_name }}</option>
+                    <label for="devor">Delivery Order</label>
+                    <select class="form-select" id="devor" disabled>
+                        <option disabled selected>Pick an item</option>
+                        @foreach ($delivery_orders as $do)
+                            <option value='@json([App\Models\DeliveryOrderProduct::where("delivery_order_id", $do->id)->get(), $do->id])' @if($do->id == $return_item->delivery_order_product->delivery_order_id) selected @endif>{{ $do->register }} (Date: {{ $do->delivery_date }}, Project: {{ $do->project->project_name }})</option>
                         @endforeach
                     </select>
-                    @error('project_id')
-                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
+
+                    @error("project_id")
+                    <p style="color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
+
                 <div class="mt-3">
-                    <div class="mt-3">
-                        <label for="fakeregister">SKU</label>
-                        <input type="text" class="form-control" id="fakeregister" name="fakeregister" placeholder="Register" value="{{ $delivery_order->register }}"  disabled>
-                    </div>
-                </div>
-                <div class="mt-3">
-                    <label for="delivery_status">Status Delivery</label>
-                    {{-- <input type="text" class="form-control" name="status" placeholder="Status"  value = "{{ old("status") }}"> --}}
-                    <select name="delivery_status" id="delivery_status" class="form-select">
-                        <option value="Complete">Complete</option>
-                        <option value="Incomplete">Incomplete</option>
+                    <label for="product">Produk yang akan dikembalikan</label>
+                    <select name="product" class="form-select" id="product" disabled>
+                        @forelse ($return_item->delivery_order_product->delivery_order->products as $p)
+                            <option value="{{ $p->id }}" @if($return_item->delivery_order_product->product->id == $p->id) selected @endif>{{ $p->product_name }} (Variant: {{ $p->variant  }}, Harga: Rp {{ number_format($p->price, 2, ",", ".") }}, Diskon: {{ $p->discount }}%)</option>
+                        @empty
+                        @endforelse
                     </select>
-                    @error('delivery_status')
-                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
+                    @error("product")
+                    <p style = "color: red; font-size: 10px;">{{$message }}</p>
                     @enderror
                 </div>
+
                 <div class="mt-3">
-                    <label for="note">Catatan</label>
-                    <input type="text" class="form-control" id="note" name="note" placeholder="Note"
-                        value = "{{ old('note', $delivery_order->note) }}">
-                    @error('note')
-                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
+                    <label for="quantity">Jumlah</label>
+                    <input type="text" class="form-control" name="quantity" id="quantity" placeholder="Jumlah" value = "{{ old("quantity", $return_item->quantity)}}">
+                    @error("quantity")
+                    <p style = "color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
+
                 <div class="mt-3">
-                    <input type="submit" class="btn btn-success px-3 py-1" value="Edit">
+                    <label for="status">Status</label>
+                    <select name="status" class="form-select" id="status">
+                        <option value="Ready to pickup" @if(old('status', $return_item->status) == "Ready to pickup") selected @endif>Ready to pickup</option>
+                        <option value="Not ready yet" @if(old('status', $return_item->status) == "Not ready yet") selected @endif>Not ready yet</option>
+                    </select>
+                    @error("status")
+                    <p style = "color: red; font-size: 10px;">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="mt-3">
+                    <label for="PIC">PIC</label>
+                    <input type="text" class="form-control" name="PIC" id="PIC" placeholder="PIC" value = "{{ old('PIC', $return_item->PIC)}}">
+                    @error("PIC")
+                    <p style = "color: red; font-size: 10px;">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="mt-3">
+                    <label for="image">Foto Barang</label>
+                    <input type="file" class="form-control" name="image" id="image">
+                    @error('image')
+                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <img id="img-preview" class="w-25 mt-2" @if($return_item->foto) src="{{ Storage::url("app/public/" . $return_item->foto) }}" @endif>
+
+                <div class="mt-3">
+                    <input type="submit" class="btn btn-success px-3 py-1" value="add">
                 </div>
             </form>
         </div>
     </x-container-middle>
 
     <script>
-        // Jika input delivery_date berubah, maka jalankan perintah berikut
-        const delivery_date = document.getElementById("delivery_date");
-        delivery_date.addEventListener("change", function(){
-            // Ambil data dari Laravel
-            const alldeliveryorderdata = @json($delivery_orders);
+        const all_prod = @json(App\Models\Product::all());
 
-            // Hitung berapa data delivery order yang punya delivery_date yang sama
-            let n = 0;
-            for(let delord of alldeliveryorderdata) {
-                if(delord.delivery_date == delivery_date.value){
-                    n++;
+        $(document).ready(function(){
+            $("#image").on("change", function(){
+                const oFReader = new FileReader();
+                oFReader.readAsDataURL(image.files[0]);
+
+                oFReader.onload = function(oFEvent){
+                    $("#img-preview").attr("src", oFEvent.target.result);
                 }
-            }
+            });
 
-            // Formatting ulang data tanggal dari Y-M-D jadi DMY
-            const [year, month, day] = delivery_date.value.split('-');
-            const formattedDate = `${day}${month}${year}`;
+            // $("#devor").change(function(){
+            //     if($(this).val()){
+            //         product_ids = [];
 
-            // Generate SKU dan masukin hasilnya langsung ke input fakeregister (yang tampil di user)
-            const generatedsku = "DO/"+ formattedDate +"/"+ (n+1);
-            const fakeregister = document.getElementById("fakeregister");
-            fakeregister.value = generatedsku;
+            //         for(let p of JSON.parse($(this).val())[0]){
+            //             product_ids.push(p.product_id);
+            //         }
+
+            //         const product_list = all_prod.filter(item => product_ids.includes(item.id));
+            //         const prod_dd = $("#product");
+            //         prod_dd.html("");
+
+            //         for(let pl of product_list){
+            //             prod_dd.append($("<option>").attr("value", pl.id).text(`${pl.product_name}`));
+            //         }
+            //     }
+            // });
+
+            // $("form").on("submit", function(e){
+            //     e.preventDefault();
+
+            //     if($("#devor").val()){
+            //         $(this).append($("<input>").attr({"type": "hidden", "name": "devor_id", "value": JSON.parse($("#devor").val())[1]}));
+            //     }
+
+            //     this.submit();
+            // });
         });
-
-        // Jika form bikindevor di-submit, jalankan perintah berikut
-        const daForm = document.getElementById("bikindevor");
-        daForm.addEventListener("submit", function(event){
-            // Cegah form buat submit
-            event.preventDefault();
-
-            // Ambil nilai SKU dari input fakeregister
-            const fakeRegister = document.querySelector('input[name="fakeregister"]');
-
-            // Bikin elemen input tersembunyi buat bantu kirim data ke Laravel (karena by default-nya Laravel ga nganggap disabled input) dan nilainya diambil dari fakeregister
-            const hiddenInput = document.createElement("input");
-            hiddenInput.setAttribute("type", "hidden");
-            hiddenInput.setAttribute("name", "register");
-            hiddenInput.setAttribute("value", fakeRegister.value);
-
-            daForm.appendChild(hiddenInput);
-
-            // Baru submit form-nya
-            daForm.submit();
-        })
     </script>
-
 @endsection
