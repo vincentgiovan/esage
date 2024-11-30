@@ -1,23 +1,27 @@
 <?php
 
-use App\Http\Controllers\AccountController;
 use App\Models\Product;
+use App\Models\Attendance;
 use App\Models\DeliveryOrder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\SalaryController;
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ReturnItemController;
+use App\Http\Controllers\RequestItemController;
 use App\Http\Controllers\DeliveryOrderController;
 use App\Http\Controllers\PurchaseProductController;
 use App\Http\Controllers\DeliveryOrderProductController;
-use App\Http\Controllers\EmployeeController;
 
 Route::get('/', function(){
     return redirect("/dashboard");
@@ -45,6 +49,10 @@ Route::middleware(["auth", "verified"])->group(function(){
         //import
         Route::get("/delivery-order/import", [DeliveryOrderController::class, "import_deliveryorder_form"])->name("deliveryorder-import");
         Route::post("/delivery-order/import", [DeliveryOrderController::class, "import_deliveryorder_store"])->name("deliveryorder-import-store");
+
+        //import with products
+        Route::get("/delivery-order-product/import-wp", [DeliveryOrderController::class, "import_with_product_form"])->name("deliveryorder-importwpform");
+        Route::post("/delivery-order-product/import-wp", [DeliveryOrderController::class, "import_with_product_store"])->name("deliveryorder-importwpstore");
 
         //edit data
         Route::get('/delivery-order/{id}/edit', [DeliveryOrderController::class, "edit"] )->name("deliveryorder-edit")->whereNumber("id");
@@ -159,6 +167,10 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::get("/purchase/import", [PurchaseController::class, "import_purchase_form"])->name("purchase-import");
         Route::post("/purchase/import", [PurchaseController::class, "import_purchase_store"])->name("purchase-import-store");
 
+        //import with products
+        Route::get("/purchase/import-wp", [PurchaseController::class, "import_with_product_form"])->name("purchase-importwpform");
+        Route::post("/purchase/import-wp", [PurchaseController::class, "import_with_product_store"])->name("purchase-importwpstore");
+
         //edit data
         Route::get('/purchase/{id}/edit', [PurchaseController::class, "edit"] )->name("purchase-edit")->whereNumber("id");
         Route::post('/purchase/{id}/edit', [PurchaseController::class, "update"] )->name("purchase-update")->whereNumber("id");
@@ -226,32 +238,44 @@ Route::middleware(["auth", "verified"])->group(function(){
     // ===== RETURN ITEM ===== //
 
     //show data
-    Route::get('/return-item', [ReturnItemController::class, "index"] )->name("return-item-index");
+    Route::get('/return-item', [ReturnItemController::class, "index"] )->name("returnitem-index");
 
     Route::middleware("admin")->group(function(){
         //create new data
         Route::get('/return-item/create', [ReturnItemController::class, "create"] )->name("returnitem-create");
         Route::post('/return-item/store', [ReturnItemController::class, "store"] )->name("returnitem-store");
 
-        //import
-        Route::get("/return-item/import", [ReturnItemController::class, "import_returnitem_form"])->name("returnitem-import");
-        Route::post("/return-item/import", [ReturnItemController::class, "import_returnitem_store"])->name("returnitem-import-store");
-
         //edit data
-        Route::get('/return-item/{id}/edit', [ReturnItemController::class, "edit"] )->name("return-item-edit")->whereNumber("id");
-        Route::post('/return-item/{id}/edit', [ReturnItemController::class, "update"] )->name("return-item-update")->whereNumber("id");
+        Route::get('/return-item/{id}/edit', [ReturnItemController::class, "edit"] )->name("returnitem-edit")->whereNumber("id");
+        Route::post('/return-item/{id}/edit', [ReturnItemController::class, "update"] )->name("returnitem-update")->whereNumber("id");
 
         //delete data
-        Route::post('/return-item/{id}', [ReturnItemController::class, "destroy"] )->name("return-item-destroy")->whereNumber("id");
+        Route::post('/return-item/{id}', [ReturnItemController::class, "destroy"] )->name("returnitem-destroy")->whereNumber("id");
+    });
 
-        //export
-        Route::get("/return-item/export/{mode}", [PDFController::class, "export_returnitem"])->name("return-item-export")->whereNumber("mode");
+
+    // ===== REQUEST ITEM ===== //
+    Route::get("/request-item", [RequestItemController::class, "index"])->name("requestitem-index");
+
+    Route::middleware("admin")->group(function(){
+        // List of items in the request
+        Route::get("/request-item/{id}", [RequestItemController::class, "show"])->name("requestitem-show")->whereNumber("id");
+
+        //create new data
+        Route::get('/request-item/create', [RequestItemController::class, "create"] )->name("requestitem-create");
+        Route::post('/request-item/store', [RequestItemController::class, "store"] )->name("requestitem-store");
+
+        //edit data
+        Route::get('/request-item/{id}/edit', [RequestItemController::class, "edit"] )->name("requestitem-edit")->whereNumber("id");
+        Route::post('/request-item/{id}/edit', [RequestItemController::class, "update"] )->name("requestitem-update")->whereNumber("id");
+
+        //delete data
+        Route::post('/request-item/{id}', [RequestItemController::class, "destroy"] )->name("requestitem-destroy")->whereNumber("id");
     });
 
 
     Route::middleware("admin")->group(function(){
         // ===== ACCOUNTS ===== //
-
         Route::get('/account', [AccountController::class, 'index'])->name('account.index');
         Route::post('/account', [AccountController::class, 'store'])->name('account.store');
         Route::get("/account/import-data", [AccountController::class, "import_user_form"])->name("account.import.form");
@@ -263,6 +287,8 @@ Route::middleware(["auth", "verified"])->group(function(){
         // ===== EMPLOYEES ===== //
         Route::get("/employee", [EmployeeController::class, "index"])->name("employee-index");
         Route::get("/employee/{id}", [EmployeeController::class, "show"])->name("employee-show")->whereNumber("id");
+        Route::get("/employee/create", [EmployeeController::class, "create"])->name("employee-create");
+        Route::post("/employee/create", [EmployeeController::class, "store"])->name("employee-store");
         Route::get("/employee/{id}/edit", [EmployeeController::class, "edit"])->name("employee-edit")->whereNumber("id");
         Route::post("/employee/{id}/edit", [EmployeeController::class, "update"])->name("employee-update")->whereNumber("id");
 
@@ -273,15 +299,23 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::post("/employee/manage-form/{id}/edit-speciality", [EmployeeController::class, "manage_form_edit_speciality"])->name("employee-manageform-editspeciality")->whereNumber("id");
         Route::post("/employee/manage-form/{id}/delete-position", [EmployeeController::class, "manage_form_delete_position"])->name("employee-manageform-deleteposition")->whereNumber("id");
         Route::post("/employee/manage-form/{id}/delete-speciality", [EmployeeController::class, "manage_form_delete_speciality"])->name("employee-manageform-deletespeciality")->whereNumber("id");
+
+        // ===== SALARY ===== //
+        Route::get("/salary", [SalaryController::class, "index"])->name("salary-index");
+        Route::get("/salary/{id}/edit", [SalaryController::class, "edit"])->name("salary-edit")->whereNumber("id");
+        Route::post("/salary/{id}/edit", [SalaryController::class, "update"])->name("salary-update")->whereNumber("id");
+
+        // ===== ATTENDANCE ===== //
+        Route::get("/attendance", [AttendanceController::class, "index"])->name("attendance-index");
+        Route::get("/attendance/create", [AttendanceController::class, "create"])->name("attendance-create")->whereNumber("id");
+        Route::post("/attendance/create", [AttendanceController::class, "store"])->name("attendance-store")->whereNumber("id");
+        Route::get("/attendance/{id}/edit", [AttendanceController::class, "edit"])->name("attendance-edit")->whereNumber("id");
+        Route::post("/attendance/{id}/edit", [AttendanceController::class, "update"])->name("attendance-update")->whereNumber("id");
+        Route::post("/attendance/{id}/delete", [AttendanceController::class, "destroy"])->name("attendance-destroy")->whereNumber("id");
+
+        // ===== VISIT LOG ===== //
+        Route::get("/visit-log", [AccountController::class, "visit_log"])->name("visitlog-index");
     });
-
-
-    Route::get("/request", function(){
-        return view("pages.request.index", [
-            "products" => Product::all()
-        ]);
-    })->name("request-index");
-
 });
 
 Auth::routes(["verify"=>true]);

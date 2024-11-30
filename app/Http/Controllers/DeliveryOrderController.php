@@ -111,6 +111,10 @@ class DeliveryOrderController extends Controller{
         return view("pages.delivery-order.import-data");
     }
 
+    public function import_with_product_form(){
+        return view("pages.delivery-order.import-wp");
+    }
+
     public function import_deliveryorder_store(Request $request)
     {
         // Validate the uploaded file
@@ -128,7 +132,7 @@ class DeliveryOrderController extends Controller{
         // Delete the stored file after processing
         Storage::delete($path);
 
-        return redirect(route("deliveryorder-index"))->with('success', 'CSV file uploaded and delivery orders added successfully.');
+        return redirect(route("deliveryorder-index"))->with('successImportDevor', 'CSV file uploaded and delivery orders added successfully.');
     }
 
     private function processdeliveryorderDataCsv($filePath)
@@ -138,7 +142,7 @@ class DeliveryOrderController extends Controller{
             $fileContent = file_get_contents($filePath);
 
             // Replace semicolons with commas
-            $fileContent = str_replace(';', ',', $fileContent);
+            // $fileContent = str_replace(';', ',', $fileContent);
 
             // Create a temporary file with the corrected content
             $tempFilePath = tempnam(sys_get_temp_dir(), 'csv');
@@ -149,7 +153,7 @@ class DeliveryOrderController extends Controller{
                 // Skip the header row if it exists
                 $header = fgetcsv($handle);
 
-                while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
+                while (($data = fgetcsv($handle, 1000, ';')) !== FALSE) {
                     $new_delivery_order = [
                         "delivery_date" => $data[1],
                         "delivery_status" => $data[2],
@@ -177,6 +181,73 @@ class DeliveryOrderController extends Controller{
                         ],
                         $new_delivery_order
                     );
+                }
+
+                fclose($handle);
+            }
+
+            // Remove the temporary file
+            unlink($tempFilePath);
+        }
+    }
+
+    public function import_with_product_store(Request $request)
+    {
+        // Validate the uploaded file
+        $request->validate([
+            'csv_file' => 'required|file|mimes:csv,txt',
+        ]);
+
+        // Store the file
+        $file = $request->file('csv_file');
+        $path = $file->store('csv_files');
+
+        // Process the CSV file
+        $this->processdeliveryorderDataCsv2(storage_path('app/' . $path));
+
+        // Delete the stored file after processing
+        Storage::delete($path);
+
+        return redirect(route("deliveryorder-index"))->with('successImportDevor', 'CSV file uploaded and delivery orders added successfully.');
+    }
+
+    private function processdeliveryorderDataCsv2($filePath)
+    {
+        if (($handle = fopen($filePath, 'r')) !== FALSE) {
+            // Read the entire CSV file content
+            $fileContent = file_get_contents($filePath);
+
+            // Replace semicolons with commas
+            // $fileContent = str_replace(';', ',', $fileContent);
+
+            // Create a temporary file with the corrected content
+            $tempFilePath = tempnam(sys_get_temp_dir(), 'csv');
+            file_put_contents($tempFilePath, $fileContent);
+
+            // Re-open the temporary file for processing
+            if (($handle = fopen($tempFilePath, 'r')) !== FALSE) {
+                // Skip the header row if it exists
+                $header = fgetcsv($handle);
+
+                while (($data = fgetcsv($handle, 1000, ';')) !== FALSE) {
+                    $product = Product::where("product_code", $data[1])->first();
+                    $devor = DeliveryOrder::where("register", $data[0])->first();
+
+                    if(!$product || !$devor){
+                        continue;
+                    }
+
+                    $old_stock = $product->stock;
+
+                    if($old_stock - intval($data[2]) >= 0){
+                        Product::find($product->id)->update(["stock" => $old_stock - intval($data[2])]);
+
+                        DeliveryOrderProduct::create([
+                            "delivery_order_id" => $devor->id,
+                            "product_id" => $product->id,
+                            "quantity" => intval($data[2])
+                        ]);
+                    }
                 }
 
                 fclose($handle);

@@ -2,189 +2,171 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\User;
 use App\Models\Partner;
 use App\Models\Product;
 use App\Models\Project;
-use Illuminate\Http\Request;
 use App\Models\ReturnItem;
+use Illuminate\Http\Request;
+use App\Models\DeliveryOrder;
 use App\Models\ReturnItemProduct;
+use Illuminate\Support\Facades\DB;
+use App\Models\DeliveryOrderProduct;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use PhpParser\Node\Stmt\Return_;
 
-class ReturnItemController extends Controller{
-
-    // Tabel list semua delivery order
-    public function index()
-    {
-        // Tampilkan halaman pages/delivery-order/index.blade.php beserta data yang diperlukan di blade-nya
+class ReturnItemController extends Controller {
+    public function index(){
         return view("pages.return-item.index", [
-            "returnitems" => ReturnItem::all() // Semua data delivery orders (buat ditampilin satu satu di tabel)
+            "return_items" => ReturnItem::all()
         ]);
     }
 
-    // Form untuk buat delivery order baru (cuma delivery order-nya, kalo produk nanti harus masuk ke cart)
-    public function create()
-    {
-        // Tampilkan halaman pages/delivery-order/create.blade.php beserta data yang diperlukan di blade-nya
-        return view("pages.delivery-order.create", [
-            "products" => Product::all(), // Semua data project (buat dropdown/select project)
-            "delivery_orders" => ReturnItem::all(), // Semua data delivery order (buat auto generate SKU)
-            "projects" => Project::all(),
+    public function create(){
+        return view("pages.return-item.create", [
+            "delivery_orders" => DeliveryOrder::all()
         ]);
     }
 
-    // Simpan data delivery order baru ke database
-    public function store(Request $request)
-    {
-        // Validasi data, kalau ga lolos ga lanjut
-        // $validatedData = $request->validate([
-        //     // "product_id" => "required",
-        //     "delivery_date"=>"required|date",
-        //     "project_id" => "required",
-        //     "register" => "required|min:0|not_in:0",
-        //     "delivery_status" => "required",
-        //     "note"=>"nullable"
-        // ]);
+    public function store(Request $request){
+        $validated_data = $request->validate([
+            "product" => "required",
+            "status" => "required",
+            "PIC" => "required|min:3",
+            "devor_id" => "required",
+            "image" => "required|image",
+            "qty" => "required|numeric|min:0|not_in:0"
+        ]);
 
-        // Kalo data udah aman bikin dan tambahin data delivery order baru di tabel delivery_orders
-        ReturnItem::create($validatedData);
+        try {
+            DB::beginTransaction();
 
-        // Arahkan user kembali ke halaman pages/delivery-order/index.blade.php
-        return redirect(route("returnitem-index"))->with("successAddOrder", "Order added successfully!");
+            $devorprod = DeliveryOrderProduct::where("product_id", $validated_data["product"])->where("delivery_order_id", $validated_data["devor_id"])->first();
+            $product = Product::find($validated_data["product"]);
+
+            if($request->file("image")){
+                $validated_data["foto"] = $request->file("image")->store("images");
+                unset($validated_data["image"]);
+            }
+
+            $pcode = str_replace(' ', '', ucwords(strtolower($product->product_name))) . "/" . str_replace(' ', '', ucwords(strtolower($product->variant)));
+
+            // Check if the exact same product with the same attributes exists (excluding the return status)
+            $existingProduct = Product::where('product_name', $product->product_name)
+                ->where('variant', $product->variant)
+                ->where('price', $product->price)
+                ->where('discount', $product->discount)
+                ->where('is_returned', 'yes')
+                ->first();
+
+            if ($existingProduct) {
+                // If an existing returned product is found, update the stock
+                $existingProduct->stock += $validated_data["qty"];
+                $existingProduct->save();
+
+                $aidi = $existingProduct->id;
+
+            } else {
+                // If no existing returned product is found, create a new one
+                // Check if the same product exists without considering the "is_returned" status
+                $product_with_existing_pcode = Product::where("product_code", "like", $pcode . "%")->get();
+
+                // Generate a new unique product_code by appending the count of existing products
+                $newProductCode = $pcode . ($product_with_existing_pcode->count() + 1); // Ensure unique product code
+
+                // Create a new product entry with the is_returned set to "yes"
+                $newProd = Product::create([
+                    "product_name" => $product->product_name,
+                    "variant" => $product->variant,
+                    "price" => $product->price,
+                    "discount" => $product->discount,
+                    "unit" => $product->unit,
+                    "stock" => $validated_data["qty"], // Stock is set to the quantity being returned
+                    "status" => $product->status,
+                    "markup" => $product->markup,
+                    "product_code" => $newProductCode,
+                    "is_returned" => "yes"
+                ]);
+
+                $aidi = $newProd->id;
+            }
+
+            ReturnItem::create([
+                "delivery_order_product_id" => $devorprod->id,
+                "product_id" => $aidi,
+                "foto" => $validated_data["foto"],
+                "PIC" => $validated_data["PIC"],
+                "status" => $validated_data["status"],
+                "quantity" => $validated_data["qty"]
+            ]);
+
+            DB::commit();
+        }
+        catch(Exception $e){
+            DB::rollback();
+
+            return $e;
+        }
+
+        return redirect(route("returnitem-index"))->with("successAddReturnItem", "New return item data successfully added!");
     }
 
-    // Form edit data delivery order (kalo ubah list produk harus masuk ke cart)
-    public function edit($id)
-    {
-        // Tampilkan halaman pages/deliver-order/edit.blade.php beserta data-data yang diperlukan di blade-nya
+    public function edit($id){
         return view("pages.return-item.edit", [
-            // "delivery_order" => DeliveryOrder::where("id", $id)->first(), // data delivery order yang mau di-edit buat nanti auto fill di form edit
-            // "projects" => Project::all(), // data semua project (buat dropdown/select project)
-            // "status"=> ["complete", "incomplete"], // buat dropdown status delivery order
-            // "delivery_orders" => DeliveryOrder::all(), // data semua delivery order (buat auto generate SKU)
+            "return_item" => ReturnItem::find($id),
+            "delivery_orders" => DeliveryOrder::all()
         ]);
     }
 
-    // Save perubahan data delivery order ke database
-    // public function update(Request $request, $id)
-    // {
-    //     // Validasi data, kalo ga lolos ga lanjut
-    //     $validatedData = $request->validate([
-    //         "delivery_date"=>"required|date",
-    //         "project_id" => "required|min:1",
-    //         "register" => "required|min:0|not_in:0",
-    //         "delivery_status" => "required",
-    //         "note"=>"nullable"
-    //     ]);
+    public function update(Request $request, $id){
+        $return_item = ReturnItem::find($id);
 
+        $validation_rule = [
+            "status" => "required",
+            "PIC" => "required|min:3",
+            "quantity" => "required|numeric|min:0|not_in:0"
+        ];
 
-    //     // Kalo semuanya aman, update data delivery order tersebut di tabel delivery_orders
-    //     DeliveryOrder::where("id", $id)->update($validatedData);
+        if(!$return_item->foto){
+            $validation_rule["image"] = "required|image";
+        }
+        else {
+            $validation_rule["image"] = "nullable|image";
+        }
 
-    //     // Arahkan user kembali ke halaman pages/delivery-order/index.blade.php
-    //     return redirect(route("deliveryorder-index"))->with("successEditOrder", "Order editted successfully!");
-    // }
+        $validated_data = $request->validate($validation_rule);
 
-    // Hapus data delivery order
-    // public function destroy($id)
-    // {
-    //     // Kembalikan stok produk ke jumlah asalnya baru kita hapus
-    //     // Untuk itu pertama kita perlu ambil data dari tabel delivery_order_products yang memiliki delivery order yang sama dengan yang mau dihapus (karena delivery order tidak langsung menyimpan data produk di tabelnya, relation many-to-many jadi hubungan delivery order nyimpan produk apa aja ada di tabel delivery_order_products)
-    //     $do = DeliveryOrderProduct::where("delivery_order_id", $id)->get();
+        if($request->file("image")){
+            if($return_item->foto && $return_item->foto != ""){
+                Storage::delete($return_item->foto);
+            }
 
-    //     // Untuk setiap data yang diperoleh kita lakukan:
-    //     foreach ($do as $data){
-    //         $product = Product::where("id", $data->product_id)->first(); // Targetkan data produk di tabel products yang aslinya (karena data $do cuma menyimpan id referensi)
-    //         $oldstock = $product->stock; // Ambil stok saat ini
-    //         Product::where("id", $data->product_id)->update(["stock"=> ($oldstock +
-    //         $data->quantity)]); // Update stok product saat ini (karena sifat delivery_order mengurangi jumlah stok maka jika dikembalikan seperti semula jumlah stok product bertambah)
-    //     }
+            $validated_data["foto"] = $request->file("image")->store("images");
+            unset($validated_data["image"]);
+        }
 
-    //     // Jika setiap product yang terkait sudah dikembalikan ke semula stoknya kita baru hapus data delivery order dari tabel delivery_orders
-    //     DeliveryOrder::destroy("id", $id);
+        $return_item->update($validated_data);
 
-    //     // Arahkan user kembali ke halaman pages/delivery-order/index.blade.php
-    //     return redirect(route("deliveryorder-index"))->with("successDeleteOrder", "Order deleted successfully!");
-    // }
-
-    // // READ DATA FROM CSV
-    // public function import_deliveryorder_form(){
-    //     return view("pages.delivery-order.import-data");
-    // }
-
-    // public function import_deliveryorder_store(Request $request)
-    // {
-    //     // Validate the uploaded file
-    //     $request->validate([
-    //         'csv_file' => 'required|file|mimes:csv,txt',
-    //     ]);
-
-    //     // Store the file
-    //     $file = $request->file('csv_file');
-    //     $path = $file->store('csv_files');
-
-    //     // Process the CSV file
-    //     $this->processdeliveryorderDataCsv(storage_path('app/' . $path));
-
-    //     // Delete the stored file after processing
-    //     Storage::delete($path);
-
-    //     return redirect(route("deliveryorder-index"))->with('success', 'CSV file uploaded and delivery orders added successfully.');
-    // }
-
-    // private function processdeliveryorderDataCsv($filePath)
-    // {
-    //     if (($handle = fopen($filePath, 'r')) !== FALSE) {
-    //         // Read the entire CSV file content
-    //         $fileContent = file_get_contents($filePath);
-
-    //         // Replace semicolons with commas
-    //         $fileContent = str_replace(';', ',', $fileContent);
-
-    //         // Create a temporary file with the corrected content
-    //         $tempFilePath = tempnam(sys_get_temp_dir(), 'csv');
-    //         file_put_contents($tempFilePath, $fileContent);
-
-    //         // Re-open the temporary file for processing
-    //         if (($handle = fopen($tempFilePath, 'r')) !== FALSE) {
-    //             // Skip the header row if it exists
-    //             $header = fgetcsv($handle);
-
-    //             while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
-    //                 $new_delivery_order = [
-    //                     "delivery_date" => $data[1],
-    //                     "delivery_status" => $data[2],
-    //                 ];
-
-    //                 // Insert into the products table
-    //                 $existing_project = Project::where("project_name", $data[3])->get();
-    //                 if($existing_project->count()){
-    //                     $new_delivery_order["project_id"] = $existing_project->first()->id;
-    //                 }
-    //                 else {
-    //                     $newProject = Project::create([
-    //                         "project_name" => $data[3],
-    //                         "location" => $data[4],
-    //                         "PIC" => $data[5],
-    //                         "address" => $data[6]
-    //                     ]);
-
-    //                     $new_delivery_order["project_id"] = $newProject->id;
-    //                 }
-
-    //                 DeliveryOrder::updateOrCreate(
-    //                     [
-    //                         'register' => $data[0],
-    //                     ],
-    //                     $new_delivery_order
-    //                 );
-    //             }
-
-    //             fclose($handle);
-    //         }
-
-    //         // Remove the temporary file
-    //         unlink($tempFilePath);
-    //     }
+        return redirect(route("returnitem-index"))->with("successEditReturnItem", "Return item data edited succesfully!");
     }
+
+    public function destroy($id){
+        $return_item = ReturnItem::find($id);
+        $existingReturnedProduct = Product::find($return_item->product->id);
+
+        if($return_item->quantity < $existingReturnedProduct->stock){
+            $prevStock = $existingReturnedProduct->stock;
+            $existingReturnedProduct->update(["stock" => $prevStock - $return_item->quantity]);
+            $return_item->delete();
+        }
+        else {
+            $existingReturnedProduct->delete();
+            $return_item->delete();
+        }
+
+        return redirect(route("returnitem-index"))->with("successDeleteReturnItem", "Return item data deleted successfully");
+    }
+}
 

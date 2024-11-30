@@ -54,23 +54,23 @@
         <div class="overflow-x-auto">
             <table class="w-100">
                 <tr>
-                    <th class="border border-1 border-secondary ">Nomor</th>
-                    <th class="border border-1 border-secondary ">Nama Produk </th>
-                    <th class="border border-1 border-secondary ">SKU Produk </th>
-                    <th class="border border-1 border-secondary ">Quantity</th>
-                    <th class="border border-1 border-secondary ">Variant</th>
-                    <th class="border border-1 border-secondary ">Action</th>
+                    <th>No</th>
+                    <th>Nama Produk </th>
+                    <th>SKU Produk </th>
+                    <th>Quantity</th>
+                    <th>Variant</th>
+                    <th>Action</th>
                 </tr>
 
                 @foreach ($do as $deliveryorder_product)
-                    <tr>
-                        <td class="border border-1 border-secondary " >{{ $loop->iteration }}</td>
-                        <td class="border border-1 border-secondary " >{{ $deliveryorder_product->product->product_name }}</td>
-                        <td class="border border-1 border-secondary " >{{ $deliveryorder_product->product->product_code }}</td>
-                        <td class="border border-1 border-secondary " >{{ $deliveryorder_product->quantity }}</td>
-                        <td class="border border-1 border-secondary " >{{ $deliveryorder_product->product->variant }}</td>
-                        <td class="border border-1 border-secondary " >
-                            <div class="d-flex gap-5 w-100 justify-content-center">
+                    <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $deliveryorder_product->product->product_name }}</td>
+                        <td>{{ $deliveryorder_product->product->product_code }}</td>
+                        <td>{{ $deliveryorder_product->quantity }}</td>
+                        <td>{{ $deliveryorder_product->product->variant }}</td>
+                        <td>
+                            <div class="d-flex gap-5 w-100">
                                 <form action="{{ route("deliveryorderproduct-destroy", [$deliveryorder->id, $deliveryorder_product->id] ) }}" method="POST">
                                     @csrf
                                     <button class="btn btn-danger text-white" style="font-size: 10pt " onclick="return confirm('Do you want to remove this item from the deliveryorder?')">
@@ -89,7 +89,7 @@
                 </tr>
             </table>
 
-            <div class="d-flex h-100 w-100 justify-content-end gap-3 fw-bold border border-1 border-secondary px-2" style="font-size: 14pt; background: linear-gradient(to right, rgb(113, 113, 113), rgb(213, 207, 207));">
+            <div class="d-flex h-100 w-100 justify-content-end gap-3 x-2" style="font-size: 14pt; background: linear-gradient(to right, rgb(113, 113, 113), rgb(213, 207, 207));">
                 <div>
                     Total Items:
                 </div>

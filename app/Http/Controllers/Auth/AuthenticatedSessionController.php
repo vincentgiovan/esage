@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\VisitLog;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,6 +30,14 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request)
     {
         $request->authenticate();
+
+        VisitLog::create([
+            "user_id" => Auth::user()->id,
+            "IP" => $request->IP,
+            "location" => $request->location,
+            "OS" => $request->OS,
+            "device" => $request->device
+        ]);
 
         $request->session()->regenerate();
 

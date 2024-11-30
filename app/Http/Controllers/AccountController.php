@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Salary;
 use App\Models\Employee;
+use App\Models\VisitLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -38,8 +40,6 @@ class AccountController extends Controller
             'password' => Hash::make($request->password),
             'role' => $request->role,
         ]);
-
-        Employee::create(["user_id" => $new_user->id]);
 
         // Arahin user balik ke halaman account/index.blade.php
         return redirect()->route('account.index')->with("successCreateAccount", "Successfully created new account");;
@@ -127,5 +127,11 @@ class AccountController extends Controller
         }
 
         return back()->with("successEditProfile", "Profile edited successfully!");
+    }
+
+    public function visit_log(){
+        return view("pages.visit-log.index", [
+            "visit_logs" => VisitLog::all()
+        ]);
     }
 }
