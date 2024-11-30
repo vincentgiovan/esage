@@ -4,7 +4,7 @@
     <x-container>
         <br>
         <div class="w-100 d-flex align-items-center justify-content-between">
-            <h1>Warehouse Items</h1>
+            <h2>Purchases</h2>
             @can("admin")
                 <div class="d-flex gap-3">
                     {{-- <a class="btn btn-secondary" href="{{ route('purchase-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a> --}}
@@ -67,24 +67,24 @@
         <div class="overflow-x-auto">
             <table class="w-100">
                 <tr>
-                    <th class="border border-1 border-secondary ">Nomor</th>
-                    <th class="border border-1 border-secondary ">Supplier </th>
-                    <th class="border border-1 border-secondary ">Purchase Deadline</th>
-                    <th class="border border-1 border-secondary ">Register</th>
-                    <th class="border border-1 border-secondary ">Purchase Date</th>
-                    <th class="border border-1 border-secondary ">Note</th>
-                    <th class="border border-1 border-secondary ">Purchase Status</th>
+                    <th>No</th>
+                    <th>Supplier </th>
+                    <th>Purchase Deadline</th>
+                    <th>Register</th>
+                    <th>Purchase Date</th>
+                    <th>Note</th>
+                    <th>Purchase Status</th>
                     @can("admin")
-                        <th class="border border-1 border-secondary ">Action</th>
+                        <th>Action</th>
                     @endcan
                 </tr>
 
                 @foreach ($purchases as $p)
-                    <tr>
-                        <td class="border border-1 border-secondary ">{{ $loop->iteration }}</td>
-                        <td class="border border-1 border-secondary ">{{ $p->partner->partner_name }}</td>
-                        <td class="border border-1 border-secondary ">{{ $p->purchase_deadline }}</td>
-                        <td class="border border-1 border-secondary ">
+                    <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $p->partner->partner_name }}</td>
+                        <td>{{ Carbon\Carbon::parse($p->purchase_deadline)->format("d M Y") }}</td>
+                        <td>
                             <div class="d-flex gap-5 w-100 justify-content-between align-items-center">
                                 {{ $p->register }}
                                 @can('admin')
@@ -94,25 +94,25 @@
                             </div>
                         </td>
 
-                        <td class="border border-1 border-secondary ">{{ $p->purchase_date }}</td>
-                        <td class="border border-1 border-secondary ">{{ $p->note }}</td>
-                        <td class="border border-1 border-secondary ">{{ $p->purchase_status }}</td>
-                        {{-- <td class="border border-1 border-secondary " >{{ $p->user->name }}</td> --}}
+                        <td>{{ Carbon\Carbon::parse($p->purchase_date)->format("d M Y") }}</td>
+                        <td>{{ $p->note }}</td>
+                        <td>{{ $p->purchase_status }}</td>
+                        {{-- <td >{{ $p->user->name }}</td> --}}
 
                         @can("admin")
-                            <td class="border border-1 border-secondary ">
-                                <div class="d-flex gap-5 w-100 justify-content-center">
+                            <td>
+                                <div class="d-flex gap-2 w-100">
 
                                     <a href="{{ route('purchase-edit', $p->id) }}" class="btn text-white"
                                         style="font-size: 10pt; background-color: rgb(197, 167, 0);">
                                         <i class="bi bi-pencil"></i>
-                                        Edit Data</a>
+                                    </a>
                                     <form action="{{ route('purchase-destroy', $p->id) }}" method="POST">
                                         @csrf
                                         <button class="btn btn-danger text-white" style="font-size: 10pt "
                                             onclick="return confirm('Do you want to delete this item?')">
                                             <i class="bi bi-trash"></i>
-                                            Delete</button>
+                                        </button>
                                     </form>
                                 </div>
                             </td>

@@ -4,7 +4,8 @@
     <x-container>
 
         <br>
-        <h1>Request Items</h1>
+        <h2>Request Items</h2>
+        <hr>
         <br>
 
         @if (session()->has('successAddRequest'))
@@ -24,25 +25,25 @@
         <div class="overflow-x-auto mt-3">
             <table class="w-100">
                 <tr>
-                    <th class="border border-1 border-secondary ">#</th>
-                    <th class="border border-1 border-secondary ">Request Date</th>
-                    <th class="border border-1 border-secondary ">Project Name</th>
-                    <th class="border border-1 border-secondary ">Project Location</th>
-                    <th class="border border-1 border-secondary ">PIC</th>
-                    <th class="border border-1 border-secondary ">Notes</th>
-                    <th class="border border-1 border-secondary ">Actions</th>
+                    <th>No</th>
+                    <th>Request Date</th>
+                    <th>Project Name</th>
+                    <th>Project Location</th>
+                    <th>PIC</th>
+                    <th>Notes</th>
+                    <th>Actions</th>
                 </tr>
 
                 @foreach ($requests as $r)
-                    <tr>
-                        <td class="border border-1 border-secondary ">{{ $loop->iteration }}</td>
-                        <td class="border border-1 border-secondary ">{{ $r->request_date }}</td>
-                        <td class="border border-1 border-secondary ">{{ $r->project->project_name }}</td>
-                        <td class="border border-1 border-secondary ">{{ $r->project->location }}</td>
-                        <td class="border border-1 border-secondary ">{{ $r->PIC }}</td>
-                        <td class="border border-1 border-secondary ">{{ $r->notes }}</td>
-                        <td class="border border-1 border-secondary ">
-                            <div class="d-flex gap-2 w-100 justify-content-center">
+                    <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ Carbon\Carbon::parse($r->request_date)->format("d M Y") }}</td>
+                        <td>{{ $r->project->project_name }}</td>
+                        <td>{{ $r->project->location }}</td>
+                        <td>{{ $r->PIC }}</td>
+                        <td>{{ $r->notes }}</td>
+                        <td>
+                            <div class="d-flex gap-2 w-100">
                                 <a href="{{ route('requestitem-show', $r->id) }}" class="btn btn-success text-white"
                                     style="font-size: 10pt;">
                                     <i class="bi bi-eye"></i>

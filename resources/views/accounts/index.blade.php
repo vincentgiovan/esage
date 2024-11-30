@@ -4,7 +4,7 @@
 
 <!-- tes123456789 -->
 <x-container>
-    <h1 class="my-4">Account Management</h1>
+    <h2 class="my-4">Account Management</h2>
     <hr class="mt-2">
     <br>
 
@@ -125,36 +125,48 @@
             @endif
 
             <div class="w-full overflow-x-auto">
-                <table class="table table-bordered">
+                <table class="w-100">
                     <thead>
                         <tr>
-                            <th class="border border-1 border-secondary" style="background: rgb(199, 199, 199)">Name</th>
-                            <th class="border border-1 border-secondary" style="background: rgb(199, 199, 199)">Email</th>
-                            <th class="border border-1 border-secondary" style="background: rgb(199, 199, 199)">Role</th>
-                            <th class="border border-1 border-secondary" style="background: rgb(199, 199, 199)">Actions</th>
+                            <th style="background: rgb(199, 199, 199)">Name</th>
+                            <th style="background: rgb(199, 199, 199)">Email</th>
+                            <th style="background: rgb(199, 199, 199)">Role</th>
+                            <th style="background: rgb(199, 199, 199)">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @php
+                            $i = 1;
+                        @endphp
+                        
                         @foreach($users as $user)
-                        @if(Auth::user()->id == $user->id)
-                            @continue
-                        @endif
-                        <tr>
-                            <td class="border border-1 border-secondary">{{ $user->name }}</td>
-                            <td class="border border-1 border-secondary">{{ $user->email }}</td>
-                            <td class="border border-1 border-secondary">{{ ($user->role == 2)? "User" : "Admin" }}</td>
-                            <td class="border border-1 border-secondary">
-                                <div class="d-flex w-100 align-items-center gap-3">
-                                    <form action="{{ route('account.destroy', $user->id) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this account?');"><i class="bi bi-trash3"></i> Delete</button>
-                                    </form>
-                                    {{-- <button class="btn btn-warning" data-toggle="modal" data-target="#editUserModal-{{ $user->id }}">Edit</button> --}}
-                                    <a href="{{ route("account.show", $user->id) }}" class="btn text-white" data-toggle="modal" data-target="#editUserModal-{{ $user->id }}" style="background-color: rgb(197, 167, 0);"><i class="bi bi-pencil"></i> Edit</a>
-                                </div>
-                            </td>
-                        </tr>
+                            @if(Auth::user()->id == $user->id)
+                                @php
+                                    $i++;
+                                @endphp
+
+                                @continue
+                            @endif
+                            <tr style="background: @if($i % 2 == 1) #E0E0E0 @else white @endif;">
+                                <td>{{ $user->name }}</td>
+                                <td>{{ $user->email }}</td>
+                                <td>{{ ($user->role == 2)? "User" : "Admin" }}</td>
+                                <td>
+                                    <div class="d-flex w-100 align-items-center gap-3">
+                                        <form action="{{ route('account.destroy', $user->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this account?');"><i class="bi bi-trash3"></i> Delete</button>
+                                        </form>
+                                        {{-- <button class="btn btn-warning" data-toggle="modal" data-target="#editUserModal-{{ $user->id }}">Edit</button> --}}
+                                        <a href="{{ route("account.show", $user->id) }}" class="btn text-white" data-toggle="modal" data-target="#editUserModal-{{ $user->id }}" style="background-color: rgb(197, 167, 0);"><i class="bi bi-pencil"></i> Edit</a>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            @php
+                                $i++;
+                            @endphp
                         @endforeach
                     </tbody>
                 </table>

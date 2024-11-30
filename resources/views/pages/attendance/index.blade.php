@@ -3,7 +3,8 @@
 @section("content")
     <x-container>
         <br>
-        <h1>Employee Attendance</h1>
+        <h2>Employee Attendance</h2>
+        <hr>
 
         @if (session()->has('successEditAttendance'))
             <p class="text-success fw-bold">{{ session('successEditAttendance') }}</p>
@@ -21,23 +22,29 @@
         <div class="overflow-x-auto mt-4">
             <table class="w-100">
                 <tr>
-                    <th class="border border-1 border-secondary ">#</th>
-                    <th class="border border-1 border-secondary ">Tanggal</th>
-                    <th class="border border-1 border-secondary ">Proyek</th>
-                    <th class="border border-1 border-secondary ">Nama</th>
-                    <th class="border border-1 border-secondary ">Subtotal</th>
-                    <th class="border border-1 border-secondary ">Actions</th>
+                    <th>#</th>
+                    <th>Tanggal</th>
+                    <th>Proyek</th>
+                    <th>Nama</th>
+                    <th>Subtotal</th>
+                    <th>Actions</th>
                 </tr>
 
                 @foreach ($attendances as $a)
-                    <tr>
-                        <td class="border border-1 border-secondary ">{{ $loop->iteration }}</td>
-                        <td class="border border-1 border-secondary ">{{ $a->attendance_date }}</td>
-                        <td class="border border-1 border-secondary ">{{ $a->project->project_name }}</td>
-                        <td class="border border-1 border-secondary ">{{ $a->employee->nama }}</td>
-                        <td class="border border-1 border-secondary ">N/A</td>
-                        <td class="border border-1 border-secondary ">
-                            <div class="d-flex gap-2 w-100 justify-content-center">
+                    <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ Carbon\Carbon::parse($a->attendance_date)->format("d M Y") }}</td>
+                        <td>{{ $a->project->project_name }}</td>
+                        <td>{{ $a->employee->nama }}</td>
+                        <td>
+                            @if($subtotals[$loop->iteration - 1] != "N/A")
+                                Rp {{ number_format($subtotals[$loop->iteration - 1], 2, ",", ".") }}
+                            @else
+                                {{ $subtotals[$loop->iteration - 1] }}
+                            @endif
+                        </td>
+                        <td>
+                            <div class="d-flex gap-2 w-100">
                                 <a href="{{ route('attendance-edit', $a->id) }}" class="btn btn-warning text-white"
                                     style="font-size: 10pt; background-color: rgb(197, 167, 0);">
                                     <i class="bi bi-pencil"></i>

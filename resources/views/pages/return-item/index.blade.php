@@ -4,7 +4,7 @@
     <x-container>
         <br>
         <div class="w-100 d-flex align-items-center justify-content-between">
-            <h1>Return Items</h1>
+            <h2>Return Items</h2>
             {{-- <div class="d-flex gap-3">
                 <a class="btn btn-secondary" href="{{ route('deliveryorder-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
                 <div class="position-relative d-flex flex-column align-items-end">
@@ -47,27 +47,27 @@
         <div class="overflow-x-auto">
             <table class="w-100">
                 <tr>
-                    <th class="border border-1 border-secondary ">No</th>
-                    <th class="border border-1 border-secondary ">Proyek Asal</th>
-                    <th class="border border-1 border-secondary ">Produk</th>
-                    <th class="border border-1 border-secondary ">Foto</th>
-                    <th class="border border-1 border-secondary ">PIC Return</th>
-                    <th class="border border-1 border-secondary ">Status</th>
-                    <th class="border border-1 border-secondary ">Action</th>
+                    <th>No</th>
+                    <th>Proyek Asal</th>
+                    <th>Produk</th>
+                    <th>Foto</th>
+                    <th>PIC Return</th>
+                    <th>Status</th>
+                    <th>Action</th>
                 </tr>
 
                 @foreach ($return_items as $ri)
-                    <tr>
-                        <td class="border border-1 border-secondary ">{{ $loop->iteration }}</td>
-                        <td class="border border-1 border-secondary ">
+                    <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
+                        <td>{{ $loop->iteration }}</td>
+                        <td>
                             <ul>
                                 <li>Proyek: {{ $ri->delivery_order_product->delivery_order->project->project_name }}</li>
-                                <li>Tanggal: {{ $ri->delivery_order_product->delivery_order->delivery_date }}</li>
+                                <li>Tanggal: {{ Carbon\Carbon::parse($ri->delivery_order_product->delivery_order->delivery_date)->format("d M Y") }}</li>
                                 <li>SKU Order: {{ $ri->delivery_order_product->delivery_order->register }}</li>
                             </ul>
 
                         </td>
-                        <td class="border border-1 border-secondary ">
+                        <td>
                             <ul>
                                 <li>Nama: {{ $ri->product->product_name }}</li>
                                 <li>Varian: {{ $ri->product->variant }}</li>
@@ -76,17 +76,17 @@
                                 <li>Jumlah: {{ $ri->quantity }}</li>
                             </ul>
                         </td>
-                        <td class="border border-1 border-secondary" style="max-width: 200px;">
+                        <td style="max-width: 200px;">
                             @if($ri->foto)
                                 <img class="w-100" src="{{ Storage::url("app/public/" . $ri->foto) }}">
                             @else
                                 N/A
                             @endif
                         </td>
-                        <td class="border border-1 border-secondary ">{{ $ri->PIC }}</td>
-                        <td class="border border-1 border-secondary ">{{ $ri->status }}</td>
+                        <td>{{ $ri->PIC }}</td>
+                        <td>{{ $ri->status }}</td>
 
-                        <td class="border border-1 border-secondary">
+                        <td>
                             <div class="d-flex gap-5 w-100 justify-content-center">
                                 <a href="{{ route('returnitem-edit', $ri->id) }}" class="btn text-white"
                                     style="font-size: 10pt; background-color: rgb(197, 167, 0);">

@@ -9,10 +9,10 @@
         <div class="container bg-white rounded-4 p-5 mt-4 border border-1 card">
             <h2 class="text-center fw-bold">Import Products Data to {{ $deliveryorder->register }}</h2>
 
-            <p class="fs-6 mt-4">Please make sure the columns order is the same as the shown image before saving as .csv file:</p>
+            <p class="mt-4">Please make sure the columns order is the same as the shown image before saving as .csv file:</p>
             <img src="{{ asset('res/guide-importcsv-devorproduct.png') }}" alt="guide-importcsv" class="w-50">
 
-            <p class="fs-6 mt-4">Please upload in .csv file format.</p>
+            <p class="mt-4">Please upload in .csv file format.</p>
 
             <form action="{{ route('deliveryorderproduct-import-store', $deliveryorder->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf

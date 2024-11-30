@@ -10,8 +10,27 @@ use Illuminate\Http\Request;
 class AttendanceController extends Controller
 {
     public function index(){
+        $attendances = Attendance::all();
+        $subtotals = [];
+
+        foreach($attendances as $atd){
+            if($atd->employee->kalkulasi_gaji == "on"){
+                $sub_normal = $atd->normal * $atd->employee->pokok;
+                $sub_lembur = $atd->jam_lembur * $atd->employee->lembur;
+                $sub_lembur_panjang = $atd->index_lembur_panjang * $atd->employee->lembur_panjang;
+                $sub_performa = $atd->index_performa * $atd->employee->performa;
+
+                $subtotal = $sub_normal + $sub_lembur + $sub_lembur_panjang + $sub_performa;
+                array_push($subtotals, $subtotal);
+            }
+            else {
+                array_push($subtotals, 'N/A');
+            }
+        }
+
         return view("pages.attendance.index", [
-            "attendances" => Attendance::all()
+            "attendances" => $attendances,
+            "subtotals" => $subtotals
         ]);
     }
 

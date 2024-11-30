@@ -24,6 +24,7 @@
         <style>
             body{
                 background-color: white;
+                font-size: 11pt;
             }
 
             /* button[type="button"], button[type="submit"]:hover {
@@ -37,6 +38,12 @@
 
             table th {
                 background-color: rgb(194, 191, 191);
+            }
+
+            ol, ul {
+                list-style-position: inside; /* Ensure the bullet/number is inside */
+                padding-left: 0;            /* Remove padding */
+                margin-left: 0;             /* Remove margin */
             }
 
             .select2-selection__arrow {
@@ -79,6 +86,10 @@
                 #main-content-div {
                     padding-left: 0;
                     width: 100%;
+                }
+
+                body {
+                    font-size: 8pt;
                 }
             }
         </style>
