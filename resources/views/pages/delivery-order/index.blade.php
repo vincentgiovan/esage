@@ -71,7 +71,7 @@
                     <th>Delivery Date</th>
                     <th>Project</th>
                     <th>Register</th>
-                    <th>Delivery Status</th>
+                    <th class="text-center">Delivery Status</th>
                     <th>Note</th>
                     @can("admin")
                         <th>Action</th>
@@ -93,7 +93,15 @@
                             </div>
                         </td>
 
-                        <td>{{ $p->delivery_status }}</td>
+                        <td>
+                            <div class="w-100 d-flex justify-content-center">
+                                @if($p->delivery_status == "Complete")
+                                    <i class="bi bi-check-circle-fill fs-4" style="color: green"></i>
+                                @else
+                                    <i class="bi bi-x-circle-fill fs-4" style="color: red"></i>
+                                @endif
+                            </div>
+                        </td>
                         <td>{{ $p->note }}</td>
                         {{-- <td >{{ $p->user->name }}</td> --}}
                         @can("admin")
