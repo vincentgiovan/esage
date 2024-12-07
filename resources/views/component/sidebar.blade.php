@@ -52,6 +52,10 @@
             <li class="nav-item">
                 <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("visit-log*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("visitlog-index") }}" ><i class="bi bi-person-lines-fill me-2"></i> Visit Log</a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("test-geolocation*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("test-geolocation") }}" >Test Geolocation</a>
+            </li>
         @endcan
     </ul>
     {{-- <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">

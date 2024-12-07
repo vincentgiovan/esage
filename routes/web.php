@@ -315,6 +315,12 @@ Route::middleware(["auth", "verified"])->group(function(){
 
         // ===== VISIT LOG ===== //
         Route::get("/visit-log", [AccountController::class, "visit_log"])->name("visitlog-index");
+
+
+        // Test Geolocation
+        Route::get("/test-geolocation", function(){
+            return view("pages.test-geolocation");
+        })->name("test-geolocation");
     });
 });
 
