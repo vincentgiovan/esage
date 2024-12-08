@@ -87,17 +87,17 @@
                         <td>{{ $ri->status }}</td>
 
                         <td>
-                            <div class="d-flex gap-5 w-100 justify-content-center">
+                            <div class="d-flex gap-2 w-100">
                                 <a href="{{ route('returnitem-edit', $ri->id) }}" class="btn text-white"
                                     style="font-size: 10pt; background-color: rgb(197, 167, 0);">
                                     <i class="bi bi-pencil"></i>
-                                    Edit Data</a>
+                                </a>
                                 <form action="{{ route('returnitem-destroy', $ri->id) }}" method="POST">
                                     @csrf
                                     <button class="btn btn-danger text-white" style="font-size: 10pt "
                                         onclick="return confirm('Do you want to delete this item?')">
                                         <i class="bi bi-trash"></i>
-                                        Delete</button>
+                                    </button>
                                 </form>
                             </div>
                         </td>

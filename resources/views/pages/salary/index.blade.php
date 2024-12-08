@@ -8,9 +8,16 @@
 
         @if (session()->has('successEditSalary'))
             <p class="text-success fw-bold">{{ session('successEditSalary') }}</p>
+        @elseif (session()->has('successAutoGenerateSalary'))
+            <p class="text-success fw-bold">{{ session('successAutoGenerateSalary') }}</p>
         @endif
 
-        <div class="overflow-x-auto mt-5">
+        <form action="{{ route('salary-autocreate') }}" method="post" class="mt-2">
+            @csrf
+            <button class="btn btn-primary" type="submit">Generate Latest Salary</button>
+        </form>
+
+        <div class="overflow-x-auto mt-3">
             <table class="w-100">
                 <tr>
                     <th>No</th>
@@ -25,16 +32,10 @@
                 @foreach ($salaries as $s)
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $s->employee->masuk ? Carbon\Carbon::parse($s->employee->masuk)->format("d M Y") : "N/A" }} - {{ $s->employee->keluar ? Carbon\Carbon::parse($s->employee->keluar)->format("d M Y") : "N/A" }}</td>
+                        <td>{{ $s->start_period ? Carbon\Carbon::parse($s->start_period)->format("d M Y") : "N/A" }} - {{ $s->end_period ? Carbon\Carbon::parse($s->end_period)->format("d M Y") : "N/A" }}</td>
                         <td>{{ $s->employee->nama }}</td>
                         <td>{{ $s->employee->jabatan }}</td>
-                        <td>
-                            @if($totals[$loop->iteration - 1] != "N/A")
-                                Rp {{ number_format($totals[$loop->iteration - 1], 2, ",", ".") }}
-                            @else
-                                {{ $totals[$loop->iteration - 1] }}
-                            @endif
-                        </td>
+                        <td>Rp {{ number_format($s->total, 2, ",", ".") }}</td>
                         <td>{{ $s->keterangan ?? "N/A" }}</td>
                         <td>
                             <div class="d-flex gap-2 w-100">

@@ -139,6 +139,17 @@
 
     <script>
         $(document).ready(() => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    console.log("Location allowed.");
+                },
+                function(error) {
+                    console.error("Error getting location:", error);
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+
             const all_employees = @json($employees);
 
             $("#employee_id").change(function(){
@@ -149,7 +160,48 @@
                 $("#lembur_panjang").val(targetted.lembur_panjang);
                 $("#performa").val(targetted.performa);
             });
+
+            $("form").on("submit", function(e){
+                e.preventDefault();
+
+                // Create a Promise to handle geolocation
+                const locationPromise = new Promise((resolve, reject) => {
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(function(position) {
+                            const lat = position.coords.latitude;
+                            const lon = position.coords.longitude;
+
+                            $("form").append($("<input>").attr({"type": "hidden", "name": "latitude", "value": lat}));
+                            $("form").append($("<input>").attr({"type": "hidden", "name": "longitude", "value": lon}));
+
+                            resolve(); // Location success
+                        },
+                        function(error) {
+                            console.error("Error getting location:", error);
+                            alert("Error occurred while retrieving location.");
+                            reject(); // Location failed
+                        },
+                        {
+                            enableHighAccuracy: true,  // Request high accuracy
+                            timeout: 10000,            // Timeout after 10 seconds
+                            maximumAge: 0              // Don't use cached location data
+                        });
+                    } else {
+                        alert("Geolocation is not supported by this browser.");
+                        reject(); // Geolocation not supported
+                    }
+                });
+
+                // Handle the location promise
+                locationPromise.then(() => {
+                    // Proceed with form submission if location is allowed
+                    this.submit();
+                }).catch(() => {
+                    alert("Please allow location access in this web app.");
+                });
+            });
         });
     </script>
+
 
 @endsection

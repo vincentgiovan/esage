@@ -19,6 +19,9 @@ return new class extends Migration
             $table->unsignedBigInteger("employee_id");
             $table->foreign("employee_id")->references("id")->on("employees");
 
+            $table->date('start_period');
+            $table->date('end_period');
+
             $table->longText("keterangan")->nullable();
 
             $table->timestamps();
