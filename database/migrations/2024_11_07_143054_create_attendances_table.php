@@ -28,6 +28,9 @@ return new class extends Migration
             $table->float("index_performa");
             $table->float("remark")->nullable();
 
+            $table->double('latitude', 15, 8)->nullable();
+            $table->double('longitude', 15, 8)->nullable();
+
             $table->timestamps();
         });
     }

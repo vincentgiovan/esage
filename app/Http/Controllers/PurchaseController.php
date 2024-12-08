@@ -30,7 +30,7 @@ class PurchaseController extends Controller
         // Tampilkan halaman pages/purchase/create.blade.php dan data-data yang diperlukan di blade-nya:
         return view("pages.purchase.create", [
             "supplier" => Partner::all(), // data semua partner (supplier) untuk dropdown/select partner
-            "status" => ["Complete", "Incomplete"], // untuk dropdown status purchase
+            "status" => ["Ordered", "Retrieved"], // untuk dropdown status purchase
             "purchases" => Purchase::all() // data semua purchase untuk auto generate SKU
         ]);
     }
@@ -61,7 +61,7 @@ class PurchaseController extends Controller
         return view("pages.purchase.edit", [
             "purchase" => Purchase::where("id", $id)->first(), // data purchase yang mau di-edit buat auto fill form
             "supplier" => Partner::all(), // data semua partner (supplier) buat dropdown/select partner
-            "status" => ["Complete", "Incomplete"], // untuk dropdown status purchase
+            "status" => ["Ordered", "Retrieved"], // untuk dropdown status purchase
             "purchases" => Purchase::all() // data semua purchase untuk auto generate SKU
         ]);
     }

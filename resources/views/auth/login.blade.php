@@ -90,45 +90,58 @@
         passwordIcon.classList.toggle('bi-eye-slash-fill');
     });
 
+    fetch('https://get.geojs.io/v1/ip/geo.json')
+    .then(response => response.json())
+    .then(data => {
+        console.log('IP:', data.ip);
+        console.log('City:', data.city);
+        console.log('Region:', data.region);
+        console.log('Country:', data.country);
+
+        detectedIP = data.ip;
+        detectedLocation = `${data.city}, ${data.region}, ${data.country}`;
+    })
+    .catch(error => console.error('Error getting IP geolocation:', error));
+
     // Fetch user's real IP and other details from ip-api.com
-    fetch('http://ip-api.com/json')
-        .then(response => response.json())
-        .then(data => {
-            console.log('IP:', data.query); // Output: Mobile, Tablet, Desktop, or Unknown
-            console.log('City:', data.city); // Output: Platform name (e.g., 'Win32', 'MacIntel', 'Linux')
-            console.log('Region:', data.regionName); // Output: Mobile, Tablet, Desktop, or Unknown
-            console.log('Country:', data.country); // Output: Platform name (e.g., 'Win32', 'MacIntel', 'Linux')
+    // fetch('http://ip-api.com/json')
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         console.log('IP:', data.query); // Output: Mobile, Tablet, Desktop, or Unknown
+    //         console.log('City:', data.city); // Output: Platform name (e.g., 'Win32', 'MacIntel', 'Linux')
+    //         console.log('Region:', data.regionName); // Output: Mobile, Tablet, Desktop, or Unknown
+    //         console.log('Country:', data.country); // Output: Platform name (e.g., 'Win32', 'MacIntel', 'Linux')
 
-            detectedIP = data.query;
-            detectedLocation = `${data.city}, ${data.regionName}, ${data.country}`;
-        })
-        .catch(error => console.error('Error fetching IP data:', error));
+    //         detectedIP = data.query;
+    //         detectedLocation = `${data.city}, ${data.regionName}, ${data.country}`;
+    //     })
+    //     .catch(error => console.error('Error fetching IP data:', error));
 
-        const deviceType = (() => {
-            const ua = navigator.userAgent;
-            const platform = navigator.platform.toLowerCase();
+    const deviceType = (() => {
+        const ua = navigator.userAgent;
+        const platform = navigator.platform.toLowerCase();
 
-            // Check if the device is mobile (Android, iPhone, iPad, iPod)
-            if (/Mobile|Android|iP(hone|od|ad)/.test(ua)) {
-                return 'Mobile';
-            }
-            // Check if the device is a tablet
-            else if (/Tablet/.test(ua)) {
-                return 'Tablet';
-            }
-            // Check for Windows OS (Win32 or Win64)
-            else if (platform.includes('win')) {
-                return 'Desktop';
-            }
-            // Check for other common desktop OS (Mac, Linux)
-            else if (/mac|linux/.test(platform)) {
-                return 'Desktop';
-            }
-            // If it doesn't match any of the above, return 'Unknown'
-            else {
-                return 'Unknown';
-            }
-        })();
+        // Check if the device is mobile (Android, iPhone, iPad, iPod)
+        if (/Mobile|Android|iP(hone|od|ad)/.test(ua)) {
+            return 'Mobile';
+        }
+        // Check if the device is a tablet
+        else if (/Tablet/.test(ua)) {
+            return 'Tablet';
+        }
+        // Check for Windows OS (Win32 or Win64)
+        else if (platform.includes('win')) {
+            return 'Desktop';
+        }
+        // Check for other common desktop OS (Mac, Linux)
+        else if (/mac|linux/.test(platform)) {
+            return 'Desktop';
+        }
+        // If it doesn't match any of the above, return 'Unknown'
+        else {
+            return 'Unknown';
+        }
+    })();
 
     const os = navigator.platform; // Get the platform (e.g., 'Win32', 'MacIntel', 'Linux')
 

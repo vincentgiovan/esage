@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class AttendanceController extends Controller
 {
     public function index(){
-        $attendances = Attendance::all();
+        $attendances = Attendance::orderBy('attendance_date', 'asc')->get();
         $subtotals = [];
 
         foreach($attendances as $atd){
@@ -51,6 +51,8 @@ class AttendanceController extends Controller
             "index_lembur_panjang" => "required|numeric|min:0",
             "index_performa" => "required|numeric|min:0",
             "remark" => "nullable",
+            "latitude" => "required",
+            "longitude" => "required"
         ]);
 
         Attendance::create($validatedData);
@@ -75,7 +77,7 @@ class AttendanceController extends Controller
             "jam_lembur" => "required|numeric|min:0",
             "index_lembur_panjang" => "required|numeric|min:0",
             "index_performa" => "required|numeric|min:0",
-            "remark" => "nullable",
+            "remark" => "nullable"
         ]);
 
         Attendance::find($id)->update($validatedData);
@@ -87,5 +89,11 @@ class AttendanceController extends Controller
         Attendance::find($id)->delete();
 
         return redirect(route("attendance-index"))->with("successDeleteAttendance", "New attendance deleted sucessfully!");
+    }
+
+    public function location($id){
+        return view("pages.attendance.check-location", [
+            "attendance" => Attendance::find($id)
+        ]);
     }
 }

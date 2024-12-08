@@ -64,8 +64,7 @@ class EmployeeController extends Controller
         }
         $validated_data["keahlian"] = serialize($selected_specialities);
 
-        $new_employee = Employee::create($validated_data);
-        Salary::create(["employee_id" => $new_employee->id]);
+        Employee::create($validated_data);
 
         return redirect(route("employee-index"))->with("success-add-employee-data", "Employee data added successfully");
     }
