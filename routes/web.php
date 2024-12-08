@@ -302,6 +302,7 @@ Route::middleware(["auth", "verified"])->group(function(){
 
         // ===== SALARY ===== //
         Route::get("/salary", [SalaryController::class, "index"])->name("salary-index");
+        Route::post("/salary/auto-create", [SalaryController::class, "auto_create"])->name('salary-autocreate');
         Route::get("/salary/{id}/edit", [SalaryController::class, "edit"])->name("salary-edit")->whereNumber("id");
         Route::post("/salary/{id}/edit", [SalaryController::class, "update"])->name("salary-update")->whereNumber("id");
 
@@ -312,15 +313,10 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::get("/attendance/{id}/edit", [AttendanceController::class, "edit"])->name("attendance-edit")->whereNumber("id");
         Route::post("/attendance/{id}/edit", [AttendanceController::class, "update"])->name("attendance-update")->whereNumber("id");
         Route::post("/attendance/{id}/delete", [AttendanceController::class, "destroy"])->name("attendance-destroy")->whereNumber("id");
+        Route::get("/attendance/{id}/location", [AttendanceController::class, "location"])->name('attendance-location')->whereNumber("id");
 
         // ===== VISIT LOG ===== //
         Route::get("/visit-log", [AccountController::class, "visit_log"])->name("visitlog-index");
-
-
-        // Test Geolocation
-        Route::get("/test-geolocation", function(){
-            return view("pages.test-geolocation");
-        })->name("test-geolocation");
     });
 });
 

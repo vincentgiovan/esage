@@ -45,6 +45,9 @@
                         </td>
                         <td>
                             <div class="d-flex gap-2 w-100">
+                                <a href="{{ route('attendance-location', $a->id) }}" class="btn btn-success text-white">
+                                    <i class="bi bi-geo-alt-fill"></i>
+                                </a>
                                 <a href="{{ route('attendance-edit', $a->id) }}" class="btn btn-warning text-white"
                                     style="font-size: 10pt; background-color: rgb(197, 167, 0);">
                                     <i class="bi bi-pencil"></i>
