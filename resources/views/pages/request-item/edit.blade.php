@@ -45,7 +45,7 @@
                     <hr>
                     <div class="mt-3">
                         <label for="select-product-dropdown">Nama Produk</label>
-                        <select name="product_name" class="form-select" id="select-product-dropdown">
+                        <select name="product_name" class="form-select select2" >
                             @foreach ($products as $product)
                                 <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} ({{ $product->variant }}) (Stok :  {{ $product->stock }})</option>
                             @endforeach

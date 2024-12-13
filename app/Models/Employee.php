@@ -18,4 +18,8 @@ class Employee extends Model
     public function salaries(){
         return $this->hasMany(Salary::class);
     }
+
+    public function projects(){
+        return $this->belongsToMany(Project::class, "employee_projects");
+    }
 }

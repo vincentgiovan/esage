@@ -84,7 +84,7 @@
                     @if (session()->has('passwordNotConfirmed'))
                         <p class="text-success fw-bold">{{ session('passwordNotConfirmed') }}</p>
                     @endif
-                    <input type="submit" class="btn btn-success px-3 py-1" value="Add">
+                    <input type="submit" class="btn btn-success px-3 py-1" value="Simpan Data Baru">
                 </div>
             </form>
 

@@ -196,7 +196,18 @@
                 </div>
 
                 <div class="mt-3">
-                    <input type="submit" class="btn btn-success px-3 py-1" value="Edit">
+                    <label for="status">Status</label>
+                    <select type="text" class="form-select" name="status" id="status" placeholder="status">
+                        <option value="active" @if(old('status') == 'active') selected @endif>Aktif</option>
+                        <option value="passive" @if(old('status') == 'passive') selected @endif>Tidak Aktif</option>
+                    </select>
+                    @error('status')
+                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="mt-5">
+                    <input type="submit" class="btn btn-success px-3 py-1" value="Simpan Perubahan">
                 </div>
             </form>
         </div>

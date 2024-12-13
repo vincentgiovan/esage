@@ -14,7 +14,7 @@ class EmployeeController extends Controller
 {
     public function index(){
         return view("pages.employee.index", [
-            "employees" => Employee::all()
+            "employees" => Employee::orderByRaw('CASE WHEN status = "active" THEN 0 ELSE 1 END')->get()
         ]);
     }
 
@@ -93,6 +93,7 @@ class EmployeeController extends Controller
             "masuk" => "nullable|date",
             "keluar" => "nullable|date",
             "keterangan" => "nullable",
+            "status" => "required"
         ]);
 
         $employee = Employee::find($id);

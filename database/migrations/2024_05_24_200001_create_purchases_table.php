@@ -22,7 +22,7 @@ return new class extends Migration
             $table->longText("note")->nullable();
             $table->date("purchase_date");
             $table->string("purchase_status");
-            $table->foreign("partner_id")->references("id")->on("partners");
+            $table->foreign("partner_id")->references("id")->on("partners")->onDelete('cascade');
         });
     }
 

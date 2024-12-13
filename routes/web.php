@@ -22,6 +22,7 @@ use App\Http\Controllers\RequestItemController;
 use App\Http\Controllers\DeliveryOrderController;
 use App\Http\Controllers\PurchaseProductController;
 use App\Http\Controllers\DeliveryOrderProductController;
+use App\Http\Controllers\EmployeeProjectController;
 
 Route::get('/', function(){
     return redirect("/dashboard");
@@ -137,6 +138,11 @@ Route::middleware(["auth", "verified"])->group(function(){
         //import
         Route::get("/project/import", [ProjectController::class, "import_project_form"])->name("project-import");
         Route::post("/project/import", [ProjectController::class, "import_project_store"])->name("project-import-store");
+
+        // manage employees
+        Route::get('/project/{id}/manage-employee', [EmployeeProjectController::class, "index"])->name("project-manageemployee-index");
+        Route::post('/project/{id}/assign-employee', [EmployeeProjectController::class, "assign_employee"])->name("project-manageemployee-assign");
+        Route::post('/project/{id}/unassign-employee', [EmployeeProjectController::class, "unassign_employee"])->name("project-manageemployee-unassign");
 
         //edit data
         Route::get('/project/{id}/edit', [ProjectController::class, "edit"] )->name("project-edit")->whereNumber("id");
@@ -308,7 +314,8 @@ Route::middleware(["auth", "verified"])->group(function(){
 
         // ===== ATTENDANCE ===== //
         Route::get("/attendance", [AttendanceController::class, "index"])->name("attendance-index");
-        Route::get("/attendance/create", [AttendanceController::class, "create"])->name("attendance-create")->whereNumber("id");
+        Route::get("/attendance/create/admin", [AttendanceController::class, "create_admin"])->name("attendance-create-admin")->whereNumber("id");
+        Route::get("/attendance/create/self", [AttendanceController::class, "create_self"])->name("attendance-create-self")->whereNumber("id");
         Route::post("/attendance/create", [AttendanceController::class, "store"])->name("attendance-store")->whereNumber("id");
         Route::get("/attendance/{id}/edit", [AttendanceController::class, "edit"])->name("attendance-edit")->whereNumber("id");
         Route::post("/attendance/{id}/edit", [AttendanceController::class, "update"])->name("attendance-update")->whereNumber("id");

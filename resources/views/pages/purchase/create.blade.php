@@ -67,7 +67,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <input type="submit" class="btn btn-success px-3 py-1" value="Add">
+                    <input type="submit" class="btn btn-success px-3 py-1" value="Simpan Data Baru">
                 </div>
             </form>
         </div>

@@ -6,11 +6,12 @@
         <i class="bi bi-arrow-up-circle" style="font-size: 40px; z-index: 10;"></i>
     </a> --}}
 
-    <div class="px-5">
+    <div class="">
         @if (session()->has('successfulLogin'))
             <p class="text-success fs-5">{{ session('successfulLogin') }}</p>
         @endif
 
+        <!-- Title -->
         <div class="row">
             <div class="col-md-12 grid-margin">
                 <div class="d-flex justify-content-between align-items-center gap-3">
@@ -44,60 +45,76 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-3 grid-margin stretch-card">
-                <div class="card pe-4">
+
+        <!-- Summary -->
+        <div class="d-flex align-items-stretch justify-content-between w-100">
+            <div style="width: 18%;">
+                <div class="card">
                     <div class="card-body">
-                        <p class="card-title text-md-center text-xl-left fs-5"><i class="bi bi-clipboard-x"></i> Stok Kosong</p>
+                        <p class="card-title text-md-center text-xl-left fs-6"><i class="bi bi-clipboard-x"></i> Stok Kosong</p>
                         <div
                             class="d-flex flex-wrap justify-content-md-center justify-content-xl-center align-items-center">
                             <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-center fs-1">{{ $totalemptyproduct }}</h3>
                             <i class="ti-calendar icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
                         </div>
-                        <p class="mb-0 mt-2 text-center"><span class="text-black "><small>(30 days)</small></span>
+                        <p class="mb-0 mt-2 text-center"><span class="text-black "><small>(30 hari terakhir)</small></span>
                         </p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 px-4 grid-margin stretch-card">
+
+            <div style="width: 18%;">
                 <div class="card">
                     <div class="card-body">
-                        <p class="card-title text-md-center text-xl-left fs-5"><i class="bi bi-truck"></i> Total D.Order</p>
+                        <p class="card-title text-md-center text-xl-left fs-6"><i class="bi bi-truck"></i> Total D.Order</p>
                         <div
                             class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-center align-items-center">
                             <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-center fs-1">{{ $totaldelivery }}</h3>
                             <i class="ti-user icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
                         </div>
-                        <p class="mb-0 mt-2 text-center "><span class="text-black "><small>(30 days)</small></span>
+                        <p class="mb-0 mt-2 text-center "><span class="text-black "><small>(30 hari terakhir)</small></span>
                         </p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 px-4 grid-margin stretch-card">
+
+            <div style="width: 18%;">
                 <div class="card">
                     <div class="card-body">
-                        <p class="card-title text-md-center text-xl-left fs-5"><i class="bi bi-cart4"></i> Total Purchase</p>
+                        <p class="card-title text-md-center text-xl-left fs-6"><i class="bi bi-cart4"></i> Total Pembelian</p>
                         <div
                             class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-center align-items-center">
                             <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-center fs-1">{{ $totalpurchase }}</h3>
                             <i class="ti-agenda icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
                         </div>
-                        <p class="mb-0 mt-2 text-center "><span class="text-black "><small>(30
-                                    days)</small></span></p>
+                        <p class="mb-0 mt-2 text-center "><span class="text-black "><small>(30 hari terakhir)</small></span></p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 ps-4 grid-margin stretch-card">
+
+            <div style="width: 18%;">
                 <div class="card">
                     <div class="card-body">
-                        <p class="card-title text-md-center text-xl-left fs-5"><i class="bi bi-building"></i> New Projects</p>
+                        <p class="card-title text-md-center text-xl-left fs-6"><i class="bi bi-building"></i> Proyek Baru</p>
                         <div
                             class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-center align-items-center">
                             <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-center fs-1">{{ $totalnewproject }}</h3>
                             <i class="ti-layers-alt icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
                         </div>
-                        <p class="mb-0 mt-2 text-center"><span class="text-black "><small>(30
-                                    days)</small></span></p>
+                        <p class="mb-0 mt-2 text-center"><span class="text-black "><small>(30 hari terakhir)</small></span></p>
+                    </div>
+                </div>
+            </div>
+            <div style="width: 18%;">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-title text-md-center text-xl-left fs-6"><i class="bi bi-building"></i> Karyawan Aktif</p>
+                        <div
+                            class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-center align-items-center">
+                            <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-center fs-1">{{ $activeemployee }}</h3>
+                            <i class="ti-layers-alt icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                        </div>
+                        <p class="mb-0 mt-2 text-center"><span class="text-black "><small>Dari total {{ $totalemployee }} karyawan</small></span></p>
                     </div>
                 </div>
             </div>
@@ -226,13 +243,15 @@
                 </div>
             </div> --}}
             <!-- nanti ubah jadi col-md-5 kalo top product mau dimunculin -->
-            <div class="col-md-12 grid-margin stretch-card">
+
+            <!-- Todo list -->
+            <div class="col-md-12 grid-margin stretch-card mt-4">
                 <div class="card">
                     <form action="{{ route('todo-update') }}" method="post" class="card-body" id="porm">
                         @csrf
-                        <h4 class="card-title fs-5"><i class="bi bi-journal-text"></i> To Do Lists</h4>
+                        <h4 class="card-title fs-6"><i class="bi bi-journal-text"></i> To Do Lists</h4>
 
-                        <div class="list-wrapper pt-2 h-auto">
+                        <div class="list-wrapper pt-2 h-auto px-3">
                             <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
                                 @forelse($todos as $todo)
                                     <li class="">

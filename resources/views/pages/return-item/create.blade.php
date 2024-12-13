@@ -70,7 +70,7 @@
                 <img id="img-preview" class="w-25 mt-2">
 
                 <div class="mt-3">
-                    <input type="submit" class="btn btn-success px-3 py-1" value="add">
+                    <input type="submit" class="btn btn-success px-3 py-1" value="Simpan Data Baru">
                 </div>
             </form>
         </div>

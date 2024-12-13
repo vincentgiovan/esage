@@ -96,7 +96,7 @@
 
                         <td>{{ Carbon\Carbon::parse($p->purchase_date)->format("d M Y") }}</td>
                         <td>{{ $p->note }}</td>
-                        <td class="fw-bold" style="color: @if($p->purchase_status == 'Ordered') blue @else green @endif;">{{ $p->purchase_status }}</td>
+                        <td class="fw-semibold @if($p->purchase_status == 'Ordered') text-primary @else text-success @endif">{{ $p->purchase_status }}</td>
                         {{-- <td >{{ $p->user->name }}</td> --}}
 
                         @can("admin")

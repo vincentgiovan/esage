@@ -34,8 +34,15 @@ class AttendanceController extends Controller
         ]);
     }
 
-    public function create(){
-        return view("pages.attendance.create", [
+    public function create_admin(){
+        return view("pages.attendance.create-admin", [
+            "projects" => Project::all(),
+            "employees" => Employee::all()
+        ]);
+    }
+
+    public function create_self(){
+        return view("pages.attendance.create-self", [
             "projects" => Project::all(),
             "employees" => Employee::all()
         ]);

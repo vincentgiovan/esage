@@ -13,7 +13,7 @@
         @endif
 
         @can('admin')
-            <a href="{{ route('attendance-create') }}" class="btn btn-primary text-white mt-3" style="font-size: 10pt">
+            <a href="{{ route('attendance-create-admin') }}" class="btn btn-primary text-white mt-3" style="font-size: 10pt">
                 <i class="bi bi-plus-square"></i>
                 Add New Attendance
             </a>

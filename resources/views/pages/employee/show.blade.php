@@ -82,6 +82,10 @@
                 <th class="border border-1 border-secondary w-25">Keterangan</th>
                 <td class="border border-1 border-secondary">{{ $employee->keterangan ?? "N/A" }}</td>
             </tr>
+            <tr>
+                <th class="border border-1 border-secondary w-25">Status</th>
+                <td class="border border-1 border-secondary">{{ $employee->status ? ucwords($employee->status) : "N/A" }}</td>
+            </tr>
         </table>
     </x-container>
 @endsection

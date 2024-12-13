@@ -28,7 +28,7 @@
                     <th>Lembur</th>
                     <th>L.Panjang</th>
                     <th>Performa</th>
-                    <th>Payroll</th>
+                    <th>Status</th>
                     <th>Kasbon</th>
                     <th>Actions</th>
                 </tr>
@@ -43,7 +43,8 @@
                         <td>{{ __("Rp " . number_format($e->lembur, 2, ',', '.')) }}</td>
                         <td>{{ __("Rp " . number_format($e->lembur_panjang, 2, ',', '.')) }}</td>
                         <td>{{ __("Rp " . number_format($e->performa, 2, ',', '.')) }}</td>
-                        <td>{{ ($e->payroll == "on")? "Ya" : "Tidak" }}</td>
+                        {{-- <td>{{ ($e->payroll == "on")? "Ya" : "Tidak" }}</td> --}}
+                        <td class="fw-semibold {{ $e->status == 'active'? 'text-primary' : 'text-danger' }}">{{ ucwords($e->status) }}</td>
                         <td>{{ __(("Rp " .  number_format($e->kasbon, 2, ',', '.'))) }}</td>
                         <td>
                             <div class="d-flex gap-2 w-100">

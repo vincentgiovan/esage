@@ -13,18 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('salaries', function (Blueprint $table) {
+        Schema::create('employee_projects', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger("employee_id");
-            $table->foreign("employee_id")->references("id")->on("employees")->onDelete('cascade');
+            $table->unsignedBigInteger('employee_id');
+            $table->unsignedBigInteger('project_id');
 
-            $table->date('start_period');
-            $table->date('end_period');
-
-            $table->unsignedBigInteger("total");
-
-            $table->longText("keterangan")->nullable();
+            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
 
             $table->timestamps();
         });
@@ -37,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('salaries');
+        Schema::dropIfExists('employee_projects');
     }
 };

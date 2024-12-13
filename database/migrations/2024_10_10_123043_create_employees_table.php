@@ -31,6 +31,7 @@ return new class extends Migration
             $table->string("payroll")->default("off");
             $table->unsignedBigInteger("kasbon")->nullable();
             $table->longText("keterangan")->nullable();
+            $table->string('status')->default('active');
 
             $table->timestamps();
         });

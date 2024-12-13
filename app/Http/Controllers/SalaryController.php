@@ -34,7 +34,7 @@ class SalaryController extends Controller
             $startOfWeek = $currentSaturday->copy()->subDays(6); // Saturday
             $endOfWeek = $currentSaturday->copy(); // Friday
 
-            $employees = Employee::where("kalkulasi_gaji", "on")->get();
+            $employees = Employee::where("kalkulasi_gaji", "on")->where("status", "active")->get();
 
             foreach ($employees as $employee) {
                 $attendances = $employee->attendances()

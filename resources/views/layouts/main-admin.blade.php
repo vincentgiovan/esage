@@ -162,12 +162,12 @@
         <script>
             $(document).ready(() => {
                 // Buat ngubah dropdown select product jadi select2 (yang ada fitur searchnya) dan sedikit styling
-                $('#select-product-dropdown').select2({
-                    placeholder: "Select a Student",
+                $('.select2').select2({
+                    placeholder: "Select an Item",
                     allowClear: false
                 });
 
-                $('#select-product-dropdown').next('.select2-container').find('.select2-selection').css({
+                $('.select2').next('.select2-container').find('.select2-selection').css({
                     "height": "2.4rem",
                     "padding-top": "0.3rem",
                     "border": "#dee2e6 solid 1px",

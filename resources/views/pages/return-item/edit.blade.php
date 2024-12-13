@@ -74,7 +74,7 @@
                 <img id="img-preview" class="w-25 mt-2" @if($return_item->foto) src="{{ Storage::url("app/public/" . $return_item->foto) }}" @endif>
 
                 <div class="mt-3">
-                    <input type="submit" class="btn btn-success px-3 py-1" value="add">
+                    <input type="submit" class="btn btn-success px-3 py-1" value="Simpan Perubahan">
                 </div>
             </form>
         </div>

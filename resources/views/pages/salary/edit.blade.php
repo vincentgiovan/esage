@@ -39,7 +39,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <input type="submit" class="btn btn-success px-3 py-1" value="Edit">
+                    <input type="submit" class="btn btn-success px-3 py-1" value="Simpan Perubahan">
                 </div>
             </form>
         </div>

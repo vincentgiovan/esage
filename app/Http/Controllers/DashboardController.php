@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Purchase;
 use Illuminate\Http\Request;
 use App\Models\DeliveryOrder;
+use App\Models\Employee;
 use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,6 +31,10 @@ class DashboardController extends Controller
         // Jumlah project baru dalam 1 bulan terakhir
         $totalnewproject = Project::where("created_at", "like", $currentMonth . "%")->get()->count();
 
+        // Jumlah karyawan aktif
+        $totalactive = Employee::where("status", "active")->count();
+        $totalemployee = Employee::all()->count();
+
         // Ambil data todo list
         $todos = Todo::where("user_id", Auth::user()->id)->get();
 
@@ -39,6 +44,8 @@ class DashboardController extends Controller
             "totaldelivery" => $totalDelivery,
             "totalpurchase" => $totalPurchase,
             "totalnewproject" => $totalnewproject,
+            "activeemployee" => $totalactive,
+            "totalemployee" => $totalemployee,
             "todos" => $todos
         ]);
 

@@ -17,10 +17,10 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger("delivery_order_product_id");
-            $table->foreign("delivery_order_product_id")->references("id")->on("delivery_order_products");
+            $table->foreign("delivery_order_product_id")->references("id")->on("delivery_order_products")->onDelete('cascade');
 
             $table->unsignedBigInteger("product_id");
-            $table->foreign("product_id")->references("id")->on("products");
+            $table->foreign("product_id")->references("id")->on("products")->onDelete('cascade');
 
             $table->string("foto");
             $table->string("PIC");
