@@ -314,18 +314,19 @@ Route::middleware(["auth", "verified"])->group(function(){
 
         // ===== ATTENDANCE ===== //
         Route::get("/attendance", [AttendanceController::class, "index"])->name("attendance-index");
+        Route::get("/attendance/{id}", [AttendanceController::class, "show"])->name('attendance-show')->whereNumber("id");
         Route::get("/attendance/create/admin", [AttendanceController::class, "create_admin"])->name("attendance-create-admin");
-        Route::get("/attendance/create/self", [AttendanceController::class, "create_self"])->name("attendance-create-self");
         Route::post("/attendance/create/admin", [AttendanceController::class, "store_admin"])->name("attendance-store-admin");
-        Route::post("/attendance/create/self", [AttendanceController::class, "store_self"])->name("attendance-store-self");
         Route::get("/attendance/{id}/edit", [AttendanceController::class, "edit"])->name("attendance-edit")->whereNumber("id");
         Route::post("/attendance/{id}/edit", [AttendanceController::class, "update"])->name("attendance-update")->whereNumber("id");
         Route::post("/attendance/{id}/delete", [AttendanceController::class, "destroy"])->name("attendance-destroy")->whereNumber("id");
-        Route::get("/attendance/{id}/location", [AttendanceController::class, "location"])->name('attendance-location')->whereNumber("id");
 
         // ===== VISIT LOG ===== //
         Route::get("/visit-log", [AccountController::class, "visit_log"])->name("visitlog-index");
     });
+
+    Route::get("/attendance/create/self", [AttendanceController::class, "create_self"])->name("attendance-create-self")->middleware("self_attendance");
+    Route::post("/attendance/create/self", [AttendanceController::class, "store_self"])->name("attendance-store-self")->middleware("self_attendance");
 });
 
 Auth::routes(["verify"=>true]);

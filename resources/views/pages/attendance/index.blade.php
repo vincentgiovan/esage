@@ -3,13 +3,20 @@
 @section("content")
     <x-container>
         <br>
-        <h3>Presensi Pegawai</h3>
+        <div class="d-flex w-100 justify-content-between align-items-center">
+            <h3>Presensi Pegawai</h3>
+            @can('admin')
+                @can('self_attendance')
+                    <a class="btn btn-primary" href="{{ route('attendance-create-self') }}">Self Attendance</a>
+                @endcan
+            @endcan
+        </div>
         <hr>
 
         @if (session()->has('successEditAttendance'))
             <p class="text-success fw-bold">{{ session('successEditAttendance') }}</p>
-        @elseif (session()->has('successAddAttendance'))
-            <p class="text-success fw-bold">{{ session('successAddAttendance') }}</p>
+        @elseif (session()->has('successCreateAttendance'))
+            <p class="text-success fw-bold">{{ session('successCreateAttendance') }}</p>
         @endif
 
         @can('admin')
@@ -64,8 +71,8 @@
                         </td>
                         <td>
                             <div class="d-flex gap-2 w-100">
-                                <a href="{{ route('attendance-location', $a->id) }}" class="btn btn-success text-white">
-                                    <i class="bi bi-geo-alt-fill"></i>
+                                <a href="{{ route('attendance-show', $a->id) }}" class="btn btn-success text-white">
+                                    <i class="bi bi-eye"></i>
                                 </a>
                                 <a href="{{ route('attendance-edit', $a->id) }}" class="btn btn-warning text-white"
                                     style="font-size: 10pt; background-color: rgb(197, 167, 0);">

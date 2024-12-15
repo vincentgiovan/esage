@@ -16,6 +16,9 @@ return new class extends Migration
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
 
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('user')->onDelete('null');
+
             $table->string("nama");
             $table->string("NIK")->nullable();
             $table->string("foto_ktp")->nullable();

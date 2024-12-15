@@ -9,6 +9,7 @@ use App\Models\Employee;
 use App\Models\Attendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class AttendanceController extends Controller
 {
@@ -44,6 +45,12 @@ class AttendanceController extends Controller
         ]);
     }
 
+    public function show($id){
+        return view("pages.attendance.show", [
+            "attendance" => Attendance::find($id)
+        ]);
+    }
+
     public function create_admin(Request $request){
         return view("pages.attendance.create-admin", [
             "project" => Project::find($request->query('project'))
@@ -51,9 +58,12 @@ class AttendanceController extends Controller
     }
 
     public function create_self(){
+        $existing_data = Attendance::where("attendance_date", Carbon::parse(now())->format('Y-m-d'))->where('employee_id', Auth::user()->employee_data->id)->get();
+
         return view("pages.attendance.create-self", [
             "projects" => Project::where('archived', 0)->get(),
-            "employees" => Employee::where('archived', 0)->get()
+            "employees" => Employee::where('archived', 0)->get(),
+            "existing_attendances" => $existing_data
         ]);
     }
 
@@ -64,7 +74,7 @@ class AttendanceController extends Controller
         try {
             DB::beginTransaction();
 
-            foreach($request->employee as $i => $remp){
+            foreach($request->employee as $remp){
                 $t = [];
                 $employee = Employee::find($remp);
 
@@ -74,8 +84,8 @@ class AttendanceController extends Controller
                 for($j = 0; $j < 7; $j++){
                     $atd_start_date = Carbon::parse($request->start_date);
 
-                    $start_work = $request->start_time[$i][$j] ? $request->start_time[$i][$j] . ':00' : 'Off';
-                    $end_work = $request->end_time[$i][$j] ? $request->end_time[$i][$j] . ':00' : 'Off';
+                    $start_work = $request->start_time[$remp][$j] ? $request->start_time[$remp][$j] . ':00' : 'Off';
+                    $end_work = $request->end_time[$remp][$j] ? $request->end_time[$remp][$j] . ':00' : 'Off';
 
                     if($end_work != 'Off'){
                         $status = 'Normal';
@@ -202,7 +212,9 @@ class AttendanceController extends Controller
             "jam_lembur" => "required|numeric|min:0",
             "index_lembur_panjang" => "required|numeric|min:0",
             "index_performa" => "required|numeric|min:0",
-            "remark" => "nullable"
+            "remark" => "nullable",
+            "jam_masuk" => "required",
+            "jam_keluar" => "required"
         ]);
 
         Attendance::find($id)->update($validatedData);
@@ -214,11 +226,5 @@ class AttendanceController extends Controller
         Attendance::find($id)->update(["archived" => 1]);
 
         return redirect(route("attendance-index"))->with("successDeleteAttendance", "New attendance deleted sucessfully!");
-    }
-
-    public function location($id){
-        return view("pages.attendance.check-location", [
-            "attendance" => Attendance::find($id)
-        ]);
     }
 }

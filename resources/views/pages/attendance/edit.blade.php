@@ -17,7 +17,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="employee_id">Employee Name</label>
+                    <label for="employee_id">Pegawai</label>
                     <select type="text" class="form-select text-black @error('employee_id') is-invalid @enderror" id="employee_id" name="employee_id">
                         <option selected disabled>Select an employee</option>
                         @foreach ($employees as $e)
@@ -30,7 +30,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="project_id">Project Name</label>
+                    <label for="project_id">Proyek</label>
                     <select type="text" class="form-select text-black @error('project_id') is-invalid @enderror" id="project_id" name="project_id">
                         <option selected disabled>Select a project</option>
                         @foreach ($projects as $p)
@@ -44,7 +44,26 @@
 
                 <div class="d-flex w-100 gap-4 mt-3">
                     <div class="w-50">
-                        <label for="normal">Normal</label>
+                        <label for="jam_masuk">Jam Masuk</label>
+                        <input type="time" class="form-control @error('jam_masuk') is-invalid @enderror" id="jam_masuk" name="jam_masuk" placeholder="Input Index lembur panjang"
+                            value="{{ old('jam_masuk', $attendance->jam_masuk) }}">
+                        @error('jam_masuk')
+                            <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="w-50">
+                        <label for="jam_keluar">Jam Keluar</label>
+                        <input type="time" class="form-control @error('jam_keluar') is-invalid @enderror" id="jam_keluar" name="jam_keluar" value="{{ $attendance->jam_keluar }}" >
+                        @error('jam_keluar')
+                            <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="d-flex w-100 gap-4 mt-3">
+                    <div class="w-50">
+                        <label for="normal">Jam Normal</label>
                         <input type="text" class="form-control @error('normal') is-invalid @enderror" id="normal" name="normal" placeholder="Input normal"
                             value="{{ old('normal', $attendance->normal) }}">
                         @error('normal')
@@ -53,9 +72,10 @@
                     </div>
 
                     <div class="w-50">
-                        <label for="pokok">Pokok</label>
-                        <input type="text" class="form-control @error('pokok') is-invalid @enderror" id="pokok" value="{{ $attendance->employee->pokok }}" disabled>
-                        @error('pokok')
+                        <label for="index_performa">Indeks Performa</label>
+                        <input type="text" class="form-control @error('index_performa') is-invalid @enderror" id="index_performa" name="index_performa" placeholder="Input index performa"
+                            value="{{ old('index_performa', $attendance->index_performa) }}">
+                        @error('index_performa')
                             <p style="color: red; font-size: 10px;">{{ $message }}</p>
                         @enderror
                     </div>
@@ -72,47 +92,10 @@
                     </div>
 
                     <div class="w-50">
-                        <label for="lembur">Lembur</label>
-                        <input type="text" class="form-control @error('lembur') is-invalid @enderror" id="lembur" value="{{ $attendance->employee->lembur }}" disabled>
-                        @error('lembur')
-                            <p style="color: red; font-size: 10px;">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="d-flex w-100 gap-4 mt-3">
-                    <div class="w-50">
                         <label for="index_lembur_panjang">Index Lembur Panjang</label>
                         <input type="text" class="form-control @error('index_lembur_panjang') is-invalid @enderror" id="index_lembur_panjang" name="index_lembur_panjang" placeholder="Input Index lembur panjang"
                             value="{{ old('index_lembur_panjang', $attendance->index_lembur_panjang) }}">
                         @error('index_lembur_panjang')
-                            <p style="color: red; font-size: 10px;">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="w-50">
-                        <label for="lembur_panjang">Lembur Panjang</label>
-                        <input type="text" class="form-control @error('lembur_panjang') is-invalid @enderror" id="lembur_panjang" value="{{ $attendance->employee->lembur_panjang }}" disabled>
-                        @error('lembur_panjang')
-                            <p style="color: red; font-size: 10px;">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="d-flex w-100 gap-4 mt-3">
-                    <div class="w-50">
-                        <label for="index_performa">Index Performa</label>
-                        <input type="text" class="form-control @error('index_performa') is-invalid @enderror" id="index_performa" name="index_performa" placeholder="Input index performa"
-                            value="{{ old('index_performa', $attendance->index_performa) }}">
-                        @error('index_performa')
-                            <p style="color: red; font-size: 10px;">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="w-50">
-                        <label for="performa">Performa</label>
-                        <input type="text" class="form-control @error('performa') is-invalid @enderror" id="performa" value="{{ $attendance->employee->performa }}" disabled>
-                        @error('performa')
                             <p style="color: red; font-size: 10px;">{{ $message }}</p>
                         @enderror
                     </div>
@@ -136,20 +119,4 @@
             </form>
         </div>
     </x-container-middle>
-
-    <script>
-        $(document).ready(() => {
-            const all_employees = @json($employees);
-
-            $("#employee_id").change(function(){
-                const targetted = all_employees.find(item => item.id == $(this).val());
-
-                $("#pokok").val(targetted.pokok);
-                $("#lembur").val(targetted.lembur);
-                $("#lembur_panjang").val(targetted.lembur_panjang);
-                $("#performa").val(targetted.performa);
-            });
-        });
-    </script>
-
 @endsection

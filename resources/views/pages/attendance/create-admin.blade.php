@@ -83,8 +83,8 @@
                                     <td>{{ $e->jabatan }}</td>
                                     <td style="width: 100px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
-                                            <input type="time" name="start_time[{{ $loop->index }}][]" value="08:00">
-                                            <input type="time" name="end_time[{{ $loop->index }}][]" class="endtime-weekend" value="16:00">
+                                            <input type="time" name="start_time[{{ $e->id }}][]" value="08:00">
+                                            <input type="time" name="end_time[{{ $e->id }}][]" class="endtime-weekend" value="16:00">
                                             <label for="offcb{{ $e->id }}sat" class="d-flex gap-2 align-items-center w-100">
                                                 <input type="checkbox" class="off-checkbox off-sat" id="offcb{{ $e->id }}sat"> Off
                                             </label>
@@ -92,8 +92,8 @@
                                     </td>
                                     <td style="width: 100px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
-                                            <input type="time" name="start_time[{{ $loop->index }}][]" value="08:00">
-                                            <input type="time" name="end_time[{{ $loop->index }}][]" class="endtime-weekend" value="16:00">
+                                            <input type="time" name="start_time[{{ $e->id }}][]" value="08:00">
+                                            <input type="time" name="end_time[{{ $e->id }}][]" class="endtime-weekend" value="16:00">
                                             <label for="offcb{{ $e->id }}sun" class="d-flex gap-2 align-items-center w-100">
                                                 <input type="checkbox" class="off-checkbox off-sun" id="offcb{{ $e->id }}sun"> Off
                                             </label>
@@ -101,8 +101,8 @@
                                     </td>
                                     <td style="width: 100px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
-                                            <input type="time" name="start_time[{{ $loop->index }}][]" value="08:00">
-                                            <input type="time" name="end_time[{{ $loop->index }}][]" value="17:00">
+                                            <input type="time" name="start_time[{{ $e->id }}][]" value="08:00">
+                                            <input type="time" name="end_time[{{ $e->id }}][]" value="17:00">
                                             <label for="offcb{{ $e->id }}mon" class="d-flex gap-2 align-items-center w-100">
                                                 <input type="checkbox" class="off-checkbox off-mon" id="offcb{{ $e->id }}mon"> Off
                                             </label>
@@ -110,8 +110,8 @@
                                     </td>
                                     <td style="width: 100px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
-                                            <input type="time" name="start_time[{{ $loop->index }}][]" value="08:00">
-                                            <input type="time" name="end_time[{{ $loop->index }}][]" value="17:00">
+                                            <input type="time" name="start_time[{{ $e->id }}][]" value="08:00">
+                                            <input type="time" name="end_time[{{ $e->id }}][]" value="17:00">
                                             <label for="offcb{{ $e->id }}tue" class="d-flex gap-2 align-items-center w-100">
                                                 <input type="checkbox" class="off-checkbox off-tue" id="offcb{{ $e->id }}tue"> Off
                                             </label>
@@ -119,8 +119,8 @@
                                     </td>
                                     <td style="width: 100px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
-                                            <input type="time" name="start_time[{{ $loop->index }}][]" value="08:00">
-                                            <input type="time" name="end_time[{{ $loop->index }}][]" value="17:00">
+                                            <input type="time" name="start_time[{{ $e->id }}][]" value="08:00">
+                                            <input type="time" name="end_time[{{ $e->id }}][]" value="17:00">
                                             <label for="offcb{{ $e->id }}wed" class="d-flex gap-2 align-items-center w-100">
                                                 <input type="checkbox" class="off-checkbox off-wed" id="offcb{{ $e->id }}wed"> Off
                                             </label>
@@ -128,8 +128,8 @@
                                     </td>
                                     <td style="width: 100px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
-                                            <input type="time" name="start_time[{{ $loop->index }}][]" value="08:00">
-                                            <input type="time" name="end_time[{{ $loop->index }}][]" value="17:00">
+                                            <input type="time" name="start_time[{{ $e->id }}][]" value="08:00">
+                                            <input type="time" name="end_time[{{ $e->id }}][]" value="17:00">
                                             <label for="offcb{{ $e->id }}thu" class="d-flex gap-2 align-items-center w-100">
                                                 <input type="checkbox" class="off-checkbox off-thu" id="offcb{{ $e->id }}thu"> Off
                                             </label>
@@ -137,8 +137,8 @@
                                     </td>
                                     <td style="width: 100px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
-                                            <input type="time" name="start_time[{{ $loop->index }}][]" value="08:00">
-                                            <input type="time" name="end_time[{{ $loop->index }}][]" value="17:00">
+                                            <input type="time" name="start_time[{{ $e->id }}][]" value="08:00">
+                                            <input type="time" name="end_time[{{ $e->id }}][]" value="17:00">
                                             <label for="offcb{{ $e->id }}fri" class="d-flex gap-2 align-items-center w-100">
                                                 <input type="checkbox" class="off-checkbox off-fri" id="offcb{{ $e->id }}fri"> Off
                                             </label>
