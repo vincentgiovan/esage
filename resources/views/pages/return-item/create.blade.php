@@ -77,7 +77,7 @@
     </x-container-middle>
 
     <script>
-        const all_prod = @json(App\Models\Product::all());
+        const all_prod = @json(App\Models\Product::where('archived', 0)->get());
 
         $(document).ready(function(){
             $("#image").on("change", function(){

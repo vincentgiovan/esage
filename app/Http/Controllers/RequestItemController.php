@@ -12,7 +12,7 @@ class RequestItemController extends Controller
 {
     public function index(){
         return view("pages.request-item.index", [
-            "requests" => RequestItem::all()
+            "requests" => RequestItem::where('archived', 0)->get()
         ]);
     }
 
@@ -24,8 +24,8 @@ class RequestItemController extends Controller
 
     public function create(){
         return view("pages.request-item.create", [
-            "projects" => Project::all(),
-            "products" => Product::all()
+            "projects" => Project::where('archived', 0)->get(),
+            "products" => Product::where('archived', 0)->get()
         ]);
     }
 
@@ -52,8 +52,8 @@ class RequestItemController extends Controller
         return view("pages.request-item.edit", [
             "request_item" => RequestItem::find($id),
             "rip" => RequestItemProduct::where("request_item_id", $id)->get(),
-            "projects" => Project::all(),
-            "products" => Product::all()
+            "projects" => Project::where('archived', 0)->get(),
+            "products" => Product::where('archived', 0)->get()
         ]);
     }
 

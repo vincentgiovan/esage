@@ -16,7 +16,7 @@ class AccountController extends Controller
     public function index()
     {
         // Ambil semua data akun dari tabel user
-        $users = User::all();
+        $users = User::where('archived', 0)->get();
 
         // Tampilkan halaman account/index.blade.php dan kirimkan data semua akun ke blade-nya
         return view('accounts.index', compact('users'));
@@ -59,7 +59,7 @@ class AccountController extends Controller
     public function update(Request $request, $id)
     {
         // Targetkan data akun mana yang mau di-update berdasarkan yang dipilih di halaman sebelumnya
-        $user = User::where("id", $id);
+        $user = User::find($id);
 
         // Bikin aturan dasar validasinya (setidaknya nama sama email harus diisi pas form edit di-submit)
         $validationRule = [
@@ -128,7 +128,7 @@ class AccountController extends Controller
 
     public function visit_log(){
         return view("pages.visit-log.index", [
-            "visit_logs" => VisitLog::all()
+            "visit_logs" => VisitLog::where('archived', 0)->get()
         ]);
     }
 }

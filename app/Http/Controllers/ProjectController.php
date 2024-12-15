@@ -14,7 +14,7 @@ class ProjectController extends Controller{
     {
         // Tampilkan halaman pages/project/index.blade.php beserta data yang diperlukan:
         return view("pages.project.index", [
-            "projects" => Project::all() // semua data project buat ditampilin satu-satu
+            "projects" => Project::where('archived', 0)->get() // semua data project buat ditampilin satu-satu
         ]);
     }
 
@@ -48,7 +48,7 @@ class ProjectController extends Controller{
     {
         // Tampilkan halaman pages/project/edit.blade.php beserta data yang diperlukan di blade-nya:
         return view("pages.project.edit", [
-            "project" => Project::where("id", $id)->first() // data project yang mau di-edit buat autofill data di form
+            "project" => Project::find($id) // data project yang mau di-edit buat autofill data di form
         ]);
     }
 
@@ -64,7 +64,7 @@ class ProjectController extends Controller{
         ]);
 
         // Simpan perubahan datanya di tabel projects
-        Project::where("id", $id)->update($validatedData);
+        Project::find($id)->update($validatedData);
 
         // Arahkan user kembali ke halaman pages/project/index.blade.php
         return redirect(route("project-index"))->with("successEditProject", "Project editted successfully!");

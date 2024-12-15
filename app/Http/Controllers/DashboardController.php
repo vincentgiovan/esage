@@ -32,7 +32,7 @@ class DashboardController extends Controller
 
         // Jumlah pegawai aktif
         $totalactive = Employee::where("status", "active")->count();
-        $totalemployee = Employee::all()->count();
+        $totalemployee = Employee::where('archived', 0)->get()->count();
 
         // Ambil data todo list
         $todos = Todo::where("user_id", Auth::user()->id)->get();

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class SalaryController extends Controller
 {
     public function index(){
-        $salaries = Salary::all();
+        $salaries = Salary::where('archived', 0)->get();
 
         return view("pages.salary.index", [
             "salaries" => $salaries,

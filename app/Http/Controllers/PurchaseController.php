@@ -20,7 +20,7 @@ class PurchaseController extends Controller
     {
         // Tampilkan halaman pages/purchase/index.blade.php beserta data yang diperlukan di blade-nya:
         return view("pages.purchase.index", [
-            "purchases" => Purchase::all() // semua data purchases buat ditampilin satu-satu
+            "purchases" => Purchase::where('archived', 0)->get() // semua data purchases buat ditampilin satu-satu
         ]);
     }
 
@@ -29,9 +29,9 @@ class PurchaseController extends Controller
     {
         // Tampilkan halaman pages/purchase/create.blade.php dan data-data yang diperlukan di blade-nya:
         return view("pages.purchase.create", [
-            "supplier" => Partner::all(), // data semua partner (supplier) untuk dropdown/select partner
+            "supplier" => Partner::where('archived', 0)->get(), // data semua partner (supplier) untuk dropdown/select partner
             "status" => ["Ordered", "Retrieved"], // untuk dropdown status purchase
-            "purchases" => Purchase::all() // data semua purchase untuk auto generate SKU
+            "purchases" => Purchase::where('archived', 0)->get() // data semua purchase untuk auto generate SKU
         ]);
     }
 
@@ -59,10 +59,10 @@ class PurchaseController extends Controller
     {
         // Tampilkan halaman pages/purchase/edit.blade.php beserta data yang diperlukan di blade-nya:
         return view("pages.purchase.edit", [
-            "purchase" => Purchase::where("id", $id)->first(), // data purchase yang mau di-edit buat auto fill form
-            "supplier" => Partner::all(), // data semua partner (supplier) buat dropdown/select partner
+            "purchase" => Purchase::find($id), // data purchase yang mau di-edit buat auto fill form
+            "supplier" => Partner::where('archived', 0)->get(), // data semua partner (supplier) buat dropdown/select partner
             "status" => ["Ordered", "Retrieved"], // untuk dropdown status purchase
-            "purchases" => Purchase::all() // data semua purchase untuk auto generate SKU
+            "purchases" => Purchase::where('archived', 0)->get() // data semua purchase untuk auto generate SKU
         ]);
     }
 
@@ -79,7 +79,7 @@ class PurchaseController extends Controller
         ]);
 
         // Simpan perubahannya di data yang sesuai di tabel purchases
-        Purchase::where("id", $id)->update($validatedData);
+        Purchase::find($id)->update($validatedData);
 
         // Arahkan user kembali ke halaman pages/purchase/index.blade.php
         return redirect(route("purchase-index"))->with("successEditPurchase", "Purchase editted successfully!");
@@ -94,9 +94,9 @@ class PurchaseController extends Controller
 
         // Untuk setiap data yang kita peroleh lakukan:
         foreach ($pp as $data){
-            $product = Product::where("id", $data->product_id)->first(); // Targetkan data product di tabel aslinya
+            $product = Product::find($data->product_id); // Targetkan data product di tabel aslinya
             $oldstock = $product->stock; // Ambil data stok saat ini
-            Product::where("id", $data->product_id)->update(["stock"=> ($oldstock -
+            Product::find($data->product_id)->update(["stock"=> ($oldstock -
             $data->quantity)]); // Kembalikan stoknya ke jumlah yang seharusnya (dikurangin karena purchase membuat stok produk bertambah)
         }
 

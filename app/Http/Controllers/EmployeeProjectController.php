@@ -46,7 +46,7 @@ class EmployeeProjectController extends Controller
         $project = Project::find($id);
         $employee = Employee::find($request->employee);
 
-        $del = EmployeeProject::where("project_id", $project->id)->where("employee_id", $employee->id)->first();
+        $del = EmployeeProject::where("project_id", $project->id)->where("employee_id", $employee->id);
         $del->delete();
 
         return back()->with('successUnassignEmployee', 'Berhasil menghapus pegawai dari proyek.');

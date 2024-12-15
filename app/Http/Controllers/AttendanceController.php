@@ -36,15 +36,15 @@ class AttendanceController extends Controller
 
     public function create_admin(){
         return view("pages.attendance.create-admin", [
-            "projects" => Project::all(),
-            "employees" => Employee::all()
+            "projects" => Project::where('archived', 0)->get(),
+            "employees" => Employee::where('archived', 0)->get()
         ]);
     }
 
     public function create_self(){
         return view("pages.attendance.create-self", [
-            "projects" => Project::all(),
-            "employees" => Employee::all()
+            "projects" => Project::where('archived', 0)->get(),
+            "employees" => Employee::where('archived', 0)->get()
         ]);
     }
 
@@ -70,8 +70,8 @@ class AttendanceController extends Controller
     public function edit($id){
         return view("pages.attendance.edit", [
             "attendance" => Attendance::find($id),
-            "projects" => Project::all(),
-            "employees" => Employee::all()
+            "projects" => Project::where('archived', 0)->get(),
+            "employees" => Employee::where('archived', 0)->get()
         ]);
     }
 

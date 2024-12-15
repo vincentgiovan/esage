@@ -20,13 +20,13 @@ use PhpParser\Node\Stmt\Return_;
 class ReturnItemController extends Controller {
     public function index(){
         return view("pages.return-item.index", [
-            "return_items" => ReturnItem::all()
+            "return_items" => ReturnItem::where('archived', 0)->get()
         ]);
     }
 
     public function create(){
         return view("pages.return-item.create", [
-            "delivery_orders" => DeliveryOrder::all()
+            "delivery_orders" => DeliveryOrder::where('archived', 0)->get()
         ]);
     }
 
@@ -116,7 +116,7 @@ class ReturnItemController extends Controller {
     public function edit($id){
         return view("pages.return-item.edit", [
             "return_item" => ReturnItem::find($id),
-            "delivery_orders" => DeliveryOrder::all()
+            "delivery_orders" => DeliveryOrder::where('archived', 0)->get()
         ]);
     }
 

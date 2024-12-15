@@ -15,7 +15,7 @@ class PartnerController extends Controller{
     {
         // Tampilkan halaman pages/partner/index.blade.php beserta data yang diperlukan di blade-nya:
         return view("pages.partner.index", [
-            "partners" => Partner::all() // semua data partner buat ditampilin satu-satu di tabel
+            "partners" => Partner::where('archived', 0)->get() // semua data partner buat ditampilin satu-satu di tabel
         ]);
     }
 
@@ -54,7 +54,7 @@ class PartnerController extends Controller{
     {
         // Tampilkan halaman pages/partner/edit.blade.php beserta data yang diperlukan di blade-nya:
         return view("pages.partner.edit", [
-            "partner" => Partner::where("id", $id)->first() // data partner yang mau di-edit buat auto fill form-nya
+            "partner" => Partner::find($id) // data partner yang mau di-edit buat auto fill form-nya
         ]);
     }
 
@@ -75,7 +75,7 @@ class PartnerController extends Controller{
         ]);
 
         // Simpan perubahan data ke tabel partners
-        Partner::where("id", $id)->update($validatedData);
+        Partner::find($id)->update($validatedData);
 
         // Arahkan user kembali ke halaman pages/partner/index.blade.php
         return redirect(route("partner-index"))->with("successEditPartner", "Partner editted successfully!");

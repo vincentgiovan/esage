@@ -45,7 +45,7 @@ class ProductController extends Controller{
     {
         // Tampilkan halaman pages/product/create.blade.php
         return view("pages.product.create", [
-            "products" => Product::all()
+            "products" => Product::where('archived', 0)->get()
         ]);
     }
 
@@ -80,7 +80,7 @@ class ProductController extends Controller{
     {
         // Tampilkan halaman pages/product/edit.blade.php beserta data yang diperlukan di blade-nya
         return view("pages.product.edit", [
-            "product" => Product::where("id", $id)->first(), // data product yang mau di-edit buat auto fill form-nya
+            "product" => Product::find($id), // data product yang mau di-edit buat auto fill form-nya
             "status" => ["Ready", "Out Of Stock"] // buat dropdown status product
         ]);
     }
@@ -101,7 +101,7 @@ class ProductController extends Controller{
         ]);
 
         // Simpan perubahan datanya di data produk yang ditargetkan di tabel products
-        Product::where("id", $id)->update($validatedData);
+        Product::find($id)->update($validatedData);
 
         // Arahkan user kembali ke halaman pages/product/index.blade.php
         return redirect(route("product-index"))->with("successEditProduct", "Product editted successfully!");

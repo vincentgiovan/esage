@@ -26,8 +26,8 @@ class EmployeeController extends Controller
 
     public function create(){
         return view("pages.employee.create", [
-            "positions" => Position::all(),
-            "specialities" => Speciality::all()
+            "positions" => Position::where('archived', 0)->get(),
+            "specialities" => Speciality::where('archived', 0)->get()
         ]);
     }
 
@@ -72,8 +72,8 @@ class EmployeeController extends Controller
     public function edit($id){
         return view("pages.employee.edit", [
             "employee" => Employee::find($id),
-            "positions" => Position::all(),
-            "specialities" => Speciality::all()
+            "positions" => Position::where('archived', 0)->get(),
+            "specialities" => Speciality::where('archived', 0)->get()
         ]);
     }
 
@@ -125,8 +125,8 @@ class EmployeeController extends Controller
 
     public function manage_form(){
         return view("pages.employee.manage-form", [
-            "positions" => Position::all(),
-            "specialities" => Speciality::all()
+            "positions" => Position::where('archived', 0)->get(),
+            "specialities" => Speciality::where('archived', 0)->get()
         ]);
     }
 

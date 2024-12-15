@@ -18,7 +18,7 @@ class DeliveryOrderController extends Controller{
     {
         // Tampilkan halaman pages/delivery-order/index.blade.php beserta data yang diperlukan di blade-nya
         return view("pages.delivery-order.index", [
-            "deliveryorders" => DeliveryOrder::all() // Semua data delivery orders (buat ditampilin satu satu di tabel)
+            "deliveryorders" => DeliveryOrder::where('archived', 0)->get() // Semua data delivery orders (buat ditampilin satu satu di tabel)
         ]);
     }
 
@@ -27,8 +27,8 @@ class DeliveryOrderController extends Controller{
     {
         // Tampilkan halaman pages/delivery-order/create.blade.php beserta data yang diperlukan di blade-nya
         return view("pages.delivery-order.create", [
-            "projects" => Project::all(), // Semua data project (buat dropdown/select project)
-            "delivery_orders" => DeliveryOrder::all(), // Semua data delivery order (buat auto generate SKU)
+            "projects" => Project::where('archived', 0)->get(), // Semua data project (buat dropdown/select project)
+            "delivery_orders" => DeliveryOrder::where('archived', 0)->get(), // Semua data delivery order (buat auto generate SKU)
         ]);
     }
 
@@ -57,10 +57,10 @@ class DeliveryOrderController extends Controller{
     {
         // Tampilkan halaman pages/deliver-order/edit.blade.php beserta data-data yang diperlukan di blade-nya
         return view("pages.delivery-order.edit", [
-            "delivery_order" => DeliveryOrder::where("id", $id)->first(), // data delivery order yang mau di-edit buat nanti auto fill di form edit
-            "projects" => Project::all(), // data semua project (buat dropdown/select project)
+            "delivery_order" => DeliveryOrder::find($id), // data delivery order yang mau di-edit buat nanti auto fill di form edit
+            "projects" => Project::where('archived', 0)->get(), // data semua project (buat dropdown/select project)
             "status"=> ["complete", "incomplete"], // buat dropdown status delivery order
-            "delivery_orders" => DeliveryOrder::all(), // data semua delivery order (buat auto generate SKU)
+            "delivery_orders" => DeliveryOrder::where('archived', 0)->get(), // data semua delivery order (buat auto generate SKU)
         ]);
     }
 
@@ -78,7 +78,7 @@ class DeliveryOrderController extends Controller{
 
 
         // Kalo semuanya aman, update data delivery order tersebut di tabel delivery_orders
-        DeliveryOrder::where("id", $id)->update($validatedData);
+        DeliveryOrder::find($id)->update($validatedData);
 
         // Arahkan user kembali ke halaman pages/delivery-order/index.blade.php
         return redirect(route("deliveryorder-index"))->with("successEditOrder", "Order editted successfully!");
@@ -93,9 +93,9 @@ class DeliveryOrderController extends Controller{
 
         // Untuk setiap data yang diperoleh kita lakukan:
         foreach ($do as $data){
-            $product = Product::where("id", $data->product_id)->first(); // Targetkan data produk di tabel products yang aslinya (karena data $do cuma menyimpan id referensi)
+            $product = Product::find($data->product_id); // Targetkan data produk di tabel products yang aslinya (karena data $do cuma menyimpan id referensi)
             $oldstock = $product->stock; // Ambil stok saat ini
-            Product::where("id", $data->product_id)->update(["stock"=> ($oldstock +
+            Product::find($data->product_id)->update(["stock"=> ($oldstock +
             $data->quantity)]); // Update stok product saat ini (karena sifat delivery_order mengurangi jumlah stok maka jika dikembalikan seperti semula jumlah stok product bertambah)
         }
 

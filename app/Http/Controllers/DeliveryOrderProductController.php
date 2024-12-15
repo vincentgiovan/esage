@@ -15,7 +15,7 @@ class DeliveryOrderProductController extends Controller
     public function view_items($id)
     {
         // Targetkan delivery order yang dipilih yang mau dicek list produknya
-        $deliveryorder = DeliveryOrder::where("id", $id)->first();
+        $deliveryorder = DeliveryOrder::find($id);
 
         // Ambil data produk yang tercatat dalam delivery order tersebut (tabel delivery_orders tidak menyimpan data produk karena relation many to many, jadi ambil data dari tabel perantara, ambil semua yang delivery_order_id-nya sama kayak delivery_order yang dipilih)
         $do = DeliveryOrderProduct::where("delivery_order_id", $deliveryorder->id)->get();
@@ -32,12 +32,12 @@ class DeliveryOrderProductController extends Controller
     public function add_existing_product($id)
     {
         // Targetkan delivery order yang cart produknya ingin ditambahkan
-        $deliveryorder = DeliveryOrder::where("id", $id)->first();
+        $deliveryorder = DeliveryOrder::find($id);
 
         // Tampilkan halaman pages/transit/deliveryorderproduct/adddeliveryorder.blade.php beserta data yang diperlukan di blade-nya
         return view("pages.transit.deliveryorderproduct.adddeliveryorder", [
             "deliveryorder" => $deliveryorder, // data delivery order yang ditargetkan
-            "products" => Product::all() // list semua produk terdaftar untuk dropdown/select produk
+            "products" => Product::where('archived', 0)->get() // list semua produk terdaftar untuk dropdown/select produk
         ]);
     }
 
@@ -51,7 +51,7 @@ class DeliveryOrderProductController extends Controller
         ]);
 
         // Targetkan delivery order yang cart produknya ingin ditambahkan
-        $deliveryorder = DeliveryOrder::where("id",$id)->first();
+        $deliveryorder = DeliveryOrder::where("id",$id);
 
         // Untuk setiap input produk yang dimasukkan, lakukan hal ini:
         foreach($request->products as $index=>$product_id){
@@ -63,7 +63,7 @@ class DeliveryOrderProductController extends Controller
             ]);
 
             // Karena delivery order sifatnya mengurangi stok produk, maka update stok product di tabel aslinya:
-            $oldstock = Product::where("id",$product_id)->first()->stock; // Ambil stok lama produk
+            $oldstock = Product::where("id",$product_id)->stock; // Ambil stok lama produk
             $newstock = $oldstock - $request->quantities[$index]; // Stok yang baru
 
             $toUpdate = ["stock" => $newstock]; // Simpen kolom data yang mau di-update by default
@@ -82,7 +82,7 @@ class DeliveryOrderProductController extends Controller
     public function destroy($id, $did)
     {
         // Ambil data dari tabel delivery_order_products yang punya id produk dan delivery order yang sama dengan product yang mau dihapus dari cart delivery order yang diinginkan
-        $do = DeliveryOrderProduct::where("id", $did)->first();
+        $do = DeliveryOrderProduct::find($did);
 
         // Kembalikan stok produk ke awal mula:
         $oldstock = $do->product->stock; // Ambil stok lama
@@ -91,7 +91,7 @@ class DeliveryOrderProductController extends Controller
         if($newstock > 0 && $do->product->status == "Out of Stock"){
             $toUpdate["status"] = "Ready";
         }
-        Product::where("id", $do->product->id)->update($toUpdate); // Update stok product di tabel aslinya
+        Product::find($do->product->id)->update($toUpdate); // Update stok product di tabel aslinya
 
         // Kalau udah baru hapus data delivery order product-nya
         DeliveryOrderProduct::find($do->id)->delete();
@@ -148,7 +148,7 @@ class DeliveryOrderProductController extends Controller
                     if($product->count()){
                         $prod = $product->first();
                         $old_stock = $prod->stock;
-                        Product::where("id", $prod->id)->update(["stock" => $old_stock - $data[1]]);
+                        Product::find($prod->id)->update(["stock" => $old_stock - $data[1]]);
 
                         DeliveryOrderProduct::create([
                             "product_id" => $product->first()->id,

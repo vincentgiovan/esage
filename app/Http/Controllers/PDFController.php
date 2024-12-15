@@ -17,7 +17,7 @@ class PDFController extends Controller
     public function export_product($mode)
     {
         $data = [
-            "products" => Product::all()
+            "products" => Product::where('archived', 0)->get()
         ];
 
         $pdf = Pdf::loadView('pdf.allproduct', $data)->setPaper("a4", ($mode == 1)? "landscape" : "portrait");
@@ -29,7 +29,7 @@ class PDFController extends Controller
     public function export_purchase_product($id, $mode)
     {
         // Targetkan purchase yang ingin ditampilkan cart-nya
-        $purchase = Purchase::where("id", $id)->first();
+        $purchase = Purchase::find($id);
 
         // Ambil data dari purchase product yang purchase_id-nya sama kayak purchase yang mau ditampilin cart-nya
         $pp = PurchaseProduct::where("purchase_id", $purchase->id)->get();
@@ -47,7 +47,7 @@ class PDFController extends Controller
     // Export data delivery order product
     public function export_deliveryorder_product($id, $mode){
         // Targetkan delivery order yang dipilih yang mau dicek list produknya
-        $deliveryorder = DeliveryOrder::where("id", $id)->first();
+        $deliveryorder = DeliveryOrder::find($id);
 
         // Ambil data produk yang tercatat dalam delivery order tersebut (tabel delivery_orders tidak menyimpan data produk karena relation many to many, jadi ambil data dari tabel perantara, ambil semua yang delivery_order_id-nya sama kayak delivery_order yang dipilih)
         $do = DeliveryOrderProduct::where("delivery_order_id", $deliveryorder->id)->get();
@@ -65,7 +65,7 @@ class PDFController extends Controller
     // Export semua delvery order
     public function export_deliveryorder($mode){
         // Targetkan delivery order semua
-        $deliveryorders = DeliveryOrder::all();
+        $deliveryorders = DeliveryOrder::where('archived', 0)->get();
 
         $data = [
             "deliveryorders" => $deliveryorders, // list product yang tercatat di delivery order yang ingin dicek cart-nya
@@ -78,7 +78,7 @@ class PDFController extends Controller
 
     public function export_purchase($mode){
         // Targetkan delivery order semua
-        $purchases = Purchase::all();
+        $purchases = Purchase::where('archived', 0)->get();
 
         $data = [
             "purchases" => $purchases, // list product yang tercatat di delivery order yang ingin dicek cart-nya
@@ -91,7 +91,7 @@ class PDFController extends Controller
 
     public function export_partner($mode){
         // Targetkan delivery order semua
-        $partners = Partner::all();
+        $partners = Partner::where('archived', 0)->get();
 
         $data = [
             "partners" => $partners, // list product yang tercatat di delivery order yang ingin dicek cart-nya
@@ -104,7 +104,7 @@ class PDFController extends Controller
 
     public function export_project($mode){
         // Targetkan delivery order semua
-        $projects = Project::all();
+        $projects = Project::where('archived', 0)->get();
 
         $data = [
             "projects" => $projects, // list product yang tercatat di delivery order yang ingin dicek cart-nya
