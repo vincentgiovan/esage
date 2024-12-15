@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class Purchase extends FetchUnarchivedData
+class Purchase extends Model
 {
     use HasFactory;
 
