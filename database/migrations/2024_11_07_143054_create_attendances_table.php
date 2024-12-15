@@ -24,6 +24,9 @@ return new class extends Migration
             $table->unsignedBigInteger("project_id");
             $table->foreign("project_id")->references("id")->on("projects")->onDelete('cascade');
 
+            $table->time("jam_masuk");
+            $table->time("jam_keluar");
+
             $table->float("normal");
             $table->float("jam_lembur");
             $table->float("index_lembur_panjang");

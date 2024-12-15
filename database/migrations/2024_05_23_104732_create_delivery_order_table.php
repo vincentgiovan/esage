@@ -22,6 +22,8 @@ return new class extends Migration
                 $table->string("register");
                 $table->longText("note")->nullable();
                 $table->foreign("project_id")->references("id")->on("projects")->onDelete('cascade');
+
+                $table->unsignedInteger('archived')->default(0);
             });
 
     }

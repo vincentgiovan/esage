@@ -24,6 +24,8 @@ return new class extends Migration
             $table->date("request_date")->nullable();
 
             $table->timestamps();
+
+            $table->unsignedInteger('archived')->default(0);
         });
     }
 

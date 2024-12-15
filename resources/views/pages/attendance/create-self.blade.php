@@ -4,7 +4,7 @@
     <x-container-middle>
         <div class="container bg-white rounded-4 p-5 border border-1 card">
             <h2 class="text-center fw-bold">Add Attendance Data</h2>
-            <form method="POST" action="{{ route('attendance-store') }}">
+            <form method="POST" action="{{ route('attendance-store-self') }}">
                 @csrf
 
                 <div class="mt-3">

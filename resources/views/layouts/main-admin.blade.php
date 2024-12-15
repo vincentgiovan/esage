@@ -8,8 +8,8 @@
         <title>eSage</title>
 
         <!-- Style punya template halaman -->
-        <link rel="stylesheet" href="{{ asset("vendors/ti-icons/css/themify-icons.css") }}">
-        <link rel="stylesheet" href="{{ asset("template/vendors/base/vendor.bundle.base.css") }}">
+        {{-- <link rel="stylesheet" href="{{ asset("vendors/ti-icons/css/themify-icons.css") }}">
+        <link rel="stylesheet" href="{{ asset("template/vendors/base/vendor.bundle.base.css") }}">  --}}
         <link rel="stylesheet" href="{{ asset("template/css/style.css") }}">
 
         <!-- Bootstrap CSS & icon -->
@@ -18,7 +18,7 @@
 
         <!-- Original asset -->
         <link rel="shortcut icon" href="{{ asset("res/sageico.ico") }}" />
-        <link rel="stylesheet" href="style.css">
+        {{-- <link rel="stylesheet" href="style.css"> --}}
 
         <!-- Custom styles -->
         <style>
@@ -193,14 +193,14 @@
         </script>
 
         <!-- Template halaman -->
-        <script src="{{ asset("template/vendors/base/vendor.bundle.base.js") }}"></script>
+        {{-- <script src="{{ asset("template/vendors/base/vendor.bundle.base.js") }}"></script>
         <script src="{{ asset("template/vendors/chart.js/Chart.min.js") }}"></script>
         <script src="{{ asset("template/js/jquery.cookie.js") }}" type="text/javascript"></script>
         <script src="{{ asset("template/js/off-canvas.js") }}"></script>
         <script src="{{ asset("template/js/hoverable-collapse.js") }}"></script>
         <script src="{{ asset("template/js/template.js") }}"></script>
         <script src="{{ asset("template/js/todolist.js") }}"></script>
-        <script src="{{ asset("template/js/dashboard.js") }}"></script>
+        <script src="{{ asset("template/js/dashboard.js") }}"></script> --}}
 
         <!-- Include Select2 JavaScript -->
 		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>

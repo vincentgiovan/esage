@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string("location");
             $table->string("PIC");
             $table->longText("address");
+
+            $table->unsignedInteger('archived')->default(0);
         });
     }
 

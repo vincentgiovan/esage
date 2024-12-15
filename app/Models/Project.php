@@ -15,7 +15,17 @@ class Project extends Model
     }
 
     public function employees(){
-        return $this->belongsToMany(Employee::class, "employee_projects");
+        return $this->belongsToMany(Employee::class, "employee_projects")->orderByRaw(
+            'CASE
+                WHEN jabatan LIKE "%Manage%" THEN 1
+                WHEN jabatan = "Kepala Tukang" THEN 2
+                WHEN jabatan = "Tukang" THEN 3
+                WHEN jabatan = "1/2 Tukang" THEN 4
+                WHEN jabatan = "Mandor" THEN 5
+                WHEN jabatan = "Laden" THEN 6
+                ELSE 7
+            END'
+        );
     }
 
     public function scopeFilter($query, array $filters){

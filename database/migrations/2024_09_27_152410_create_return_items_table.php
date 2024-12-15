@@ -28,6 +28,8 @@ return new class extends Migration
             $table->unsignedInteger("quantity");
 
             $table->timestamps();
+
+            $table->unsignedInteger('archived')->default(0);
         });
     }
 

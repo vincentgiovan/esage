@@ -30,7 +30,7 @@ class EmployeeProjectController extends Controller
         return view('pages.project.manage-employee', [
             "project" => $project,
             "all_employees" => $filtered_employees,
-            "employees_assigned" => $project->employees()->orderByRaw($order)->get()
+            "employees_assigned" => $project->employees
         ]);
     }
 

@@ -3,7 +3,7 @@
 @section("content")
     <x-container>
         <br>
-        <h2>Employee Attendance</h2>
+        <h3>Presensi Pegawai</h3>
         <hr>
 
         @if (session()->has('successEditAttendance'))
@@ -13,10 +13,27 @@
         @endif
 
         @can('admin')
-            <a href="{{ route('attendance-create-admin') }}" class="btn btn-primary text-white mt-3" style="font-size: 10pt">
-                <i class="bi bi-plus-square"></i>
-                Add New Attendance
-            </a>
+            <!-- Add Attendance Preform -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <button class="w-100 h-100 btn d-flex justify-content-between" type="button" id="add-new-attendance-btn">Buat Presensi Baru <i class="bi bi-chevron-down"></i></button>
+                </div>
+
+                <div class="card-body" id="add-new-attendance-form" style="display: none;">
+                    <form action="{{ route('attendance-create-admin') }}" method="GET">
+                        <div class="form-group mb-3">
+                            <label for="project">Pilih Proyek</label>
+                            <select class="form-select" id="project" name="project">
+                                @foreach ($projects as $project)
+                                    <option value="{{ $project->id }}">{{ $project->project_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Konfirmasi dan Lanjut</button>
+                    </form>
+                </div>
+            </div>
         @endcan
 
         <div class="overflow-x-auto mt-4">
@@ -24,6 +41,7 @@
                 <tr>
                     <th>#</th>
                     <th>Tanggal</th>
+                    <th>Jam Kerja</th>
                     <th>Proyek</th>
                     <th>Nama</th>
                     <th>Subtotal</th>
@@ -34,6 +52,7 @@
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ Carbon\Carbon::parse($a->attendance_date)->format("d M Y") }}</td>
+                        <td>{{ Carbon\Carbon::parse($a->jam_masuk)->format("H:i") }}-{{ Carbon\Carbon::parse($a->jam_keluar)->format("H:i") }}</td>
                         <td>{{ $a->project->project_name }}</td>
                         <td>{{ $a->employee->nama }}</td>
                         <td>
@@ -64,5 +83,13 @@
             </table>
         </div>
     </x-container>
+
+    <script>
+        $(document).ready(() => {
+            $("#add-new-attendance-btn").click(() => {
+                $("#add-new-attendance-form").slideToggle();
+            })
+        });
+    </script>
 
 @endsection

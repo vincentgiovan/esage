@@ -314,9 +314,10 @@ Route::middleware(["auth", "verified"])->group(function(){
 
         // ===== ATTENDANCE ===== //
         Route::get("/attendance", [AttendanceController::class, "index"])->name("attendance-index");
-        Route::get("/attendance/create/admin", [AttendanceController::class, "create_admin"])->name("attendance-create-admin")->whereNumber("id");
-        Route::get("/attendance/create/self", [AttendanceController::class, "create_self"])->name("attendance-create-self")->whereNumber("id");
-        Route::post("/attendance/create", [AttendanceController::class, "store"])->name("attendance-store")->whereNumber("id");
+        Route::get("/attendance/create/admin", [AttendanceController::class, "create_admin"])->name("attendance-create-admin");
+        Route::get("/attendance/create/self", [AttendanceController::class, "create_self"])->name("attendance-create-self");
+        Route::post("/attendance/create/admin", [AttendanceController::class, "store_admin"])->name("attendance-store-admin");
+        Route::post("/attendance/create/self", [AttendanceController::class, "store_self"])->name("attendance-store-self");
         Route::get("/attendance/{id}/edit", [AttendanceController::class, "edit"])->name("attendance-edit")->whereNumber("id");
         Route::post("/attendance/{id}/edit", [AttendanceController::class, "update"])->name("attendance-update")->whereNumber("id");
         Route::post("/attendance/{id}/delete", [AttendanceController::class, "destroy"])->name("attendance-destroy")->whereNumber("id");

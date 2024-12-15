@@ -2,15 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
+use Carbon\Carbon;
 use App\Models\Project;
-use App\Models\Attendance;
 use App\Models\Employee;
+use App\Models\Attendance;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AttendanceController extends Controller
 {
     public function index(){
-        $attendances = Attendance::orderBy('attendance_date', 'asc')->get();
+        $attendances = Attendance::with('project')
+            ->orderBy('attendance_date', 'asc')
+            ->orderBy(Project::select('project_name')
+                ->whereColumn('id', 'attendances.project_id')
+                ->limit(1), 'asc')
+            ->get();
+
         $subtotals = [];
 
         foreach($attendances as $atd){
@@ -30,14 +39,14 @@ class AttendanceController extends Controller
 
         return view("pages.attendance.index", [
             "attendances" => $attendances,
-            "subtotals" => $subtotals
+            "subtotals" => $subtotals,
+            "projects" => Project::where('archived', 0)->get()
         ]);
     }
 
-    public function create_admin(){
+    public function create_admin(Request $request){
         return view("pages.attendance.create-admin", [
-            "projects" => Project::where('archived', 0)->get(),
-            "employees" => Employee::where('archived', 0)->get()
+            "project" => Project::find($request->query('project'))
         ]);
     }
 
@@ -48,7 +57,116 @@ class AttendanceController extends Controller
         ]);
     }
 
-    public function store(Request $request){
+    public function store_admin(Request $request){
+        // return $request;
+        // $test = [];
+
+        try {
+            DB::beginTransaction();
+
+            foreach($request->employee as $i => $remp){
+                $t = [];
+                $employee = Employee::find($remp);
+
+                $t["employee"] = $employee->nama;
+                // $jk = [];
+
+                for($j = 0; $j < 7; $j++){
+                    $atd_start_date = Carbon::parse($request->start_date);
+
+                    $start_work = $request->start_time[$i][$j] ? $request->start_time[$i][$j] . ':00' : 'Off';
+                    $end_work = $request->end_time[$i][$j] ? $request->end_time[$i][$j] . ':00' : 'Off';
+
+                    if($end_work != 'Off'){
+                        $status = 'Normal';
+                        $jamnormal = 0;
+                        $jamlembur = 0;
+
+                        // Weekends
+                        if($j == 0 || $j == 1){
+                            if($end_work > '16:29:00' && $end_work <= '23:59:00'){
+                                $status = 'Lembur';
+                            }
+                            else if($end_work >= '00:00:00' && $end_work < '08:00:00'){
+                                $status = 'Lembur Panjang';
+                            }
+                        }
+                        // Weekdays
+                        else {
+                            if($end_work > '17:29:00' && $end_work <= '23:59:00'){
+                                $status = 'Lembur';
+                            }
+                            else if($end_work >= '00:00:00' && $end_work <= '00:59:00'){
+                                $status = 'Lembur';
+                            }
+                            else if($end_work >= '01:00:00' && $end_work < '08:00:00'){
+                                $status = 'Lembur Panjang';
+                            }
+                        }
+
+                        // COUNTING NORMAL WORK HOUR
+                        $carbonStartN = Carbon::createFromFormat('H:i:s', $start_work);
+                        $carbonEndN = Carbon::createFromFormat('H:i:s', $end_work);
+
+                        if ($carbonEndN->lessThan($carbonStartN)) {
+                            $carbonEndN->addDay();
+                        }
+
+                        $minutesDifferenceN = $carbonStartN->diffInMinutes($carbonEndN);
+                        $roundedMinutesN = floor($minutesDifferenceN / 60) * 60;
+                        $jamnormal = min($roundedMinutesN / 60, ($j == 0 || $j == 1)? 8 : 9);
+
+                        if($status != 'Normal'){
+                            // COUNTING OVERTIME WORK HOUR
+                            $carbonStartOT = Carbon::createFromFormat('H:i:s', ($j == 0 || $j == 1)? '16:00:00' : '17:00:00');
+                            $carbonEndOT = Carbon::createFromFormat('H:i:s', $end_work);
+
+                            if ($carbonEndOT->lessThan($carbonStartOT)) {
+                                $carbonEndOT->addDay();
+                            }
+
+                            $minutesDifferenceOT = $carbonStartOT->diffInMinutes($carbonEndOT);
+                            $roundedMinutesOT = round($minutesDifferenceOT / 30) * 30;
+                            $jamlembur = $roundedMinutesOT / 60;
+                        }
+
+                        Attendance::create([
+                            "attendance_date" => $atd_start_date->addDays($j),
+                            "employee_id" => $employee->id,
+                            "project_id" => Project::find($request->project)->id,
+                            "jam_masuk" => $start_work,
+                            "jam_keluar" => $end_work,
+                            "normal" => $jamnormal,
+                            "jam_lembur" => ($status == 'Lembur')? $jamlembur : 0,
+                            "index_lembur_panjang" => ($status == 'Lembur Panjang')? $jamlembur : 0,
+                            "index_performa" => 0,
+                            "remark" => $request->remark
+                        ]);
+
+                        // array_push($jk, $atd_start_date->addDays($j) . ", " . $start_work . "-" . $end_work . " [" . $status . "] (Normal: " . $jamnormal. ", Lembur: ". $jamlembur . ")");
+                    }
+                }
+
+                // $t["jam_kerja"] = $jk;
+
+                // array_push($test, $t);
+            }
+
+            DB::commit();
+        }
+        catch(Exception $e){
+            DB::rollback();
+
+            throw $e;
+        }
+
+        // $test["start_date"] = $request->start_date;
+        // $test["end_date"] = $request->end_date;
+
+        return redirect(route('attendance-index'))->with('successCreateAttendance', 'Attendances data created successfully!');
+    }
+
+    public function store_self(Request $request){
         $validatedData = $request->validate([
             "attendance_date" => "required",
             "employee_id" => "required",
