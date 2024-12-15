@@ -111,7 +111,7 @@ class ProductController extends Controller{
     public function destroy($id)
     {
         // Hapus data product yang ditargetkan dari tabel products
-        Product::destroy("id", $id);
+        Product::find($id)->update(["archived" => 1]);
 
         // Arahkan user kembali ke halaman pages/product/index.blade.php
         return redirect(route("product-index"))->with("successDeleteProduct", "Product deleted successfully!");

@@ -69,7 +69,7 @@ class RequestItemController extends Controller
 
         $existing_rip = RequestItemProduct::where("request_item_id", $reqit->id)->get();
         foreach($existing_rip as $er){
-            RequestItemProduct::find($er->id)->delete();
+            RequestItemProduct::find($er->id)->update(["archived" => 1]);
         }
 
         foreach($request->products as $i => $prd_id){
@@ -84,7 +84,7 @@ class RequestItemController extends Controller
     }
 
     public function destroy($id){
-        RequestItem::find($id)->delete();
+        RequestItem::find($id)->update(["archived" => 1]);
 
         return redirect(route("requestitem-index"))->with("successDeleteRequest", "Successfully deleted the request item");
     }

@@ -91,10 +91,7 @@ class AccountController extends Controller
     public function destroy($id)
     {
         // Targetkan data akun yang mau dihapus sesuai dengan akun mana yang dipilih di halaman sebelumnya
-        $user = User::findOrFail($id);
-
-        // Hapus datanya dari database
-        $user->delete();
+        User::find($id)->update(["archived" => 1]);
 
         // Arahkan user kembali ke halaman accounts/index.blade.php
         return redirect()->route('account.index')->with("successDeleteAccount", "Successfully deleted new account");

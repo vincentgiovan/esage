@@ -101,7 +101,7 @@ class PurchaseController extends Controller
         }
 
         // Hapus data purchase dari tabel purchases
-        Purchase::destroy("id", $id);
+        Purchase::find($id)->update(["archived" => 1]);
 
         // Arahkan user kembali ke halaman pages/purchase/index.blade.php
         return redirect(route("purchase-index"))->with("successDeletePurchase", "Purchase deleted successfully!");

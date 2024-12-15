@@ -85,7 +85,7 @@ class PartnerController extends Controller{
     // Hapus partner dari database
     public function destroy($id){
         // Hapus data partner dari tabel partners yang punya id sama kayak data yang mau dihapus
-        Partner::destroy("id", $id);
+        Partner::find($id)->update(["archived" => 1]);
 
         // Arahkan user kembali ke halaman pages/partner/index.blade.php
         return redirect(route("partner-index"))->with("successDeletePartner", "Partner deleted successfully!");

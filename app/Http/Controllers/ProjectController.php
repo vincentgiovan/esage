@@ -74,7 +74,7 @@ class ProjectController extends Controller{
     public function destroy($id)
     {
         // Hapus data project yang mau dihapus dari tabel projects
-        Project::destroy("id", $id);
+        Project::find($id)->update(["archived" => 1]);
 
         // Arahkan user kembali ke halaman pages/project/index.blade.php
         return redirect(route("project-index"))->with("successDeleteProject", "Project deleted successfully!");

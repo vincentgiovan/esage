@@ -10,8 +10,18 @@ use Illuminate\Http\Request;
 class EmployeeProjectController extends Controller
 {
     public function index($id){
+        $order = 'CASE
+                    WHEN jabatan LIKE "%Manage%" THEN 1
+                    WHEN jabatan = "Kepala Tukang" THEN 2
+                    WHEN jabatan = "Tukang" THEN 3
+                    WHEN jabatan = "1/2 Tukang" THEN 4
+                    WHEN jabatan = "Mandor" THEN 5
+                    WHEN jabatan = "Laden" THEN 6
+                    ELSE 7
+                END';
+
         $project = Project::find($id);
-        $all_employees = Employee::where('status', 'active')->get();
+        $all_employees = Employee::where('status', 'active')->orderByRaw($order)->get();
         $ep = EmployeeProject::where("project_id", $project->id)->get();
 
         $project_employee_ids = $ep->pluck('employee_id');
@@ -20,7 +30,7 @@ class EmployeeProjectController extends Controller
         return view('pages.project.manage-employee', [
             "project" => $project,
             "all_employees" => $filtered_employees,
-            "employees_assigned" => $project->employees
+            "employees_assigned" => $project->employees()->orderByRaw($order)->get()
         ]);
     }
 
@@ -29,7 +39,7 @@ class EmployeeProjectController extends Controller
 
         EmployeeProject::create(["project_id" => $project->id, "employee_id" => $request->employee]);
 
-        return back()->with('successAssignEmployee', 'Berhasil menambahkan karyawan ke proyek.');
+        return back()->with('successAssignEmployee', 'Berhasil menambahkan pegawai ke proyek.');
     }
 
     public function unassign_employee(Request $request, $id){
@@ -39,6 +49,6 @@ class EmployeeProjectController extends Controller
         $del = EmployeeProject::where("project_id", $project->id)->where("employee_id", $employee->id)->first();
         $del->delete();
 
-        return back()->with('successUnassignEmployee', 'Berhasil menghapus karyawan dari proyek.');
+        return back()->with('successUnassignEmployee', 'Berhasil menghapus pegawai dari proyek.');
     }
 }

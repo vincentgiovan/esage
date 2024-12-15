@@ -7,7 +7,7 @@
         <h5 class="mt-4">Data Absensi</h5>
         <table class="w-100">
             <tr>
-                <th class="border border-1 border-secondary w-25">Karyawan</th>
+                <th class="border border-1 border-secondary w-25">Pegawai</th>
                 <td class="border border-1 border-secondary">{{ $attendance->employee->nama }}</td>
             </tr>
             <tr>

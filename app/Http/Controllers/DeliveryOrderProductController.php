@@ -94,7 +94,7 @@ class DeliveryOrderProductController extends Controller
         Product::where("id", $do->product->id)->update($toUpdate); // Update stok product di tabel aslinya
 
         // Kalau udah baru hapus data delivery order product-nya
-        DeliveryOrderProduct::destroy("id", $do->id);
+        DeliveryOrderProduct::find($do->id)->delete();
 
         // Arahkan user kembali ke halaman pages/transit/deliveryorderproduct/index.blade.php
         return redirect(route("deliveryorderproduct-viewitem", $id))->with("successDeleteProduct", "Product deleted successfully!");

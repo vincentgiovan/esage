@@ -100,7 +100,7 @@ class DeliveryOrderController extends Controller{
         }
 
         // Jika setiap product yang terkait sudah dikembalikan ke semula stoknya kita baru hapus data delivery order dari tabel delivery_orders
-        DeliveryOrder::destroy("id", $id);
+        DeliveryOrder::find($id)->update(["archived" => 1]);
 
         // Arahkan user kembali ke halaman pages/delivery-order/index.blade.php
         return redirect(route("deliveryorder-index"))->with("successDeleteOrder", "Order deleted successfully!");

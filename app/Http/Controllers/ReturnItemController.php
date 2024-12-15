@@ -159,11 +159,11 @@ class ReturnItemController extends Controller {
         if($return_item->quantity < $existingReturnedProduct->stock){
             $prevStock = $existingReturnedProduct->stock;
             $existingReturnedProduct->update(["stock" => $prevStock - $return_item->quantity]);
-            $return_item->delete();
+            $return_item->update(["archived" => 1]);
         }
         else {
-            $existingReturnedProduct->delete();
-            $return_item->delete();
+            $existingReturnedProduct->update(["archived" => 1]);
+            $return_item->update(["archived" => 1]);
         }
 
         return redirect(route("returnitem-index"))->with("successDeleteReturnItem", "Return item data deleted successfully");

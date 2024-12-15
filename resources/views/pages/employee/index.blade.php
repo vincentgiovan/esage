@@ -9,8 +9,10 @@
         </div>
         <hr>
 
-        @if (session()->has('success-edit-employee'))
-            <p class="text-success fw-bold">{{ session('success-edit-employee') }}</p>
+        @if (session()->has('success-add-employee-data'))
+            <p class="text-success fw-bold">{{ session('success-add-employee-data') }}</p>
+        @elseif (session()->has('success-edit-employee-data'))
+            <p class="text-success fw-bold">{{ session('success-edit-employee-data') }}</p>
         @endif
 
         <div class="mt-4">

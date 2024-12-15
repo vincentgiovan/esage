@@ -93,7 +93,7 @@ class AttendanceController extends Controller
     }
 
     public function destroy($id){
-        Attendance::find($id)->delete();
+        Attendance::find($id)->update(["archived" => 1]);
 
         return redirect(route("attendance-index"))->with("successDeleteAttendance", "New attendance deleted sucessfully!");
     }

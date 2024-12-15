@@ -108,13 +108,13 @@
             <div style="width: 18%;">
                 <div class="card">
                     <div class="card-body">
-                        <p class="card-title text-md-center text-xl-left fs-6"><i class="bi bi-building"></i> Karyawan Aktif</p>
+                        <p class="card-title text-md-center text-xl-left fs-6"><i class="bi bi-building"></i> Pegawai Aktif</p>
                         <div
                             class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-center align-items-center">
                             <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-center fs-1">{{ $activeemployee }}</h3>
                             <i class="ti-layers-alt icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
                         </div>
-                        <p class="mb-0 mt-2 text-center"><span class="text-black "><small>Dari total {{ $totalemployee }} karyawan</small></span></p>
+                        <p class="mb-0 mt-2 text-center"><span class="text-black "><small>Dari total {{ $totalemployee }} pegawai</small></span></p>
                     </div>
                 </div>
             </div>

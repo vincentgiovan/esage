@@ -195,7 +195,7 @@ class PurchaseProductController extends Controller
         Product::where("id", $pp->product->id)->update($toUpdate); // Kembalikan stok ke semula (dikurangi karena purchase menambah stok)
 
         // Hapus data purchase produk
-        PurchaseProduct::destroy("id", $pp->id);
+        PurchaseProduct::find($pp->id)->delete();
 
         // Arahkan kembali user ke pages/transit/purchaseproduct/index.blade.php
         return redirect(route("purchaseproduct-viewitem", $id))->with("successDeleteProduct", "Product deleted successfully!");

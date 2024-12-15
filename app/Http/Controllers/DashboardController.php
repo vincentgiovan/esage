@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Todo;
 use App\Models\Product;
 use App\Models\Purchase;
-use Illuminate\Http\Request;
 use App\Models\DeliveryOrder;
 use App\Models\Employee;
 use App\Models\Project;
@@ -31,7 +30,7 @@ class DashboardController extends Controller
         // Jumlah project baru dalam 1 bulan terakhir
         $totalnewproject = Project::where("created_at", "like", $currentMonth . "%")->get()->count();
 
-        // Jumlah karyawan aktif
+        // Jumlah pegawai aktif
         $totalactive = Employee::where("status", "active")->count();
         $totalemployee = Employee::all()->count();
 
