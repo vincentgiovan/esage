@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('user')->onDelete('null');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
 
             $table->string("nama");
             $table->string("NIK")->nullable();

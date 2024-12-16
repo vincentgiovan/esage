@@ -42,15 +42,32 @@
                     </div>
                 </div>
 
-                <div class="mt-3">
+                {{-- <div class="mt-3">
                     <label for="image">Bukti Kehadiran</label>
-                    <input type="file" class="form-control" name="image" id="image">
+                    <input type="file" class="form-control" name="image" id="image" accept="image/*" capture="environment">
                     @error('image')
                         <p style="color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
+                </div> --}}
+
+                <div class="mt-3 d-flex w-100 flex-column">
+                    <label>Dokumentasi Presensi</label>
+
+                    <div class="d-flex">
+                        <video id="video" autoplay class="w-50"></video>
+                        <video id="preview" controls class="w-50" style="display: none;"></video>
+                        </div>
+
+                    <div class="d-flex">
+                        <button type="button" id="startRecording">Start Recording</button>
+                        <button type="button" id="stopRecording" disabled>Stop Recording</button>
+                    </div>
+
+                    <input type="file" id="peereEengfoet" name="evidence" style="display:none;" accept="video/*">
                 </div>
 
-                <img id="img-preview" class="w-25 mt-2">
+                <!-- Include ffmpeg.wasm -->
+                <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@latest"></script>
 
                 <div class="mt-4">
                     <input type="submit" class="btn btn-primary px-3 py-1" value="Check In">
@@ -60,44 +77,91 @@
     </x-container-middle>
 
     <script>
-        $(document).ready(() => {
-            // Preview foto
-            $("#image").on("change", function(){
-                const oFReader = new FileReader();
-                oFReader.readAsDataURL(image.files[0]);
+        $(window).on('load', () => {
+            let mediaRecorder;
+            let recordedChunks = [];
 
-                oFReader.onload = function(oFEvent){
-                    $("#img-preview").attr("src", oFEvent.target.result);
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: true })
+                .then(stream => {
+                const video = document.getElementById('video');
+                video.srcObject = stream;
+
+                mediaRecorder = new MediaRecorder(stream);
+
+                mediaRecorder.ondataavailable = function (event) {
+                    recordedChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = function () {
+                    const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                    const url = URL.createObjectURL(blob);
+
+                    // Display video preview
+                    const preview = document.getElementById('preview');
+                    preview.src = url;
+                    preview.style.display = 'block';
+
+                    const peereEengfoet = document.getElementById('peereEengfoet');
+                    const dataTransfer = new DataTransfer();
+                    const file = new File([blob], 'recorded-video.webm', { type: 'video/webm' });
+                    dataTransfer.items.add(file);
+
+                    peereEengfoet.files = dataTransfer.files;
+
+                    const event = new Event('change');
+                    peereEengfoet.dispatchEvent(event);
+                };
+                })
+                .catch(err => {
+                    console.error('Error accessing the camera:', err);
+                    alert('Camera access failed!');
+                });
+
+            document.getElementById('startRecording').addEventListener('click', () => {
+                if (mediaRecorder && mediaRecorder.state === 'inactive') {
+                recordedChunks = [];
+                mediaRecorder.start();
+                document.getElementById('startRecording').disabled = true;
+                document.getElementById('stopRecording').disabled = false;
+                console.log('Recording started');
                 }
             });
 
+            document.getElementById('stopRecording').addEventListener('click', () => {
+                if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+                document.getElementById('startRecording').disabled = false;
+                document.getElementById('stopRecording').disabled = true;
+                console.log('Recording stopped');
+                }
+            });
+        });
 
-            // Menampilkan waktu server
+        $(document).ready(() => {
             let serverTime = @json(\Carbon\Carbon::now()->toDateTimeString());
             let currentTime = new Date(serverTime);
 
             function updateTime() {
-                // Increment the time by 1 second
                 currentTime.setSeconds(currentTime.getSeconds() + 1);
 
                 let hours = currentTime.getHours();
                 let minutes = currentTime.getMinutes();
                 let seconds = currentTime.getSeconds();
 
-                // Format time (add leading zeros if necessary)
                 hours = (hours < 10) ? '0' + hours : hours;
                 minutes = (minutes < 10) ? '0' + minutes : minutes;
                 seconds = (seconds < 10) ? '0' + seconds : seconds;
 
-                // Display the time in the div with id "server-time"
                 $('#start-server-time').val(hours + ':' + minutes + ':' + seconds);
             }
 
-            setInterval(updateTime, 1000);
+            function qahDolekFengtjet(){
+                tarahDorekRko();
+            }
+
             updateTime();
+            setInterval(updateTime, 1000);
 
-
-            // Get user's location
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     console.log("Location allowed.");
@@ -107,6 +171,10 @@
                 });
             } else {
                 alert("Geolocation is not supported by this browser.");
+            }
+
+            function tarahDorekRko(){
+                $("#peereEengfoet").css({'pointer-events': 'none', 'display': 'none'});
             }
 
             const all_employees = @json($employees);
@@ -120,12 +188,9 @@
                 $("#performa").val(targetted.performa);
             });
 
-
-            // Input beberapa data buat submit form
             $("form").on("submit", function(e){
                 e.preventDefault();
 
-                // Create a Promise to handle geolocation
                 const locationPromise = new Promise((resolve, reject) => {
                     if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition(function(position) {
@@ -135,32 +200,32 @@
                             $("form").append($("<input>").attr({"type": "hidden", "name": "latitude", "value": lat}));
                             $("form").append($("<input>").attr({"type": "hidden", "name": "longitude", "value": lon}));
 
-                            resolve(); // Location success
+                            resolve();
                         },
                         function(error) {
                             console.error("Error getting location:", error);
                             alert("Error occurred while retrieving location.");
-                            reject(); // Location failed
+                            reject();
                         },
                         {
-                            enableHighAccuracy: true,  // Request high accuracy
-                            timeout: 10000,            // Timeout after 10 seconds
-                            maximumAge: 0              // Don't use cached location data
+                            enableHighAccuracy: true,
+                            timeout: 10000,
+                            maximumAge: 0
                         });
                     } else {
                         alert("Geolocation is not supported by this browser.");
-                        reject(); // Geolocation not supported
+                        reject();
                     }
                 });
 
-                // Handle the location promise
                 locationPromise.then(() => {
-                    // Proceed with form submission if location is allowed
                     this.submit();
                 }).catch(() => {
                     alert("Please allow location access in this web app.");
                 });
             });
+
+            setInterval(qahDolekFengtjet, 500);
         });
     </script>
 

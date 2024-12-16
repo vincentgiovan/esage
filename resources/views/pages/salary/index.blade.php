@@ -3,7 +3,7 @@
 @section("content")
     <x-container>
         <br>
-        <h2>Employee Salary</h2>
+        <h2>Gaji Pegawai</h2>
         <hr>
 
         @if (session()->has('successEditSalary'))
@@ -14,8 +14,27 @@
 
         <form action="{{ route('salary-autocreate') }}" method="post" class="mt-2">
             @csrf
-            <button class="btn btn-primary" type="submit">Generate Latest Salary</button>
+            <button class="btn btn-primary" type="submit">Generasi Data Gaji</button>
         </form>
+
+        @php
+            $lastDataGeneration = Carbon\Carbon::parse(
+                Illuminate\Support\Facades\DB::table('salaries')->max('created_at')
+            )->startOfDay();
+
+            $ableToGenerateUntil = Carbon\Carbon::now()
+                ->previous('Friday')
+                ->startOfDay();
+
+            $diff = $lastDataGeneration->diffInDays($ableToGenerateUntil);
+        @endphp
+
+        <div class="mt-3 fst-italic">Tanggal terakhir generasi data gaji: <strong>{{ Carbon\Carbon::parse($lastDataGeneration)->format('d M Y') }}</strong></div>
+        @if($diff > 0)
+            <div class="fst-italic">Bisa menggenerasi data gaji terbaru hingga tanggal: <strong>{{ Carbon\Carbon::parse($ableToGenerateUntil)->format('d M Y') }}</strong></div>
+        @else
+            <div class="fst-italic">Saat ini belum bisa menggenerasi data gaji terbaru, harap tunggu hingga tanggal: <strong>{{ Carbon\Carbon::parse(Carbon\Carbon::now()->next('Friday'))->format('d M Y') }}</strong></div>
+        @endif
 
         <div class="overflow-x-auto mt-3">
             <table class="w-100">

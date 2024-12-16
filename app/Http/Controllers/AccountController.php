@@ -128,7 +128,7 @@ class AccountController extends Controller
 
     public function visit_log(){
         return view("pages.visit-log.index", [
-            "visit_logs" => VisitLog::where('archived', 0)->get()
+            "visit_logs" => VisitLog::all()
         ]);
     }
 }

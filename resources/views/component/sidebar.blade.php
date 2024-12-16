@@ -46,7 +46,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("attendance*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("attendance-index") }}" ><i class="bi bi-clipboard2-check me-2"></i> Presensi</a>
+                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("attendance*") && !Request::is('attendance/create/self')) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("attendance-index") }}" ><i class="bi bi-clipboard2-check me-2"></i> Presensi</a>
             </li>
 
             <li class="nav-item">
@@ -56,13 +56,10 @@
 
         @can('self_attendance')
             <li class="nav-item">
-                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("attendance*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("attendance-create-self") }}" ><i class="bi bi-clipboard2-check me-2"></i> Presensi</a>
+                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("attendance/create/self")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("attendance-create-self") }}" ><i class="bi bi-clipboard2-check me-2"></i> Absensi Mandiri</a>
             </li>
         @endcan
     </ul>
-    {{-- <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-        <span class="ti-view-list"></span>
-    </button> --}}
 </nav>
 
 <script>

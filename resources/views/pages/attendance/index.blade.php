@@ -3,14 +3,7 @@
 @section("content")
     <x-container>
         <br>
-        <div class="d-flex w-100 justify-content-between align-items-center">
-            <h3>Presensi Pegawai</h3>
-            @can('admin')
-                @can('self_attendance')
-                    <a class="btn btn-primary" href="{{ route('attendance-create-self') }}">Self Attendance</a>
-                @endcan
-            @endcan
-        </div>
+        <h3>Presensi Pegawai</h3>
         <hr>
 
         @if (session()->has('successEditAttendance'))

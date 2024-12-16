@@ -24,9 +24,6 @@ return new class extends Migration
             $table->foreign("purchase_id")->references("id")->on("products")->onDelete("cascade");
 
             $table->timestamps();
-
-            $table->unsignedInteger('archived')->default(0);
-
         });
     }
 

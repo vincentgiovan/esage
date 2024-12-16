@@ -75,10 +75,10 @@ class AttendanceController extends Controller
             DB::beginTransaction();
 
             foreach($request->employee as $remp){
-                $t = [];
+                // $t = [];
                 $employee = Employee::find($remp);
 
-                $t["employee"] = $employee->nama;
+                // $t["employee"] = $employee->nama;
                 // $jk = [];
 
                 for($j = 0; $j < 7; $j++){
@@ -86,6 +86,7 @@ class AttendanceController extends Controller
 
                     $start_work = $request->start_time[$remp][$j] ? $request->start_time[$remp][$j] . ':00' : 'Off';
                     $end_work = $request->end_time[$remp][$j] ? $request->end_time[$remp][$j] . ':00' : 'Off';
+                    $index_performa = $request->index_performa[$remp][$j] ?? 0;
 
                     if($end_work != 'Off'){
                         $status = 'Normal';
@@ -149,7 +150,7 @@ class AttendanceController extends Controller
                             "normal" => $jamnormal,
                             "jam_lembur" => ($status == 'Lembur')? $jamlembur : 0,
                             "index_lembur_panjang" => ($status == 'Lembur Panjang')? $jamlembur : 0,
-                            "index_performa" => 0,
+                            "index_performa" => $index_performa,
                             "remark" => $request->remark
                         ]);
 
@@ -177,6 +178,7 @@ class AttendanceController extends Controller
     }
 
     public function store_self(Request $request){
+        return $request;
         $validatedData = $request->validate([
             "attendance_date" => "required",
             "employee_id" => "required",
