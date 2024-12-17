@@ -25,16 +25,21 @@ return new class extends Migration
             $table->foreign("project_id")->references("id")->on("projects")->onDelete('cascade');
 
             $table->time("jam_masuk");
-            $table->time("jam_keluar");
+            $table->time("jam_keluar")->nullable();
 
-            $table->float("normal");
-            $table->float("jam_lembur");
-            $table->float("index_lembur_panjang");
-            $table->float("index_performa");
+            $table->float("normal")->nullable();
+            $table->float("jam_lembur")->nullable();
+            $table->float("index_lembur_panjang")->nullable();
+            $table->unsignedBigInteger("performa")->nullable();
             $table->float("remark")->nullable();
 
-            $table->double('latitude', 15, 8)->nullable();
-            $table->double('longitude', 15, 8)->nullable();
+            $table->double('latitude_masuk', 15, 8)->nullable();
+            $table->double('longitude_masuk', 15, 8)->nullable();
+            $table->double('latitude_keluar', 15, 8)->nullable();
+            $table->double('longitude_keluar', 15, 8)->nullable();
+
+            $table->string('bukti_masuk')->nullable();
+            $table->string('bukti_keluar')->nullable();
 
             $table->timestamps();
         });

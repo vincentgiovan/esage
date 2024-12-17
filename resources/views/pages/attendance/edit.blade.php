@@ -72,10 +72,10 @@
                     </div>
 
                     <div class="w-50">
-                        <label for="index_performa">Indeks Performa</label>
-                        <input type="text" class="form-control @error('index_performa') is-invalid @enderror" id="index_performa" name="index_performa" placeholder="Input index performa"
-                            value="{{ old('index_performa', $attendance->index_performa) }}">
-                        @error('index_performa')
+                        <label for="performa">Performa</label>
+                        <input type="text" class="form-control @error('performa') is-invalid @enderror" id="performa" name="performa" placeholder="Input performa"
+                            value="{{ old('performa', $attendance->performa) }}">
+                        @error('performa')
                             <p style="color: red; font-size: 10px;">{{ $message }}</p>
                         @enderror
                     </div>

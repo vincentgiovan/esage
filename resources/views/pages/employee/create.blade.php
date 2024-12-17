@@ -121,15 +121,6 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="performa">Performa</label>
-                    <input type="text" class="form-control" name="performa" id="performa" placeholder="Performa"
-                        value="{{ old('performa') }}">
-                    @error('performa')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div class="mt-3">
                     <label for="kasbon">Kasbon</label>
                     <input type="text" class="form-control" name="kasbon" id="kasbon" placeholder="Kasbon"
                         value="{{ old('kasbon') }}">

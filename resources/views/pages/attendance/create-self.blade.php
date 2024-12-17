@@ -4,9 +4,7 @@
     <x-container-middle>
         <div class="container bg-white rounded-4 p-5 border border-1 card">
             <h3 class="text-center fw-bold">Presensi Mandiri</h3>
-            <form method="POST" action="{{ route('attendance-store-self') }}">
-                @csrf
-
+            <div>
                 <div class="mt-3">
                     <label>Tanggal</label>
                     <input type="text" class="form-control" value="{{ Carbon\Carbon::parse(Carbon\Carbon::now())->format('Y-m-d') }}" disabled>
@@ -16,39 +14,6 @@
                     <label>Nama Pegawai</label>
                     <input type="text" class="form-control" value="{{ Auth::user()->name }}" disabled>
                 </div>
-
-                <div class="mt-3">
-                    <label for="project_id">Proyek</label>
-                    <select type="text" class="form-select text-black @error('project_id') is-invalid @enderror" id="project_id" name="project_id">
-                        <option selected disabled>Pilih proyek</option>
-                        @foreach ($projects as $p)
-                            <option value="{{ $p->id }}" @if(old("project_id") == $p->id) selected @endif>{{ $p->project_name }}</option>
-                        @endforeach
-                    </select>
-                    @error('project_id')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div class="w-100 d-flex gap-3">
-                    <div class="mt-3 w-50">
-                        <label>Jam Masuk</label>
-                        <input type="text" id="start-server-time" class="form-control" disabled>
-                    </div>
-
-                    <div class="mt-3 w-50">
-                        <label>Jam Keluar</label>
-                        <input type="text" id="end-server-time" class="form-control" disabled>
-                    </div>
-                </div>
-
-                {{-- <div class="mt-3">
-                    <label for="image">Bukti Kehadiran</label>
-                    <input type="file" class="form-control" name="image" id="image" accept="image/*" capture="environment">
-                    @error('image')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
-                    @enderror
-                </div> --}}
 
                 <div class="mt-3 d-flex w-100 flex-column">
                     <label>Dokumentasi Presensi</label>
@@ -63,54 +28,143 @@
                         <button type="button" id="stopRecording" disabled>Stop Recording</button>
                     </div>
 
-                    <input type="file" id="peereEengfoet" name="evidence" style="display:none;" accept="video/*">
+                    <input type="file" id="evidence" name="evidence" style="display:none;" accept="video/*">
+
+                    @error('evidence')
+                        <p class="text-danger">{{ $message }}</p>
+                    @enderror
                 </div>
 
-                <!-- Include ffmpeg.wasm -->
-                <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@latest"></script>
+                <h5 class="mt-5">Daftar Proyek:</h5>
+                @foreach($assigned_projects as $asproj)
+                    <div class="w-100 mt-4 border border-1 p-3">
+                        <h6>{{ $asproj->project_name }}</h6>
 
-                <div class="mt-4">
-                    <input type="submit" class="btn btn-primary px-3 py-1" value="Check In">
-                </div>
-            </form>
+                        <div class="w-100 d-flex gap-3">
+                            <div class="w-50">
+                                <label>Jam Masuk</label>
+                                <div class="d-flex gap-2 w-100">
+                                    <input type="text" class="form-control start-server-time" @if($existing_attendances->where('project_id', $asproj->id)->first()) value="{{ $existing_attendances->first()->jam_masuk }}" @endif disabled>
+                                </div>
+                            </div>
+
+                            <div class="w-50" id="check-out-form">
+                                @csrf
+                                <label>Jam Keluar</label>
+                                <div class="d-flex gap-2 w-100">
+                                    <input type="text" class="form-control end-server-time" @if($existing_attendances->where('project_id', $asproj->id)->first()) value="{{ $existing_attendances->first()->jam_keluar }}" @endif disabled>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if(!$existing_attendances->where('project_id', $asproj->id)->first())
+                            <form method="post" action="{{ route('attendance-self-checkin', $asproj->id) }}" class="my-3 check-in-form" enctype="multipart/form-data">
+                                @csrf
+                                <input type="file" class="evidence_masuk" name="evidence_masuk" style="display:none;" accept="video/*">
+                                <input type="submit" class="btn btn-primary px-3 py-1" value="Check In">
+                            </form>
+
+                            <script>
+                                let serverTime = @json(\Carbon\Carbon::now()->toDateTimeString());
+                                let currentTime = new Date(serverTime);
+
+                                $(document).ready(() => {
+                                    function updateTime() {
+                                        currentTime.setSeconds(currentTime.getSeconds() + 1);
+
+                                        let hours = currentTime.getHours();
+                                        let minutes = currentTime.getMinutes();
+                                        let seconds = currentTime.getSeconds();
+
+                                        hours = (hours < 10) ? '0' + hours : hours;
+                                        minutes = (minutes < 10) ? '0' + minutes : minutes;
+                                        seconds = (seconds < 10) ? '0' + seconds : seconds;
+
+                                        $('.start-server-time').val(hours + ':' + minutes + ':' + seconds);
+                                    }
+
+                                    updateTime();
+                                    setInterval(updateTime, 1000);
+                                });
+                            </script>
+                        @else
+                            <form method="post" action="{{ route('attendance-self-checkout', $asproj->id) }}" class="my-3 check-out-form"  enctype="multipart/form-data">
+                                @csrf
+                                <input type="file" class="evidence_keluar" name="evidence_keluar" style="display:none;" accept="video/*">
+                                <input type="submit" class="btn btn-primary px-3 py-1" value="Check Out">
+                            </form>
+
+                            <script>
+                                let serverTime = @json(\Carbon\Carbon::now()->toDateTimeString());
+                                let currentTime = new Date(serverTime);
+
+                                $(document).ready(() => {
+                                    function updateTime() {
+                                        currentTime.setSeconds(currentTime.getSeconds() + 1);
+
+                                        let hours = currentTime.getHours();
+                                        let minutes = currentTime.getMinutes();
+                                        let seconds = currentTime.getSeconds();
+
+                                        hours = (hours < 10) ? '0' + hours : hours;
+                                        minutes = (minutes < 10) ? '0' + minutes : minutes;
+                                        seconds = (seconds < 10) ? '0' + seconds : seconds;
+
+                                        $('.end-server-time').val(hours + ':' + minutes + ':' + seconds);
+                                    }
+
+                                    updateTime();
+                                    setInterval(updateTime, 1000);
+                                });
+                            </script>
+                        @endif
+                    </div>
+                @endforeach
+            </div>
         </div>
     </x-container-middle>
 
     <script>
+        let videoFile;  // Define videoFile globally
+
         $(window).on('load', () => {
             let mediaRecorder;
             let recordedChunks = [];
 
             navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: true })
                 .then(stream => {
-                const video = document.getElementById('video');
-                video.srcObject = stream;
+                    const video = document.getElementById('video');
+                    video.srcObject = stream;
 
-                mediaRecorder = new MediaRecorder(stream);
+                    mediaRecorder = new MediaRecorder(stream);
 
-                mediaRecorder.ondataavailable = function (event) {
-                    recordedChunks.push(event.data);
-                };
+                    mediaRecorder.ondataavailable = function (event) {
+                        recordedChunks.push(event.data);
+                    };
 
-                mediaRecorder.onstop = function () {
-                    const blob = new Blob(recordedChunks, { type: 'video/webm' });
-                    const url = URL.createObjectURL(blob);
+                    mediaRecorder.onstop = function () {
+                        const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                        const url = URL.createObjectURL(blob);
 
-                    // Display video preview
-                    const preview = document.getElementById('preview');
-                    preview.src = url;
-                    preview.style.display = 'block';
+                        // Display video preview
+                        const preview = document.getElementById('preview');
+                        preview.src = url;
+                        preview.style.display = 'block';
 
-                    const peereEengfoet = document.getElementById('peereEengfoet');
-                    const dataTransfer = new DataTransfer();
-                    const file = new File([blob], 'recorded-video.webm', { type: 'video/webm' });
-                    dataTransfer.items.add(file);
+                        // Create a file from the Blob
+                        videoFile = new File([blob], 'recorded-video.webm', { type: 'video/webm' });
 
-                    peereEengfoet.files = dataTransfer.files;
+                        // Handle file input
+                        const documentation = document.getElementById('evidence');
+                        const dataTransfer = new DataTransfer();
+                        dataTransfer.items.add(videoFile);  // Add the file to DataTransfer
+                        documentation.files = dataTransfer.files;  // Assign the file to the hidden file input
 
-                    const event = new Event('change');
-                    peereEengfoet.dispatchEvent(event);
-                };
+                        console.log(videoFile);
+
+                        const event = new Event('change');
+                        documentation.dispatchEvent(event);
+                    };
                 })
                 .catch(err => {
                     console.error('Error accessing the camera:', err);
@@ -119,48 +173,28 @@
 
             document.getElementById('startRecording').addEventListener('click', () => {
                 if (mediaRecorder && mediaRecorder.state === 'inactive') {
-                recordedChunks = [];
-                mediaRecorder.start();
-                document.getElementById('startRecording').disabled = true;
-                document.getElementById('stopRecording').disabled = false;
-                console.log('Recording started');
+                    recordedChunks = [];
+                    mediaRecorder.start();
+                    document.getElementById('startRecording').disabled = true;
+                    document.getElementById('stopRecording').disabled = false;
+                    console.log('Recording started');
                 }
             });
 
             document.getElementById('stopRecording').addEventListener('click', () => {
                 if (mediaRecorder && mediaRecorder.state === 'recording') {
-                mediaRecorder.stop();
-                document.getElementById('startRecording').disabled = false;
-                document.getElementById('stopRecording').disabled = true;
-                console.log('Recording stopped');
+                    mediaRecorder.stop();
+                    document.getElementById('startRecording').disabled = false;
+                    document.getElementById('stopRecording').disabled = true;
+                    console.log('Recording stopped');
                 }
             });
         });
 
         $(document).ready(() => {
-            let serverTime = @json(\Carbon\Carbon::now()->toDateTimeString());
-            let currentTime = new Date(serverTime);
-
-            function updateTime() {
-                currentTime.setSeconds(currentTime.getSeconds() + 1);
-
-                let hours = currentTime.getHours();
-                let minutes = currentTime.getMinutes();
-                let seconds = currentTime.getSeconds();
-
-                hours = (hours < 10) ? '0' + hours : hours;
-                minutes = (minutes < 10) ? '0' + minutes : minutes;
-                seconds = (seconds < 10) ? '0' + seconds : seconds;
-
-                $('#start-server-time').val(hours + ':' + minutes + ':' + seconds);
-            }
-
             function qahDolekFengtjet(){
                 tarahDorekRko();
             }
-
-            updateTime();
-            setInterval(updateTime, 1000);
 
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
@@ -176,17 +210,6 @@
             function tarahDorekRko(){
                 $("#peereEengfoet").css({'pointer-events': 'none', 'display': 'none'});
             }
-
-            const all_employees = @json($employees);
-
-            $("#employee_id").change(function(){
-                const targetted = all_employees.find(item => item.id == $(this).val());
-
-                $("#pokok").val(targetted.pokok);
-                $("#lembur").val(targetted.lembur);
-                $("#lembur_panjang").val(targetted.lembur_panjang);
-                $("#performa").val(targetted.performa);
-            });
 
             $("form").on("submit", function(e){
                 e.preventDefault();
@@ -226,6 +249,69 @@
             });
 
             setInterval(qahDolekFengtjet, 500);
+        });
+
+        // Form submission logic with video file
+        $('.check-in-form').on('submit', function (e) {
+    e.preventDefault();
+
+    // Append check-in time
+    $(this).append($('<input>').attr({
+        'type': 'hidden',
+        'name': 'check_in_time',
+        'value': $(this).prev().find('.start-server-time').val()
+    }));
+
+    // Ensure videoFile exists before appending
+    if (videoFile) {
+        // Add the video file to the form's evidence field
+        const evidenceInput = $(this).find('.evidence_masuk')[0];
+
+        // Create a DataTransfer object and add the video file
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(videoFile);  // Add the video file to DataTransfer
+
+        // Attach the files to the hidden input element
+        evidenceInput.files = dataTransfer.files;
+
+        // Finally, submit the form
+        this.submit();
+    } else {
+        alert('Please record a video first.');
+    }
+});
+
+        // Same logic for check-out form
+        $('.check-out-form').on('submit', function (e) {
+            e.preventDefault();
+
+            // Append check-out time
+            $(this).append($('<input>').attr({
+                'type': 'hidden',
+                'name': 'check_in_time',
+                'value': $(this).prev().find('.end-server-time').val()
+            }));
+
+            // Ensure videoFile exists before appending
+            if (videoFile) {
+                const form = this;
+
+                // Add the video file to the form's evidence field
+                const evidenceInput = $('#evidence')[0];
+
+                // Ensure the file input is cleared before appending new file
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(videoFile);  // Add the video file to DataTransfer
+                evidenceInput.files = dataTransfer.files;
+
+                // Append the cloned file input to the form
+                $(this).append(evidenceInput);
+
+                // Submit the form
+                this.submit();
+            } else {
+                alert('Please record a video first.');
+            }
         });
     </script>
 

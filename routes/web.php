@@ -326,7 +326,8 @@ Route::middleware(["auth", "verified"])->group(function(){
     });
 
     Route::get("/attendance/create/self", [AttendanceController::class, "create_self"])->name("attendance-create-self")->middleware("self_attendance");
-    Route::post("/attendance/create/self", [AttendanceController::class, "store_self"])->name("attendance-store-self")->middleware("self_attendance");
+    Route::post("/attendance/create/self/{project_id}/checkin", [AttendanceController::class, "check_in"])->name("attendance-self-checkin")->middleware("self_attendance")->whereNumber('project_id');
+    Route::post("/attendance/create/self/{project_id}/checkout", [AttendanceController::class, "check_out"])->name("attendance-self-checkout")->middleware("self_attendance")->whereNumber('project_id');
 });
 
 Auth::routes(["verify"=>true]);

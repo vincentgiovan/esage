@@ -26,8 +26,8 @@ class EmployeeController extends Controller
 
     public function create(){
         return view("pages.employee.create", [
-            "positions" => Position::where('archived', 0)->get(),
-            "specialities" => Speciality::where('archived', 0)->get()
+            "positions" => Position::all(),
+            "specialities" => Speciality::all()
         ]);
     }
 
@@ -41,7 +41,6 @@ class EmployeeController extends Controller
             "pokok" => "nullable|numeric|min:0",
             "lembur" => "nullable|numeric|min:0",
             "lembur_panjang" => "nullable|numeric|min:0",
-            "performa" => "nullable|numeric|min:0",
             "kasbon" => "nullable|numeric|min:0",
             "payroll" => "required",
             "masuk" => "nullable|date",
@@ -87,7 +86,6 @@ class EmployeeController extends Controller
             "pokok" => "nullable|numeric|min:0",
             "lembur" => "nullable|numeric|min:0",
             "lembur_panjang" => "nullable|numeric|min:0",
-            "performa" => "nullable|numeric|min:0",
             "kasbon" => "nullable|numeric|min:0",
             "payroll" => "required",
             "masuk" => "nullable|date",
@@ -125,8 +123,8 @@ class EmployeeController extends Controller
 
     public function manage_form(){
         return view("pages.employee.manage-form", [
-            "positions" => Position::where('archived', 0)->get(),
-            "specialities" => Speciality::where('archived', 0)->get()
+            "positions" => Position::all(),
+            "specialities" => Speciality::all()
         ]);
     }
 
