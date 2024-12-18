@@ -57,17 +57,6 @@ class AttendanceController extends Controller
         ]);
     }
 
-    public function create_self(){
-        $existing_data = Attendance::where("attendance_date", Carbon::parse(now())->format('Y-m-d'))->where('employee_id', Auth::user()->employee_data->id)->get();
-
-        return view("pages.attendance.create-self", [
-            "projects" => Project::where('archived', 0)->get(),
-            "employees" => Employee::where('archived', 0)->get(),
-            "existing_attendances" => $existing_data,
-            "assigned_projects" => Auth::user()->employee_data->projects
-        ]);
-    }
-
     public function store_admin(Request $request){
         try {
             DB::beginTransaction();
@@ -166,8 +155,31 @@ class AttendanceController extends Controller
         return redirect(route('attendance-index'))->with('successCreateAttendance', 'Attendances data created successfully!');
     }
 
-    public function check_in(Request $request, $project_id){
-        return $request;
+    public function index_self(){
+        $existing_data = Attendance::where("attendance_date", Carbon::parse(now())->format('Y-m-d'))->where('employee_id', Auth::user()->employee_data->id)->get();
+
+        return view("pages.attendance.index-self", [
+            "existing_attendances" => $existing_data,
+            "assigned_projects" => Auth::user()->employee_data->projects
+        ]);
+    }
+
+    public function check_in($project_id){
+        $project = Project::find($project_id);
+
+        $existing_data = Attendance::where("attendance_date", Carbon::parse(now())->format('Y-m-d'))->where('employee_id', Auth::user()->employee_data->id)->where('project_id', $project->id)->first();
+
+        if($existing_data){
+            return back()->with('alreadyCheckIn', 'Anda sudah melakukan check in untuk proyek ini.');
+        }
+        else {
+            return view("pages.attendance.checkin-self", [
+                "project" => $project,
+            ]);
+        }
+    }
+
+    public function check_in_store(Request $request, $project_id){
         $validatedData = $request->validate([
             'check_in_time' => 'required',
             'evidence' => 'required|file|mimetypes:video/webm',
@@ -192,32 +204,48 @@ class AttendanceController extends Controller
             "longitude_masuk" => $validatedData["longitude"]
         ]);
 
-        return redirect(route('home'))->with('successCheckInSelfAttendance', 'Berhasil melakukan check in pada presensi mandiri.');
+        return redirect(route('attendance-self-index'))->with('successCheckInSelfAttendance', 'Berhasil melakukan check in pada presensi mandiri.');
     }
 
-    public function check_out(Request $request){
-        return $request;
+    public function check_out($project_id){
+        $project = Project::find($project_id);
+
+        $existing_data = Attendance::where("attendance_date", Carbon::parse(now())->format('Y-m-d'))->where('employee_id', Auth::user()->employee_data->id)->where('project_id', $project->id)->first();
+
+        if($existing_data->jam_keluar){
+            return back()->with('alreadyCheckOut', 'Anda sudah melakukan check out untuk proyek ini.');
+        }
+        else {
+            return view("pages.attendance.checkout-self", [
+                "project" => $project,
+            ]);
+        }
     }
 
-    // public function store_self(Request $request){
-    //     return $request;
-    //     $validatedData = $request->validate([
-    //         "attendance_date" => "required",
-    //         "employee_id" => "required",
-    //         "project_id" => "required",
-    //         "normal" => "required|numeric|min:0",
-    //         "jam_lembur" => "required|numeric|min:0",
-    //         "index_lembur_panjang" => "required|numeric|min:0",
-    //         "index_performa" => "required|numeric|min:0",
-    //         "remark" => "nullable",
-    //         "latitude" => "required",
-    //         "longitude" => "required"
-    //     ]);
+    public function check_out_store(Request $request, $project_id){
+        $validatedData = $request->validate([
+            'check_out_time' => 'required',
+            'evidence' => 'required|file|mimetypes:video/webm',
+            'latitude' => 'required',
+            'longitude' => 'required'
+        ]);
 
-    //     Attendance::create($validatedData);
+        if($request->file("evidence")){
+            $validatedData['evidence_path'] = $request->file('evidence')->store('videos');
+            unset($validatedData["evidence"]);
+        }
 
-    //     return redirect(route("attendance-index"))->with("successAddAttendance", "New attendance added sucessfully!");
-    // }
+        $project = Project::find($project_id);
+
+        Attendance::where("attendance_date", Carbon::parse(now())->format('Y-m-d'))->where('employee_id', Auth::user()->employee_data->id)->where('project_id', $project->id)->update([
+            "jam_keluar" => substr($validatedData["check_out_time"], 0, 5) . ':00',
+            "bukti_keluar" => $validatedData["evidence_path"],
+            "latitude_keluar" => $validatedData["latitude"],
+            "longitude_keluar" => $validatedData["longitude"]
+        ]);
+
+        return redirect(route('attendance-self-index'))->with('successCheckInSelfAttendance', 'Berhasil melakukan check out pada presensi mandiri.');
+    }
 
     public function edit($id){
         return view("pages.attendance.edit", [

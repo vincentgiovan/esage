@@ -325,9 +325,11 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::get("/visit-log", [AccountController::class, "visit_log"])->name("visitlog-index");
     });
 
-    Route::get("/attendance/create/self", [AttendanceController::class, "create_self"])->name("attendance-create-self")->middleware("self_attendance");
-    Route::post("/attendance/create/self/{project_id}/checkin", [AttendanceController::class, "check_in"])->name("attendance-self-checkin")->middleware("self_attendance")->whereNumber('project_id');
-    Route::post("/attendance/create/self/{project_id}/checkout", [AttendanceController::class, "check_out"])->name("attendance-self-checkout")->middleware("self_attendance")->whereNumber('project_id');
+    Route::get("/attendance/self", [AttendanceController::class, "index_self"])->name("attendance-self-index")->middleware("self_attendance");
+    Route::get("/attendance/self/create/{project_id}/checkin", [AttendanceController::class, "check_in"])->name("attendance-self-checkin")->middleware("self_attendance")->whereNumber('project_id');
+    Route::post("/attendance/self/create/{project_id}/checkin", [AttendanceController::class, "check_in_store"])->name("attendance-self-checkin-store")->middleware("self_attendance")->whereNumber('project_id');
+    Route::get("/attendance/self/create/{project_id}/checkout", [AttendanceController::class, "check_out"])->name("attendance-self-checkout")->middleware("self_attendance")->whereNumber('project_id');
+    Route::post("/attendance/self/create/{project_id}/checkout", [AttendanceController::class, "check_out_store"])->name("attendance-self-checkout-store")->middleware("self_attendance")->whereNumber('project_id');
 });
 
 Auth::routes(["verify"=>true]);
