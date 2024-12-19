@@ -21,9 +21,10 @@ class ProductController extends Controller{
         foreach($products as $product){
             $pae = false;
             foreach($all_products as $ap){
-                if($product->variant == $ap->variant && $product->product_name == $ap->product_name){
+                if($product->variant == $ap->variant && $product->product_name == $ap->product_name && $product->is_returned == $ap->is_returned){
                     $ap["stock"] += $product->stock;
                     $ap["price"] = $product->price;
+                    $ap["is_returned"] = $product->is_returned;
                     $pae = true;
                 }
             }

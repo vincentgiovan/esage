@@ -71,6 +71,7 @@
                     <th>Variant</th>
                     <th>Markup</th>
                     <th>Status</th>
+                    <th>Returned</th>
                     @can('admin')
                         <th>Action</th>
                     @endcan
@@ -102,7 +103,7 @@
                         <td class="">{{ $p->variant }}</td>
                         <td class="">{{ $p->markup }}</td>
                         <td class="">{{ $p->status }}</td>
-                        {{-- <td class="" >{{ $p->user->name }}</td> --}}
+                        <td class="" >{{ $p->is_returned }}</td>
                         @can('admin')
                             <td class="">
                                 <div class="d-flex gap-2 w-100">

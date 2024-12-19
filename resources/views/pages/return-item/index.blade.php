@@ -4,7 +4,7 @@
     <x-container>
         <br>
         <div class="w-100 d-flex align-items-center justify-content-between">
-            <h2>Return Items</h2>
+            <h2>Barang Return</h2>
             {{-- <div class="d-flex gap-3">
                 <a class="btn btn-secondary" href="{{ route('deliveryorder-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
                 <div class="position-relative d-flex flex-column align-items-end">
@@ -26,7 +26,6 @@
             });
         </script>
         <hr>
-        <br>
 
         {{-- <h5>welcome back, {{ Auth::user()->name }}! </h5> --}}
 
@@ -40,7 +39,7 @@
 
         <a href="{{ route('returnitem-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
             <i class="bi bi-plus-square"></i>
-            Return New Items</a>
+            Buat Data Return Barang Baru</a>
         <br>
         <!-- tabel list data-->
 
@@ -61,9 +60,8 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>
                             <ul>
-                                <li>Proyek: {{ $ri->delivery_order_product->delivery_order->project->project_name }}</li>
-                                <li>Tanggal: {{ Carbon\Carbon::parse($ri->delivery_order_product->delivery_order->delivery_date)->format("d M Y") }}</li>
-                                <li>SKU Order: {{ $ri->delivery_order_product->delivery_order->register }}</li>
+                                <li>Proyek: {{ $ri->project->project_name }}</li>
+                                <li>Tanggal: {{ Carbon\Carbon::parse($ri->created_at)->format("d M Y") }}</li>
                             </ul>
 
                         </td>
@@ -71,8 +69,10 @@
                             <ul>
                                 <li>Nama: {{ $ri->product->product_name }}</li>
                                 <li>Varian: {{ $ri->product->variant }}</li>
-                                <li>Harga: Rp {{ number_format($ri->product->price, "2", ",", ".") }}</li>
-                                <li>Diskon: {{ $ri->product->discount }}%</li>
+                                @can('admin')
+                                    <li>Harga: Rp {{ number_format($ri->product->price, "2", ",", ".") }}</li>
+                                    <li>Diskon: {{ $ri->product->discount }}%</li>
+                                @endcan
                                 <li>Jumlah: {{ $ri->quantity }}</li>
                             </ul>
                         </td>

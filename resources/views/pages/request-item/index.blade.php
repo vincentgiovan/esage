@@ -4,7 +4,7 @@
     <x-container>
 
         <br>
-        <h2>Request Items</h2>
+        <h2>Request Barang</h2>
         <hr>
         <br>
 
@@ -16,11 +16,9 @@
             <p class="text-success fw-bold">{{ session('successDeleteRequest') }}</p>
         @endif
 
-        @can("admin")
-            <a href="{{ route('requestitem-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
-                <i class="bi bi-plus-square"></i>
-                Add New Request</a>
-        @endcan
+        <a href="{{ route('requestitem-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
+            <i class="bi bi-plus-square"></i>
+            Add New Request</a>
 
         <div class="overflow-x-auto mt-3">
             <table class="w-100">

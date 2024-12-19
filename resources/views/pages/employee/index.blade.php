@@ -4,8 +4,8 @@
     <x-container>
         <br>
         <div class="w-100 d-flex justify-content-between align-items-center">
-            <h2>Sage Employees</h2>
-            <a href="{{ route('employee-manageform') }}" class="btn btn-primary">Positions & Specialities</a>
+            <h2>Data Pegawai</h2>
+            <a href="{{ route('employee-manageform') }}" class="btn btn-primary">Atur Jabatan dan Keahlian</a>
         </div>
         <hr>
 
@@ -15,8 +15,17 @@
             <p class="text-success fw-bold">{{ session('success-edit-employee-data') }}</p>
         @endif
 
-        <div class="mt-4">
-            <a href="{{ route('employee-create') }}" class="btn btn-primary"><i class="bi bi-plus-square"></i> New Employee Data</a>
+        <div class="mt-4 d-flex w-100 justify-content-between">
+            <a href="{{ route('employee-create') }}" class="btn btn-primary"><i class="bi bi-plus-square"></i> Data Pegawai Baru</a>
+
+            <form action="{{ route('employee-index') }}" class="d-flex gap-3 items-center">
+                <select type="text" class="form-select" name="status">
+                    <option value="">Semua</option>
+                    <option value="active" @if(request('status') == 'active') selected @endif>Aktif</option>
+                    <option value="passive" @if(request('status') == 'passive') selected @endif>Tidak Aktif</option>
+                </select>
+                <button class="btn btn-primary" type="submit">Filter</button>
+            </form>
         </div>
 
         <div class="overflow-x-auto mt-3">

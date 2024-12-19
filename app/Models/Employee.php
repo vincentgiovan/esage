@@ -22,4 +22,12 @@ class Employee extends Model
     public function projects(){
         return $this->belongsToMany(Project::class, "employee_projects");
     }
+
+    public function scopeFilter($query, array $filters){
+        $query->when($filters["status"]?? false, function($query, $status) {
+            return $query->where(function($query) use($status) {
+                $query->where("status", $status);
+            });
+        });
+    }
 }

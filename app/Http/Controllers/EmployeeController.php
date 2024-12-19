@@ -14,7 +14,7 @@ class EmployeeController extends Controller
 {
     public function index(){
         return view("pages.employee.index", [
-            "employees" => Employee::orderByRaw('CASE WHEN status = "active" THEN 0 ELSE 1 END')->get()
+            "employees" => Employee::filter(request(['status']))->orderByRaw('CASE WHEN status = "active" THEN 0 ELSE 1 END')->get()
         ]);
     }
 

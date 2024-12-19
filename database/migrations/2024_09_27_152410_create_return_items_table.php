@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('return_items', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger("delivery_order_product_id");
-            $table->foreign("delivery_order_product_id")->references("id")->on("delivery_order_products")->onDelete('cascade');
+            $table->unsignedBigInteger("project_id");
+            $table->foreign("project_id")->references("id")->on("projects")->onDelete('cascade');
 
             $table->unsignedBigInteger("product_id");
             $table->foreign("product_id")->references("id")->on("products")->onDelete('cascade');

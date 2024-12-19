@@ -12,29 +12,42 @@
             <p class="text-success fw-bold">{{ session('successAutoGenerateSalary') }}</p>
         @endif
 
-        <form action="{{ route('salary-autocreate') }}" method="post" class="mt-2">
-            @csrf
-            <button class="btn btn-primary" type="submit">Generasi Data Gaji</button>
-        </form>
+        <div class="d-flex w-100 justify-content-between mt-2 align-items-center">
+            <form action="{{ route('salary-autocreate') }}" method="post">
+                @csrf
+                <button class="btn btn-primary" type="submit">Generasi Data Gaji</button>
 
-        @php
-            $lastDataGeneration = Carbon\Carbon::parse(
-                Illuminate\Support\Facades\DB::table('salaries')->max('created_at')
-            )->startOfDay();
+                @php
+                    $lastDataGeneration = Carbon\Carbon::parse(
+                        Illuminate\Support\Facades\DB::table('salaries')->max('created_at')
+                    )->startOfDay();
 
-            $ableToGenerateUntil = Carbon\Carbon::now()
-                ->previous('Friday')
-                ->startOfDay();
+                    $ableToGenerateUntil = Carbon\Carbon::now()
+                        ->previous('Friday')
+                        ->startOfDay();
 
-            $diff = $lastDataGeneration->diffInDays($ableToGenerateUntil);
-        @endphp
+                    $diff = $lastDataGeneration->diffInDays($ableToGenerateUntil);
+                @endphp
 
-        <div class="mt-3 fst-italic">Tanggal terakhir generasi data gaji: <strong>{{ Carbon\Carbon::parse($lastDataGeneration)->format('d M Y') }}</strong></div>
-        @if($diff > 0)
-            <div class="fst-italic">Bisa menggenerasi data gaji terbaru hingga tanggal: <strong>{{ Carbon\Carbon::parse($ableToGenerateUntil)->format('d M Y') }}</strong></div>
-        @else
-            <div class="fst-italic">Saat ini belum bisa menggenerasi data gaji terbaru, harap tunggu hingga tanggal: <strong>{{ Carbon\Carbon::parse(Carbon\Carbon::now()->next('Friday'))->format('d M Y') }}</strong></div>
-        @endif
+                <div class="mt-3 fst-italic">Tanggal terakhir generasi data gaji: <strong>{{ Carbon\Carbon::parse($lastDataGeneration)->format('d M Y') }}</strong></div>
+                @if($diff > 0)
+                    <div class="fst-italic">Bisa menggenerasi data gaji terbaru hingga tanggal: <strong>{{ Carbon\Carbon::parse($ableToGenerateUntil)->format('d M Y') }}</strong></div>
+                @else
+                    <div class="fst-italic">Saat ini belum bisa menggenerasi data gaji terbaru, harap tunggu hingga tanggal: <strong>{{ Carbon\Carbon::parse(Carbon\Carbon::now()->next('Friday'))->format('d M Y') }}</strong></div>
+                @endif
+            </form>
+
+            <form action="{{ route('salary-index') }}" class="d-flex flex-column align-items-end">
+                <label for="">Tampilkan Data Hanya pada Periode Tanggal:</label>
+                <div class="d-flex gap-3 align-items-center mt-1">
+                    <input type="date" name="from" class="form-control" id="filter-start-date" value="{{ request('from') }}">
+                    <div class="">-</div>
+                    <input type="date" name="until" class="form-control" id="filter-end-date" value="{{ request('until') }}">
+                </div>
+                <button type="submit" class="btn btn-primary px-4 mt-3">Filter Data</button>
+            </form>
+        </div>
+
 
         <div class="overflow-x-auto mt-3">
             <table class="w-100">

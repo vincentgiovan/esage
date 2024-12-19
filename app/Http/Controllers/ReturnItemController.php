@@ -26,7 +26,8 @@ class ReturnItemController extends Controller {
 
     public function create(){
         return view("pages.return-item.create", [
-            "delivery_orders" => DeliveryOrder::where('archived', 0)->get()
+            "projects" => Project::where('archived', 0)->get(),
+            "products" => Product::where('archived', 0)->get()
         ]);
     }
 
@@ -35,7 +36,7 @@ class ReturnItemController extends Controller {
             "product" => "required",
             "status" => "required",
             "PIC" => "required|min:3",
-            "devor_id" => "required",
+            "project" => "required",
             "image" => "required|image",
             "qty" => "required|numeric|min:0|not_in:0"
         ]);
@@ -43,7 +44,7 @@ class ReturnItemController extends Controller {
         try {
             DB::beginTransaction();
 
-            $devorprod = DeliveryOrderProduct::where("product_id", $validated_data["product"])->where("delivery_order_id", $validated_data["devor_id"])->first();
+            $project = Project::find($validated_data["project"]);
             $product = Product::find($validated_data["product"]);
 
             if($request->file("image")){
@@ -94,7 +95,7 @@ class ReturnItemController extends Controller {
             }
 
             ReturnItem::create([
-                "delivery_order_product_id" => $devorprod->id,
+                "project_id" => $project->id,
                 "product_id" => $aidi,
                 "foto" => $validated_data["foto"],
                 "PIC" => $validated_data["PIC"],
@@ -116,7 +117,8 @@ class ReturnItemController extends Controller {
     public function edit($id){
         return view("pages.return-item.edit", [
             "return_item" => ReturnItem::find($id),
-            "delivery_orders" => DeliveryOrder::where('archived', 0)->get()
+            "projects" => Project::where('archived', 0)->get(),
+            "products" => Product::where('archived', 0)->get()
         ]);
     }
 
