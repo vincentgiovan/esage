@@ -164,6 +164,10 @@ class AttendanceController extends Controller
         ]);
     }
 
+    public function show_self(){
+        
+    }
+
     public function check_in($project_id){
         $project = Project::find($project_id);
 
@@ -236,9 +240,73 @@ class AttendanceController extends Controller
         }
 
         $project = Project::find($project_id);
+        $currAttendance = Attendance::where("attendance_date", Carbon::parse(now())->format('Y-m-d'))->where('employee_id', Auth::user()->employee_data->id)->where('project_id', $project->id)->first();
 
-        Attendance::where("attendance_date", Carbon::parse(now())->format('Y-m-d'))->where('employee_id', Auth::user()->employee_data->id)->where('project_id', $project->id)->update([
-            "jam_keluar" => substr($validatedData["check_out_time"], 0, 5) . ':00',
+        $status = 'Normal';
+        $jamnormal = 0;
+        $jamlembur = 0;
+
+        $start_work = $currAttendance->jam_masuk;
+        $end_work = substr($validatedData["check_out_time"], 0, 5) . ':00';
+        $dayName = Carbon::parse(now())->format('l');
+
+        // Weekends
+        if($dayName == 'Saturday' || $dayName == 'Sunday'){
+            if($end_work > '16:29:00' && $end_work <= '23:59:00'){
+                $status = 'Lembur';
+            }
+            else if($end_work >= '00:00:00' && $end_work < '08:00:00'){
+                $status = 'Lembur Panjang';
+            }
+        }
+        // Weekdays
+        else {
+            if($end_work > '17:29:00' && $end_work <= '23:59:00'){
+                $status = 'Lembur';
+            }
+            else if($end_work >= '00:00:00' && $end_work <= '00:59:00'){
+                $status = 'Lembur';
+            }
+            else if($end_work >= '01:00:00' && $end_work < '08:00:00'){
+                $status = 'Lembur Panjang';
+            }
+        }
+
+        // COUNTING NORMAL WORK HOUR
+        $carbonStartN = Carbon::createFromFormat('H:i:s', $start_work);
+        $carbonEndN = Carbon::createFromFormat('H:i:s', $end_work);
+
+        if ($carbonEndN->lessThan($carbonStartN)) {
+            $carbonEndN->addDay();
+        }
+
+        $minutesDifferenceN = $carbonStartN->diffInMinutes($carbonEndN);
+        $roundedMinutesN = floor($minutesDifferenceN / 60) * 60;
+        $jamnormal = min($roundedMinutesN / 60, ($dayName == 'Saturday' || $dayName == 'Sunday')? 8 : 9);
+
+        if($status != 'Normal'){
+            // COUNTING OVERTIME WORK HOUR
+            $carbonStartOT = Carbon::createFromFormat('H:i:s', ($dayName == 'Saturday' || $dayName == 'Sunday')? '16:00:00' : '17:00:00');
+            $carbonEndOT = Carbon::createFromFormat('H:i:s', $end_work);
+
+            if ($carbonEndOT->lessThan($carbonStartOT)) {
+                $carbonEndOT->addDay();
+            }
+
+            $minutesDifferenceOT = $carbonStartOT->diffInMinutes($carbonEndOT);
+            $roundedMinutesOT = round($minutesDifferenceOT / 30) * 30;
+            $jamlembur = $roundedMinutesOT / 60;
+
+            if($status == 'Lembur Panjang'){
+                $jamlembur -= 8;
+            }
+        }
+
+        $currAttendance->update([
+            "normal" => $jamnormal,
+            "jam_lembur" => $jamlembur,
+            "index_lembur_panjang" => ($status == 'Lembur Panjang')? 1 : 0,
+            "jam_keluar" => $end_work,
             "bukti_keluar" => $validatedData["evidence_path"],
             "latitude_keluar" => $validatedData["latitude"],
             "longitude_keluar" => $validatedData["longitude"]

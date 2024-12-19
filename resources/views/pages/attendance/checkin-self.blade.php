@@ -34,7 +34,7 @@
                     <div class="d-flex">
                         <video id="video" autoplay class="w-50"></video>
                         <video id="preview" controls class="w-50" style="display: none;"></video>
-                        </div>
+                    </div>
 
                     <div class="d-flex mt-3 gap-3">
                         <button type="button" class="btn btn-success" id="startRecording">Mulai Recording</button>

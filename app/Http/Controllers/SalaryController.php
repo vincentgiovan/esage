@@ -46,7 +46,7 @@ class SalaryController extends Controller
                     $sub_normal = $atd->normal * $employee->pokok;
                     $sub_lembur = $atd->jam_lembur * $employee->lembur;
                     $sub_lembur_panjang = $atd->index_lembur_panjang * $employee->lembur_panjang;
-                    $sub_performa = $atd->index_performa * $employee->performa;
+                    $sub_performa = $atd->performa;
                     $total += $sub_normal + $sub_lembur + $sub_lembur_panjang + $sub_performa;
                 }
 

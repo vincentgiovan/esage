@@ -115,5 +115,32 @@
                 }
             </script>
         @endif
+
+        @if($attendance->latitude_masuk || $attendance->latitude_keluar)
+            <h6 class="mt-4">Bukti Kehadiran</h6>
+            <div class="w-100 d-flex gap-3">
+                <div class="w-50">
+                    <div class="fst-italic">Masuk</div>
+                    @if($attendance->bukti_masuk)
+                        <video width="100%" height="360" controls>
+                            <source src="{{ Storage::url("app/public/" . $attendance->bukti_masuk) }}" type="video/webm">
+                        </video>
+                    @else
+                        N/A
+                    @endif
+                </div>
+
+                <div class="w-50">
+                    <div class="fst-italic">Keluar</div>
+                    @if($attendance->bukti_keluar)
+                        <video width="100%" height="360" controls>
+                            <source src="{{ Storage::url("app/public/" . $attendance->bukti_keluar) }}" type="video/webm">
+                        </video>
+                    @else
+                        N/A
+                    @endif
+                </div>
+            </div>
+        @endif
     </x-container>
 @endsection

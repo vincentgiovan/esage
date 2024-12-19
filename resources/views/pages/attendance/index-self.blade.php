@@ -55,10 +55,10 @@
                     </div>
                 </div>
 
-
                 <div class="my-3">
-                    <input type="file" class="evidence_masuk" name="evidence_masuk" style="display:none;" accept="video/*">
-                    <a href="{{ route(!$already_check_in ? 'attendance-self-checkin' : 'attendance-self-checkout', $asproj->id) }}" class="btn btn-primary px-3 py-1">{{ $already_check_in ? 'Check Out' : 'Check In' }}</a>
+                    @if(!$already_check_in || !$already_check_out)
+                        <a href="{{ route(!$already_check_in ? 'attendance-self-checkin' : 'attendance-self-checkout', $asproj->id) }}" class="btn btn-primary px-3 py-1">{{ $already_check_in ? 'Check Out' : 'Check In' }}</a>
+                    @endif
                 </div>
             </div>
         @endforeach
