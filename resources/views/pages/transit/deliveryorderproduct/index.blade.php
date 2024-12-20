@@ -55,20 +55,39 @@
             <table class="w-100">
                 <tr>
                     <th>No</th>
-                    <th>Nama Produk </th>
-                    <th>SKU Produk </th>
-                    <th>Quantity</th>
+                    <th>Nama Produk</th>
                     <th>Variant</th>
+                    <th>SKU Produk</th>
+                    <th>Harga</th>
+                    <th>Diskon</th>
+                    <th>Harga Diskon</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
                     <th>Action</th>
                 </tr>
 
+                @php
+                    $total = 0;
+                @endphp
+
                 @foreach ($do as $deliveryorder_product)
+                    @php
+                        $prod = $deliveryorder_product->product;
+
+                        $disc_price = ((100 - $prod->discount) / 100) * $prod->price;
+                        $subtotal = $disc_price * $prod->quantity;
+                        $total += $subtotal;
+                    @endphp
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $deliveryorder_product->product->product_name }}</td>
-                        <td>{{ $deliveryorder_product->product->product_code }}</td>
+                        <td>{{ $prod->product_name }} @if($prod->is_returned == 'yes'){{ __('- Returned') }}@endif</td>
+                        <td>{{ $prod->variant }}</td>
+                        <td>{{ $prod->product_code }}</td>
+                        <td>Rp {{ number_format($prod->price, 2, ',', '.') }}</td>
+                        <td>{{ $prod->discount }}%</td>
+                        <td>Rp {{ number_format($disc_price, 2, ',', '.') }}</td>
                         <td>{{ $deliveryorder_product->quantity }}</td>
-                        <td>{{ $deliveryorder_product->product->variant }}</td>
+                        <td>Rp{{ number_format($subtotal, 2, ',', '.') }}</td>
                         <td>
                             <div class="d-flex gap-5 w-100">
                                 <form action="{{ route("deliveryorderproduct-destroy", [$deliveryorder->id, $deliveryorder_product->id] ) }}" method="POST">
@@ -91,10 +110,10 @@
 
             <div class="d-flex h-100 w-100 justify-content-end gap-3 x-2" style="font-size: 14pt; background: linear-gradient(to right, rgb(113, 113, 113), rgb(213, 207, 207));">
                 <div>
-                    Total Items:
+                    Total:
                 </div>
                 <div>
-                    {{ $do->count() }}
+                    Rp {{ number_format($total, 2, '.', ',') }}
                 </div>
             </div>
         </div>

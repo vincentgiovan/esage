@@ -71,7 +71,7 @@
                     <th>Variant</th>
                     <th>Markup</th>
                     <th>Status</th>
-                    <th>Returned</th>
+                    <th class="text-center">Returned</th>
                     @can('admin')
                         <th>Action</th>
                     @endcan
@@ -79,7 +79,7 @@
 
                 @foreach ($products as $p)
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
-                        <td class="">
+                        <td>
                             @php
                                 if(request("page")){
                                     echo $loop->iteration + ((request("page") - 1) * $n_pagination);
@@ -89,23 +89,33 @@
 
                             @endphp
                         </td>
-                        <td class="">
+                        <td>
                             <div class="w-100 d-flex justify-content-between align-items-center">
                                 <div>{{ $p->product_name }}</div>
                                 @can('admin')
-                                    <a href="{{ route('product-log', $p->id) }}" class="btn btn-success">View Log</a>
+                                    @if($p->is_returned == 'no')
+                                        <a href="{{ route('product-log', $p->id) }}" class="btn btn-success">View Log</a>
+                                    @endif
                                 @endcan
                             </div>
                         </td>
-                        <td class="">{{ $p->stock }}</td>
-                        <td class="">Rp {{ number_format($p->price, 2, ',', '.') }}</td>
-                        <td class="">{{ $p->unit }}</td>
-                        <td class="">{{ $p->variant }}</td>
-                        <td class="">{{ $p->markup }}</td>
-                        <td class="">{{ $p->status }}</td>
-                        <td class="" >{{ $p->is_returned }}</td>
+                        <td>{{ $p->stock }}</td>
+                        <td>Rp {{ number_format($p->price, 2, ',', '.') }}</td>
+                        <td>{{ $p->unit }}</td>
+                        <td>{{ $p->variant }}</td>
+                        <td>{{ $p->markup }}</td>
+                        <td>{{ $p->status }}</td>
+                        <td>
+                            <div class="w-100 d-flex justify-content-center">
+                                @if($p->is_returned == "yes")
+                                    <i class="bi bi-check-circle-fill fs-4" style="color: red"></i>
+                                @else
+                                    <i class="bi bi-x-circle-fill fs-4" style="color: green"></i>
+                                @endif
+                            </div>
+                        </td>
                         @can('admin')
-                            <td class="">
+                            <td>
                                 <div class="d-flex gap-2 w-100">
                                     <a href="{{ route('product-edit', $p->id) }}" class="btn btn-warning text-white"
                                         style="font-size: 10pt; background-color: rgb(197, 167, 0);">

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Salary;
 use App\Models\Partner;
 use App\Models\Product;
 use App\Models\Project;
 use App\Models\Purchase;
+use Illuminate\Http\Request;
 use App\Models\DeliveryOrder;
 use App\Models\PurchaseProduct;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -113,5 +115,40 @@ class PDFController extends Controller
         $pdf = Pdf::loadView('pdf.project', $data)->setPaper("a4", ($mode == 1)? "landscape" : "portrait");
 
         return $pdf->stream('project.pdf');
+    }
+
+    public function export_salaries(Request $request){
+        $salaries = Salary::filter(request(['from', 'until']))
+            ->with(['employee.attendances' => function ($query) {
+                $filters = request(['from', 'until']);
+
+                $query->when(isset($filters['from']) && isset($filters['until']), function ($query) use ($filters) {
+                    return $query->where(function ($query) use ($filters) {
+                        $query->whereBetween('attendance_date', [$filters['from'], $filters['until']])
+                            ->orWhereBetween('attendance_date', [$filters['from'], $filters['until']])
+                            ->orWhere(function ($query) use ($filters) {
+                                $query->where('attendance_date', '<=', $filters['from'])
+                                        ->where('attendance_date', '>=', $filters['until']);
+                            });
+                    });
+                });
+
+                $query->when($filters['from'] ?? false, function ($query, $from) {
+                    return $query->where('attendance_date', '>=', $from);
+                });
+
+                $query->when($filters['until'] ?? false, function ($query, $until) {
+                    return $query->where('attendance_date', '<=', $until);
+                });
+            }])
+            ->get();
+
+        $data = [
+            "salaries" => $salaries
+        ];
+
+        $pdf = Pdf::loadView('pdf.salary', $data)->setPaper("a4", "portrait");
+
+        return $pdf->stream('salaries.pdf');
     }
 }

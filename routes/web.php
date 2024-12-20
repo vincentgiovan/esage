@@ -311,6 +311,7 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::post("/salary/auto-create", [SalaryController::class, "auto_create"])->name('salary-autocreate');
         Route::get("/salary/{id}/edit", [SalaryController::class, "edit"])->name("salary-edit")->whereNumber("id");
         Route::post("/salary/{id}/edit", [SalaryController::class, "update"])->name("salary-update")->whereNumber("id");
+        Route::post("/salary/export", [PDFController::class, "export_salaries"])->name("salary-export")->whereNumber("id");
 
         // ===== ATTENDANCE ===== //
         Route::get("/attendance", [AttendanceController::class, "index"])->name("attendance-index");

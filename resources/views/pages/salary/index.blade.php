@@ -37,15 +37,23 @@
                 @endif
             </form>
 
-            <form action="{{ route('salary-index') }}" class="d-flex flex-column align-items-end">
+            <div class="d-flex flex-column align-items-end">
                 <label for="">Tampilkan Data Hanya pada Periode Tanggal:</label>
                 <div class="d-flex gap-3 align-items-center mt-1">
-                    <input type="date" name="from" class="form-control" id="filter-start-date" value="{{ request('from') }}">
+                    <input type="date" class="form-control" id="filter-start-date" value="{{ request('from') }}">
                     <div class="">-</div>
-                    <input type="date" name="until" class="form-control" id="filter-end-date" value="{{ request('until') }}">
+                    <input type="date" class="form-control" id="filter-end-date" value="{{ request('until') }}">
                 </div>
-                <button type="submit" class="btn btn-primary px-4 mt-3">Filter Data</button>
-            </form>
+                <div class="d-flex gap-3">
+                    <form action="{{ route('salary-export') }}" method="post">
+                        @csrf
+                        <button type="submit" class="btn btn-primary px-4 mt-3">Export PDF</button>
+                    </form>
+                    <form action="{{ route('salary-index') }}">
+                        <button type="submit" class="btn btn-primary px-4 mt-3">Filter Data</button>
+                    </form>
+                </div>
+            </div>
         </div>
 
 
@@ -83,5 +91,16 @@
             </table>
         </div>
     </x-container>
+
+    <script>
+        $("form").on("submit", function(e){
+            e.preventDefault();
+
+            $(this).append($("<input>").attr({"type": "hidden", "name": "from", "value": $("#filter-start-date").val()}));
+            $(this).append($("<input>").attr({"type": "hidden", "name": "until", "value": $("#filter-end-date").val()}));
+
+            this.submit();
+        });
+    </script>
 
 @endsection

@@ -35,7 +35,7 @@ class PurchaseProductController extends Controller
         // Tampilkan halaman pages/transit/purchaseproduct/addpurchase.blade.php
         return view("pages.transit.purchaseproduct.addpurchase", [
             "purchase" => $purchase, // data purchase yang mau ditambahkan cart-nya
-            "products" => Product::where('archived', 0)->get() // semua data produk untuk dropdown/select product
+            "products" => Product::where('archived', 0)->where('is_returned', 'no')->get() // semua data produk untuk dropdown/select product
         ]);
     }
 
@@ -126,7 +126,6 @@ class PurchaseProductController extends Controller
         // Tampilkan halaman pages/transit/purchaseproduct/addnewitem.blade.php beserta data yang diperlukan di blade-nya:
         return view("pages.transit.purchaseproduct.addnewitem", [
             "purchase" => $purchase, // data purchase yang ingin ditambahkan cart-nya
-            "products" => Product::where('archived', 0)->get()
         ]);
     }
 

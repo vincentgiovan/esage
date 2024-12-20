@@ -28,7 +28,7 @@
                     <select name="product" class="form-select select2" id="product">
                         <option disabled selected>Pick an item</option>
                         @foreach ($products as $prod)
-                            <option value="{{ $prod->id }}" @if(old('product') == $prod->id) selected @endif>{{ $prod->product_name }} - {{ $prod->variant }}  (Harga: Rp {{ number_format($prod->price, 2, ',', '.') }}, Stok:  {{ $prod->stock }}, Diskon: {{ $prod->discount }}%)</option>
+                            <option value="{{ $prod->id }}" @if(old('product') == $prod->id) selected @endif>{{ $prod->product_name }} - {{ $prod->variant }} (Harga: Rp {{ number_format($prod->price, 2, ',', '.') }}, Stok:  {{ $prod->stock }}, Diskon: {{ $prod->discount }}%) @if($prod->is_returned == 'yes'){{__('- Returned')}}@endif</option>
                         @endforeach
                     </select>
                     @error("product")

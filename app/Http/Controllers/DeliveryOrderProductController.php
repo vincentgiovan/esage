@@ -51,7 +51,7 @@ class DeliveryOrderProductController extends Controller
         ]);
 
         // Targetkan delivery order yang cart produknya ingin ditambahkan
-        $deliveryorder = DeliveryOrder::where("id",$id);
+        $deliveryorder = DeliveryOrder::find($id);
 
         // Untuk setiap input produk yang dimasukkan, lakukan hal ini:
         foreach($request->products as $index=>$product_id){
@@ -63,7 +63,7 @@ class DeliveryOrderProductController extends Controller
             ]);
 
             // Karena delivery order sifatnya mengurangi stok produk, maka update stok product di tabel aslinya:
-            $oldstock = Product::where("id",$product_id)->stock; // Ambil stok lama produk
+            $oldstock = Product::find($product_id)->stock; // Ambil stok lama produk
             $newstock = $oldstock - $request->quantities[$index]; // Stok yang baru
 
             $toUpdate = ["stock" => $newstock]; // Simpen kolom data yang mau di-update by default
@@ -71,7 +71,7 @@ class DeliveryOrderProductController extends Controller
                 $toUpdate["status"] = "Out of Stock";
             }
 
-            Product::where("id",$product_id)->update($toUpdate); // Update datanya
+            Product::find($product_id)->update($toUpdate); // Update datanya
         };
 
         // Arahkan user kembali ke halaman pages/transit/deliveryorderproduct/index.blade.php

@@ -15,6 +15,10 @@ class Salary extends Model
         return $this->belongsTo(Employee::class);
     }
 
+    public function attendances(){
+        return $this->hasMany(Attendance::class);
+    }
+
     public function scopeFilter($query, array $filters)
     {
         $query->when(isset($filters['from']) && isset($filters['until']), function ($query) use ($filters) {
