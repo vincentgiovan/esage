@@ -23,6 +23,7 @@ use App\Http\Controllers\DeliveryOrderController;
 use App\Http\Controllers\PurchaseProductController;
 use App\Http\Controllers\DeliveryOrderProductController;
 use App\Http\Controllers\EmployeeProjectController;
+use App\Http\Controllers\PrepayController;
 
 Route::get('/', function(){
     return redirect("/dashboard");
@@ -290,7 +291,7 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::put('/account/{id}', [AccountController::class, 'update'])->name('account.update')->whereNumber("id");
         Route::delete('/account/{id}', [AccountController::class, 'destroy'])->name('account.destroy')->whereNumber("id");
 
-        // ===== EMPLOYEES ===== //
+        // ===== EMPLOYEES AND PREPAYS ===== //
         Route::get("/employee", [EmployeeController::class, "index"])->name("employee-index");
         Route::get("/employee/{id}", [EmployeeController::class, "show"])->name("employee-show")->whereNumber("id");
         Route::get("/employee/create", [EmployeeController::class, "create"])->name("employee-create");
@@ -305,6 +306,11 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::post("/employee/manage-form/{id}/edit-speciality", [EmployeeController::class, "manage_form_edit_speciality"])->name("employee-manageform-editspeciality")->whereNumber("id");
         Route::post("/employee/manage-form/{id}/delete-position", [EmployeeController::class, "manage_form_delete_position"])->name("employee-manageform-deleteposition")->whereNumber("id");
         Route::post("/employee/manage-form/{id}/delete-speciality", [EmployeeController::class, "manage_form_delete_speciality"])->name("employee-manageform-deletespeciality")->whereNumber("id");
+
+        Route::post("/employee/{id}/prepay/add", [PrepayController::class, "store"])->name("prepay-store")->whereNumber('id');
+        Route::post("/employee/{emp_id}/prepay/{ppay_id}/edit", [PrepayController::class, "update"])->name("prepay-update")->whereNumber('emp_id')->whereNumber('ppay_id');
+        Route::post("/employee/{emp_id}/prepay/{ppay_id}/delete", [PrepayController::class, "destroy"])->name("prepay-destroy")->whereNumber('emp_id')->whereNumber('ppay_id');
+
 
         // ===== SALARY ===== //
         Route::get("/salary", [SalaryController::class, "index"])->name("salary-index");

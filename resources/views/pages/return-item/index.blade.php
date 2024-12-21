@@ -61,7 +61,7 @@
                         <td>
                             <ul>
                                 <li>Proyek: {{ $ri->project->project_name }}</li>
-                                <li>Tanggal: {{ Carbon\Carbon::parse($ri->created_at)->format("d M Y") }}</li>
+                                <li>Tanggal: {{ Carbon\Carbon::parse($ri->created_at)->translatedFormat("d M Y") }}</li>
                             </ul>
 
                         </td>

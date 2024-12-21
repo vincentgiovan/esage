@@ -51,7 +51,7 @@
                 @foreach ($attendances as $a)
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ Carbon\Carbon::parse($a->attendance_date)->format("d M Y") }}</td>
+                        <td>{{ Carbon\Carbon::parse($a->attendance_date)->translatedFormat("d M Y") }}</td>
                         <td>{{ Carbon\Carbon::parse($a->jam_masuk)->format("H:i") }}-{{ Carbon\Carbon::parse($a->jam_keluar)->format("H:i") }}</td>
                         <td>{{ $a->project->project_name }}</td>
                         <td>{{ $a->employee->nama }}</td>

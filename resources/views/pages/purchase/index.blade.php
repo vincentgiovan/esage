@@ -83,7 +83,7 @@
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $p->partner->partner_name }}</td>
-                        <td>{{ Carbon\Carbon::parse($p->purchase_deadline)->format("d M Y") }}</td>
+                        <td>{{ Carbon\Carbon::parse($p->purchase_deadline)->translatedFormat("d M Y") }}</td>
                         <td>
                             <div class="d-flex gap-5 w-100 justify-content-between align-items-center">
                                 {{ $p->register }}
@@ -94,7 +94,7 @@
                             </div>
                         </td>
 
-                        <td>{{ Carbon\Carbon::parse($p->purchase_date)->format("d M Y") }}</td>
+                        <td>{{ Carbon\Carbon::parse($p->purchase_date)->translatedFormat("d M Y") }}</td>
                         <td>{{ $p->note }}</td>
                         <td class="fw-semibold @if($p->purchase_status == 'Ordered') text-primary @else text-success @endif">{{ $p->purchase_status }}</td>
                         {{-- <td >{{ $p->user->name }}</td> --}}

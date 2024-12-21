@@ -35,7 +35,7 @@
                 @foreach ($requests as $r)
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ Carbon\Carbon::parse($r->request_date)->format("d M Y") }}</td>
+                        <td>{{ Carbon\Carbon::parse($r->request_date)->translatedFormat("d M Y") }}</td>
                         <td>{{ $r->project->project_name }}</td>
                         <td>{{ $r->project->location }}</td>
                         <td>{{ $r->PIC }}</td>

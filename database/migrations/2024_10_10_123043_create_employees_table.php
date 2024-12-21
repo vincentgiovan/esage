@@ -28,11 +28,10 @@ return new class extends Migration
             $table->unsignedBigInteger("pokok")->nullable();
             $table->unsignedBigInteger("lembur")->nullable();
             $table->unsignedBigInteger("lembur_panjang")->nullable();
-            $table->unsignedBigInteger("performa")->nullable();
             $table->date("masuk")->nullable();
             $table->date("keluar")->nullable();
             $table->string("payroll")->default("off");
-            $table->unsignedBigInteger("kasbon")->nullable();
+            // $table->unsignedBigInteger("kasbon")->nullable();
             $table->longText("keterangan")->nullable();
             $table->string('status')->default('active');
 

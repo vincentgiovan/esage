@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\Models\Project;
 use App\Models\Employee;
 use App\Models\Attendance;
+use App\Models\Prepay;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -63,6 +64,15 @@ class AttendanceController extends Controller
 
             foreach($request->employee as $remp){
                 $employee = Employee::find($remp);
+
+                if($request->kasbon[$remp]){
+                    Prepay::create([
+                        "employee_id" => $employee->id,
+                        "start_period" => Carbon::parse($request->start_date)->format("Y-m-d"),
+                        "end_period" => Carbon::parse($request->start_date)->addDays(7)->format("Y-m-d"),
+                        "amount" => intval($request->kasbon[$remp])
+                    ]);
+                }
 
                 for($j = 0; $j < 7; $j++){
                     $atd_start_date = Carbon::parse($request->start_date);
@@ -162,10 +172,6 @@ class AttendanceController extends Controller
             "existing_attendances" => $existing_data,
             "assigned_projects" => Auth::user()->employee_data->projects
         ]);
-    }
-
-    public function show_self(){
-        
     }
 
     public function check_in($project_id){

@@ -131,16 +131,7 @@
                     @enderror
                 </div>
 
-                <div class="mt-3">
-                    <label for="kasbon">Kasbon</label>
-                    <input type="text" class="form-control" name="kasbon" id="kasbon" placeholder="Kasbon"
-                        value="{{ old('kasbon', $employee->kasbon) }}">
-                    @error('kasbon')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div class="mt-3">
+                {{-- <div class="mt-3">
                     <label>Payroll</label>
 
                     <div class="d-flex gap-3">
@@ -157,7 +148,7 @@
                             </label>
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="mt-3">
                     <label for="masuk">Masuk</label>

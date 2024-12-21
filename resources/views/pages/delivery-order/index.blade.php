@@ -81,7 +81,7 @@
                 @foreach ($deliveryorders as $p)
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ Carbon\Carbon::parse($p->delivery_date)->format("d M Y") }}</td>
+                        <td>{{ Carbon\Carbon::parse($p->delivery_date)->translatedFormat("d M Y") }}</td>
                         <td>{{ $p->project->project_name }}</td>
                         <td>
                             <div class="d-flex gap-5 w-100 justify-content-between align-items-center">

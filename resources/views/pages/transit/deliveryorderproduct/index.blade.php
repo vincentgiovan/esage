@@ -113,7 +113,7 @@
                     Total:
                 </div>
                 <div>
-                    Rp {{ number_format($total, 2, '.', ',') }}
+                    Rp {{ number_format($total, 2, ',', '.') }}
                 </div>
             </div>
         </div>

@@ -16,7 +16,7 @@
             </tr>
             <tr>
                 <th class="border border-1 border-secondary w-25">Tanggal</th>
-                <td class="border border-1 border-secondary">{{ Carbon\Carbon::parse($attendance->attendance_date)->format("d F Y") }}</td>
+                <td class="border border-1 border-secondary">{{ Carbon\Carbon::parse($attendance->attendance_date)->translatedFormat("d F Y") }}</td>
             </tr>
             <tr>
                 <th class="border border-1 border-secondary w-25">Jam Masuk dan Keluar</th>

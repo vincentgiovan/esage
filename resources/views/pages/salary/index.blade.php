@@ -29,11 +29,11 @@
                     $diff = $lastDataGeneration->diffInDays($ableToGenerateUntil);
                 @endphp
 
-                <div class="mt-3 fst-italic">Tanggal terakhir generasi data gaji: <strong>{{ Carbon\Carbon::parse($lastDataGeneration)->format('d M Y') }}</strong></div>
+                <div class="mt-3 fst-italic">Tanggal terakhir generasi data gaji: <strong>{{ Carbon\Carbon::parse($lastDataGeneration)->translatedFormat('d M Y') }}</strong></div>
                 @if($diff > 0)
-                    <div class="fst-italic">Bisa menggenerasi data gaji terbaru hingga tanggal: <strong>{{ Carbon\Carbon::parse($ableToGenerateUntil)->format('d M Y') }}</strong></div>
+                    <div class="fst-italic">Bisa menggenerasi data gaji terbaru hingga tanggal: <strong>{{ Carbon\Carbon::parse($ableToGenerateUntil)->translatedFormat('d M Y') }}</strong></div>
                 @else
-                    <div class="fst-italic">Saat ini belum bisa menggenerasi data gaji terbaru, harap tunggu hingga tanggal: <strong>{{ Carbon\Carbon::parse(Carbon\Carbon::now()->next('Friday'))->format('d M Y') }}</strong></div>
+                    <div class="fst-italic">Saat ini belum bisa menggenerasi data gaji terbaru, harap tunggu hingga tanggal: <strong>{{ Carbon\Carbon::parse(Carbon\Carbon::now()->next('Friday'))->translatedFormat('d M Y') }}</strong></div>
                 @endif
             </form>
 
@@ -72,7 +72,7 @@
                 @foreach ($salaries as $s)
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $s->start_period ? Carbon\Carbon::parse($s->start_period)->format("d M Y") : "N/A" }} - {{ $s->end_period ? Carbon\Carbon::parse($s->end_period)->format("d M Y") : "N/A" }}</td>
+                        <td>{{ $s->start_period ? Carbon\Carbon::parse($s->start_period)->translatedFormat("d M Y") : "N/A" }} - {{ $s->end_period ? Carbon\Carbon::parse($s->end_period)->translatedFormat("d M Y") : "N/A" }}</td>
                         <td>{{ $s->employee->nama }}</td>
                         <td>{{ $s->employee->jabatan }}</td>
                         <td>Rp {{ number_format($s->total, 2, ",", ".") }}</td>

@@ -23,6 +23,10 @@ class Employee extends Model
         return $this->belongsToMany(Project::class, "employee_projects");
     }
 
+    public function prepays(){
+        return $this->hasMany(Prepay::class);
+    }
+
     public function scopeFilter($query, array $filters){
         $query->when($filters["status"]?? false, function($query, $status) {
             return $query->where(function($query) use($status) {
