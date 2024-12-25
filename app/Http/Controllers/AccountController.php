@@ -22,6 +22,12 @@ class AccountController extends Controller
         return view('accounts.index', compact('users'));
     }
 
+    public function create(){
+        return view('accounts.create', [
+            "employees" => Employee::where('archived', 0)->orderBy('nama', 'asc')->get()
+        ]);
+    }
+
     // Simpan data akun baru ke database
     public function store(Request $request)
     {
@@ -30,16 +36,21 @@ class AccountController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            "role" => "required"
+            "role" => "required",
+            'employee' => 'nullable'
         ]);
 
         // Kalo validasi lolos berarti langsung bikin dan tambahin datanya ke tabel users
-        $new_user = User::create([
+        User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
         ]);
+
+        if($request->employee){
+            Employee::find($request->employee)->update(['user_id' => $request->employee]);
+        }
 
         // Arahin user balik ke halaman account/index.blade.php
         return redirect()->route('account.index')->with("successCreateAccount", "Successfully created new account");;
@@ -51,8 +62,11 @@ class AccountController extends Controller
         // Ambil data akun yang dipilih dari database
         $user = User::findOrFail($id);
 
-        // Tampilkan halaman accounts/show.blade.php dan kirim data akun tersebut ke blade-nya
-        return view("accounts.show", ["user" => $user]);
+        // Tampilkan halaman accounts/edit.blade.php dan kirim data akun tersebut ke blade-nya
+        return view("accounts.edit", [
+            "user" => $user,
+            "employees" => Employee::where('archived', 0)->orderBy('nama', 'asc')->get()
+        ]);
     }
 
     // Simpan perubahan data akun ke database
@@ -64,7 +78,8 @@ class AccountController extends Controller
         // Bikin aturan dasar validasinya (setidaknya nama sama email harus diisi pas form edit di-submit)
         $validationRule = [
             'name' => 'required|string|max:255',
-            "email" => 'required|string|email|max:255'
+            "email" => 'required|string|email|max:255',
+            'employee' => 'nullable'
         ];
 
         // Aturan validasi opsional, berlaku jika input password dan konfirmasinya diisi
@@ -78,6 +93,10 @@ class AccountController extends Controller
         // Enkripsi password baru
         if($request->password){
             $validatedData["password"] = Hash::make($validatedData["password"]);
+        }
+
+        if($request->employee){
+            Employee::find($request->employee)->update(['user_id' => $request->employee]);
         }
 
         // Kalo semuanya udah baru disimpan perubahannya di tabel users

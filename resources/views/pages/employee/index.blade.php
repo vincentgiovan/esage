@@ -39,7 +39,7 @@
                     <th>Lembur</th>
                     <th>Lembur Panjang</th>
                     <th>Status</th>
-                    {{-- <th>Kasbon</th> --}}
+                    <th>Akun</th>
                     <th>Actions</th>
                 </tr>
 
@@ -54,7 +54,13 @@
                         <td>{{ __("Rp " . number_format($e->lembur_panjang, 2, ',', '.')) }}</td>
                         {{-- <td>{{ ($e->payroll == "on")? "Ya" : "Tidak" }}</td> --}}
                         <td class="fw-semibold {{ $e->status == 'active'? 'text-primary' : 'text-danger' }}">{{ ucwords($e->status) }}</td>
-                        {{-- <td>{{ __(("Rp " .  number_format($e->kasbon, 2, ',', '.'))) }}</td> --}}
+                        <td>
+                            @if($e->user_id)
+                                <i class="bi bi-check-circle-fill fs-4" style="color: green"></i>
+                            @else
+                                <i class="bi bi-x-circle-fill fs-4" style="color: red"></i>
+                            @endif
+                        </td>
                         <td>
                             <div class="d-flex gap-2 w-100">
                                 <a href="{{ route('employee-show', $e->id) }}" class="btn btn-success text-white"

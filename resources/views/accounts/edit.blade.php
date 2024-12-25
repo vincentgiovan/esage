@@ -1,20 +1,14 @@
 @extends('layouts.main-admin')
 
 @section('content')
-<div class="container">
-    <h1>Account Management</h1>
-
-    <!-- Add User Form -->
-    <div class="card mb-4">
-        <div class="card-header">
-            Edit User
-        </div>
-        <div class="card-body">
+    <x-container-middle>
+        <div class="container bg-white rounded-4 p-5 mt-4 border border-1 card">
+            <h2 class="text-center fw-bold">Edit Data Akun</h2>
             <form action="{{ route('account.update', $user->id) }}" method="POST">
                 @method("put")
                 @csrf
                 <div class="form-group">
-                    <label for="name">Name</label>
+                    <label for="name">Nama</label>
                     <input type="text" class="form-control" id="name" name="name" value="{{ $user->name }}">
                     @error("name")
                         {{ $message }}
@@ -49,7 +43,7 @@
                 </div>
 
                 <div class="form-group d-flex flex-column mt-3">
-                    <label for="password_confirmation" class="col-md-4 col-form-label text-md-right">{{ __('Password Confirmation') }}</label>
+                    <label for="password_confirmation" class="col-md-4 col-form-label text-md-right">{{ __('Konfirmasi Password') }}</label>
 
                     <div class="w-100">
                         <div class="input-group">
@@ -68,29 +62,44 @@
                         @enderror
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Edit User</button>
+
+                <div class="form-group mb-3">
+                    <label for="employee">Hubungkan dengan Pegawai (jika akun ingin dihubungkan dengan pegawai)</label>
+                    <select class="form-control select2 text-black" id="employee" name="employee">
+                        <option selected disabled>Pilih Pegawai</option>
+                        @foreach($employees as $e)
+                            <option value="{{ $e->id }}" @if($user->employee_data && $user->employee_data->user_id == $e->id) selected @endif>{{ $e->nama }}</option>
+                        @endforeach
+                    </select>
+                    @error("employee")
+                        <span class="invalid-feedback" role="alert">
+                            {{ $message }}
+                        </span>
+                    @enderror
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-3">Simpan Perubahan</button>
             </form>
         </div>
-    </div>
-</div>
+    </x-container-middle>
 
-<script>
-    document.getElementById('togglePassword').addEventListener('click', function (e) {
-        const passwordInput = document.getElementById('password');
-        const passwordIcon = document.getElementById('toggleIcon');
-        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordInput.setAttribute('type', type);
-        passwordIcon.classList.toggle('bi-eye-fill');
-        passwordIcon.classList.toggle('bi-eye-slash-fill');
-    });
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function (e) {
+            const passwordInput = document.getElementById('password');
+            const passwordIcon = document.getElementById('toggleIcon');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            passwordIcon.classList.toggle('bi-eye-fill');
+            passwordIcon.classList.toggle('bi-eye-slash-fill');
+        });
 
-    document.getElementById('togglePassword2').addEventListener('click', function (e) {
-        const passwordInput = document.getElementById('password_confirmation');
-        const passwordIcon = document.getElementById('toggleIcon2');
-        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordInput.setAttribute('type', type);
-        passwordIcon.classList.toggle('bi-eye-fill');
-        passwordIcon.classList.toggle('bi-eye-slash-fill');
-    });
-</script>
+        document.getElementById('togglePassword2').addEventListener('click', function (e) {
+            const passwordInput = document.getElementById('password_confirmation');
+            const passwordIcon = document.getElementById('toggleIcon2');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            passwordIcon.classList.toggle('bi-eye-fill');
+            passwordIcon.classList.toggle('bi-eye-slash-fill');
+        });
+    </script>
 @endsection

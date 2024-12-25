@@ -6,7 +6,6 @@
         <br>
         <h2>Request Barang</h2>
         <hr>
-        <br>
 
         @if (session()->has('successAddRequest'))
             <p class="text-success fw-bold">{{ session('successAddRequest') }}</p>
@@ -16,7 +15,7 @@
             <p class="text-success fw-bold">{{ session('successDeleteRequest') }}</p>
         @endif
 
-        <a href="{{ route('requestitem-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
+        <a href="{{ route('requestitem-create') }}" class="btn btn-primary text-white" style="font-size: 10pt">
             <i class="bi bi-plus-square"></i>
             Add New Request</a>
 

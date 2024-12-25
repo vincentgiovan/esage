@@ -284,7 +284,8 @@ Route::middleware(["auth", "verified"])->group(function(){
     Route::middleware("admin")->group(function(){
         // ===== ACCOUNTS ===== //
         Route::get('/account', [AccountController::class, 'index'])->name('account.index');
-        Route::post('/account', [AccountController::class, 'store'])->name('account.store');
+        Route::get('/account/create', [AccountController::class, 'create'])->name('account.create');
+        Route::post('/account/create', [AccountController::class, 'store'])->name('account.store');
         Route::get("/account/import-data", [AccountController::class, "import_user_form"])->name("account.import.form");
         Route::post("/account/import-data", [AccountController::class, "import_user_store"])->name("account.import.store");
         Route::get("/account/{id}", [AccountController::class, "show"])->name("account.show")->whereNumber("id");
