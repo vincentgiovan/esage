@@ -64,7 +64,8 @@
                     <th>Periode</th>
                     <th>Nama</th>
                     <th>Jabatan</th>
-                    <th>Total</th>
+                    <th>Subtotal</th>
+                    <th>Kasbon</th>
                     <th>Keterangan</th>
                     <th>Actions</th>
                 </tr>
@@ -76,6 +77,16 @@
                         <td>{{ $s->employee->nama }}</td>
                         <td>{{ $s->employee->jabatan }}</td>
                         <td>Rp {{ number_format($s->total, 2, ",", ".") }}</td>
+                        <td>
+                            @php
+                                $total_kasbon = 0;
+                                foreach($s->employee->prepays->where('start_period', '>=', $s->start_period)->where('end_period', '<=', $s->end_period) as $ppay){
+                                    $total_kasbon += $ppay->amount;
+                                }
+
+                                echo number_format($total_kasbon, 2, ',', '.');
+                            @endphp
+                        </td>
                         <td>{{ $s->keterangan ?? "N/A" }}</td>
                         <td>
                             <div class="d-flex gap-2 w-100">

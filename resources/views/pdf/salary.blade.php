@@ -82,11 +82,11 @@
                 @endphp
 
                 <tr>
-                    <td>{{ $loop->iteration }}</td>
+                    <td style="background-color: yellow;">{{ $loop->iteration }}</td>
                     <td>{{ $s->start_period ? Carbon\Carbon::parse($s->start_period)->translatedFormat("d/m/Y") : "N/A" }} - {{ $s->end_period ? Carbon\Carbon::parse($s->end_period)->translatedFormat("d/m/Y") : "N/A" }}</td>
                     <td>{{ $s->employee->nama }}</td>
                     <td>{{ $s->employee->jabatan }}</td>
-                    <td>{{ number_format($total_all_project, 2, ',', '.') }}</td>
+                    <td style="background-color: yellow;">{{ number_format($total_all_project, 2, ',', '.') }}</td>
                     <td></td>
                 </tr>
 

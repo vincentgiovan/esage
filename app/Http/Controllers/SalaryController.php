@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class SalaryController extends Controller
 {
     public function index(){
-        $salaries = Salary::filter(request(['from', 'until']))->get();
+        $salaries = Salary::filter(request(['from', 'until']))->with('employee.prepays')->get();
 
         return view("pages.salary.index", [
             "salaries" => $salaries,
