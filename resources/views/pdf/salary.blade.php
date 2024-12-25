@@ -23,9 +23,9 @@
     </head>
 
     <body>
-        {{-- <h1>Gaji Pegawai</h1>
+        <h1>Gaji Pegawai</h1>
         <hr>
-        <br> --}}
+        <br>
 
         <!-- tabel list data-->
         <table style="width: 100%; border: 1px solid black;">
@@ -38,91 +38,90 @@
                 <th>Ket.</th>
             </tr>
 
-            @foreach($salaries as $s)
+            @foreach($salaries as $i => $s)
+                @php
+                    $total_all_project = 0;
+                    $grouped = [];
+
+                    foreach ($s->employee->attendances->where('attendance_date', '>=', $s->start_period)->where('attendance_date', '<=', $s->end_period) as $atd) {
+                        $projectName = $atd->project->project_name ?? 'Unknown';
+                        if (!isset($grouped[$projectName])) {
+                            $grouped[$projectName] = [
+                                'vals' => ['normal' => 0, 'lembur' => 0, 'lembur_panjang' => 0, 'performa' => 0],
+                                'tots' => ['normal' => 0, 'lembur' => 0, 'lembur_panjang' => 0],
+                            ];
+                        }
+
+                        $grouped[$projectName]['vals']['normal'] += $atd->normal;
+                        $grouped[$projectName]['vals']['lembur'] += $atd->jam_lembur;
+                        $grouped[$projectName]['vals']['lembur_panjang'] += $atd->index_lembur_panjang;
+                        $grouped[$projectName]['vals']['performa'] += $atd->performa;
+
+                        $grouped[$projectName]['tots']['normal'] += ($atd->normal * $s->employee->pokok);
+                        $grouped[$projectName]['tots']['lembur'] += ($atd->jam_lembur * $s->employee->lembur);
+                        $grouped[$projectName]['tots']['lembur_panjang'] += ($atd->index_lembur_panjang * $s->employee->lembur_panjang);
+
+                        // Add individual attendance contribution to total
+                        $attendance_total = ($atd->normal * $s->employee->pokok) +
+                                            ($atd->jam_lembur * $s->employee->lembur) +
+                                            ($atd->index_lembur_panjang * $s->employee->lembur_panjang) +
+                                            $atd->performa;
+
+                        $total_all_project += $attendance_total;
+                    }
+
+                    // Kasbon
+                    $kasubon = $s->employee->prepays->where('start_period', '>=', $s->start_period)->where('end_period', '<=', $s->end_period);
+
+                    $total_kasbon = 0;
+                    foreach($kasubon as $kb){
+                        $total_kasbon += $kb->amount;
+                    }
+
+                    $total_all_project -= $total_kasbon;
+                @endphp
+
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $s->start_period ? Carbon\Carbon::parse($s->start_period)->translatedFormat("d/m/Y") : "N/A" }} - {{ $s->end_period ? Carbon\Carbon::parse($s->end_period)->translatedFormat("d/m/Y") : "N/A" }}</td>
                     <td>{{ $s->employee->nama }}</td>
                     <td>{{ $s->employee->jabatan }}</td>
-                    <td>{{ number_format($s->total, 2, ',', '.') }}</td>
+                    <td>{{ number_format($total_all_project, 2, ',', '.') }}</td>
                     <td></td>
                 </tr>
 
-                @php
-                    $grouped = [];
-
-                    foreach ($s->employee->attendances as $atd) {
-                        $iae = false;
-
-                        // Iterate over grouped by reference to allow modification
-                        foreach ($grouped as &$g) {
-                            if ($atd->project->project_name == $g['project']) {
-                                $iae = true;
-
-                                // Update values in the existing group
-                                $g['vals']['normal'] += $atd->normal;
-                                $g['vals']['lembur'] += $atd->jam_lembur;
-                                $g['vals']['lembur_panjang'] += $atd->index_lembur_panjang;
-                                $g['vals']['performa'] += $atd->performa;
-
-                                $g['tots']['normal'] += $atd->normal * $atd->employee->pokok;
-                                $g['tots']['lembur'] += $atd->jam_lembur * $atd->employee->lembur;
-                                $g['tots']['lembur_panjang'] += $atd->index_lembur_panjang * $atd->employee->lembur_panjang;
-
-                                break; // Exit the loop since we found the matching project
-                            }
-                        }
-                        unset($g); // Unset reference to prevent unexpected behavior outside the loop
-
-                        // If no existing group found, create a new group
-                        if (!$iae) {
-                            $val = [
-                                'normal' => $atd->normal,
-                                'lembur' => $atd->jam_lembur,
-                                'lembur_panjang' => $atd->index_lembur_panjang,
-                                'performa' => $atd->performa,
-                            ];
-
-                            $tot = [
-                                'normal' => $atd->normal * $atd->employee->pokok,
-                                'lembur' => $atd->jam_lembur * $atd->employee->lembur,
-                                'lembur_panjang' => $atd->index_lembur_panjang * $atd->employee->lembur_panjang,
-                            ];
-
-                            $gv = [
-                                "project" => $atd->project->project_name,
-                                'vals' => $val,
-                                'tots' => $tot,
-                            ];
-
-                            $grouped[] = $gv; // Add the new group to the grouped array
-                        }
-                    }
-                @endphp
-
-                @foreach($grouped as $grp)
-                    <tr>
-                        <td colspan="5">Normal: {{ $grp['vals']['normal'] }} jam ({{ $grp['project'] }})</td>
-                        <td>{{ number_format($grp['tots']['normal'], 2, ',', '.') }}</td>
-                    </tr>
+                @foreach($grouped as $project_name => $grp)
+                    @if($grp['vals']['normal'] != 0)
+                        <tr>
+                            <td colspan="5">Normal: {{ $grp['vals']['normal'] }} jam ({{ $project_name }})</td>
+                            <td>{{ number_format($grp['tots']['normal'], 2, ',', '.') }}</td>
+                        </tr>
+                    @endif
                     @if($grp['vals']['lembur'] > 0)
                         <tr>
-                            <td colspan="5">Lembur: {{ $grp['vals']['lembur'] }} jam ({{ $grp['project'] }})</td>
+                            <td colspan="5">Lembur: {{ $grp['vals']['lembur'] }} jam ({{ $project_name }})</td>
                             <td>{{ number_format($grp['tots']['lembur'], 2, ',', '.') }}</td>
                         </tr>
                     @endif
                     @if($grp['vals']['lembur_panjang'] > 0)
                         <tr>
-                            <td colspan="5">Lembur Panjang: {{ $grp['vals']['lembur_panjang'] }} hari ({{ $grp['project'] }})</td>
+                            <td colspan="5">Lembur Panjang: {{ $grp['vals']['lembur_panjang'] }} hari ({{ $project_name }})</td>
                             <td>{{ number_format($grp['tots']['lembur_panjang'], 2, ',', '.') }}</td>
                         </tr>
                     @endif
                     @if($grp['vals']['performa'] > 0)
                         <tr>
-                            <td colspan="5">Performa ({{ $atd->project->project_name }})</td>
+                            <td colspan="5">Performa ({{ $project_name }})</td>
                             <td>{{ number_format($grp['vals']['performa'], 2, ',', '.') }}</td>
                         </tr>
                     @endif
+                @endforeach
+
+                @foreach($kasubon as $ppay)
+                    <tr>
+                        <td colspan="5">Potongan kasbon @if($ppay->remark)({{ $ppay->remark }})@endif</td>
+                        <td>-{{ number_format($ppay->amount, 2, ',', '.') }}</td>
+                    </tr>
                 @endforeach
             @endforeach
         </table>

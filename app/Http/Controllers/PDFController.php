@@ -125,10 +125,10 @@ class PDFController extends Controller
                 $query->when(isset($filters['from']) && isset($filters['until']), function ($query) use ($filters) {
                     return $query->where(function ($query) use ($filters) {
                         $query->whereBetween('attendance_date', [$filters['from'], $filters['until']])
-                            ->orWhereBetween('attendance_date', [$filters['from'], $filters['until']])
+                            // ->orWhereBetween('attendance_date', [$filters['from'], $filters['until']])
                             ->orWhere(function ($query) use ($filters) {
-                                $query->where('attendance_date', '<=', $filters['from'])
-                                        ->where('attendance_date', '>=', $filters['until']);
+                                $query->where('attendance_date', '>=', $filters['from'])
+                                        ->where('attendance_date', '<=', $filters['until']);
                             });
                     });
                 });
@@ -139,6 +139,23 @@ class PDFController extends Controller
 
                 $query->when($filters['until'] ?? false, function ($query, $until) {
                     return $query->where('attendance_date', '<=', $until);
+                });
+            }, "employee.prepays" => function ($query) {
+                $filters = request(['from', 'until']);
+
+                $query->when(isset($filters['from']) && isset($filters['until']), function ($query) use ($filters) {
+                    return $query->where(function ($query) use ($filters) {
+                        $query->where('start_period', '>=', $filters['from'])
+                            ->where('end_period', '<=', $filters['until']);
+                    });
+                });
+
+                $query->when($filters['from'] ?? false, function ($query, $from) {
+                    return $query->where('start_period', '>=', $from);
+                });
+
+                $query->when($filters['until'] ?? false, function ($query, $until) {
+                    return $query->where('end_period', '<=', $until);
                 });
             }])
             ->get();
