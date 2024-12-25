@@ -6,6 +6,8 @@ use App\Models\Product;
 use App\Models\Purchase;
 use Illuminate\Http\Request;
 use App\Models\DeliveryOrder;
+use App\Models\PurchaseProduct;
+use Illuminate\Support\Facades\DB;
 use App\Models\DeliveryOrderProduct;
 use Illuminate\Support\Facades\Storage;
 
@@ -37,7 +39,36 @@ class DeliveryOrderProductController extends Controller
         // Tampilkan halaman pages/transit/deliveryorderproduct/adddeliveryorder.blade.php beserta data yang diperlukan di blade-nya
         return view("pages.transit.deliveryorderproduct.adddeliveryorder", [
             "deliveryorder" => $deliveryorder, // data delivery order yang ditargetkan
-            "products" => Product::where('archived', 0)->get() // list semua produk terdaftar untuk dropdown/select produk
+            // "products" => Product::where('products.archived', 0)
+            // ->orderBy('products.product_name', 'asc') // Group by name first
+            // ->orderBy('products.variant', 'asc') // Then by variant
+            // ->orderByRaw("CASE WHEN products.is_returned = 1 THEN 1 ELSE 0 END") // Returned products at the bottom
+            // ->get()
+            "products" => Product::select('products.*', DB::raw('COALESCE(MIN(purchases.purchase_date), products.created_at) as ordering_date'))
+            ->leftJoin('purchase_products', 'products.id', '=', 'purchase_products.product_id') // Join with purchase_products
+            ->leftJoin('purchases', 'purchase_products.purchase_id', '=', 'purchases.id') // Join with purchases
+            ->where('products.archived', 0) // Exclude archived products
+            ->groupBy(
+                'products.id',
+                'products.product_name',
+                'products.variant',
+                'products.product_code',
+                'products.price',
+                'products.discount',
+                'products.unit',
+                'products.stock',
+                'products.status',
+                'products.markup',
+                'products.is_returned',
+                'products.created_at',
+                'products.updated_at',
+                'products.archived'
+            )
+            ->orderBy('products.product_name', 'asc') // Group by product name
+            ->orderBy('products.variant', 'asc') // Then by variant
+            ->orderByRaw("CASE WHEN products.is_returned = 1 THEN 1 ELSE 0 END") // Place returned products at the bottom
+            ->orderBy('ordering_date', 'asc') // Order by oldest purchase date or created_at
+            ->get()
         ]);
     }
 
