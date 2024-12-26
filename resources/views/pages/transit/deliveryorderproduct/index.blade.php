@@ -4,7 +4,7 @@
     <x-container>
         <br>
         <div class="w-100 d-flex align-items-center justify-content-between">
-            <h1>All Products in {{ $deliveryorder->register }}</h1>
+            <h2>Daftar Barang di Pengiriman {{ $deliveryorder->register }}</h2>
             <div class="d-flex gap-3">
                 <a class="btn btn-secondary" href="{{ route('deliveryorderproduct-import', $deliveryorder->id) }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
                 <div class="position-relative d-flex flex-column align-items-end">
@@ -28,24 +28,17 @@
         </script>
 
         <hr>
-        <br>
-
-        {{-- <h5>welcome back, {{ Auth::user()->name }}! </h5> --}}
 
         @if (session()->has("successAddProduct"))
-                <p class="text-success fw-bold">{{ session("successAddProduct") }}</p>
-
+            <p class="text-success fw-bold">{{ session("successAddProduct") }}</p>
         @elseif (session()->has("successEditProduct"))
-
-                <p class="text-success fw-bold">{{ session("successEditProduct") }}</p>
-
+            <p class="text-success fw-bold">{{ session("successEditProduct") }}</p>
         @elseif (session()->has("successDeleteProduct"))
-                <p class="text-success fw-bold">{{ session("successDeleteProduct") }}</p>
-
+            <p class="text-success fw-bold">{{ session("successDeleteProduct") }}</p>
         @endif
 
         <a href="{{ route('deliveryorderproduct-create1', $deliveryorder->id) }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
-            <i class="bi bi-plus-square"></i> Add Item to List
+            <i class="bi bi-plus-square"></i> Tambah Barang ke Pengiriman
         </a>
 
         <br>
@@ -56,14 +49,14 @@
                 <tr>
                     <th>No</th>
                     <th>Nama Produk</th>
-                    <th>Variant</th>
+                    <th>Varian</th>
                     <th>SKU Produk</th>
                     <th>Harga</th>
                     <th>Diskon</th>
                     <th>Harga Diskon</th>
-                    <th>Quantity</th>
+                    <th>Jumlah</th>
                     <th>Subtotal</th>
-                    <th>Action</th>
+                    <th>Aksi</th>
                 </tr>
 
                 @php
@@ -75,9 +68,10 @@
                         $prod = $deliveryorder_product->product;
 
                         $disc_price = ((100 - $prod->discount) / 100) * $prod->price;
-                        $subtotal = $disc_price * $prod->quantity;
+                        $subtotal = $disc_price * $deliveryorder_product->quantity;
                         $total += $subtotal;
                     @endphp
+
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $prod->product_name }} @if($prod->is_returned == 'yes'){{ __('- Returned') }}@endif</td>

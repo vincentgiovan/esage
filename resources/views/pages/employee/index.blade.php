@@ -40,7 +40,7 @@
                     <th>Lembur Panjang</th>
                     <th>Status</th>
                     <th>Akun</th>
-                    <th>Actions</th>
+                    <th>Aksi</th>
                 </tr>
 
                 @foreach ($employees as $e)

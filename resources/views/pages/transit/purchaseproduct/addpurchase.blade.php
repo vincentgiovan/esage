@@ -4,48 +4,51 @@
 @section("content")
 
     <x-container-middle>
-        <div class="container border border-1 card p-5">
+        <div class="container border border-1 card py-4 px-5 mt-4">
 
-            <h2>Add New Purchase</h2>
+            <h2>Tambah Barang ke Pembelian</h2>
                 <div>
                     <div class="mt-3 ">
                         <label for="select-product-dropdown">Nama Produk</label>
-                        <select name="product_name" class="form-select select2" >
+                        <select name="product_name" class="form-select select2" id="select-product-dropdown">
                             @foreach ($products as $product)
                                 <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} - {{ $product->variant }}  (Harga: Rp {{ number_format($product->price, 2, ',', '.') }}, Stok:  {{ $product->stock }}, Diskon: {{ $product->discount }}%)</option>
                             @endforeach
                         </select>
                         <p style = "color: red; font-size: 10px;"></p>
                     </div>
+
                     <div class="mt-3">
                         <label for="price">Harga</label>
                         <input type="number" class="form-control" name="price" id="price"  placeholder="Price"  value = "{{ old("price") }}">
                         <p style = "color: red; font-size: 10px;" id="errPrice"></p>
                     </div>
+
                     <div class="mt-3">
                         <label for="discount">Diskon</label>
                         <input type="number" class="form-control" name="discount"  id="discount" placeholder="Diskon"  value = "{{ old("discount") }}">
                         <p style = "color: red; font-size: 10px;" id="errDiscount"></p>
                     </div>
+
                     <div class="mt-3">
                         <label for="quantity">Jumlah</label>
                         <input type="number" class="form-control" name="quantity" id="quantity"  placeholder="Quantity" value = "{{ old("quantity")}}">
                         <p style = "color: red; font-size: 10px;" id="errQuantity"></p>
                     </div>
 
-                        <div class="mt-3">
-                            <input type="button" id="addbutton" class="btn btn-primary px-3 py-1" value="Add Items">
-                        </div>
+                    <div class="mt-3">
+                        <input type="button" id="addbutton" class="btn btn-primary px-3 py-1" value="Tambah">
+                    </div>
                 </div>
 
                 <div class="overflow-x-auto">
                     <table class="w-100 mt-4">
                         <thead>
-                            <th>Nama Barang & Variant</th>
+                            <th>Nama Barang & Varian</th>
                             <th>Price</th>
                             <th>Diskon</th>
                             <th>Quantity</th>
-                            <th>Action</th>
+                            <th>Aksi</th>
                         </thead>
                         <tbody id="isibody">
 
@@ -58,7 +61,7 @@
                     @csrf
 
                     <div class="mt-3">
-                        <input type="submit" class="btn btn-success px-3 py-1" value="Proceed">
+                        <input type="submit" class="btn btn-success px-3 py-1" value="Simpan">
                     </div>
                     @error("prices")
                         <span class="text-danger">{{ $message }}</span>
@@ -155,7 +158,7 @@
             const deleteButton = document.createElement("button");
             deleteButton.classList.add("btn", "btn-danger");
             deleteButton.setAttribute("type", "button");
-            deleteButton.innerText = "Remove";
+            deleteButton.innerHTML = '<i class="bi bi-trash3"></i>';
             column5.appendChild(deleteButton); // display tombol merah di kolom action
 
             // Gabungkan semua kolom data menjadi 1 row data

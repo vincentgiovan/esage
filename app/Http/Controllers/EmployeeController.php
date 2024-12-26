@@ -71,8 +71,8 @@ class EmployeeController extends Controller
     public function edit($id){
         return view("pages.employee.edit", [
             "employee" => Employee::find($id),
-            "positions" => Position::where('archived', 0)->get(),
-            "specialities" => Speciality::where('archived', 0)->get()
+            "positions" => Position::all(),
+            "specialities" => Speciality::all()
         ]);
     }
 

@@ -22,7 +22,7 @@
     </style>
 </head>
 <body>
-        <h1>Warehouse Items</h1>
+        <h2>Warehouse Items</h2>
         <hr>
 
         <br>

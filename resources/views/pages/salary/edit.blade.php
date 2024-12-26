@@ -6,7 +6,7 @@
 
 @section('content')
     <x-container-middle>
-        <div class="container bg-white p-5 rounded-4 mt-4 border border-1 card">
+        <div class="container bg-white py-4 px-5 rounded-4 mt-4 border border-1 card">
 
             <h2>Edit Salary Data</h2>
 

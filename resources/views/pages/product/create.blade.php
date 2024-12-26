@@ -7,7 +7,7 @@
 @section('content')
     <x-container-middle>
         <div class="container bg-white rounded-4 p-5 mt-4 border border-1 card">
-            <h2 class="text-center fw-bold">Add New Product</h2>
+            <h2>Tambah Produk Baru</h2>
             <form method="POST" action="{{ route('product-store') }}" id="folm">
                 {{-- @csrf kepake untuk token ,wajib --}}
                 @csrf
@@ -22,7 +22,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="variant">Variant</label>
+                    <label for="variant">Varian</label>
                     <input type="text" class="form-control @error('variant') is-invalid @enderror" name="variant" id="variant" placeholder="Variant"
                         value="{{ old('variant') }}">
                     @error('variant')
@@ -60,9 +60,8 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="fake_product_code">Kode Produk</label>
-                    <input type="text" class="form-control @error('product_code') is-invalid @enderror" name="fake_product_code" id="fake_product_code" placeholder="Kode Produk"
-                        value="{{ old('fake_product_code') }}" disabled>
+                    <label for="fake_product_code">SKU</label>
+                    <input type="text" class="form-control @error('product_code') is-invalid @enderror" name="fake_product_code" id="fake_product_code" value="{{ old('fake_product_code') }}" disabled>
                     @error('product_code')
                         <p style="color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
@@ -86,11 +85,8 @@
                     @enderror
                 </div>
 
-                <div class="mt-3">
-                    @if (session()->has('passwordNotConfirmed'))
-                        <p class="text-success fw-bold">{{ session('passwordNotConfirmed') }}</p>
-                    @endif
-                    <input type="submit" class="btn btn-success px-3 py-1" value="Submit">
+                <div class="mt-4">
+                    <input type="submit" class="btn btn-success px-3 py-1" value="Simpan Data Baru">
                 </div>
             </form>
 

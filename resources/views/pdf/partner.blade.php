@@ -22,7 +22,7 @@
     </style>
 </head>
 <body>
-        <h1>Partners</h1>
+        <h2>Partners</h2>
         <hr>
 
         <br>

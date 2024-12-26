@@ -3,12 +3,10 @@
 @section('content')
     <x-container>
         <div class="w-100 d-flex align-items-center justify-content-between">
-            <h1 class="mt-4">Product Transaction Log</h1>
+            <h2 class="mt-4">Daftar Transaksi D-Order</h2>
         </div>
 
         <hr class="mt-2">
-
-        <br>
 
         @php
             $total = 0;
@@ -16,37 +14,41 @@
 
         <!-- tabel list data-->
 
-        @if($project->delivery_orders->count())
-            <table class="w-100">
-                <tr>
-                    <th class="border border-1 border-secondary w-25">Project name</th>
-                    <td class="border border-1 border-secondary">{{ $project->project_name }}</td>
-                </tr>
-                <tr>
-                    <th class="border border-1 border-secondary w-25">Project PIC</th>
-                    <td class="border border-1 border-secondary">{{ $project->PIC }}</td>
-                </tr>
-                <tr>
-                    <th class="border border-1 border-secondary w-25">Project location</th>
-                    <td class="border border-1 border-secondary">{{ $project->location }}</td>
-                </tr>
-                <tr>
-                    <th class="border border-1 border-secondary w-25">Project address</th>
-                    <td class="border border-1 border-secondary">{{ $project->address }}</td>
-                </tr>
-            </table>
-        @endif
+        <h5>Data Proyek</h5>
+        <table class="w-100">
+            <tr>
+                <th class="border border-1 border-secondary w-25">Nama Proyek</th>
+                <td class="border border-1 border-secondary">{{ $project->project_name }}</td>
+            </tr>
+            <tr>
+                <th class="border border-1 border-secondary w-25">PIC</th>
+                <td class="border border-1 border-secondary">{{ $project->PIC }}</td>
+            </tr>
+            <tr>
+                <th class="border border-1 border-secondary w-25">Lokasi</th>
+                <td class="border border-1 border-secondary">{{ $project->location }}</td>
+            </tr>
+            <tr>
+                <th class="border border-1 border-secondary w-25">Alamat</th>
+                <td class="border border-1 border-secondary">{{ $project->address }}</td>
+            </tr>
+            <tr>
+                <th class="border border-1 border-secondary w-25">Nomor RAB</th>
+                <td class="border border-1 border-secondary">{{ $project->RAB }}</td>
+            </tr>
+        </table>
 
-        <div class="overflow-x-auto mt-5">
+        <h5 class="mt-4">Daftar Barang</h5>
+        <div class="overflow-x-auto">
             <table class="w-100">
                 <tr>
-                    <th class="border border-1 border-secondary ">Nomor</th>
+                    <th class="border border-1 border-secondary ">No</th>
                     <th class="border border-1 border-secondary ">SKU Delivery Order</th>
                     <th class="border border-1 border-secondary ">SKU Produk</th>
                     <th class="border border-1 border-secondary ">Nama Produk</th>
                     <th class="border border-1 border-secondary ">Varian</th>
                     <th class="border border-1 border-secondary ">Harga Akhir</th>
-                    <th class="border border-1 border-secondary ">Qty</th>
+                    <th class="border border-1 border-secondary ">Jumlah</th>
                 </tr>
 
                 @foreach ($project->delivery_orders as $do)

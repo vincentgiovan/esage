@@ -154,7 +154,7 @@
                     <th>Periode</th>
                     <th>Jumlah</th>
                     <th>Keterangan</th>
-                    <th>Actions</th>
+                    <th>Aksi</th>
                 </tr>
 
                 @foreach ($employee->prepays()->orderBy('start_period')->get() as $kasbon)

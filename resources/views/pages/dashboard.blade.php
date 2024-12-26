@@ -22,7 +22,7 @@
                         <div class="w-100 d-flex align-items-center justify-content-between">
                             <div class="position-relative d-flex flex-column align-items-end">
                                 <button class="btn btn-primary" type="button" id="dd-toggler">
-                                    <i class="bi bi-file-earmark-arrow-up"></i> Monthly Report
+                                    <i class="bi bi-file-earmark-arrow-up"></i> Laporan Bulanan
                                 </button>
                                 <div class="bg-white rounded-lg position-absolute z-2 border border-1" id="dd-menu" style="display: none; top: 40px;">
                                     <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("deliveryorder-export", 1) }}" target="blank">Delivery Order</a></li>
@@ -341,7 +341,7 @@
                         <div class="row">
                             <div class="col-md-12 col-xl-3 d-flex flex-column justify-content-center">
                                 <div class="ml-xl-4">
-                                    <h1>33500</h1>
+                                    <h2>33500</h2>
                                     <h3 class="font-weight-light mb-xl-4">Sales</h3>
                                     <p class="text-muted mb-2 mb-xl-0">The total number of sessions within the date range.
                                         It is the period time a user is actively engaged with your website, page or app, etc

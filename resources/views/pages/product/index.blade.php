@@ -3,7 +3,7 @@
 @section('content')
     <x-container>
         <div class="w-100 d-flex align-items-center justify-content-between">
-            <h2 class="mt-4">Warehouse Items</h2>
+            <h2 class="mt-4">Data Barang di Gudang</h2>
             @can('admin')
                 <div class="d-flex gap-3">
                     <a class="btn btn-secondary" href="{{ route('product-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
@@ -28,7 +28,6 @@
             });
         </script>
         <hr class="mt-2">
-        {{-- <h5>welcome back, {{ Auth::user()->name }}! </h5> --}}
 
         @if (session()->has('successAddProduct'))
             <p class="text-success fw-bold">{{ session('successAddProduct') }}</p>
@@ -38,21 +37,19 @@
             <p class="text-success fw-bold">{{ session('successDeleteProduct') }}</p>
         @endif
 
-        <br>
-
         <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-2">
             <div class="d-flex gap-2 ">
                 <form action="{{ route('product-index') }}" class="d-flex gap-2">
-                    <input type="text" name="search" placeholder="Search products..." value="{{ request('search') }}"
+                    <input type="text" name="search" placeholder="Cari barang..." value="{{ request('search') }}"
                         class="form-control border border-1 border-secondary">
-                    <button class="btn " style="background-color: rgb(191, 191, 191)">Search</button>
+                    <button class="btn " style="background-color: rgb(191, 191, 191)"><i class="bi bi-search"></i></button>
                 </form>
-                <a href="{{ route('product-index') }}" class="btn" style="background-color: rgb(191, 191, 191)">Clear</a>
+                <a href="{{ route('product-index') }}" class="btn" style="background-color: rgb(191, 191, 191)"><i class="bi bi-x-lg"></i></a>
             </div>
             @can('admin')
                 <a href="{{ route('product-create') }}" class="btn btn-primary text-white" style="font-size: 10pt">
                     <i class="bi bi-plus-square"></i>
-                    Add New Product
+                    Tambah Barang Baru
                 </a>
             @endcan
         </div>
@@ -67,13 +64,13 @@
                     <th>Nama Produk </th>
                     <th>Stok</th>
                     <th>Harga</th>
-                    <th>Unit</th>
-                    <th>Variant</th>
+                    <th>Satuan</th>
+                    <th>Varian</th>
                     <th>Markup</th>
                     <th>Status</th>
-                    <th class="text-center">Returned</th>
+                    <th class="text-center">Return</th>
                     @can('admin')
-                        <th>Action</th>
+                        <th>Aksi</th>
                     @endcan
                 </tr>
 
@@ -94,7 +91,7 @@
                                 <div>{{ $p->product_name }}</div>
                                 @can('admin')
                                     @if($p->is_returned == 'no')
-                                        <a href="{{ route('product-log', $p->id) }}" class="btn btn-success">View Log</a>
+                                        <a href="{{ route('product-log', $p->id) }}" class="btn btn-success">Lihat Log</a>
                                     @endif
                                 @endcan
                             </div>

@@ -2,9 +2,9 @@
 
 @section('content')
     <x-container-middle>
-        <div class="container bg-white rounded-4 p-5 border border-1 card">
-            <h2 class="text-center fw-bold">Laporan Presensi Baru</h2>
-            <h6 class="text-center fw-normal">Untuk proyek: {{ $project->project_name }}</h6>
+        <div class="container bg-white rounded-4 py-4 px-5 border border-1 card mt-4">
+            <h2>Laporan Presensi Baru</h2>
+            <h6 class="fw-normal">Untuk proyek: {{ $project->project_name }}</h6>
 
             <form method="POST" action="{{ route('attendance-store-admin') }}">
                 @csrf

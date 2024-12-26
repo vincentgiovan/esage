@@ -2,7 +2,7 @@
 
 @section('content')
     <x-container-middle>
-        <div class="container bg-white rounded-4 p-5 border border-1 card">
+        <div class="container bg-white rounded-4 py-4 px-5 border border-1 card mt-4">
             <h3 class="text-center fw-bold">Presensi Mandiri - Check In</h3>
 
             <form method="POST" action="{{ route('attendance-self-checkin-store', $project->id) }}" enctype="multipart/form-data">

@@ -3,7 +3,7 @@
 @section('content')
     <x-container-middle>
         <div class="container bg-white rounded-4 p-5 mt-4 border border-1 card">
-            <h2 class="text-center fw-bold">Insert Partner</h2>
+            <h2>Tambah Partner Baru</h2>
             <form method="POST" action="{{ route('partner-store') }}">
                 {{-- @csrf kepake untuk token ,wajib --}}
                 @csrf
@@ -80,10 +80,7 @@
                     @enderror
                 </div>
 
-                <div class="mt-3">
-                    @if (session()->has('passwordNotConfirmed'))
-                        <p class="text-success fw-bold">{{ session('passwordNotConfirmed') }}</p>
-                    @endif
+                <div class="mt-4">
                     <input type="submit" class="btn btn-success px-3 py-1" value="Simpan Data Baru">
                 </div>
             </form>

@@ -23,7 +23,7 @@
     </head>
 
     <body>
-        <h1>Gaji Pegawai</h1>
+        <h2>Gaji Pegawai</h2>
         <hr>
         <br>
 

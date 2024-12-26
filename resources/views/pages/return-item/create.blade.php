@@ -3,8 +3,8 @@
 @section("content")
 
     <x-container-middle>
-        <div class="container rounded-4 p-5 bg-white border border-1 card">
-            <h2 class="text-center fw-bold">Return Barang Baru</h2>
+        <div class="container rounded-4 p-5 bg-white border border-1 card mt-4">
+            <h2>Return Barang Baru</h2>
 
             <form method="POST" action="{{ route('returnitem-store') }}" enctype="multipart/form-data">
                 @csrf
@@ -47,8 +47,8 @@
                 <div class="mt-3">
                     <label for="status">Status</label>
                     <select name="status" class="form-select" id="status">
-                        <option value="Ready to pickup" @if(old('status') == "Ready to pickup") selected @endif>Ready to pickup</option>
-                        <option value="Not ready yet" @if(old('status') == "Not ready yet") selected @endif>Not ready yet</option>
+                        <option value="Ready to pickup" @if(old('status') == "Ready to pickup") selected @endif>Siap diangkut</option>
+                        <option value="Not ready yet" @if(old('status') == "Not ready yet") selected @endif>Belum siap diangkut</option>
                     </select>
                     @error("status")
                     <p style = "color: red; font-size: 10px;">{{$message }}</p>
@@ -73,7 +73,7 @@
 
                 <img id="img-preview" class="w-25 mt-2">
 
-                <div class="mt-3">
+                <div class="mt-4">
                     <input type="submit" class="btn btn-success px-3 py-1" value="Simpan Data Baru">
                 </div>
             </form>

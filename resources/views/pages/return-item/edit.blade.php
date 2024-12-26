@@ -3,8 +3,8 @@
 @section("content")
 
     <x-container-middle>
-        <div class="container rounded-4 p-5 bg-white border border-1 card">
-            <h2 class="text-center fw-bold">New Return Item</h2>
+        <div class="container rounded-4 p-5 bg-white border border-1 card mt-4">
+            <h2>New Return Item</h2>
 
             <form method="POST" action="{{ route('returnitem-update', $return_item->id) }}" enctype="multipart/form-data">
                 @csrf
@@ -30,8 +30,8 @@
                 <div class="mt-3">
                     <label for="status">Status</label>
                     <select name="status" class="form-select" id="status">
-                        <option value="Ready to pickup" @if(old('status', $return_item->status) == "Ready to pickup") selected @endif>Ready to pickup</option>
-                        <option value="Not ready yet" @if(old('status', $return_item->status) == "Not ready yet") selected @endif>Not ready yet</option>
+                        <option value="Ready to pickup" @if(old('status', $return_item->status) == "Ready to pickup") selected @endif>Siap diangkut</option>
+                        <option value="Not ready yet" @if(old('status', $return_item->status) == "Not ready yet") selected @endif>Belum siap diangkut</option>
                     </select>
                     @error("status")
                     <p style = "color: red; font-size: 10px;">{{ $message }}</p>
@@ -56,7 +56,7 @@
 
                 <img id="img-preview" class="w-25 mt-2" @if($return_item->foto) src="{{ Storage::url("app/public/" . $return_item->foto) }}" @endif>
 
-                <div class="mt-3">
+                <div class="mt-4">
                     <input type="submit" class="btn btn-success px-3 py-1" value="Simpan Perubahan">
                 </div>
             </form>

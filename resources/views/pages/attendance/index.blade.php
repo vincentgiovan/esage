@@ -45,7 +45,7 @@
                     <th>Proyek</th>
                     <th>Nama</th>
                     <th>Subtotal</th>
-                    <th>Actions</th>
+                    <th>Aksi</th>
                 </tr>
 
                 @foreach ($attendances as $a)

@@ -2,7 +2,7 @@
 
 @section("content")
     <x-container-middle>
-        <div class="container bg-white rounded-4 p-5 border border-1 card">
+        <div class="container bg-white rounded-4 py-4 px-5 border border-1 card mt-4">
             <h2>My Profile</h2>
 
             @if (session()->has('successEditProfile'))

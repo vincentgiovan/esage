@@ -4,7 +4,7 @@
 <x-container>
     <br>
     <div class="w-100 d-flex align-items-center justify-content-between">
-        <h1>All Products in {{ $purchase->register }}</h1>
+        <h2>Daftar Barang di Pembelian {{ $purchase->register }}</h2>
         <div class="d-flex gap-3">
             <a class="btn btn-secondary" href="{{ route('purchaseproduct-import', $purchase->id) }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
             <div class="position-relative d-flex flex-column align-items-end">
@@ -28,27 +28,20 @@
     </script>
 
     <hr>
-    <br>
-
-    {{-- <h5>welcome back, {{ Auth::user()->name }}! </h5> --}}
 
     @if (session()->has("successAddProduct"))
-            <p class="text-success fw-bold">{{ session("successAddProduct") }}</p>
-
+        <p class="text-success fw-bold">{{ session("successAddProduct") }}</p>
     @elseif (session()->has("successEditProduct"))
-
-            <p class="text-success fw-bold">{{ session("successEditProduct") }}</p>
-
+        <p class="text-success fw-bold">{{ session("successEditProduct") }}</p>
     @elseif (session()->has("successDeleteProduct"))
-            <p class="text-success fw-bold">{{ session("successDeleteProduct") }}</p>
-
+        <p class="text-success fw-bold">{{ session("successDeleteProduct") }}</p>
     @endif
 
     <a href="{{ route('purchaseproduct-create1', $purchase->id) }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
-        <i class="bi bi-plus-square"></i> Add Item to List
+        <i class="bi bi-plus-square"></i> Tambah Barang ke Pembelian
     </a>
     <a href="{{ route('purchaseproduct-create2', $purchase->id) }}" class="btn btn-success text-white mb-3" style="font-size: 10pt">
-        <i class="bi bi-plus-square"></i> New Product
+        <i class="bi bi-plus-square"></i> Tambah dan Buat Data Barang Baru
     </a>
     <br>
     <!-- tabel list data-->
@@ -64,7 +57,7 @@
                 <th>Diskon</th>
                 <th>Harga Setelah Diskon</th>
                 <th>Variant</th>
-                <th>Action</th>
+                <th>Aksi</th>
             </tr>
 
             @foreach ($pp as $purchase_product)

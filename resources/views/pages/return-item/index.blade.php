@@ -4,7 +4,7 @@
     <x-container>
         <br>
         <div class="w-100 d-flex align-items-center justify-content-between">
-            <h2>Barang Return</h2>
+            <h2>Pengembalian Barang</h2>
             {{-- <div class="d-flex gap-3">
                 <a class="btn btn-secondary" href="{{ route('deliveryorder-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
                 <div class="position-relative d-flex flex-column align-items-end">
@@ -27,7 +27,7 @@
         </script>
         <hr>
 
-        {{-- <h5>welcome back, {{ Auth::user()->name }}! </h5> --}}
+
 
         @if (session()->has('successAddReturnItem'))
             <p class="text-success fw-bold">{{ session('successAddReturnItem') }}</p>
@@ -39,7 +39,7 @@
 
         <a href="{{ route('returnitem-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
             <i class="bi bi-plus-square"></i>
-            Buat Data Return Barang Baru</a>
+            Buat Pengembalian Barang Baru</a>
         <br>
         <!-- tabel list data-->
 
@@ -52,7 +52,7 @@
                     <th>Foto</th>
                     <th>PIC Return</th>
                     <th>Status</th>
-                    <th>Action</th>
+                    <th>Aksi</th>
                 </tr>
 
                 @foreach ($return_items as $ri)
@@ -84,7 +84,13 @@
                             @endif
                         </td>
                         <td>{{ $ri->PIC }}</td>
-                        <td>{{ $ri->status }}</td>
+                        <td>
+                            @if($ri->status == 'Ready to pickup')
+                                <i class="bi bi-check-circle-fill fs-4" style="color: green"></i>
+                            @else
+                                <i class="bi bi-x-circle-fill fs-4" style="color: red"></i>
+                            @endif
+                        </td>
 
                         <td>
                             <div class="d-flex gap-2 w-100">

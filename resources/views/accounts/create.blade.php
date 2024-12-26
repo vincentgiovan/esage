@@ -7,7 +7,7 @@
 @section('content')
     <x-container-middle>
         <div class="container bg-white rounded-4 p-5 mt-4 border border-1 card">
-            <h2 class="text-center fw-bold">Buat Akun Baru</h2>
+            <h2>Buat Akun Baru</h2>
             <form action="{{ route('account.store') }}" method="POST">
                 @csrf
                 <div class="form-group mb-3">

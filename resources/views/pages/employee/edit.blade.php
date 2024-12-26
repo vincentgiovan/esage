@@ -6,9 +6,9 @@
 
 @section('content')
     <x-container-middle>
-        <div class="container bg-white p-5 rounded-4 mt-4 border border-1 card">
+        <div class="container bg-white py-4 px-5 rounded-4 mt-4 border border-1 card">
 
-            <h2>Edit Employee Data</h2>
+            <h2>Edit Data Pegawai</h2>
 
             {{-- @csrf kepake untuk token ,wajib --}}
 
@@ -188,7 +188,7 @@
                     @enderror
                 </div>
 
-                <div class="mt-5">
+                <div class="mt-4">
                     <input type="submit" class="btn btn-success px-3 py-1" value="Simpan Perubahan">
                 </div>
             </form>

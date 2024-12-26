@@ -4,8 +4,8 @@
 @section("content")
 
     <x-container-middle>
-        <div class="container bg-white rounded-4 p-5 border border-1 card">
-            <h2>Add Product To Delivery Order</h2>
+        <div class="container bg-white rounded-4 py-4 px-5 border border-1 card mt-4">
+            <h2>Tambah Barang ke Pengiriman</h2>
             <div>
                 <div class="mt-3">
                     <label for="select-product-dropdown">Nama Produk</label>
@@ -24,16 +24,16 @@
                 </div>
 
                 <div class="mt-3">
-                    <input type="button" id="addbutton" class="btn btn-primary px-3 py-1" value="Add Items">
+                    <input type="button" id="addbutton" class="btn btn-primary px-3 py-1" value="Tambah">
                 </div>
             </div>
 
             <div class="overflow-x-auto">
                 <table class="w-100 mt-4">
                     <thead>
-                        <th>Nama Barang & Variant</th>
-                        <th>Quantity</th>
-                        <th>Action</th>
+                        <th>Nama Barang & Varian</th>
+                        <th>Jumlah</th>
+                        <th>Aksi</th>
                     </thead>
                     <tbody id="isibody">
 
@@ -46,7 +46,7 @@
                 @csrf
 
                 <div class="mt-3">
-                    <input type="submit" class="btn btn-success px-3 py-1" value="Proceed">
+                    <input type="submit" class="btn btn-success px-3 py-1" value="Simpan">
                 </div>
                 @error("prices")
                     <span class="text-danger">{{ $message }}</span>
@@ -120,7 +120,7 @@
             const deleteButton = document.createElement("button");
             deleteButton.classList.add("btn", "btn-danger");
             deleteButton.setAttribute("type", "button");
-            deleteButton.innerText = "Remove";
+            deleteButton.innerHTML = '<i class="bi bi-trash3"></i>';
             column5.appendChild(deleteButton); // display tombol merah di kolom action
 
             // Gabungkan semua kolom data menjadi 1 row data

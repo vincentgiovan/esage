@@ -15,13 +15,16 @@ return new class extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+
             $table->longText("project_name");
             $table->string("location");
             $table->string("PIC");
             $table->longText("address");
+            $table->string("RAB");
 
             $table->unsignedInteger('archived')->default(0);
+
+            $table->timestamps();
         });
     }
 

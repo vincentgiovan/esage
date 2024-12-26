@@ -2,9 +2,9 @@
 
 @section('content')
     <x-container-middle>
-        <div class="container bg-white rounded-4 p-5 border border-1 card">
+        <div class="container bg-white rounded-4 py-4 px-5 border border-1 card mt-4">
 
-            <h2>Add Item</h2>
+            <h2>Tambah Pembelian Baru</h2>
 
             {{-- @csrf kepake untuk token ,wajib --}}
 
@@ -27,9 +27,8 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="purchase_date">Purchase Date</label>
-                    <input type="text" class="form-control" name="purchase_date" id="purchase_date"
-                        onfocus="(this.type='date')" onblur="(this.type='text')" placeholder="Purchase Date"
+                    <label for="purchase_date">Tanggal Pembelian</label>
+                    <input type="date" class="form-control" name="purchase_date" id="purchase_date"
                         value="{{ old('purchase_date') }}">
                     @error('purchase_date')
                         <p style="color: red; font-size: 10px;">{{ $message }}</p>
@@ -37,15 +36,8 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="fakeregister">Register</label>
-                    <input type="text" class="form-control" id="fakeregister" name="fakeregister" placeholder="Register"
-                        disabled>
-                </div>
-
-                <div class="mt-3">
-                    <label for="purchase_deadline">Purchase Deadline</label>
-                    <input type="text" class="form-control" name="purchase_deadline" id="purchase_deadline"
-                        onfocus="(this.type='date')" onblur="(this.type='text')" placeholder="Purchase Deadline"
+                    <label for="purchase_deadline">Tenggat Pembelian</label>
+                    <input type="date" class="form-control" name="purchase_deadline" id="purchase_deadline"
                         value="{{ old('purchase_deadline') }}">
                     @error('purchase_deadline')
                         <p style="color: red; font-size: 10px;">{{ $message }}</p>
@@ -53,20 +45,23 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="purchase_status">Purchase Status</label>
+                    <label for="fakeregister">SKU</label>
+                    <input type="text" class="form-control" id="fakeregister" name="fakeregister" placeholder="Register"
+                        disabled>
+                </div>
+
+                <div class="mt-3">
+                    <label for="purchase_status">Status Pembelian</label>
                     <select name="purchase_status" id="purchase_status" class="form-select">
-                        @foreach ($status as $st)
-                            <option value="{{ $st }}" @if ($st == old('purchase_status')) selected @endif>
-                                {{ $st }}
-                            </option>
-                        @endforeach
+                        <option value="Ordered" @if(old('purchase_status') == 'Ordered') selected @endif>Telah dipesan</option>
+                        <option value="Retrieved" @if(old('purchase_status') == 'Retrieved') selected @endif>Diterima</option>
                     </select>
                     @error('purchase_status')
                         <p style="color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <div class="mt-3">
+                <div class="mt-4">
                     <input type="submit" class="btn btn-success px-3 py-1" value="Simpan Data Baru">
                 </div>
             </form>

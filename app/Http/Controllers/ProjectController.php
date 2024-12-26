@@ -31,9 +31,10 @@ class ProjectController extends Controller{
         // Validasi data, kalo ga lolos ga lanjut
         $validatedData = $request->validate([
             "project_name" => "required|min:3",
-            "location"=>"required",
+            "location" => "required",
             "PIC" => "required|min:3",
-            "address" => "required"
+            "address" => "required",
+            "RAB" => "required"
         ]);
 
         // Buat dan tambahkan data project baru ke tabel projects
@@ -60,7 +61,8 @@ class ProjectController extends Controller{
             "project_name" => "required|min:3",
             "location"=>"required",
             "PIC" => "required|min:3",
-            "address" => "required"
+            "address" => "required",
+            "RAB" => "required"
         ]);
 
         // Simpan perubahan datanya di tabel projects

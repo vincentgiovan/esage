@@ -3,22 +3,22 @@
 @section("content")
 
     <x-container-middle>
-        <div class="container bg-white rounded-4 p-5">
+        <div class="container bg-white rounded-4 mt-4">
 
             <h2>Edit Request Items</h2>
 
             <div>
                 <div class="p-3 border border-2 rounded-4 mt-4">
-                    <h5>Target Project</h5>
+                    <h5>Proyek Target</h5>
                     <hr>
                     <div class="mt-3">
-                        <label for="request_date">Request Date</label>
+                        <label for="request_date">Tanggal Request</label>
                         <input type="date" id="request_date" class="form-control" placeholder="Input request_date" value="{{ old('request_date', $request_item->request_date) }}"/>
                         <p style="color: red; font-size: 10px;" id="err-request-date"></p>
                     </div>
 
                     <div class="mt-3">
-                        <label for="select-project-dropdown">Project</label>
+                        <label for="select-project-dropdown">Nama Proyek</label>
                         <select name="project_name" class="form-select" id="select-project-dropdown">
                             @foreach ($projects as $project)
                                 <option value="{{ $project->id }}{{-- $project->toJson() --}}" @if ($project->project_name == old("project_name", $request_item->project->project_name)) selected @endif>{{ $project->project_name }} ({{ $project->location }}) (PIC :  {{ $project->PIC }})</option>
@@ -34,7 +34,7 @@
                     </div>
 
                     <div class="mt-3">
-                        <label for="cart_notes">Cart Notes</label>
+                        <label for="cart_notes">Catatan</label>
                         <textarea id="cart_notes" class="form-control" name="cart_notes" rows="4">{{ $request_item->notes }}</textarea>
                         <p style="color: red; font-size: 10px;" id="err-cart-notes"></p>
                     </div>
@@ -44,8 +44,8 @@
                     <h5>Product List</h5>
                     <hr>
                     <div class="mt-3">
-                        <label for="select-product-dropdown">Nama Produk</label>
-                        <select name="product_name" class="form-select select2" >
+                        <label for="select-product-dropdown">Nama Barang</label>
+                        <select name="product_name" class="form-select select2" id="select-product-dropdown">
                             @foreach ($products as $product)
                                 <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} ({{ $product->variant }}) (Stok :  {{ $product->stock }})</option>
                             @endforeach
@@ -60,22 +60,22 @@
                     </div>
 
                     <div class="mt-3">
-                        <input type="button" id="addbutton" class="btn btn-primary px-3 py-1" value="Add Items">
+                        <input type="button" id="addbutton" class="btn btn-primary px-3 py-1" value="Tambah">
                     </div>
 
                     <div class="overflow-x-auto">
                         <table class="w-100 mt-4">
                             <thead>
-                                <th>Nama Barang & Variant</th>
-                                <th>Quantity</th>
-                                <th>Action</th>
+                                <th>Nama Barang & Varian</th>
+                                <th>Jumlah</th>
+                                <th>Aksi</th>
                             </thead>
                             <tbody id="isibody">
                                 @foreach($rip as $r)
                                     <tr>
                                         <td>{{ $r->product->product_name }}</td>
                                         <td>{{ $r->quantity }}</td>
-                                        <td><button class="btn btn-danger remove-row" data-target="{{ $r->id }}">Remove</button></td>
+                                        <td><button class="btn btn-danger remove-row" data-target="{{ $r->id }}"><i class="bi bi-trash3"></i></button></td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -95,7 +95,7 @@
                 @endforeach
 
                 <div class="mt-3">
-                    <input type="submit" class="btn btn-success px-3 py-1" value="Proceed">
+                    <input type="submit" class="btn btn-success px-3 py-1" value="Simpan Perubahan">
                 </div>
             </form>
         </div>
@@ -171,7 +171,7 @@
                 const deleteButton = document.createElement("button");
                 deleteButton.classList.add("btn", "btn-danger");
                 deleteButton.setAttribute("type", "button");
-                deleteButton.innerText = "Remove";
+                deleteButton.innerHTML = '<i class="bi bi-trash3"></i>';
                 column5.appendChild(deleteButton); // display tombol merah di kolom action
 
                 // Gabungkan semua kolom data menjadi 1 row data

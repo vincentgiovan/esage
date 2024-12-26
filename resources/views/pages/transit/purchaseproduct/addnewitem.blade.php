@@ -74,7 +74,7 @@
                             <th>Mark Up</th>
                             <th>Stok</th>
                             <th>Diskon</th>
-                            <th>Action</th>
+                            <th>Aksi</th>
                         </thead>
                         <tbody id="isibody">
 

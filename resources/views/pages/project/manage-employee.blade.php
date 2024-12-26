@@ -29,7 +29,7 @@
                     <th class="border border-1 border-secondary ">#</th>
                     <th class="border border-1 border-secondary ">Nama Pegawai</th>
                     <th class="border border-1 border-secondary ">Jabatan</th>
-                    <th class="border border-1 border-secondary text-center">Actions</th>
+                    <th class="border border-1 border-secondary text-center">Aksi</th>
                 </tr>
 
                 @foreach ($employees_assigned as $e)

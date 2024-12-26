@@ -3,12 +3,12 @@
 @section("content")
 
     <x-container-middle>
-        <div class="container rounded-4 p-5 bg-white border border-1 card">
-            <h2 class="text-center fw-bold">Create New Order</h2>
+        <div class="container rounded-4 p-5 bg-white border border-1 card mt-4">
+            <h2>Tambah Pengiriman Baru</h2>
             <form method="POST" action="{{ route("deliveryorder-store"{{-- ,$delivery_order->id--}} ) }}" id="bikindevor">
                 @csrf
                 <div class="mt-3">
-                    <label for="delivery_date">Tanggal Delivery</label>
+                    <label for="delivery_date">Tanggal Pengiriman</label>
                     <input type="date" class="form-control" id="delivery_date" name="delivery_date" placeholder="delivery_date"  value = "{{ old("delivery_date") }}">
 
                     @error("delivery_date")
@@ -33,7 +33,7 @@
                 </div>
                 <div class="mt-3">
                     {{-- <input type="text" class="form-control" name="status" placeholder="Status"  value = "{{ old("status") }}"> --}}
-                    <label for="delivery_status">Status Delivery</label>
+                    <label for="delivery_status">Status Pengiriman</label>
                     <select name="delivery_status" class="form-select" id="delivery_status">
                         <option value="Complete">Complete</option>
                         <option value="Incomplete">Incomplete</option>
@@ -49,7 +49,7 @@
                     <p style = "color: red; font-size: 10px;">{{$message }}</p>
                     @enderror
                 </div>
-                <div class="mt-3">
+                <div class="mt-4">
                     <input type="submit" class="btn btn-success px-3 py-1" value="Simpan Data Baru">
                 </div>
             </form>

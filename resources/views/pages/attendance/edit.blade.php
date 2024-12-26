@@ -2,8 +2,8 @@
 
 @section('content')
     <x-container-middle>
-        <div class="container bg-white rounded-4 p-5 border border-1 card">
-            <h2 class="text-center fw-bold">Edit Attendance Data</h2>
+        <div class="container bg-white rounded-4 py-4 px-5 border border-1 card mt-4">
+            <h2>Edit Attendance Data</h2>
             <form method="POST" action="{{ route('attendance-update', $attendance->id) }}">
                 @csrf
 

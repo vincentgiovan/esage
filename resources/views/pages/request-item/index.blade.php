@@ -17,18 +17,18 @@
 
         <a href="{{ route('requestitem-create') }}" class="btn btn-primary text-white" style="font-size: 10pt">
             <i class="bi bi-plus-square"></i>
-            Add New Request</a>
+            Buat Request Baru</a>
 
         <div class="overflow-x-auto mt-3">
             <table class="w-100">
                 <tr>
                     <th>No</th>
-                    <th>Request Date</th>
-                    <th>Project Name</th>
-                    <th>Project Location</th>
+                    <th>Tanggal Request</th>
+                    <th>Nama Proyek</th>
+                    <th>Lokasi Proyek</th>
                     <th>PIC</th>
-                    <th>Notes</th>
-                    <th>Actions</th>
+                    <th>Catatan</th>
+                    <th>Aksi</th>
                 </tr>
 
                 @foreach ($requests as $r)

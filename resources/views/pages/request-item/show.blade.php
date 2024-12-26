@@ -4,7 +4,7 @@
     <x-container>
 
         <br>
-        <h1>Request Items</h1>
+        <h2>Request Items</h2>
         <br>
 
         @if (session()->has('successAddRequest'))
@@ -26,7 +26,7 @@
                     <th class="border border-1 border-secondary ">Price</th>
                     <th class="border border-1 border-secondary ">Discount</th>
                     <th class="border border-1 border-secondary ">Qty</th>
-                    {{-- <th class="border border-1 border-secondary ">Actions</th> --}}
+                    {{-- <th class="border border-1 border-secondary ">Aksi</th> --}}
                 </tr>
 
                 @foreach ($request_item_products as $r)

@@ -5,36 +5,36 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link text-decoration-none px-4" href="{{ route("deliveryorder-index") }}"  style="color: white; font-weight: bold; @if (Request::is("delivery-order*")) background-color: green; @else rgb(69, 69, 69); @endif"><i class="bi bi-truck me-2"></i> D-Order</a>
+            <a class="nav-link text-decoration-none px-4" href="{{ route("deliveryorder-index") }}"  style="color: white; font-weight: bold; @if (Request::is("delivery-order*")) background-color: green; @else rgb(69, 69, 69); @endif"><i class="bi bi-truck me-2"></i> Pengiriman Barang</a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link text-decoration-none px-4" href="{{ route("purchase-index") }}" style="color: white; font-weight: bold; @if (Request::is("purchase*")) background-color: green; @else rgb(69, 69, 69); @endif"><i class="bi bi-card-checklist me-2"></i> Pembelian</a>
+            <a class="nav-link text-decoration-none px-4" href="{{ route("purchase-index") }}" style="color: white; font-weight: bold; @if (Request::is("purchase*")) background-color: green; @else rgb(69, 69, 69); @endif"><i class="bi bi-card-checklist me-2"></i> Pembelian Barang</a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link text-decoration-none px-4" href="{{ route("partner-index") }}" style="color: white; font-weight: bold; @if (Request::is("partner*")) background-color: green; @else rgb(69, 69, 69); @endif"><i class="bi bi-shop me-2"></i> Partner</a>
+            <a class="nav-link text-decoration-none px-4" href="{{ route("partner-index") }}" style="color: white; font-weight: bold; @if (Request::is("partner*")) background-color: green; @else rgb(69, 69, 69); @endif"><i class="bi bi-shop me-2"></i> Partner Sage</a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("product*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("product-index") }}"><i class="bi bi-box-seam me-2"></i> Produk</a>
+            <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("product*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("product-index") }}"><i class="bi bi-box-seam me-2"></i> Data Barang</a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("project*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("project-index") }}"><i class="bi bi-building me-2"></i> Proyek</a>
+            <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("project*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("project-index") }}"><i class="bi bi-building me-2"></i> Proyek Sage</a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("request*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("requestitem-index") }}" ><i class="bi bi-bag-plus me-2"></i> Request Item</a>
+            <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("request*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("requestitem-index") }}" ><i class="bi bi-bag-plus me-2"></i> Request Barang</a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("return*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("returnitem-index") }}" ><i class="bi bi-bag-dash me-2"></i> Return Item</a>
+            <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("return*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("returnitem-index") }}" ><i class="bi bi-bag-dash me-2"></i> Pengembalian</a>
         </li>
 
         @can("admin")
             <li class="nav-item">
-                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("account*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("account.index") }}" ><i class="bi bi-person me-2"></i> Akun</a>
+                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("account*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("account.index") }}" ><i class="bi bi-person me-2"></i> Pengelolaan Akun</a>
             </li>
 
             <li class="nav-item">
@@ -42,11 +42,11 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("salary*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("salary-index") }}" ><i class="bi bi-currency-dollar me-2"></i> Gaji</a>
+                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("salary*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("salary-index") }}" ><i class="bi bi-currency-dollar me-2"></i> Gaji Pegawai</a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (!Request::is('attendance*self*') && Request::is('attendance*')) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("attendance-index") }}" ><i class="bi bi-clipboard2-check me-2"></i> Presensi</a>
+                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (!Request::is('attendance*self*') && Request::is('attendance*')) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("attendance-index") }}" ><i class="bi bi-clipboard2-check me-2"></i> Presensi Pegawai</a>
             </li>
 
             <li class="nav-item">
@@ -56,7 +56,7 @@
 
         @can('self_attendance')
             <li class="nav-item">
-                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("attendance*self*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("attendance-self-index") }}" ><i class="bi bi-clipboard2-check me-2"></i> Absensi Mandiri</a>
+                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("attendance*self*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("attendance-self-index") }}" ><i class="bi bi-clipboard2-check me-2"></i> Presensi Mandiri</a>
             </li>
         @endcan
     </ul>

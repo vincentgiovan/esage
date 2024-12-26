@@ -25,7 +25,7 @@
                         <th style="background: rgb(199, 199, 199)">Nama</th>
                         <th style="background: rgb(199, 199, 199)">Email</th>
                         <th style="background: rgb(199, 199, 199)">Role</th>
-                        <th style="background: rgb(199, 199, 199)">Actions</th>
+                        <th style="background: rgb(199, 199, 199)">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>

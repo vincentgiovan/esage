@@ -67,7 +67,7 @@
                     <th>Subtotal</th>
                     <th>Kasbon</th>
                     <th>Keterangan</th>
-                    <th>Actions</th>
+                    <th>Aksi</th>
                 </tr>
 
                 @foreach ($salaries as $s)

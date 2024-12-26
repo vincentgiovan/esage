@@ -6,8 +6,8 @@
 
 @section('content')
     <x-container-middle>
-        <div class="container bg-white p-5 rounded-4 mt-4 border border-1 card">
-            <h2>New Employee Data</h2>
+        <div class="container bg-white py-4 px-5 rounded-4 mt-4 border border-1 card">
+            <h2>Data Pegawai Baru</h2>
 
             <form method="POST" action="{{ route('employee-store') }}" id="folm" enctype="multipart/form-data">
                 @csrf
@@ -166,7 +166,7 @@
                     @enderror
                 </div>
 
-                <div class="mt-3">
+                <div class="mt-4">
                     <input type="submit" class="btn btn-success px-3 py-1" value="Simpan Data Baru">
                 </div>
             </form>

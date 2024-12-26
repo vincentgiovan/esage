@@ -6,9 +6,9 @@
 
 @section('content')
     <x-container-middle>
-        <div class="container bg-white p-5 rounded-4 mt-4 border border-1 card">
+        <div class="container bg-white py-4 px-5 rounded-4 mt-4 border border-1 card">
 
-            <h2>Edit Item</h2>
+            <h2>Edit Data Barang</h2>
 
             {{-- @csrf kepake untuk token ,wajib --}}
 
@@ -26,7 +26,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="unit">Unit</label>
+                    <label for="unit">Satuan</label>
                     <input type="text" class="form-control" name="unit" id="unit" placeholder="Unit"
                         value="{{ old('unit', $product->unit) }}">
                     @error('unit')
@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="variant">Variant</label>
+                    <label for="variant">Varian</label>
                     <input type="text" class="form-control" name="variant" id="variant" placeholder="Variant"
                         value="{{ old('variant', $product->variant) }}">
                     @error('variant')
@@ -58,9 +58,8 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="fake_product_code">Kode Produk</label>
-                    <input type="text" class="form-control" name="fake_product_code" id="fake_product_code" placeholder="Kode Produk"
-                        value="{{ old('product_code', $product->product_code) }}" disabled>
+                    <label for="fake_product_code">SKU</label>
+                    <input type="text" class="form-control" name="fake_product_code" id="fake_product_code" value="{{ old('product_code', $product->product_code) }}" disabled>
                     @error('product_code')
                         <p style="color: red; font-size: 10px;">{{ $message }}</p>
                     @enderror
@@ -93,7 +92,7 @@
                     @enderror
                 </div>
 
-                <div class="mt-3">
+                <div class="mt-4">
                     <input type="submit" class="btn btn-success px-3 py-1" value="Simpan Perubahan">
                 </div>
             </form>
