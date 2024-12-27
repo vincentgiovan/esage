@@ -61,9 +61,9 @@
             <table class="w-100">
                 <tr>
                     <th>No</th>
-                    <th>Nama Produk </th>
-                    <th>Stok</th>
-                    <th>Harga</th>
+                    <th>Nama Produk</th>
+                    <th>Total Stok</th>
+                    <th>Harga Terakhir</th>
                     <th>Satuan</th>
                     <th>Varian</th>
                     <th>Markup</th>
@@ -74,61 +74,90 @@
                     @endcan
                 </tr>
 
-                @foreach ($products as $p)
-                    <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
-                        <td>
-                            @php
-                                if(request("page")){
-                                    echo $loop->iteration + ((request("page") - 1) * $n_pagination);
-                                } else {
-                                    echo $loop->iteration;
-                                }
+                @php
+                    $i = 0;
+                @endphp
 
-                            @endphp
-                        </td>
-                        <td>
-                            <div class="w-100 d-flex justify-content-between align-items-center">
-                                <div>{{ $p->product_name }}</div>
-                                @can('admin')
-                                    @if($p->is_returned == 'no')
-                                        <a href="{{ route('product-log', $p->id) }}" class="btn btn-success">Lihat Log</a>
-                                    @endif
-                                @endcan
-                            </div>
-                        </td>
-                        <td>{{ $p->stock }}</td>
-                        <td>Rp {{ number_format($p->price, 2, ',', '.') }}</td>
-                        <td>{{ $p->unit }}</td>
-                        <td>{{ $p->variant }}</td>
-                        <td>{{ $p->markup }}</td>
-                        <td>{{ $p->status }}</td>
-                        <td>
-                            <div class="w-100 d-flex justify-content-center">
-                                @if($p->is_returned == "yes")
-                                    <i class="bi bi-check-circle-fill fs-4" style="color: red"></i>
-                                @else
-                                    <i class="bi bi-x-circle-fill fs-4" style="color: green"></i>
-                                @endif
-                            </div>
-                        </td>
-                        @can('admin')
+                @foreach ($products as $p)
+                    @if (isset($p->is_grouped) && $p->is_grouped)
+                        <tr style="background: @if($i % 2 == 1) #E0E0E0 @else white @endif;">
                             <td>
-                                <div class="d-flex gap-2 w-100">
-                                    <a href="{{ route('product-edit', $p->id) }}" class="btn btn-warning text-white"
-                                        style="font-size: 10pt; background-color: rgb(197, 167, 0);">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                    <form action="{{ route('product-destroy', $p->id) }}" method="POST">
-                                        @csrf
-                                        <button class="btn btn-danger text-white" style="font-size: 10pt "
-                                            onclick="return confirm('Do you want to delete this item?')">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
+                                {{ ++$i }}
+                            </td>
+                            <td>
+                                <div class="w-100 d-flex justify-content-between align-items-center">
+                                    <div>{{ $p->product_name }}</div>
                                 </div>
                             </td>
-                        @endcan
-                    </tr>
+                            <td>{{ $p->stock }}</td>
+                            <td>Rp {{ number_format($p->price, 2, ',', '.') }}</td>
+                            <td>{{ $p->unit }}</td>
+                            <td>{{ $p->variant }}</td>
+                            <td></td>
+                            <td class="fw-semibold @if($p->status == 'Ready') text-primary @else text-danger @endif">{{ $p->status }}</td>
+                            <td>
+                                <div class="w-100 d-flex justify-content-center">
+                                    @if($p->is_returned == "yes")
+                                        <i class="bi bi-check-circle-fill fs-4" style="color: red"></i>
+                                    @else
+                                        <i class="bi bi-x-circle-fill fs-4" style="color: green"></i>
+                                    @endif
+                                </div>
+                            </td>
+                            @can('admin')
+                                <td>
+                                    <button class="btn btn-success view-all-btn" data-prodgroup="{{ __(str_replace(' ', '', $p->product_name) . '-' . str_replace(' ', '', $p->variant) . '-' . $p->is_returned) }}">Lihat Semua</button>
+                                </td>
+                            @endcan
+                        </tr>
+                    @else
+                        <tr class="bg-light {{ __(str_replace(' ', '', $p->product_name) . '-' . str_replace(' ', '', $p->variant) . '-' . $p->is_returned) }}" style="display: none;">
+                            <td>
+                            </td>
+                            <td>
+                                <div class="w-100 d-flex justify-content-between align-items-center">
+                                    <div>{{ $p->product_name }}</div>
+                                    @can('admin')
+                                        @if($p->is_returned == 'no')
+                                            <a href="{{ route('product-log', $p->id) }}" class="btn btn-success">Lihat Log</a>
+                                        @endif
+                                    @endcan
+                                </div>
+                            </td>
+                            <td>{{ $p->stock }}</td>
+                            <td>Rp {{ number_format($p->price, 2, ',', '.') }}</td>
+                            <td>{{ $p->unit }}</td>
+                            <td>{{ $p->variant }}</td>
+                            <td>{{ $p->markup }}</td>
+                            <td class="fw-semibold @if($p->status == 'Ready') text-primary @else text-danger @endif">{{ $p->status }}</td>
+                            <td>
+                                <div class="w-100 d-flex justify-content-center">
+                                    @if($p->is_returned == "yes")
+                                        <i class="bi bi-check-circle-fill fs-4" style="color: red"></i>
+                                    @else
+                                        <i class="bi bi-x-circle-fill fs-4" style="color: green"></i>
+                                    @endif
+                                </div>
+                            </td>
+                            @can('admin')
+                                <td>
+                                    <div class="d-flex gap-2 w-100">
+                                        <a href="{{ route('product-edit', $p->id) }}" class="btn btn-warning text-white"
+                                            style="font-size: 10pt; background-color: rgb(197, 167, 0);">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <form action="{{ route('product-destroy', $p->id) }}" method="POST">
+                                            @csrf
+                                            <button class="btn btn-danger text-white" style="font-size: 10pt "
+                                                onclick="return confirm('Do you want to delete this item?')">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            @endcan
+                        </tr>
+                    @endif
                 @endforeach
             </table>
         </div>
@@ -136,4 +165,11 @@
             {{ $products->links() }}
         </div> --}}
     </x-container>
+
+    <script>
+        $('.view-all-btn').click(function(){
+            console.log($(this).data('prodgroup'));
+            $(`.${$(this).data('prodgroup')}`).toggle();
+        });
+    </script>
 @endsection

@@ -5,11 +5,11 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link text-decoration-none px-4" href="{{ route("deliveryorder-index") }}"  style="color: white; font-weight: bold; @if (Request::is("delivery-order*")) background-color: green; @else rgb(69, 69, 69); @endif"><i class="bi bi-truck me-2"></i> Pengiriman Barang</a>
+            <a class="nav-link text-decoration-none px-4" href="{{ route("purchase-index") }}" style="color: white; font-weight: bold; @if (Request::is("purchase*")) background-color: green; @else rgb(69, 69, 69); @endif"><i class="bi bi-card-checklist me-2"></i> Pembelian Barang</a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link text-decoration-none px-4" href="{{ route("purchase-index") }}" style="color: white; font-weight: bold; @if (Request::is("purchase*")) background-color: green; @else rgb(69, 69, 69); @endif"><i class="bi bi-card-checklist me-2"></i> Pembelian Barang</a>
+            <a class="nav-link text-decoration-none px-4" href="{{ route("deliveryorder-index") }}"  style="color: white; font-weight: bold; @if (Request::is("delivery-order*")) background-color: green; @else rgb(69, 69, 69); @endif"><i class="bi bi-truck me-2"></i> Pengiriman Barang</a>
         </li>
 
         <li class="nav-item">
@@ -17,11 +17,11 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("product*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("product-index") }}"><i class="bi bi-box-seam me-2"></i> Data Barang</a>
+            <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("project*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("project-index") }}"><i class="bi bi-building me-2"></i> Proyek Sage</a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("project*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("project-index") }}"><i class="bi bi-building me-2"></i> Proyek Sage</a>
+            <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("product*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("product-index") }}"><i class="bi bi-box-seam me-2"></i> Data Barang</a>
         </li>
 
         <li class="nav-item">
@@ -38,7 +38,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("employee*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("employee-index") }}" ><i class="bi bi-person-vcard me-2"></i> Data Pegawai</a>
+                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("employee*") && !Request::is("*employee*leaves*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("employee-index") }}" ><i class="bi bi-person-vcard me-2"></i> Data Pegawai</a>
             </li>
 
             <li class="nav-item">
@@ -59,6 +59,16 @@
                 <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("attendance*self*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("attendance-self-index") }}" ><i class="bi bi-clipboard2-check me-2"></i> Presensi Mandiri</a>
             </li>
         @endcan
+
+        @if(Auth::user()->role == 'admin')
+            <li class="nav-item">
+                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("*employee*leaves*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("leave-admin-index") }}" ><i class="bi bi-clipboard2-check me-2"></i> Pengajuan Cuti</a>
+            </li>
+        @elseif(Auth::user()->role == 'user' && Auth::user()->employee_data)
+            <li class="nav-item">
+                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("*employee*leaves*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("leave-user-index") }}" ><i class="bi bi-clipboard2-check me-2"></i> Pengajuan Cuti</a>
+            </li>
+        @endif
     </ul>
 </nav>
 

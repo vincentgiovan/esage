@@ -50,7 +50,7 @@ class PurchaseController extends Controller
         Purchase::create($validatedData);
 
         // Arahkan user kembali ke halaman pages/purchase/index.blade.php
-        return redirect(route("purchase-index"))->with("successAddPurchase", "Purchase added successfully!");
+        return redirect(route("purchase-index"))->with("successAddPurchase", "Berhasil menambahkan pembelian baru.");
     }
 
     // Form edit data purchase
@@ -80,7 +80,7 @@ class PurchaseController extends Controller
         Purchase::find($id)->update($validatedData);
 
         // Arahkan user kembali ke halaman pages/purchase/index.blade.php
-        return redirect(route("purchase-index"))->with("successEditPurchase", "Purchase editted successfully!");
+        return redirect(route("purchase-index"))->with("successEditPurchase", "Berhasil memperbaharui data pembelian.");
     }
 
     // Hapus data purchase dari database
@@ -102,7 +102,7 @@ class PurchaseController extends Controller
         Purchase::find($id)->update(["archived" => 1]);
 
         // Arahkan user kembali ke halaman pages/purchase/index.blade.php
-        return redirect(route("purchase-index"))->with("successDeletePurchase", "Purchase deleted successfully!");
+        return redirect(route("purchase-index"))->with("successDeletePurchase", "Berhasil menghapus data pengiriman.");
     }
 
     // READ DATA FROM CSV
@@ -131,7 +131,7 @@ class PurchaseController extends Controller
         // Delete the stored file after processing
         Storage::delete($path);
 
-        return redirect(route("purchase-index"))->with('successImportPurchase', 'CSV file uploaded and purchases added successfully.');
+        return redirect(route("purchase-index"))->with('successImportPurchase', 'Berhasil membaca file CSV dan menambahkan data pengiriman.');
     }
 
     private function processpurchaseDataCsv($filePath)
@@ -206,7 +206,7 @@ class PurchaseController extends Controller
         // Delete the stored file after processing
         Storage::delete($path);
 
-        return redirect(route("purchase-index"))->with('successImportPurchase', 'CSV file uploaded and purchases added successfully.');
+        return redirect(route("purchase-index"))->with('successImportPurchase', 'Berhasil membaca file CSV dan menambahkan data pengiriman beserta barang-barang di dalamnya.');
     }
 
     private function processpurchaseDataCsv2($filePath)

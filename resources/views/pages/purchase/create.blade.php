@@ -21,26 +21,23 @@
                             </option>
                         @endforeach
                     </select>
-                    @error('partner_id')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 <div class="mt-3">
                     <label for="purchase_date">Tanggal Pembelian</label>
-                    <input type="date" class="form-control" name="purchase_date" id="purchase_date"
+                    <input type="date" class="form-control @error("purchase_date") is-invalid @enderror" name="purchase_date" id="purchase_date"
                         value="{{ old('purchase_date') }}">
                     @error('purchase_date')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">Harap masukkan tanggal pembelian.</p>
                     @enderror
                 </div>
 
                 <div class="mt-3">
                     <label for="purchase_deadline">Tenggat Pembelian</label>
-                    <input type="date" class="form-control" name="purchase_deadline" id="purchase_deadline"
+                    <input type="date" class="form-control @error("purchase_deadline") is-invalid @enderror" name="purchase_deadline" id="purchase_deadline"
                         value="{{ old('purchase_deadline') }}">
                     @error('purchase_deadline')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">Harap masukkan tenggat pembelian.</p>
                     @enderror
                 </div>
 
@@ -56,9 +53,6 @@
                         <option value="Ordered" @if(old('purchase_status') == 'Ordered') selected @endif>Telah dipesan</option>
                         <option value="Retrieved" @if(old('purchase_status') == 'Retrieved') selected @endif>Diterima</option>
                     </select>
-                    @error('purchase_status')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 <div class="mt-4">

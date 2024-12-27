@@ -69,7 +69,7 @@ class SalaryController extends Controller
             $currentSaturday = $endOfWeek->copy()->addDay();
         }
 
-        return redirect(route('salary-index'))->with('successAutoGenerateSalary', 'Latest salary data has been generated successfully!');
+        return redirect(route('salary-index'))->with('successAutoGenerateSalary', 'Data gaji pegawai terbaru telah berhasil digenerasi!');
     }
 
     public function edit($id){
@@ -81,6 +81,6 @@ class SalaryController extends Controller
     public function update(Request $request, $id){
         Salary::find($id)->update(["keterangan" => $request->keterangan]);
 
-        return redirect(route('salary-index'))->with("successEditSalary", "Salary edited successfully!");
+        return redirect(route('salary-index'))->with("successEditSalary", "Berhasil memperbaharui data gaji pegawai.");
     }
 }

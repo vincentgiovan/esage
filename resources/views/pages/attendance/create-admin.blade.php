@@ -43,13 +43,19 @@
 
                 <div class="d-flex gap-3 mt-4">
                     <div class="w-50 d-flex flex-column">
-                        <label for="start_date">Pilih Tanggal Awal Absensi</label>
-                        <input type="date" class="form-control w-100 mt-1" name="start_date" id="start_date" value="{{ $previousSaturday }}">
+                        <label for="start_date">Tanggal Awal Absensi</label>
+                        <input type="date" class="form-control w-100 mt-1 @error('start_date') is-invalid @enderror" name="start_date" id="start_date" value="{{ old('start_date', $previousSaturday) }}">
+                        @error('start_date')
+                            <p class="text-danger">Harap pilih tanggal awal absensi.</p>
+                        @enderror
                     </div>
 
                     <div class="w-50 d-flex flex-column">
-                        <label for="end_date">Pilih Tanggal Akhir Absensi</label>
-                        <input type="date" class="form-control w-100 mt-1" name="end_date" id="end_date" value="{{ $previousFriday }}">
+                        <label for="end_date">Tanggal Akhir Absensi</label>
+                        <input type="date" class="form-control w-100 mt-1 @error('end_date') is-invalid @enderror" name="end_date" id="end_date" value="{{ old('end_date', $previousFriday) }}">
+                        @error('end_date')
+                            <p class="text-danger">Harap pilih tanggal awal absensi.</p>
+                        @enderror
                     </div>
                 </div>
 

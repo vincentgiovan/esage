@@ -15,25 +15,25 @@
                                 <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} - {{ $product->variant }}  (Harga: Rp {{ number_format($product->price, 2, ',', '.') }}, Stok:  {{ $product->stock }}, Diskon: {{ $product->discount }}%)</option>
                             @endforeach
                         </select>
-                        <p style = "color: red; font-size: 10px;"></p>
+                        <p class="text-danger"></p>
                     </div>
 
                     <div class="mt-3">
                         <label for="price">Harga</label>
                         <input type="number" class="form-control" name="price" id="price"  placeholder="Price"  value = "{{ old("price") }}">
-                        <p style = "color: red; font-size: 10px;" id="errPrice"></p>
+                        <p class="text-danger" id="errPrice"></p>
                     </div>
 
                     <div class="mt-3">
                         <label for="discount">Diskon</label>
                         <input type="number" class="form-control" name="discount"  id="discount" placeholder="Diskon"  value = "{{ old("discount") }}">
-                        <p style = "color: red; font-size: 10px;" id="errDiscount"></p>
+                        <p class="text-danger" id="errDiscount"></p>
                     </div>
 
                     <div class="mt-3">
                         <label for="quantity">Jumlah</label>
                         <input type="number" class="form-control" name="quantity" id="quantity"  placeholder="Quantity" value = "{{ old("quantity")}}">
-                        <p style = "color: red; font-size: 10px;" id="errQuantity"></p>
+                        <p class="text-danger" id="errQuantity"></p>
                     </div>
 
                     <div class="mt-3">
@@ -108,16 +108,16 @@
             // Hilangkan error message dan mark merah pada input dan error message sebelum validasi
             errPrice.innerText = "";
             errQuantity.innerText = "";
-            input2.style.border = "none";
-            input4.style.border = "none";
+            input2.classList.remove("is-invalid");
+            input4.classList.remove("is-invalid");
 
             // Validasi input
             let inputAman = true; // Status apakah sudah terjadi kesalahan input atau belum
 
             // Kalau input price kosong atau nilainya di bawah 1 maka mark merah input dan tampilkan pesan error
             if(!input2.value && input2.value < 1){
-                input2.style.border = "solid 1px red";
-                errPrice.innerText = "Invalid input :3";
+                input2.classList.add("is-invalid");
+                errPrice.innerText = "Harap masukkan nilai minimal 1.";
 
                 inputAman = false;
             }
@@ -129,8 +129,8 @@
 
             // Kalau input quantity kosong atau nilainya di bawah 1 maka mark merah input dan tampilkan pesan error
             if(!input4.value && input4.value < 1){
-                input4.style.border = "solid 1px red";
-                errQuantity.innerText = "Invalid input :3";
+                input4.classList.add("is-invalid");
+                errQuantity.innerText = "Harap masukkan nilai minimal 1.";
 
                 inputAman = false;
             }

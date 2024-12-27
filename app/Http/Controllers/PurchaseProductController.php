@@ -114,7 +114,7 @@ class PurchaseProductController extends Controller
         };
 
         // Arahkan user kembali ke pages/transit/purchaseproduct/index.blade.php
-        return redirect(route("purchaseproduct-viewitem", $purchase->id))->with("successAddProduct", "Product added successfully");
+        return redirect(route("purchaseproduct-viewitem", $purchase->id))->with("successAddProduct", "Berhasil menambahkan barang ke pembelian.");
     }
 
     // Form penambahan produk ke cart purchase tapi produk belum terdaftar sama sekali sebelumnya
@@ -126,6 +126,7 @@ class PurchaseProductController extends Controller
         // Tampilkan halaman pages/transit/purchaseproduct/addnewitem.blade.php beserta data yang diperlukan di blade-nya:
         return view("pages.transit.purchaseproduct.addnewitem", [
             "purchase" => $purchase, // data purchase yang ingin ditambahkan cart-nya
+            "products" => Product::where('archived', 0)->where('is_returned', 'no')->get()
         ]);
     }
 
@@ -173,7 +174,7 @@ class PurchaseProductController extends Controller
         };
 
         // Arahkan user kembali ke halaman pages/transit/purchaseproduct/index.blade.php
-        return redirect(route("purchaseproduct-viewitem", $purchase->id))->with("successAddProduct", "Product added successfully");
+        return redirect(route("purchaseproduct-viewitem", $purchase->id))->with("successAddProduct", "Berhasil menambahkan barang ke pembelian dan menambahkannya ke data barang.");
     }
 
     // Hapus produk dari cart
@@ -197,7 +198,7 @@ class PurchaseProductController extends Controller
         PurchaseProduct::find($pp->id)->delete();
 
         // Arahkan kembali user ke pages/transit/purchaseproduct/index.blade.php
-        return redirect(route("purchaseproduct-viewitem", $id))->with("successDeleteProduct", "Product deleted successfully!");
+        return redirect(route("purchaseproduct-viewitem", $id))->with("successDeleteProduct", "Berhasil menghapus barang dari pembelian.");
     }
 
     // READ DATA FROM CSV
@@ -222,7 +223,7 @@ class PurchaseProductController extends Controller
         // Delete the stored file after processing
         Storage::delete($path);
 
-        return redirect(route("purchaseproduct-viewitem", $id))->with('success', 'CSV file uploaded and products added successfully.');
+        return redirect(route("purchaseproduct-viewitem", $id))->with('success', 'Berhasil membaca file CSV dan menambahkan barang ke pembelian.');
     }
 
     private function processPurchaseProductDataCsv($filePath, $purchase_id)

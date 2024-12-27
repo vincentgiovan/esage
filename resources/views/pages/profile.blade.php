@@ -17,7 +17,7 @@
                     <input type="text" class="form-control" id="name" name="name" placeholder="Display Name"
                         value="{{ old('name', Auth::user()->name) }}">
                     @error('name')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -26,7 +26,7 @@
                     <input type="text" class="form-control" id="email" name="email" placeholder="email"
                         value="{{ old('email', Auth::user()->email) }}">
                     @error('email')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
                 <div class="text-danger fw-semibold">*Warning: Changing email will require you to verify the new email</div>
@@ -49,7 +49,7 @@
                     <input type="text" class="form-control" id="role" name="role" placeholder="Account"
                         value="{{ $role }}" disabled>
                     @error('role')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
 

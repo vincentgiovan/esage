@@ -13,11 +13,11 @@
                 @csrf
 
                 <div class="mt-3">
-                    <label for="product_name">Nama Produk</label>
+                    <label for="product_name">Nama Barang</label>
                     <input type="text" class="form-control @error('product_name') is-invalid @enderror" name="product_name" id="product_name" placeholder="Nama Barang"
                         value="{{ old('product_name') }}">
                     @error('product_name')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">Harap masukkan nama barang.</p>
                     @enderror
                 </div>
 
@@ -26,16 +26,16 @@
                     <input type="text" class="form-control @error('variant') is-invalid @enderror" name="variant" id="variant" placeholder="Variant"
                         value="{{ old('variant') }}">
                     @error('variant')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">Harap masukkan varian barang.</p>
                     @enderror
                 </div>
 
                 <div class="mt-3">
-                    <label for="unit">Satuan Produk</label>
+                    <label for="unit">Satuan</label>
                     <input type="text" class="form-control @error('unit') is-invalid @enderror" name="unit" id="unit" placeholder="Unit"
                         value="{{ old('unit') }}">
                     @error('unit')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">Harap masukkan satuan barang.</p>
                     @enderror
                 </div>
 
@@ -44,27 +44,21 @@
                     <input type="number" class="form-control @error('stock') is-invalid @enderror" name="stock" id="stock" placeholder="Stok"
                         value="{{ old('stock') }}">
                     @error('stock')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">Harap masukkan nilai minimal 0.</p>
                     @enderror
                 </div>
 
                 <div class="mt-3">
                     <label for="status">Status</label>
                     <select name="status" id="status" class="form-select @error('status') is-invalid @enderror">
-                        <option value="Ready">Ready</option>
-                        <option value="Out of Stock">Out Of Stock</option>
+                        <option value="Ready" @if(old('status') == 'Ready') selected @endif>Tersedia</option>
+                        <option value="Out of Stock" @if(old('status') == 'Out of Stock') selected @endif>Stok kosong</option>
                     </select>
-                    @error('status')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 <div class="mt-3">
                     <label for="fake_product_code">SKU</label>
-                    <input type="text" class="form-control @error('product_code') is-invalid @enderror" name="fake_product_code" id="fake_product_code" value="{{ old('fake_product_code') }}" disabled>
-                    @error('product_code')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
-                    @enderror
+                    <input type="text" class="form-control" name="fake_product_code" id="fake_product_code" placeholder="(Dibuat otomatis oleh sistem)" value="{{ old('fake_product_code') }}" disabled>
                 </div>
 
                 <div class="mt-3">
@@ -72,7 +66,7 @@
                     <input type="number" class="form-control @error('price') is-invalid @enderror" name="price" id="price" placeholder="Harga"
                         value="{{ old('price') }}">
                     @error('price')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">Harap masukkan nilai minimal 1.</p>
                     @enderror
                 </div>
 
@@ -81,7 +75,7 @@
                     <input type="number" class="form-control @error('markup') is-invalid @enderror" name="markup" id="markup" placeholder="Markup"
                         value="{{ old('markup') }}">
                     @error('markup')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
 

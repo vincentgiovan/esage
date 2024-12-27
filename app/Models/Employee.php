@@ -27,6 +27,10 @@ class Employee extends Model
         return $this->hasMany(Prepay::class);
     }
 
+    public function leaves(){
+        return $this->hasMany(Leave::class);
+    }
+
     public function scopeFilter($query, array $filters){
         $query->when($filters["status"]?? false, function($query, $status) {
             return $query->where(function($query) use($status) {

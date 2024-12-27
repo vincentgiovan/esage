@@ -17,7 +17,7 @@
                     <input type="text" class="form-control" id="project_name" name="project_name" placeholder="Nama Project"
                         value="{{ old('project_name', $project->project_name) }}">
                     @error('project_name')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -26,7 +26,7 @@
                     <input type="text" class="form-control" id="location" name="location" placeholder="Location"
                         value="{{ old('location', $project->location) }}">
                     @error('location')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -35,7 +35,7 @@
                     <input type="text" class="form-control" id="PIC" name="PIC" placeholder="PIC Name"
                         value="{{ old('PIC', $project->PIC) }}">
                     @error('PIC')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -44,7 +44,7 @@
                     <input type="text" class="form-control" id="address" name="address" placeholder="Alamat"
                         value="{{ old('address', $project->address) }}">
                     @error('address')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -53,7 +53,7 @@
                     <input type="text" class="form-control @error('RAB') is-invalid @enderror" id="RAB" name="RAB" placeholder="Nomor RAB"
                         value="{{ old('RAB', $project->RAB) }}">
                     @error('RAB')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
 

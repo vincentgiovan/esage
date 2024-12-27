@@ -21,9 +21,9 @@
 
                 <div class="mt-3">
                     <label for="quantity">Jumlah</label>
-                    <input type="text" class="form-control" name="quantity" id="quantity" placeholder="Jumlah" value = "{{ old("quantity", $return_item->quantity)}}">
+                    <input type="text" class="form-control @error('quantity') is-invalid @enderror" name="quantity" id="quantity" placeholder="Jumlah" value = "{{ old("quantity", $return_item->quantity)}}">
                     @error("quantity")
-                    <p style = "color: red; font-size: 10px;">{{ $message }}</p>
+                    <p class="text-danger">Harap masukkan nilai minimal 1.</p>
                     @enderror
                 </div>
 
@@ -33,24 +33,21 @@
                         <option value="Ready to pickup" @if(old('status', $return_item->status) == "Ready to pickup") selected @endif>Siap diangkut</option>
                         <option value="Not ready yet" @if(old('status', $return_item->status) == "Not ready yet") selected @endif>Belum siap diangkut</option>
                     </select>
-                    @error("status")
-                    <p style = "color: red; font-size: 10px;">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 <div class="mt-3">
                     <label for="PIC">PIC</label>
-                    <input type="text" class="form-control" name="PIC" id="PIC" placeholder="PIC" value = "{{ old('PIC', $return_item->PIC)}}">
+                    <input type="text" class="form-control @error('PIC') is-invalid @enderror" name="PIC" id="PIC" placeholder="PIC" value = "{{ old('PIC', $return_item->PIC)}}">
                     @error("PIC")
-                    <p style = "color: red; font-size: 10px;">{{ $message }}</p>
+                    <p class="text-danger">Harap masukkan nama PIC.</p>
                     @enderror
                 </div>
 
                 <div class="mt-3">
                     <label for="image">Foto Barang</label>
-                    <input type="file" class="form-control" name="image" id="image">
+                    <input type="file" class="form-control @error('image') is-invalid @enderror" name="image" id="image">
                     @error('image')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">Harap upload foto untuk barang yang ingin dikembalikan.</p>
                     @enderror
                 </div>
 

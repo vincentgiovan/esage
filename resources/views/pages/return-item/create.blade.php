@@ -11,7 +11,7 @@
 
                 <div class="mt-3">
                     <label for="project">Pilih Asal Proyek</label>
-                    <select name="project" class="form-select" id="project">
+                    <select name="project" class="form-select @error('project') is-invalid @enderror" id="project">
                         <option disabled selected>Pick an item</option>
                         @foreach ($projects as $proj)
                             <option value="{{ $proj->id }}" @if(old('project') == $proj->id) selected @endif>{{ $proj->project_name }}</option>
@@ -19,28 +19,28 @@
                     </select>
 
                     @error("project")
-                        <p style="color: red; font-size: 10px;">{{$message }}</p>
+                        <p class="text-danger">Harap pilih project asal barang yang ingin dikembalikan.</p>
                     @enderror
                 </div>
 
                 <div class="mt-3">
                     <label for="product">Produk yang akan dikembalikan</label>
-                    <select name="product" class="form-select select2" id="product">
+                    <select name="product" class="form-select select2 @error('product') is-invalid @enderror" id="product">
                         <option disabled selected>Pick an item</option>
                         @foreach ($products as $prod)
                             <option value="{{ $prod->id }}" @if(old('product') == $prod->id) selected @endif>{{ $prod->product_name }} - {{ $prod->variant }} (Harga: Rp {{ number_format($prod->price, 2, ',', '.') }}, Stok:  {{ $prod->stock }}, Diskon: {{ $prod->discount }}%) @if($prod->is_returned == 'yes'){{__('- Returned')}}@endif</option>
                         @endforeach
                     </select>
                     @error("product")
-                    <p style = "color: red; font-size: 10px;">{{$message }}</p>
+                    <p class="text-danger">Harap pilih barang yang ingin dikembalikan.</p>
                     @enderror
                 </div>
 
                 <div class="mt-3">
                     <label for="qty">Jumlah</label>
-                    <input type="text" class="form-control" name="qty" id="qty" placeholder="Jumlah" value = "{{ old("qty")}}">
+                    <input type="text" class="form-control @error('qty') is-invalid @enderror" name="qty" id="qty" placeholder="Jumlah" value = "{{ old("qty")}}">
                     @error("qty")
-                    <p style = "color: red; font-size: 10px;">{{$message }}</p>
+                    <p class="text-danger">Harap masukkan nilai minimal 1.</p>
                     @enderror
                 </div>
 
@@ -50,24 +50,21 @@
                         <option value="Ready to pickup" @if(old('status') == "Ready to pickup") selected @endif>Siap diangkut</option>
                         <option value="Not ready yet" @if(old('status') == "Not ready yet") selected @endif>Belum siap diangkut</option>
                     </select>
-                    @error("status")
-                    <p style = "color: red; font-size: 10px;">{{$message }}</p>
-                    @enderror
                 </div>
 
                 <div class="mt-3">
                     <label for="PIC">PIC</label>
-                    <input type="text" class="form-control" name="PIC" id="PIC" placeholder="PIC" value = "{{ old("PIC")}}">
+                    <input type="text" class="form-control @error('PIC') is-invalid @enderror" name="PIC" id="PIC" placeholder="PIC" value = "{{ old("PIC")}}">
                     @error("PIC")
-                    <p style = "color: red; font-size: 10px;">{{$message }}</p>
+                    <p class="text-danger">Harap masukkan nama PIC.</p>
                     @enderror
                 </div>
 
                 <div class="mt-3">
                     <label for="image">Foto Barang</label>
-                    <input type="file" class="form-control" name="image" id="image">
+                    <input type="file" class="form-control @error('image') is-invalid @enderror" name="image" id="image">
                     @error('image')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">Harap upload foto barang yang ingin dikembalikan.</p>
                     @enderror
                 </div>
 

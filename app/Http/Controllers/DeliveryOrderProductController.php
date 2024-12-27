@@ -66,7 +66,7 @@ class DeliveryOrderProductController extends Controller
             )
             ->orderBy('products.product_name', 'asc') // Group by product name
             ->orderBy('products.variant', 'asc') // Then by variant
-            ->orderByRaw("CASE WHEN products.is_returned = 1 THEN 1 ELSE 0 END") // Place returned products at the bottom
+            ->orderByRaw("CASE WHEN products.is_returned = 'no' THEN 1 ELSE 0 END") // Place returned products at the bottom
             ->orderBy('ordering_date', 'asc') // Order by oldest purchase date or created_at
             ->get()
         ]);
@@ -106,7 +106,7 @@ class DeliveryOrderProductController extends Controller
         };
 
         // Arahkan user kembali ke halaman pages/transit/deliveryorderproduct/index.blade.php
-        return redirect(route("deliveryorderproduct-viewitem", $deliveryorder->id))->with("successAddProduct", "Product Added successfully!");
+        return redirect(route("deliveryorderproduct-viewitem", $deliveryorder->id))->with("successAddProduct", "Berhasil menambahkan barang ke pengiriman.");
     }
 
     // Hapus produk dari cart delivery order
@@ -128,7 +128,7 @@ class DeliveryOrderProductController extends Controller
         DeliveryOrderProduct::find($do->id)->delete();
 
         // Arahkan user kembali ke halaman pages/transit/deliveryorderproduct/index.blade.php
-        return redirect(route("deliveryorderproduct-viewitem", $id))->with("successDeleteProduct", "Product deleted successfully!");
+        return redirect(route("deliveryorderproduct-viewitem", $id))->with("successDeleteProduct", "Berhasil menghapus barang dari pengiriman.");
     }
 
     // READ DATA FROM CSV
@@ -153,7 +153,7 @@ class DeliveryOrderProductController extends Controller
         // Delete the stored file after processing
         Storage::delete($path);
 
-        return redirect(route("deliveryorderproduct-viewitem", $id))->with('success', 'CSV file uploaded and products added successfully.');
+        return redirect(route("deliveryorderproduct-viewitem", $id))->with('success', 'Berhasil membaca file CSV dan menambahkan barang-barang ke pengiriman.');
     }
 
     private function processDeliveryOrderProductDataCsv($filePath, $delivery_order_id)

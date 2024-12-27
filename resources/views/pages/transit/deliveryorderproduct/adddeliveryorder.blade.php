@@ -14,13 +14,13 @@
                             <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} - {{ $product->variant }} (Harga: Rp {{ number_format($product->price, 2, ',', '.') }}, Stok:  {{ $product->stock }}, Diskon: {{ $product->discount }}%) @if($product->is_returned == 'yes'){{__('- Returned')}}@endif [Tgl beli: {{ Carbon\Carbon::parse($product->ordering_date)->format('d/m/Y') }}]</option>
                         @endforeach
                     </select>
-                    <p style = "color: red; font-size: 10px;"></p>
+                    <p class="text-danger"></p>
                 </div>
 
                 <div class="mt-3">
                     <label for="quantity">Jumlah</label>
                     <input type="number" class="form-control" name="quantity" id="quantity"  placeholder="Quantity" value = "{{ old("quantity")}}">
-                    <p style = "color: red; font-size: 10px;" id="errQuantity"></p>
+                    <p class="text-danger" id="errQuantity"></p>
                 </div>
 
                 <div class="mt-3">
@@ -97,7 +97,7 @@
             // Kalau input quantity kosong atau nilainya di bawah 1 maka mark merah input dan tampilkan pesan error
             if(!input4.value || input4.value < 1 || input4.value > converted.stock){
                 input4.style.border = "solid 1px red";
-                errQuantity.innerText = "Invalid input";
+                errQuantity.innerText = "Harap masukkan angka minimal 1";
 
                 inputAman = false;
             }

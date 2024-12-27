@@ -31,13 +31,13 @@ class PartnerController extends Controller{
     {
         // Validasi data, kalo ga sesuai ga lanjut
         $validatedData = $request->validate([
-            "partner_name" => "required|min:1",
+            "partner_name" => "required",
             "role" => "required",
             "remark" => "nullable",
-            "address" => "nullable|min:0",
-            "contact" => "nullable|numeric|min:7|not_in:0",
-            "phone" => "nullable|numeric|min:1|not_in:0",
-            "fax" => "nullable|numeric|min:1|not_in:0",
+            "address" => "nullable",
+            "contact" => ['nullable', 'regex:/^[\d\s+\(\)-]+$/'],
+            "phone" => ['nullable', 'regex:/^[\d\s+\(\)-]+$/'],
+            "fax" => ['nullable', 'regex:/^[\d\s+\(\)-]+$/'],
             "email" => "nullable|email:dns",
             "tempo" => "nullable"
         ]);
@@ -46,7 +46,7 @@ class PartnerController extends Controller{
         Partner::create($validatedData);
 
         // Arahkan user kembali ke halaman pages/partner/index.blade.php
-        return redirect(route("partner-index"))->with("successAddPartner", "Partner added successfully!");
+        return redirect(route("partner-index"))->with("successAddPartner", "Berhasil menambahkan partner baru.");
     }
 
     // Form edit data partner
@@ -66,10 +66,10 @@ class PartnerController extends Controller{
             "partner_name" => "required|min:1",
             "role"=>"required",
             "remark" => "nullable",
-            "address" => "nullable|min:0",
-            "contact"=>"nullable|min:7|not_in:0",
-            "phone"=>"nullable|min:1|not_in:0",
-            "fax"=>"nullable|min:1|not_in:0",
+            "address" => "nullable",
+            "contact"=>['nullable', 'regex:/^[\d\s+\(\)-]+$/'],
+            "phone"=>['nullable', 'regex:/^[\d\s+\(\)-]+$/'],
+            "fax"=>['nullable', 'regex:/^[\d\s+\(\)-]+$/'],
             "email" => "nullable|email:dns",
             "tempo" => "nullable"
         ]);
@@ -78,7 +78,7 @@ class PartnerController extends Controller{
         Partner::find($id)->update($validatedData);
 
         // Arahkan user kembali ke halaman pages/partner/index.blade.php
-        return redirect(route("partner-index"))->with("successEditPartner", "Partner editted successfully!");
+        return redirect(route("partner-index"))->with("successEditPartner", "Berhasil memperbaharui data partner.");
 
     }
 
@@ -88,7 +88,7 @@ class PartnerController extends Controller{
         Partner::find($id)->update(["archived" => 1]);
 
         // Arahkan user kembali ke halaman pages/partner/index.blade.php
-        return redirect(route("partner-index"))->with("successDeletePartner", "Partner deleted successfully!");
+        return redirect(route("partner-index"))->with("successDeletePartner", "Berhasil menghapus data partner.");
     }
 
     // READ DATA FROM CSV
@@ -113,7 +113,7 @@ class PartnerController extends Controller{
         // Delete the stored file after processing
         Storage::delete($path);
 
-        return redirect(route("partner-index"))->with('success', 'CSV file uploaded and products added successfully.');
+        return redirect(route("partner-index"))->with('success', 'Berhasil membaca file CSV dan menambahkan partner.');
     }
 
     private function processpartnerDataCsv($filePath)

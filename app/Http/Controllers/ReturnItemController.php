@@ -111,7 +111,7 @@ class ReturnItemController extends Controller {
             return $e;
         }
 
-        return redirect(route("returnitem-index"))->with("successAddReturnItem", "New return item data successfully added!");
+        return redirect(route("returnitem-index"))->with("successAddReturnItem", "Berhasil menambahkan data pengembalian barang baru.");
     }
 
     public function edit($id){
@@ -151,7 +151,7 @@ class ReturnItemController extends Controller {
 
         $return_item->update($validated_data);
 
-        return redirect(route("returnitem-index"))->with("successEditReturnItem", "Return item data edited succesfully!");
+        return redirect(route("returnitem-index"))->with("successEditReturnItem", "Berhasil memperbaharui data pengembalian barang.");
     }
 
     public function destroy($id){
@@ -168,7 +168,7 @@ class ReturnItemController extends Controller {
             $return_item->update(["archived" => 1]);
         }
 
-        return redirect(route("returnitem-index"))->with("successDeleteReturnItem", "Return item data deleted successfully");
+        return redirect(route("returnitem-index"))->with("successDeleteReturnItem", "Berhasil menghapus data pengembalian barang.");
     }
 }
 

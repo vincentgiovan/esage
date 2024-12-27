@@ -4,61 +4,61 @@
 @section("content")
 
     <x-container-middle>
-        <div class="container bg-white p-5 rounded-4 border border-1 card mt-4">
+        <div class="container bg-white py-4 px-5 rounded-4 border border-1 card mt-4">
 
-            <h2>Add New Purchase</h2>
+            <h2>Tambah Barang ke Pembelian dan Data Barang</h2>
                 <div>
                     <div class="mt-3">
                         <label for="product_name">Nama Produk</label>
                         <input type="text" class="form-control" name="product_name" id="product_name" placeholder="Nama Barang" value = "{{ old("product_name" ) }}">
-                        <p style = "color: red; font-size: 10px;" id="errProductName"></p>
+                        <p class="text-danger" id="errProductName"></p>
                     </div>
                     <div class="mt-3">
                         <div class="unit">Satuan</div>
                         <input type="text" class="form-control" name="unit" id="unit" placeholder="Unit"  value = "{{ old("unit") }}">
-                        <p style = "color: red; font-size: 10px;" id="errUnit"></p>
+                        <p class="text-danger" id="errUnit"></p>
                     </div>
                     <div class="mt-3">
                         <div class="status">Status</div>
                         <select name="status" class="form-select" id="status">
-                            <option value="Ready">Ready</option>
-                            <option value="Out Of Stock">Out Of Stock</option>
+                            <option value="Ready">Tersedia</option>
+                            <option value="Out Of Stock">Stok kosong</option>
                         </select>
-                        <p style = "color: red; font-size: 10px;" id="errStatus"></p>
+                        <p class="text-danger" id="errStatus"></p>
                     </div>
                     <div class="mt-3">
                         <label for="variant">Variant</label>
                         <input type="text" class="form-control" name="variant"  id="variant" placeholder="Variant"  value = "{{ old("variant") }}">
-                        <p style = "color: red; font-size: 10px;" id="errVariant"></p>
+                        <p class="text-danger" id="errVariant"></p>
                     </div>
                     <div class="mt-3">
                         <label for="fake_product_code">SKU</label>
-                        <input type="text" class="form-control" name="fake_product_code" id="fake_product_code" placeholder="Kode Produk" disabled>
-                        <p style = "color: red; font-size: 10px;" id="errProductCode"></p>
+                        <input type="text" class="form-control" name="fake_product_code" id="fake_product_code" placeholder="(Dibuat otomatis oleh sistem)" disabled>
+                        <p class="text-danger" id="errProductCode"></p>
                     </div>
                     <div class="mt-3">
                         <label for="price">Harga</label>
                         <input type="number" class="form-control" name="price" id="price" placeholder="Harga" value = "{{ old("price") }}">
-                        <p style = "color: red; font-size: 10px;" id="errPrice"></p>
+                        <p class="text-danger" id="errPrice"></p>
                     </div>
                     <div class="mt-3">
                         <label for="markup">Markup</label>
                         <input type="number" class="form-control" name="markup" id="markup" placeholder="Markup"  value = "{{ old("markup") }}">
-                        <p style = "color: red; font-size: 10px;" id="errMarkup"></p>
+                        <p class="text-danger" id="errMarkup"></p>
                     </div>
                     <div class="mt-3">
                         <label for="stock">Stok</label>
                         <input type="number" class="form-control" name="stock"  id="stock" placeholder="Stok"  value = "{{ old("stock") }}">
-                        <p style = "color: red; font-size: 10px;" id="errStock"></p>
+                        <p class="text-danger" id="errStock"></p>
                     </div>
                     <div class="mt-3">
                         <label for="discount">Diskon</label>
                         <input type="number" class="form-control" name="discount"  id="discount" placeholder="Diskon"  value = "{{ old("discount") }}">
-                        <p style = "color: red; font-size: 10px;" id="errDiscount"></p>
+                        <p class="text-danger" id="errDiscount"></p>
                     </div>
 
                     <div class="mt-3">
-                        <input type="button" id="addbutton" class="btn btn-primary px-3 py-1" value="Add Items">
+                        <input type="button" id="addbutton" class="btn btn-primary px-3 py-1" value="Tambah">
                     </div>
                 </div>
 
@@ -87,42 +87,34 @@
                     @csrf
 
                     <div class="mt-3">
-                        <input type="submit" class="btn btn-success px-3 py-1" value="Proceed">
+                        <input type="submit" class="btn btn-success px-3 py-1" value="Simpan">
                     </div>
                     @error("product_name")
-                        <span class="text-danger">{{ $message }}</span>
+                        <span class="text-danger">{{ $message }}</span><br>
                     @enderror
-                    <br>
                     @error("unit")
-                        <span class="text-danger">{{ $message }}</span>
+                        <span class="text-danger">{{ $message }}</span><br>
                     @enderror
-                    <br>
                     @error("status")
-                        <span class="text-danger">{{ $message }}</span>
+                        <span class="text-danger">{{ $message }}</span><br>
                     @enderror
-                    <br>
                     @error("variant")
-                        <span class="text-danger">{{ $message }}</span>
+                        <span class="text-danger">{{ $message }}</span><br>
                     @enderror
-                    <br>
                     @error("product_code")
-                        <span class="text-danger">{{ $message }}</span>
+                        <span class="text-danger">{{ $message }}</span><br>
                     @enderror
-                    <br>
                     @error("price")
-                        <span class="text-danger">{{ $message }}</span>
+                        <span class="text-danger">{{ $message }}</span><br>
                     @enderror
-                    <br>
                     @error("markup")
-                        <span class="text-danger">{{ $message }}</span>
+                        <span class="text-danger">{{ $message }}</span><br>
                     @enderror
-                    <br>
                     @error("stock")
-                        <span class="text-danger">{{ $message }}</span>
+                        <span class="text-danger">{{ $message }}</span><br>
                     @enderror
-                    <br>
                     @error("discount")
-                        <span class="text-danger">{{ $message }}</span>
+                        <span class="text-danger">{{ $message }}</span><br>
                     @enderror
 
                 </form>
@@ -234,7 +226,7 @@
             // Kalo product name kosong maka mark merah input dan tampilkan error message
             if(!input1.value){
                 input1.classList.add("is-invalid");
-                errProductName.innerText = "Invalid input";
+                errProductName.innerText = "Harap masukkan nama barang.";
 
                 inputAman = false;
             }
@@ -242,7 +234,7 @@
             // Kalo satuan kosong maka mark merah input dan tampilkan error message
             if(!input2.value){
                 input2.classList.add("is-invalid");
-                errUnit.innerText = "Invalid input";
+                errUnit.innerText = "Harap masukkan satuan/unit barang.";
 
                 inputAman = false;
             }
@@ -250,7 +242,7 @@
             // Kalo varian kosong maka mark merah input dan tampilkan error message
             if(!input4.value){
                 input4.classList.add("is-invalid");
-                errVariant.innerText = "Invalid input";
+                errVariant.innerText = "Harap masukkan varian barang.";
 
                 inputAman = false;
             }
@@ -258,7 +250,7 @@
             // Kalo harga kosong atau di bawah 1 maka mark merah input dan tampilkan error message
             if(!input6.value && input6.value < 1){
                 input6.classList.add("is-invalid");
-                errPrice.innerText = "Invalid input";
+                errPrice.innerText = "Harap masukkan nilai minimal 1.";
 
                 inputAman = false;
             }
@@ -266,7 +258,7 @@
             // Kalo markup kosong atau di bawah 1 maka mark merah input dan tampilkan error message
             if(input7.value && input7.value < 1){
                 input7.classList.add("is-invalid");
-                errMarkup.innerText = "Invalid input";
+                errMarkup.innerText = "Harap masukkan nilai minimal 1.";
 
                 inputAman = false;
             }
@@ -274,7 +266,7 @@
             // Kalo stock kosong atau di bawah 1 maka mark merah input dan tampilkan error message
             if(!input8.value && input8.value < 1){
                 input8.classList.add("is-invalid");
-                errStock.innerText = "Invalid input";
+                errStock.innerText = "Harap masukkan nilai minimal 1.";
 
                 inputAman = false;
             }
@@ -282,7 +274,7 @@
             // Kalo diskon kosong maka mark merah input dan tampilkan error message
             if(!input9.value){
                 input9.classList.add("is-invalid");
-                errDiscount.innerText = "Invalid input";
+                errDiscount.innerText = "Harap masukkan nilai minimal 0.";
 
                 inputAman = false;
             }

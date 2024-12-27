@@ -45,7 +45,7 @@ class RequestItemController extends Controller
             ]);
         }
 
-        return redirect(route("requestitem-index"))->with("successAddRequest", "Successfully added new request item");
+        return redirect(route("requestitem-index"))->with("successAddRequest", "Berhasil menambahkan request barang baru.");
     }
 
     public function edit($id){
@@ -80,12 +80,12 @@ class RequestItemController extends Controller
             ]);
         }
 
-        return redirect(route("requestitem-index"))->with("successEditRequest", "Successfully edited the request item");
+        return redirect(route("requestitem-index"))->with("successEditRequest", "Berhasil memperbaharui data request barang.");
     }
 
     public function destroy($id){
         RequestItem::find($id)->update(["archived" => 1]);
 
-        return redirect(route("requestitem-index"))->with("successDeleteRequest", "Successfully deleted the request item");
+        return redirect(route("requestitem-index"))->with("successDeleteRequest", "Berhasil menghapus data request barang.");
     }
 }

@@ -14,31 +14,26 @@
                     <label for="name">Nama</label>
                     <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old("name") }}">
                     @error("name")
-                        <span class="invalid-feedback" role="alert">
-                            {{ $message }}
-                        </span>
+                        <p class="text-danger" role="alert">
+                            Harap masukkan nama.
+                        </p>
                     @enderror
                 </div>
                 <div class="form-group mb-3">
                     <label for="email">Email</label>
                     <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old("email") }}">
                     @error("email")
-                        <span class="invalid-feedback" role="alert">
-                            {{ $message }}
-                        </span>
+                        <p class="text-danger" role="alert">
+                            Harap masukkan email dengan format yang benar.
+                        </p>
                     @enderror
                 </div>
                 <div class="form-group mb-3">
                     <label for="role">Pilih Role</label>
                     <select class="form-control text-black" id="role" name="role">
-                        <option value="1">Admin</option>
-                        <option value="2" selected>User</option>
+                        <option value="admin">Admin</option>
+                        <option value="user" selected>User</option>
                     </select>
-                    @error("role")
-                        <span class="invalid-feedback" role="alert">
-                            {{ $message }}
-                        </span>
-                    @enderror
                 </div>
 
                 <div class="form-group mb-3 row">
@@ -51,9 +46,9 @@
                         </button>
                     </div>
                     @error('password')
-                        <span class="invalid-feedback d-block" role="alert">
-                            {{ $message }}
-                        </span>
+                        <p class="text-danger d-block" role="alert">
+                            Harap masukkan password (minimal 8 karakter) dan pastikan konfirmasi password sama.
+                        </p>
                     @enderror
 
                 </div>
@@ -68,9 +63,9 @@
                         </button>
                     </div>
                     @error('password_confirmation')
-                        <span class="invalid-feedback d-block" role="alert">
-                            {{ $message }}
-                        </span>
+                        <p class="text-danger d-block" role="alert">
+                            Harap masukkan password (minimal 8 karakter) dan pastikan konfirmasi password sama.
+                        </p>
                     @enderror
                 </div>
 
@@ -79,14 +74,9 @@
                     <select class="form-control select2 text-black" id="employee" name="employee">
                         <option selected disabled>Pilih Pegawai</option>
                         @foreach($employees as $e)
-                            <option value="{{ $e->id }}">{{ $e->nama }}</option>
+                            <option value="{{ $e->id }}" @if(old('employee') == $e->id) selected @endif>{{ $e->nama }}</option>
                         @endforeach
                     </select>
-                    @error("employee")
-                        <span class="invalid-feedback" role="alert">
-                            {{ $message }}
-                        </span>
-                    @enderror
                 </div>
 
                 <button type="submit" class="btn btn-primary mt-3">Buat Akun</button>

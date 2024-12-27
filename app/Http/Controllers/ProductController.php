@@ -17,26 +17,30 @@ class ProductController extends Controller{
         $n_pagination = 10;
         $products = Product::filter(request(["search"]))->orderByRaw('CASE WHEN status = "Out of Stock" THEN 0 ELSE 1 END')->orderBy("product_name")->get(); // Data semua produk dari database buat ditampilin satu-satu (kalo user-nya searching tampilkan yang memenuhi keyword)
 
-        $all_products = [];
-        foreach($products as $product){
-            $pae = false;
-            foreach($all_products as $ap){
-                if($product->variant == $ap->variant && $product->product_name == $ap->product_name && $product->is_returned == $ap->is_returned){
-                    $ap["stock"] += $product->stock;
-                    $ap["price"] = $product->price;
-                    $ap["is_returned"] = $product->is_returned;
-                    $pae = true;
-                }
-            }
+        $grouped_products = $products->groupBy(function ($product) {
+            return "{$product->product_name}|{$product->variant}|{$product->is_returned}";
+        })->map(function ($group) {
+            // Use the first product in the group as a base for the grouped product
+            $baseProduct = $group->first()->replicate();
 
-            if(!$pae){
-                array_push($all_products, $product);
-            }
-        }
+            // Aggregate stock and update fields
+            $baseProduct->stock = $group->sum('stock'); // Total stock
+            $baseProduct->price = $group->last()->price; // Latest price
+            $baseProduct->is_grouped = true; // Custom marker for grouped entry
+
+            // Return the grouped product along with the original group
+            return [
+                'grouped' => $baseProduct,
+                'originals' => $group
+            ];
+        })->flatMap(function ($item) {
+            // Flatten each group to include the grouped product followed by originals
+            return $item['originals']->prepend($item['grouped']);
+        })->values(); // Reset the keys for a clean indexed collection
 
         // Tampilkan halaman pages/product/index.blade.php
         return view("pages.product.index", [
-            "products" => collect($all_products),
+            "products" => $grouped_products,
             "n_pagination" => $n_pagination
         ]);
     }
@@ -73,7 +77,7 @@ class ProductController extends Controller{
         Product::create($validatedData);
 
         // Arahkan user kembali ke halaman pages/product/index.blade.php
-        return redirect(route("product-index"))->with("successAddProduct", "Product added successfully!");
+        return redirect(route("product-index"))->with("successAddProduct", "Berhasil menambahkan barang baru.");
     }
 
     // Form edit data produk
@@ -105,7 +109,7 @@ class ProductController extends Controller{
         Product::find($id)->update($validatedData);
 
         // Arahkan user kembali ke halaman pages/product/index.blade.php
-        return redirect(route("product-index"))->with("successEditProduct", "Product editted successfully!");
+        return redirect(route("product-index"))->with("successEditProduct", "Berhasil memperbaharui data barang.");
     }
 
     // Hapus data product dari database
@@ -115,7 +119,7 @@ class ProductController extends Controller{
         Product::find($id)->update(["archived" => 1]);
 
         // Arahkan user kembali ke halaman pages/product/index.blade.php
-        return redirect(route("product-index"))->with("successDeleteProduct", "Product deleted successfully!");
+        return redirect(route("product-index"))->with("successDeleteProduct", "Berhasil menghapus data barang.");
     }
 
 
@@ -141,7 +145,7 @@ class ProductController extends Controller{
         // Delete the stored file after processing
         Storage::delete($path);
 
-        return redirect(route("product-index"))->with('success', 'CSV file uploaded and products added successfully.');
+        return redirect(route("product-index"))->with('success', 'Berhasil membaca file CSV dan menambahkan data barang.');
     }
 
     private function processProductDataCsv($filePath)

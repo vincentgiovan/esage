@@ -59,6 +59,12 @@ class AttendanceController extends Controller
     }
 
     public function store_admin(Request $request){
+        $request->validate([
+            "start_date" => "required",
+            "end_date" => "required",
+            "remark" => "nullable",
+        ]);
+
         try {
             DB::beginTransaction();
 
@@ -162,7 +168,7 @@ class AttendanceController extends Controller
             throw $e;
         }
 
-        return redirect(route('attendance-index'))->with('successCreateAttendance', 'Attendances data created successfully!');
+        return redirect(route('attendance-index'))->with('successCreateAttendance', 'Berhasil membuat data presensi baru.');
     }
 
     public function index_self(){
@@ -345,12 +351,12 @@ class AttendanceController extends Controller
 
         Attendance::find($id)->update($validatedData);
 
-        return redirect(route("attendance-index"))->with("successEditAttendance", "New attendance edited sucessfully!");
+        return redirect(route("attendance-index"))->with("successEditAttendance", "Berhasil memperbaharui data presensi.");
     }
 
     public function destroy($id){
         Attendance::find($id)->update(["archived" => 1]);
 
-        return redirect(route("attendance-index"))->with("successDeleteAttendance", "New attendance deleted sucessfully!");
+        return redirect(route("attendance-index"))->with("successDeleteAttendance", "Berhasil menghapus data presensi.");
     }
 }

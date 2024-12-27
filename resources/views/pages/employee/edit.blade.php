@@ -18,27 +18,27 @@
 
                 <div class="mt-3">
                     <label for="nama">Nama</label>
-                    <input type="text" class="form-control" name="nama" id="nama" placeholder="Nama Pegawai"
+                    <input type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" id="nama" placeholder="Nama Pegawai"
                         value="{{ old('nama', $employee->nama) }}">
                     @error('nama')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">Harap masukkan nama karyawan.</p>
                     @enderror
                 </div>
 
                 <div class="mt-3">
                     <label for="NIK">NIK</label>
-                    <input type="text" class="form-control" name="NIK" id="NIK" placeholder="NIK"
+                    <input type="text" class="form-control @error('NIK') is-invalid @enderror" name="NIK" id="NIK" placeholder="NIK"
                         value="{{ old('NIK', $employee->NIK) }}">
                     @error('NIK')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">Harap masukkan NIK karyawan.</p>
                     @enderror
                 </div>
 
                 <div class="mt-3">
                     <label for="foto_ktp">Foto KTP</label>
-                    <input type="file" class="form-control" name="image" id="image">
+                    <input type="file" class="form-control @error('image') is-invalid @enderror" name="image" id="image">
                     @error('image')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">Harap upload foto KTP karyawan.</p>
                     @enderror
                 </div>
 
@@ -77,7 +77,7 @@
                         @endforeach
                     </select>
                     @error('jabatan')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -100,34 +100,34 @@
                     </div>
 
                     @error('keahlian[]')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <div class="mt-3">
                     <label for="pokok">Pokok</label>
-                    <input type="text" class="form-control" name="pokok" id="pokok" placeholder="Pokok"
+                    <input type="text" class="form-control @error('pokok') is-invalid @enderror" name="pokok" id="pokok" placeholder="Pokok"
                         value="{{ old('pokok', $employee->pokok) }}">
                     @error('pokok')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">Harap masukkan nominal pokok karyawan.</p>
                     @enderror
                 </div>
 
                 <div class="mt-3">
                     <label for="lembur">Lembur</label>
-                    <input type="text" class="form-control" name="lembur" id="lembur" placeholder="Lembur"
+                    <input type="text" class="form-control @error('lembur') is-invalid @enderror" name="lembur" id="lembur" placeholder="Lembur"
                         value="{{ old('lembur', $employee->lembur) }}">
                     @error('lembur')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">Harap masukkan nominal lembur karyawan.</p>
                     @enderror
                 </div>
 
                 <div class="mt-3">
                     <label for="lembur_panjang">Lembur Panjang</label>
-                    <input type="text" class="form-control" name="lembur_panjang" id="lembur_panjang" placeholder="Lembur Panjang"
+                    <input type="text" class="form-control @error('lembur_panjang') is-invalid @enderror" name="lembur_panjang" id="lembur_panjang" placeholder="Lembur Panjang"
                         value="{{ old('lembur_panjang', $employee->lembur_panjang) }}">
                     @error('lembur_panjang')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">Harap masukkan nominal lembur panjang karyawan.</p>
                     @enderror
                 </div>
 
@@ -154,27 +154,18 @@
                     <label for="masuk">Masuk</label>
                     <input type="date" class="form-control" name="masuk" id="masuk"
                         value="{{ old('masuk', $employee->masuk) }}">
-                    @error('masuk')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 <div class="mt-3">
                     <label for="keluar">Keluar</label>
                     <input type="date" class="form-control" name="keluar" id="keluar"
                         value="{{ old('keluar', $employee->keluar) }}">
-                    @error('keluar')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 <div class="mt-3">
                     <label for="keterangan">Keterangan</label>
                     <input type="text" class="form-control" name="keterangan" id="keterangan" placeholder="Keterangan"
                         value="{{ old('keterangan', $employee->keterangan) }}">
-                    @error('keterangan')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 <div class="mt-3">
@@ -183,9 +174,6 @@
                         <option value="active" @if(old('status') == 'active') selected @endif>Aktif</option>
                         <option value="passive" @if(old('status') == 'passive') selected @endif>Tidak Aktif</option>
                     </select>
-                    @error('status')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 <div class="mt-4">

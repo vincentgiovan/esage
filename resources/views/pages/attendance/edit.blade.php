@@ -12,7 +12,7 @@
                     <input type="date" class="form-control @error('attendance_date') is-invalid @enderror" id="attendance_date" name="attendance_date" placeholder="attendance_date"
                         value="{{ old('attendance_date', $attendance->attendance_date) }}">
                     @error('attendance_date')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">Harap masukkan tanggal absensi.</p>
                     @enderror
                 </div>
 
@@ -25,7 +25,7 @@
                         @endforeach
                     </select>
                     @error('employee_id')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -38,7 +38,7 @@
                         @endforeach
                     </select>
                     @error('project_id')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -48,7 +48,7 @@
                         <input type="time" class="form-control @error('jam_masuk') is-invalid @enderror" id="jam_masuk" name="jam_masuk" placeholder="Input Index lembur panjang"
                             value="{{ old('jam_masuk', $attendance->jam_masuk) }}">
                         @error('jam_masuk')
-                            <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                            <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
 
@@ -56,7 +56,7 @@
                         <label for="jam_keluar">Jam Keluar</label>
                         <input type="time" class="form-control @error('jam_keluar') is-invalid @enderror" id="jam_keluar" name="jam_keluar" value="{{ $attendance->jam_keluar }}" >
                         @error('jam_keluar')
-                            <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                            <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
@@ -67,7 +67,7 @@
                         <input type="text" class="form-control @error('normal') is-invalid @enderror" id="normal" name="normal" placeholder="Input normal"
                             value="{{ old('normal', $attendance->normal) }}">
                         @error('normal')
-                            <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                            <p class="text-danger">Harap masukkan jumlah jam normal.</p>
                         @enderror
                     </div>
 
@@ -76,7 +76,7 @@
                         <input type="text" class="form-control @error('performa') is-invalid @enderror" id="performa" name="performa" placeholder="Input performa"
                             value="{{ old('performa', $attendance->performa) }}">
                         @error('performa')
-                            <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                            <p class="text-danger">Harap masukkan nilai minimal 0.</p>
                         @enderror
                     </div>
                 </div>
@@ -87,7 +87,7 @@
                         <input type="text" class="form-control @error('jam_lembur') is-invalid @enderror" id="jam_lembur" name="jam_lembur" placeholder="Input jam lembur"
                             value="{{ old('jam_lembur', $attendance->jam_lembur) }}">
                         @error('jam_lembur')
-                            <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                            <p class="text-danger">Harap masukkan jumlah jam lembur.</p>
                         @enderror
                     </div>
 
@@ -96,18 +96,15 @@
                         <input type="text" class="form-control @error('index_lembur_panjang') is-invalid @enderror" id="index_lembur_panjang" name="index_lembur_panjang" placeholder="Input Index lembur panjang"
                             value="{{ old('index_lembur_panjang', $attendance->index_lembur_panjang) }}">
                         @error('index_lembur_panjang')
-                            <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                            <p class="text-danger">Harap masukkan nilai minimal 0.</p>
                         @enderror
                     </div>
                 </div>
 
                 <div class="mt-3">
                     <label for="remark">Remark</label>
-                    <input type="text" class="form-control @error('remark') is-invalid @enderror" id="remark" name="remark" placeholder="Input remark"
+                    <input type="text" class="form-control" id="remark" name="remark" placeholder="Input remark"
                         value="{{ old('remark', $attendance->remark) }}">
-                    @error('remark')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 <div class="mt-3">

@@ -49,7 +49,7 @@ class DeliveryOrderController extends Controller{
         DeliveryOrder::create($validatedData);
 
         // Arahkan user kembali ke halaman pages/delivery-order/index.blade.php
-        return redirect(route("deliveryorder-index"))->with("successAddOrder", "Order added successfully!");
+        return redirect(route("deliveryorder-index"))->with("successAddOrder", "Berhasil menambahkan pengiriman baru.");
     }
 
     // Form edit data delivery order (kalo ubah list produk harus masuk ke cart)
@@ -81,7 +81,7 @@ class DeliveryOrderController extends Controller{
         DeliveryOrder::find($id)->update($validatedData);
 
         // Arahkan user kembali ke halaman pages/delivery-order/index.blade.php
-        return redirect(route("deliveryorder-index"))->with("successEditOrder", "Order editted successfully!");
+        return redirect(route("deliveryorder-index"))->with("successEditOrder", "Berhasil memperbaharui data pengiriman.");
     }
 
     // Hapus data delivery order
@@ -103,7 +103,7 @@ class DeliveryOrderController extends Controller{
         DeliveryOrder::find($id)->update(["archived" => 1]);
 
         // Arahkan user kembali ke halaman pages/delivery-order/index.blade.php
-        return redirect(route("deliveryorder-index"))->with("successDeleteOrder", "Order deleted successfully!");
+        return redirect(route("deliveryorder-index"))->with("successDeleteOrder", "Berhasil menghapus data pengiriman.");
     }
 
     // READ DATA FROM CSV
@@ -132,7 +132,7 @@ class DeliveryOrderController extends Controller{
         // Delete the stored file after processing
         Storage::delete($path);
 
-        return redirect(route("deliveryorder-index"))->with('successImportDevor', 'CSV file uploaded and delivery orders added successfully.');
+        return redirect(route("deliveryorder-index"))->with('successImportDevor', 'Berhasil membaca file CSV dan menambahkan data pengiriman.');
     }
 
     private function processdeliveryorderDataCsv($filePath)
@@ -208,7 +208,7 @@ class DeliveryOrderController extends Controller{
         // Delete the stored file after processing
         Storage::delete($path);
 
-        return redirect(route("deliveryorder-index"))->with('successImportDevor', 'CSV file uploaded and delivery orders added successfully.');
+        return redirect(route("deliveryorder-index"))->with('successImportDevor', 'Berhasil membaca file CSV dan menambahkan data pengiriman beserta barang-barang di dalamnya.');
     }
 
     private function processdeliveryorderDataCsv2($filePath)

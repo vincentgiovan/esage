@@ -53,7 +53,7 @@ class AccountController extends Controller
         }
 
         // Arahin user balik ke halaman account/index.blade.php
-        return redirect()->route('account.index')->with("successCreateAccount", "Successfully created new account");;
+        return redirect()->route('account.index')->with("successCreateAccount", "Berhasil membuat akun baru.");
     }
 
     // Buat edit akun sekaligus tunjukin data akun
@@ -103,7 +103,7 @@ class AccountController extends Controller
         $user->update($validatedData);
 
         // Arahin user balik ke halaman accounts/index.blade.php
-        return redirect()->route('account.index')->with("successEditAccount", "Successfully edited new account");
+        return redirect()->route('account.index')->with("successEditAccount", "Berhasil memperbaharui data akun.");
     }
 
     // Hapus akun
@@ -113,7 +113,7 @@ class AccountController extends Controller
         User::find($id)->update(["archived" => 1]);
 
         // Arahkan user kembali ke halaman accounts/index.blade.php
-        return redirect()->route('account.index')->with("successDeleteAccount", "Successfully deleted new account");
+        return redirect()->route('account.index')->with("successDeleteAccount", "Berhasil menghapus akun.");
     }
 
     public function import_user_form(){
@@ -142,7 +142,7 @@ class AccountController extends Controller
             $user->update(["email_verified_at" => null]);
         }
 
-        return back()->with("successEditProfile", "Profile edited successfully!");
+        return back()->with("successEditProfile", "Berhasil memperbaharui profil akun.");
     }
 
     public function visit_log(){

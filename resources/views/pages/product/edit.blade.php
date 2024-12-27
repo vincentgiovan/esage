@@ -21,30 +21,7 @@
                     <input type="text" class="form-control" name="product_name" id="product_name" placeholder="Nama Barang"
                         value="{{ old('product_name', $product->product_name) }}">
                     @error('product_name')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div class="mt-3">
-                    <label for="unit">Satuan</label>
-                    <input type="text" class="form-control" name="unit" id="unit" placeholder="Unit"
-                        value="{{ old('unit', $product->unit) }}">
-                    @error('unit')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div class="mt-3">
-                    <label for="status">Status</label>
-                    <select name="status" id="status" class="form-select">
-                        @foreach ($status as $s)
-                            <option value="{{ $s }}" @if ($product->status == $s) selected @endif>
-                                {{ $s }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('status')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">Harap masukkan nama barang.</p>
                     @enderror
                 </div>
 
@@ -53,33 +30,16 @@
                     <input type="text" class="form-control" name="variant" id="variant" placeholder="Variant"
                         value="{{ old('variant', $product->variant) }}">
                     @error('variant')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">Harap masukkan varian barang.</p>
                     @enderror
                 </div>
 
                 <div class="mt-3">
-                    <label for="fake_product_code">SKU</label>
-                    <input type="text" class="form-control" name="fake_product_code" id="fake_product_code" value="{{ old('product_code', $product->product_code) }}" disabled>
-                    @error('product_code')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div class="mt-3">
-                    <label for="price">Harga</label>
-                    <input type="number" class="form-control" name="price" id="price" placeholder="Harga"
-                        value="{{ old('price', $product->price) }}">
-                    @error('price')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div class="mt-3">
-                    <label for="markup">Markup</label>
-                    <input type="number" class="form-control" name="markup" id="markup" placeholder="Markup"
-                        value="{{ old('markup', $product->markup) }}">
-                    @error('markup')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                    <label for="unit">Satuan</label>
+                    <input type="text" class="form-control" name="unit" id="unit" placeholder="Unit"
+                        value="{{ old('unit', $product->unit) }}">
+                    @error('unit')
+                        <p class="text-danger">Harap masukkan satuan barang.</p>
                     @enderror
                 </div>
 
@@ -88,7 +48,38 @@
                     <input type="number" class="form-control" name="stock" id="stock" placeholder="Stok"
                         value="{{ old('stock', $product->stock) }}">
                     @error('stock')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">Harap masukkan nilai minimal 0.</p>
+                    @enderror
+                </div>
+
+                <div class="mt-3">
+                    <label for="status">Status</label>
+                    <select name="status" id="status" class="form-select">
+                        <option value="Ready" @if(old('status', $product->status) == 'Ready') selected @endif>Tersedia</option>
+                        <option value="Out of Stock" @if(old('status', $product->status) == 'Out of Stock') selected @endif>Stok kosong</option>
+                    </select>
+                </div>
+
+                <div class="mt-3">
+                    <label for="fake_product_code">SKU</label>
+                    <input type="text" class="form-control" name="fake_product_code" id="fake_product_code" value="{{ old('product_code', $product->product_code) }}" placeholder="(Dibuat otomatis oleh sistem)" disabled>
+                </div>
+
+                <div class="mt-3">
+                    <label for="price">Harga</label>
+                    <input type="number" class="form-control" name="price" id="price" placeholder="Harga"
+                        value="{{ old('price', $product->price) }}">
+                    @error('price')
+                        <p class="text-danger">Harap masukkan nilai minimal 1.</p>
+                    @enderror
+                </div>
+
+                <div class="mt-3">
+                    <label for="markup">Markup</label>
+                    <input type="number" class="form-control" name="markup" id="markup" placeholder="Markup"
+                        value="{{ old('markup', $product->markup) }}">
+                    @error('markup')
+                        <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
 
