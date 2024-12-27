@@ -6,6 +6,8 @@ use App\Models\Product;
 use App\Models\Purchase;
 use Illuminate\Http\Request;
 use App\Models\DeliveryOrder;
+use App\Models\PurchaseProduct;
+use Illuminate\Support\Facades\DB;
 use App\Models\DeliveryOrderProduct;
 use Illuminate\Support\Facades\Storage;
 
@@ -15,7 +17,7 @@ class DeliveryOrderProductController extends Controller
     public function view_items($id)
     {
         // Targetkan delivery order yang dipilih yang mau dicek list produknya
-        $deliveryorder = DeliveryOrder::where("id", $id)->first();
+        $deliveryorder = DeliveryOrder::find($id);
 
         // Ambil data produk yang tercatat dalam delivery order tersebut (tabel delivery_orders tidak menyimpan data produk karena relation many to many, jadi ambil data dari tabel perantara, ambil semua yang delivery_order_id-nya sama kayak delivery_order yang dipilih)
         $do = DeliveryOrderProduct::where("delivery_order_id", $deliveryorder->id)->get();
@@ -32,12 +34,41 @@ class DeliveryOrderProductController extends Controller
     public function add_existing_product($id)
     {
         // Targetkan delivery order yang cart produknya ingin ditambahkan
-        $deliveryorder = DeliveryOrder::where("id", $id)->first();
+        $deliveryorder = DeliveryOrder::find($id);
 
         // Tampilkan halaman pages/transit/deliveryorderproduct/adddeliveryorder.blade.php beserta data yang diperlukan di blade-nya
         return view("pages.transit.deliveryorderproduct.adddeliveryorder", [
             "deliveryorder" => $deliveryorder, // data delivery order yang ditargetkan
-            "products" => Product::all() // list semua produk terdaftar untuk dropdown/select produk
+            // "products" => Product::where('products.archived', 0)
+            // ->orderBy('products.product_name', 'asc') // Group by name first
+            // ->orderBy('products.variant', 'asc') // Then by variant
+            // ->orderByRaw("CASE WHEN products.is_returned = 1 THEN 1 ELSE 0 END") // Returned products at the bottom
+            // ->get()
+            "products" => Product::select('products.*', DB::raw('COALESCE(MIN(purchases.purchase_date), products.created_at) as ordering_date'))
+            ->leftJoin('purchase_products', 'products.id', '=', 'purchase_products.product_id') // Join with purchase_products
+            ->leftJoin('purchases', 'purchase_products.purchase_id', '=', 'purchases.id') // Join with purchases
+            ->where('products.archived', 0) // Exclude archived products
+            ->groupBy(
+                'products.id',
+                'products.product_name',
+                'products.variant',
+                'products.product_code',
+                'products.price',
+                'products.discount',
+                'products.unit',
+                'products.stock',
+                'products.status',
+                'products.markup',
+                'products.is_returned',
+                'products.created_at',
+                'products.updated_at',
+                'products.archived'
+            )
+            ->orderBy('products.product_name', 'asc') // Group by product name
+            ->orderBy('products.variant', 'asc') // Then by variant
+            ->orderByRaw("CASE WHEN products.is_returned = 'no' THEN 1 ELSE 0 END") // Place returned products at the bottom
+            ->orderBy('ordering_date', 'asc') // Order by oldest purchase date or created_at
+            ->get()
         ]);
     }
 
@@ -51,7 +82,7 @@ class DeliveryOrderProductController extends Controller
         ]);
 
         // Targetkan delivery order yang cart produknya ingin ditambahkan
-        $deliveryorder = DeliveryOrder::where("id",$id)->first();
+        $deliveryorder = DeliveryOrder::find($id);
 
         // Untuk setiap input produk yang dimasukkan, lakukan hal ini:
         foreach($request->products as $index=>$product_id){
@@ -63,7 +94,7 @@ class DeliveryOrderProductController extends Controller
             ]);
 
             // Karena delivery order sifatnya mengurangi stok produk, maka update stok product di tabel aslinya:
-            $oldstock = Product::where("id",$product_id)->first()->stock; // Ambil stok lama produk
+            $oldstock = Product::find($product_id)->stock; // Ambil stok lama produk
             $newstock = $oldstock - $request->quantities[$index]; // Stok yang baru
 
             $toUpdate = ["stock" => $newstock]; // Simpen kolom data yang mau di-update by default
@@ -71,18 +102,18 @@ class DeliveryOrderProductController extends Controller
                 $toUpdate["status"] = "Out of Stock";
             }
 
-            Product::where("id",$product_id)->update($toUpdate); // Update datanya
+            Product::find($product_id)->update($toUpdate); // Update datanya
         };
 
         // Arahkan user kembali ke halaman pages/transit/deliveryorderproduct/index.blade.php
-        return redirect(route("deliveryorderproduct-viewitem", $deliveryorder->id))->with("successAddProduct", "Product Added successfully!");
+        return redirect(route("deliveryorderproduct-viewitem", $deliveryorder->id))->with("successAddProduct", "Berhasil menambahkan barang ke pengiriman.");
     }
 
     // Hapus produk dari cart delivery order
     public function destroy($id, $did)
     {
         // Ambil data dari tabel delivery_order_products yang punya id produk dan delivery order yang sama dengan product yang mau dihapus dari cart delivery order yang diinginkan
-        $do = DeliveryOrderProduct::where("id", $did)->first();
+        $do = DeliveryOrderProduct::find($did);
 
         // Kembalikan stok produk ke awal mula:
         $oldstock = $do->product->stock; // Ambil stok lama
@@ -91,13 +122,13 @@ class DeliveryOrderProductController extends Controller
         if($newstock > 0 && $do->product->status == "Out of Stock"){
             $toUpdate["status"] = "Ready";
         }
-        Product::where("id", $do->product->id)->update($toUpdate); // Update stok product di tabel aslinya
+        Product::find($do->product->id)->update($toUpdate); // Update stok product di tabel aslinya
 
         // Kalau udah baru hapus data delivery order product-nya
-        DeliveryOrderProduct::destroy("id", $do->id);
+        DeliveryOrderProduct::find($do->id)->delete();
 
         // Arahkan user kembali ke halaman pages/transit/deliveryorderproduct/index.blade.php
-        return redirect(route("deliveryorderproduct-viewitem", $id))->with("successDeleteProduct", "Product deleted successfully!");
+        return redirect(route("deliveryorderproduct-viewitem", $id))->with("successDeleteProduct", "Berhasil menghapus barang dari pengiriman.");
     }
 
     // READ DATA FROM CSV
@@ -122,7 +153,7 @@ class DeliveryOrderProductController extends Controller
         // Delete the stored file after processing
         Storage::delete($path);
 
-        return redirect(route("deliveryorderproduct-viewitem", $id))->with('success', 'CSV file uploaded and products added successfully.');
+        return redirect(route("deliveryorderproduct-viewitem", $id))->with('success', 'Berhasil membaca file CSV dan menambahkan barang-barang ke pengiriman.');
     }
 
     private function processDeliveryOrderProductDataCsv($filePath, $delivery_order_id)
@@ -148,7 +179,7 @@ class DeliveryOrderProductController extends Controller
                     if($product->count()){
                         $prod = $product->first();
                         $old_stock = $prod->stock;
-                        Product::where("id", $prod->id)->update(["stock" => $old_stock - $data[1]]);
+                        Product::find($prod->id)->update(["stock" => $old_stock - $data[1]]);
 
                         DeliveryOrderProduct::create([
                             "product_id" => $product->first()->id,

@@ -20,13 +20,14 @@ use PhpParser\Node\Stmt\Return_;
 class ReturnItemController extends Controller {
     public function index(){
         return view("pages.return-item.index", [
-            "return_items" => ReturnItem::all()
+            "return_items" => ReturnItem::where('archived', 0)->get()
         ]);
     }
 
     public function create(){
         return view("pages.return-item.create", [
-            "delivery_orders" => DeliveryOrder::all()
+            "projects" => Project::where('archived', 0)->get(),
+            "products" => Product::where('archived', 0)->get()
         ]);
     }
 
@@ -35,7 +36,7 @@ class ReturnItemController extends Controller {
             "product" => "required",
             "status" => "required",
             "PIC" => "required|min:3",
-            "devor_id" => "required",
+            "project" => "required",
             "image" => "required|image",
             "qty" => "required|numeric|min:0|not_in:0"
         ]);
@@ -43,7 +44,7 @@ class ReturnItemController extends Controller {
         try {
             DB::beginTransaction();
 
-            $devorprod = DeliveryOrderProduct::where("product_id", $validated_data["product"])->where("delivery_order_id", $validated_data["devor_id"])->first();
+            $project = Project::find($validated_data["project"]);
             $product = Product::find($validated_data["product"]);
 
             if($request->file("image")){
@@ -94,7 +95,7 @@ class ReturnItemController extends Controller {
             }
 
             ReturnItem::create([
-                "delivery_order_product_id" => $devorprod->id,
+                "project_id" => $project->id,
                 "product_id" => $aidi,
                 "foto" => $validated_data["foto"],
                 "PIC" => $validated_data["PIC"],
@@ -110,13 +111,14 @@ class ReturnItemController extends Controller {
             return $e;
         }
 
-        return redirect(route("returnitem-index"))->with("successAddReturnItem", "New return item data successfully added!");
+        return redirect(route("returnitem-index"))->with("successAddReturnItem", "Berhasil menambahkan data pengembalian barang baru.");
     }
 
     public function edit($id){
         return view("pages.return-item.edit", [
             "return_item" => ReturnItem::find($id),
-            "delivery_orders" => DeliveryOrder::all()
+            "projects" => Project::where('archived', 0)->get(),
+            "products" => Product::where('archived', 0)->get()
         ]);
     }
 
@@ -149,7 +151,7 @@ class ReturnItemController extends Controller {
 
         $return_item->update($validated_data);
 
-        return redirect(route("returnitem-index"))->with("successEditReturnItem", "Return item data edited succesfully!");
+        return redirect(route("returnitem-index"))->with("successEditReturnItem", "Berhasil memperbaharui data pengembalian barang.");
     }
 
     public function destroy($id){
@@ -159,14 +161,14 @@ class ReturnItemController extends Controller {
         if($return_item->quantity < $existingReturnedProduct->stock){
             $prevStock = $existingReturnedProduct->stock;
             $existingReturnedProduct->update(["stock" => $prevStock - $return_item->quantity]);
-            $return_item->delete();
+            $return_item->update(["archived" => 1]);
         }
         else {
-            $existingReturnedProduct->delete();
-            $return_item->delete();
+            $existingReturnedProduct->update(["archived" => 1]);
+            $return_item->update(["archived" => 1]);
         }
 
-        return redirect(route("returnitem-index"))->with("successDeleteReturnItem", "Return item data deleted successfully");
+        return redirect(route("returnitem-index"))->with("successDeleteReturnItem", "Berhasil menghapus data pengembalian barang.");
     }
 }
 

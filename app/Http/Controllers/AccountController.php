@@ -16,10 +16,16 @@ class AccountController extends Controller
     public function index()
     {
         // Ambil semua data akun dari tabel user
-        $users = User::all();
+        $users = User::where('archived', 0)->get();
 
         // Tampilkan halaman account/index.blade.php dan kirimkan data semua akun ke blade-nya
         return view('accounts.index', compact('users'));
+    }
+
+    public function create(){
+        return view('accounts.create', [
+            "employees" => Employee::where('archived', 0)->orderBy('nama', 'asc')->get()
+        ]);
     }
 
     // Simpan data akun baru ke database
@@ -30,19 +36,24 @@ class AccountController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            "role" => "required"
+            "role" => "required",
+            'employee' => 'nullable'
         ]);
 
         // Kalo validasi lolos berarti langsung bikin dan tambahin datanya ke tabel users
-        $new_user = User::create([
+        User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
         ]);
 
+        if($request->employee){
+            Employee::find($request->employee)->update(['user_id' => $request->employee]);
+        }
+
         // Arahin user balik ke halaman account/index.blade.php
-        return redirect()->route('account.index')->with("successCreateAccount", "Successfully created new account");;
+        return redirect()->route('account.index')->with("successCreateAccount", "Berhasil membuat akun baru.");
     }
 
     // Buat edit akun sekaligus tunjukin data akun
@@ -51,20 +62,24 @@ class AccountController extends Controller
         // Ambil data akun yang dipilih dari database
         $user = User::findOrFail($id);
 
-        // Tampilkan halaman accounts/show.blade.php dan kirim data akun tersebut ke blade-nya
-        return view("accounts.show", ["user" => $user]);
+        // Tampilkan halaman accounts/edit.blade.php dan kirim data akun tersebut ke blade-nya
+        return view("accounts.edit", [
+            "user" => $user,
+            "employees" => Employee::where('archived', 0)->orderBy('nama', 'asc')->get()
+        ]);
     }
 
     // Simpan perubahan data akun ke database
     public function update(Request $request, $id)
     {
         // Targetkan data akun mana yang mau di-update berdasarkan yang dipilih di halaman sebelumnya
-        $user = User::where("id", $id);
+        $user = User::find($id);
 
         // Bikin aturan dasar validasinya (setidaknya nama sama email harus diisi pas form edit di-submit)
         $validationRule = [
             'name' => 'required|string|max:255',
-            "email" => 'required|string|email|max:255'
+            "email" => 'required|string|email|max:255',
+            'employee' => 'nullable'
         ];
 
         // Aturan validasi opsional, berlaku jika input password dan konfirmasinya diisi
@@ -80,24 +95,25 @@ class AccountController extends Controller
             $validatedData["password"] = Hash::make($validatedData["password"]);
         }
 
+        if($request->employee){
+            Employee::find($request->employee)->update(['user_id' => $request->employee]);
+        }
+
         // Kalo semuanya udah baru disimpan perubahannya di tabel users
         $user->update($validatedData);
 
         // Arahin user balik ke halaman accounts/index.blade.php
-        return redirect()->route('account.index')->with("successEditAccount", "Successfully edited new account");
+        return redirect()->route('account.index')->with("successEditAccount", "Berhasil memperbaharui data akun.");
     }
 
     // Hapus akun
     public function destroy($id)
     {
         // Targetkan data akun yang mau dihapus sesuai dengan akun mana yang dipilih di halaman sebelumnya
-        $user = User::findOrFail($id);
-
-        // Hapus datanya dari database
-        $user->delete();
+        User::find($id)->update(["archived" => 1]);
 
         // Arahkan user kembali ke halaman accounts/index.blade.php
-        return redirect()->route('account.index')->with("successDeleteAccount", "Successfully deleted new account");
+        return redirect()->route('account.index')->with("successDeleteAccount", "Berhasil menghapus akun.");
     }
 
     public function import_user_form(){
@@ -126,7 +142,7 @@ class AccountController extends Controller
             $user->update(["email_verified_at" => null]);
         }
 
-        return back()->with("successEditProfile", "Profile edited successfully!");
+        return back()->with("successEditProfile", "Berhasil memperbaharui profil akun.");
     }
 
     public function visit_log(){

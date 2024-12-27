@@ -36,11 +36,11 @@
         <div class="overflow-x-auto">
             <table class="w-100">
                 <tr>
-                    <th>Nomor</th>
-                    <th>Timestamp</th>
+                    <th>No</th>
+                    <th>Waktu</th>
                     <th>User</th>
                     <th>IP Address</th>
-                    <th>Location</th>
+                    <th>Lokasi</th>
                     <th>Device</th>
                     <th>OS</th>
                 </tr>

@@ -6,7 +6,7 @@
 
 @section('content')
     <x-container-middle>
-        <div class="container bg-white p-5 rounded-4 mt-4 border border-1 card">
+        <div class="container bg-white py-4 px-5 rounded-4 mt-4 border border-1 card">
 
             <h2>Edit Salary Data</h2>
 
@@ -34,12 +34,12 @@
                     <input type="text" class="form-control" name="keterangan" id="keterangan" placeholder="Keterangan"
                         value="{{ old('keterangan', $salary->keterangan) }}">
                     @error('keterangan')
-                        <p style="color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <div class="mt-3">
-                    <input type="submit" class="btn btn-success px-3 py-1" value="Edit">
+                    <input type="submit" class="btn btn-success px-3 py-1" value="Simpan Perubahan">
                 </div>
             </form>
         </div>

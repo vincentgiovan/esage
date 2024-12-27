@@ -4,17 +4,28 @@
     <x-container>
         <br>
         <div class="w-100 d-flex justify-content-between align-items-center">
-            <h2>Sage Employees</h2>
-            <a href="{{ route('employee-manageform') }}" class="btn btn-primary">Positions & Specialities</a>
+            <h2>Data Pegawai</h2>
+            <a href="{{ route('employee-manageform') }}" class="btn btn-primary">Atur Jabatan dan Keahlian</a>
         </div>
         <hr>
 
-        @if (session()->has('success-edit-employee'))
-            <p class="text-success fw-bold">{{ session('success-edit-employee') }}</p>
+        @if (session()->has('success-add-employee-data'))
+            <p class="text-success fw-bold">{{ session('success-add-employee-data') }}</p>
+        @elseif (session()->has('success-edit-employee-data'))
+            <p class="text-success fw-bold">{{ session('success-edit-employee-data') }}</p>
         @endif
 
-        <div class="mt-4">
-            <a href="{{ route('employee-create') }}" class="btn btn-primary"><i class="bi bi-plus-square"></i> New Employee Data</a>
+        <div class="mt-4 d-flex w-100 justify-content-between">
+            <a href="{{ route('employee-create') }}" class="btn btn-primary"><i class="bi bi-plus-square"></i> Data Pegawai Baru</a>
+
+            <form action="{{ route('employee-index') }}" class="d-flex gap-3 items-center">
+                <select type="text" class="form-select" name="status">
+                    <option value="">Semua</option>
+                    <option value="active" @if(request('status') == 'active') selected @endif>Aktif</option>
+                    <option value="passive" @if(request('status') == 'passive') selected @endif>Tidak Aktif</option>
+                </select>
+                <button class="btn btn-primary" type="submit">Filter</button>
+            </form>
         </div>
 
         <div class="overflow-x-auto mt-3">
@@ -26,11 +37,10 @@
                     <th>Jabatan</th>
                     <th>Pokok</th>
                     <th>Lembur</th>
-                    <th>L.Panjang</th>
-                    <th>Performa</th>
-                    <th>Payroll</th>
-                    <th>Kasbon</th>
-                    <th>Actions</th>
+                    <th>Lembur Panjang</th>
+                    <th>Status</th>
+                    <th>Akun</th>
+                    <th>Aksi</th>
                 </tr>
 
                 @foreach ($employees as $e)
@@ -42,9 +52,15 @@
                         <td>{{ __("Rp " . number_format($e->pokok, 2, ',', '.')) }}</td>
                         <td>{{ __("Rp " . number_format($e->lembur, 2, ',', '.')) }}</td>
                         <td>{{ __("Rp " . number_format($e->lembur_panjang, 2, ',', '.')) }}</td>
-                        <td>{{ __("Rp " . number_format($e->performa, 2, ',', '.')) }}</td>
-                        <td>{{ ($e->payroll == "on")? "Ya" : "Tidak" }}</td>
-                        <td>{{ __(("Rp " .  number_format($e->kasbon, 2, ',', '.'))) }}</td>
+                        {{-- <td>{{ ($e->payroll == "on")? "Ya" : "Tidak" }}</td> --}}
+                        <td class="fw-semibold {{ $e->status == 'active'? 'text-primary' : 'text-danger' }}">{{ ucwords($e->status) }}</td>
+                        <td>
+                            @if($e->user_id)
+                                <i class="bi bi-check-circle-fill fs-4" style="color: green"></i>
+                            @else
+                                <i class="bi bi-x-circle-fill fs-4" style="color: red"></i>
+                            @endif
+                        </td>
                         <td>
                             <div class="d-flex gap-2 w-100">
                                 <a href="{{ route('employee-show', $e->id) }}" class="btn btn-success text-white"

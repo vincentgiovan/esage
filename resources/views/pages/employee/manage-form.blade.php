@@ -3,7 +3,7 @@
 @section("content")
     <x-container>
         <br>
-        <h1>Sage Employees - Manage Form</h1>
+        <h2>Sage Employees - Manage Form</h2>
 
         @if (session()->has('successAddPosition'))
             <p class="text-success fw-bold">{{ session('successAddPosition') }}</p>
@@ -33,7 +33,7 @@
                     <th class="border border-1 border-secondary ">#</th>
                     <th class="border border-1 border-secondary ">Position Name</th>
                     <th class="border border-1 border-secondary ">Availability</th>
-                    <th class="border border-1 border-secondary ">Actions</th>
+                    <th class="border border-1 border-secondary ">Aksi</th>
                 </tr>
 
                 @foreach ($positions as $p)
@@ -78,7 +78,7 @@
                     <th class="border border-1 border-secondary ">#</th>
                     <th class="border border-1 border-secondary ">Speciality Name</th>
                     <th class="border border-1 border-secondary ">Availability</th>
-                    <th class="border border-1 border-secondary ">Actions</th>
+                    <th class="border border-1 border-secondary ">Aksi</th>
                 </tr>
 
                 @foreach ($specialities as $s)

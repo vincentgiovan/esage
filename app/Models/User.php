@@ -42,7 +42,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Todo::class);
     }
 
-    public function employee(){
+    public function employee_data(){
         return $this->hasOne(Employee::class);
     }
 

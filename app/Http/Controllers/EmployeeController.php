@@ -14,7 +14,7 @@ class EmployeeController extends Controller
 {
     public function index(){
         return view("pages.employee.index", [
-            "employees" => Employee::all()
+            "employees" => Employee::filter(request(['status']))->orderByRaw('CASE WHEN status = "active" THEN 0 ELSE 1 END')->get()
         ]);
     }
 
@@ -34,16 +34,15 @@ class EmployeeController extends Controller
     public function store(Request $request){
         $validated_data = $request->validate([
             "nama" => "required|min:3",
-            "NIK" => "nullable|min:16",
-            "image" => "nullable|file|image|max:4096",
+            "NIK" => "required|min:16",
+            "image" => "required|file|image|max:4096",
             "kalkulasi_gaji" => "required",
-            "jabatan" => "nullable",
-            "pokok" => "nullable|numeric|min:0",
-            "lembur" => "nullable|numeric|min:0",
-            "lembur_panjang" => "nullable|numeric|min:0",
-            "performa" => "nullable|numeric|min:0",
-            "kasbon" => "nullable|numeric|min:0",
-            "payroll" => "required",
+            "jabatan" => "required",
+            "pokok" => "required|numeric|min:0",
+            "lembur" => "required|numeric|min:0",
+            "lembur_panjang" => "required|numeric|min:0",
+            // "kasbon" => "nullable|numeric|min:0",
+            // "payroll" => "required",
             "masuk" => "nullable|date",
             "keluar" => "nullable|date",
             "keterangan" => "nullable",
@@ -66,7 +65,7 @@ class EmployeeController extends Controller
 
         Employee::create($validated_data);
 
-        return redirect(route("employee-index"))->with("success-add-employee-data", "Employee data added successfully");
+        return redirect(route("employee-index"))->with("success-add-employee-data", "Berhasil menambahkan data pegawai baru.");
     }
 
     public function edit($id){
@@ -80,19 +79,19 @@ class EmployeeController extends Controller
     public function update(Request $request, $id){
         $validated_data = $request->validate([
             "nama" => "required|min:3",
-            "NIK" => "nullable|min:16",
+            "NIK" => "required|min:16",
             "image" => "nullable|file|image|max:4096",
             "kalkulasi_gaji" => "required",
-            "jabatan" => "nullable",
-            "pokok" => "nullable|numeric|min:0",
-            "lembur" => "nullable|numeric|min:0",
-            "lembur_panjang" => "nullable|numeric|min:0",
-            "performa" => "nullable|numeric|min:0",
-            "kasbon" => "nullable|numeric|min:0",
-            "payroll" => "required",
+            "jabatan" => "required",
+            "pokok" => "required|numeric|min:0",
+            "lembur" => "required|numeric|min:0",
+            "lembur_panjang" => "required|numeric|min:0",
+            // "kasbon" => "nullable|numeric|min:0",
+            // "payroll" => "required",
             "masuk" => "nullable|date",
             "keluar" => "nullable|date",
             "keterangan" => "nullable",
+            "status" => "required"
         ]);
 
         $employee = Employee::find($id);
@@ -119,7 +118,7 @@ class EmployeeController extends Controller
 
         $employee->update($validated_data);
 
-        return redirect(route("employee-index"))->with("success-edit-employee-data", "Employee data edited successfully");
+        return redirect(route("employee-index"))->with("success-edit-employee-data", "Berhasil memperbarui data pegawai.");
     }
 
     public function manage_form(){
@@ -134,7 +133,7 @@ class EmployeeController extends Controller
 
         Position::create(["position_name" => $request->position_name, "status" => "on"]);
 
-        return back()->with("successAddPosition", "Position added successfully!");
+        return back()->with("successAddPosition", "Berhasil menambahkan pilihan posisi baru.");
     }
 
     public function manage_form_add_speciality(Request $request){
@@ -142,31 +141,31 @@ class EmployeeController extends Controller
 
         Speciality::create(["speciality_name" => $request->speciality_name, "status" => "on"]);
 
-        return back()->with("successAddSpeciality", "Speciality added successfully!");
+        return back()->with("successAddSpeciality", "Berhasil menambahkan pilihan keahlian baru.");
     }
 
     public function manage_form_edit_position(Request $request, $id){
         Position::find($id)->update(["status" => $request->status]);
 
-        return back()->with("successEditPosition", "Position edited successfully!");
+        return back()->with("successEditPosition", "Berhasil memperbarui status pilihan posisi.");
     }
 
     public function manage_form_edit_speciality(Request $request, $id){
         Speciality::find($id)->update(["status" => $request->status]);
 
-        return back()->with("successEditSpeciality", "Speciality edited successfully!");
+        return back()->with("successEditSpeciality", "Berhasil memperbarui status pilihan keahlian.");
     }
 
     public function manage_form_delete_position($id){
-        Position::find($id)->delete();
+        Position::find($id)->update(["archived" => 1]);
 
-        return back()->with("successDeletePosition", "Position deleted successfully!");
+        return back()->with("successDeletePosition", "Berhasil menghapus pilihan posisi.");
     }
 
     public function manage_form_delete_speciality($id){
-        Speciality::find($id)->delete();
+        Speciality::find($id)->update(["archived" => 1]);
 
-        return back()->with("successDeletePosition", "Position deleted successfully!");
+        return back()->with("successDeletePosition", "Berhasil menghapus pilihan keahlian.");
     }
 
 }

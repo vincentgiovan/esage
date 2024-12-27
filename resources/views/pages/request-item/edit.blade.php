@@ -3,40 +3,40 @@
 @section("content")
 
     <x-container-middle>
-        <div class="container bg-white rounded-4 p-5">
+        <div class="container bg-white rounded-4 mt-4">
 
             <h2>Edit Request Items</h2>
 
             <div>
                 <div class="p-3 border border-2 rounded-4 mt-4">
-                    <h5>Target Project</h5>
+                    <h5>Proyek Target</h5>
                     <hr>
                     <div class="mt-3">
-                        <label for="request_date">Request Date</label>
+                        <label for="request_date">Tanggal Request</label>
                         <input type="date" id="request_date" class="form-control" placeholder="Input request_date" value="{{ old('request_date', $request_item->request_date) }}"/>
-                        <p style="color: red; font-size: 10px;" id="err-request-date"></p>
+                        <p class="text-danger" id="err-request-date"></p>
                     </div>
 
                     <div class="mt-3">
-                        <label for="select-project-dropdown">Project</label>
+                        <label for="select-project-dropdown">Nama Proyek</label>
                         <select name="project_name" class="form-select" id="select-project-dropdown">
                             @foreach ($projects as $project)
                                 <option value="{{ $project->id }}{{-- $project->toJson() --}}" @if ($project->project_name == old("project_name", $request_item->project->project_name)) selected @endif>{{ $project->project_name }} ({{ $project->location }}) (PIC :  {{ $project->PIC }})</option>
                             @endforeach
                         </select>
-                        <p style="color: red; font-size: 10px;" id="err-project-name"></p>
+                        <p class="text-danger" id="err-project-name"></p>
                     </div>
 
                     <div class="mt-3">
                         <label for="PIC">PIC</label>
                         <input type="text" id="PIC" class="form-control" placeholder="Input PIC" value="{{ old('PIC', $request_item->PIC) }}"/>
-                        <p style="color: red; font-size: 10px;" id="err-pic"></p>
+                        <p class="text-danger" id="err-pic"></p>
                     </div>
 
                     <div class="mt-3">
-                        <label for="cart_notes">Cart Notes</label>
+                        <label for="cart_notes">Catatan</label>
                         <textarea id="cart_notes" class="form-control" name="cart_notes" rows="4">{{ $request_item->notes }}</textarea>
-                        <p style="color: red; font-size: 10px;" id="err-cart-notes"></p>
+                        <p class="text-danger" id="err-cart-notes"></p>
                     </div>
                 </div>
 
@@ -44,38 +44,38 @@
                     <h5>Product List</h5>
                     <hr>
                     <div class="mt-3">
-                        <label for="select-product-dropdown">Nama Produk</label>
-                        <select name="product_name" class="form-select" id="select-product-dropdown">
+                        <label for="select-product-dropdown">Nama Barang</label>
+                        <select name="product_name" class="form-select select2" id="select-product-dropdown">
                             @foreach ($products as $product)
                                 <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} ({{ $product->variant }}) (Stok :  {{ $product->stock }})</option>
                             @endforeach
                         </select>
-                        <p style="color: red; font-size: 10px;" id="err-product-name"></p>
+                        <p class="text-danger" id="err-product-name"></p>
                     </div>
 
                     <div class="mt-3">
                         <label for="quantity">Jumlah</label>
                         <input type="number" class="form-control" name="quantity" id="quantity"  placeholder="Quantity" value = "{{ old("quantity")}}">
-                        <p style="color: red; font-size: 10px;" id="errQuantity"></p>
+                        <p class="text-danger" id="errQuantity"></p>
                     </div>
 
                     <div class="mt-3">
-                        <input type="button" id="addbutton" class="btn btn-primary px-3 py-1" value="Add Items">
+                        <input type="button" id="addbutton" class="btn btn-primary px-3 py-1" value="Tambah">
                     </div>
 
                     <div class="overflow-x-auto">
                         <table class="w-100 mt-4">
                             <thead>
-                                <th>Nama Barang & Variant</th>
-                                <th>Quantity</th>
-                                <th>Action</th>
+                                <th>Nama Barang & Varian</th>
+                                <th>Jumlah</th>
+                                <th>Aksi</th>
                             </thead>
                             <tbody id="isibody">
                                 @foreach($rip as $r)
                                     <tr>
                                         <td>{{ $r->product->product_name }}</td>
                                         <td>{{ $r->quantity }}</td>
-                                        <td><button class="btn btn-danger remove-row" data-target="{{ $r->id }}">Remove</button></td>
+                                        <td><button class="btn btn-danger remove-row" data-target="{{ $r->id }}"><i class="bi bi-trash3"></i></button></td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -95,7 +95,7 @@
                 @endforeach
 
                 <div class="mt-3">
-                    <input type="submit" class="btn btn-success px-3 py-1" value="Proceed">
+                    <input type="submit" class="btn btn-success px-3 py-1" value="Simpan Perubahan">
                 </div>
             </form>
         </div>
@@ -122,8 +122,8 @@
                 const tbody = document.getElementById("isibody");
 
                 // Targetkan elemen-elemen input data purchase produk yang diperlukan (buat nanti diambil nilainya)
-                const input5 = document.getElementById("select-product-dropdown");
-                const input6 = document.getElementById("quantity");
+                const inpProduct = document.getElementById("select-product-dropdown");
+                const inpQty = document.getElementById("quantity");
 
                 // Targetkan elemen-elemen error message (buat nanti display error message)
                 const errProductName = document.getElementById("err-product-name");
@@ -132,22 +132,24 @@
                 // Hilangkan error message dan mark merah pada input dan error message sebelum validasi
                 errProductName.innerText = "";
                 errQuantity.innerText = "";
-                input5.style.border = "none";
-                input6.style.border = "none";
+                inpProduct.classList.remove('is-invalid');
+                inpQty.classList.remove('is-invalid');
+                $(inpQty).removeClass('is-invalid');
 
                 // Validasi input
                 let inputAman = true; // Status apakah sudah terjadi kesalahan input atau belum
 
-                if(!input5.value){
-                    input5.style.border = "solid 1px red";
+                if(!inpProduct.value){
+                    inpProduct.classList.add('is-invalid');
                     errProductName.innerText = "Invalid input :3";
 
                     inputAman = false;
                 }
 
-                if(!input6.value && input6.value <= 0){
-                    input6.style.border = "solid 1px red";
-                    errQuantity.innerText = "Invalid input :3";
+                if(!inpQty.value || inpQty.value < 1){
+                    inpQty.classList.add('is-invalid');
+                    $(inpQty).addClass('is-invalid');
+                    errQuantity.innerText = "Harap masukkan nilai minimal 1.";
 
                     inputAman = false;
                 }
@@ -160,60 +162,60 @@
                 // Generate elemen <tr> dan <td> untuk membuat row tabel display
                 const newRow = document.createElement("tr");
                 const column1 = document.createElement("td");
-                const column4 = document.createElement("td");
-                const column5 = document.createElement("td");
+                const column2 = document.createElement("td");
+                const column3 = document.createElement("td");
 
-                const converted = JSON.parse(input5.value); // value dari option yang dipilih itu konversi collection Laravel jadi JSON, tapi bentuknya masih teks, jadi perlu dikonversi ke format JSON beneran dulu biar lebih enak diolah
+                const converted = JSON.parse(inpProduct.value); // value dari option yang dipilih itu konversi collection Laravel jadi JSON, tapi bentuknya masih teks, jadi perlu dikonversi ke format JSON beneran dulu biar lebih enak diolah
                 column1.innerText = `${converted.product_name} (${converted.variant})`; // format teks yang tampil di kolom nama produk menjadi "nama_product (varian) dan tampilkan di row data baru di kolom nama produk"
-                column4.innerText = input6.value; // ambil nilai dari input quantity dan tampilkan di kolom quantity
+                column2.innerText = inpQty.value; // ambil nilai dari input quantity dan tampilkan di kolom quantity
 
                 // Buat tombol merah tong sampah buat nanti dipake buat hapus 1 row data
                 const deleteButton = document.createElement("button");
                 deleteButton.classList.add("btn", "btn-danger");
                 deleteButton.setAttribute("type", "button");
-                deleteButton.innerText = "Remove";
-                column5.appendChild(deleteButton); // display tombol merah di kolom action
+                deleteButton.innerHTML = '<i class="bi bi-trash3"></i>';
+                column3.appendChild(deleteButton); // display tombol merah di kolom action
 
                 // Gabungkan semua kolom data menjadi 1 row data
                 newRow.appendChild(column1);
-                newRow.appendChild(column4);
-                newRow.appendChild(column5);
+                newRow.appendChild(column2);
+                newRow.appendChild(column3);
 
                 // Tambahkan row data baru ke tabel untuk di-display
                 tbody.appendChild(newRow);
 
                 // Generate hidden input untuk kirim data ke Laravel (bikin something like <input type="hidden" name="variabel_data[]" value="nilai_dari_input"> buat setiap input yang ada)
-                const susInput = document.createElement("input");
-                susInput.setAttribute("type", "hidden");
-                susInput.setAttribute("name", "products[]");
-                susInput.setAttribute("value", converted.id);
+                const susInpProd = document.createElement("input");
+                susInpProd.setAttribute("type", "hidden");
+                susInpProd.setAttribute("name", "products[]");
+                susInpProd.setAttribute("value", converted.id);
 
-                const susInput3 = document.createElement("input");
-                susInput3.setAttribute("type", "hidden");
-                susInput3.setAttribute("name", "quantities[]");
-                susInput3.setAttribute("value", input6.value);
+                const susInpQty = document.createElement("input");
+                susInpQty.setAttribute("type", "hidden");
+                susInpQty.setAttribute("name", "quantities[]");
+                susInpQty.setAttribute("value", inpQty.value);
 
                 // Tambahkan semua hidden input ke form submit
-                confirmationForm.appendChild(susInput);
-                confirmationForm.appendChild(susInput3);
+                confirmationForm.appendChild(susInpProd);
+                confirmationForm.appendChild(susInpQty);
 
                 // Kalau tombol merah diklik maka lakukan:
                 deleteButton.addEventListener("click", function(){
                     tbody.removeChild(newRow); // Hapus row data yang ada di tabel
 
                     // Hilangkan hidden input-nya juga
-                    confirmationForm.removeChild(susInput);
-                    confirmationForm.removeChild(susInput3);
+                    confirmationForm.removeChild(susInpProd);
+                    confirmationForm.removeChild(susInpQty);
                 });
             });
 
             $(confirmationForm).on("submit", function(e){
                 e.preventDefault();
 
-                const input1 = $("#request_date");
-                const input2 = $("#select-project-dropdown");
-                const input3 = $("#PIC");
-                const input4 = $("#cart_notes");
+                const inpReqDate = $("#request_date");
+                const inpProj = $("#select-project-dropdown");
+                const inpPIC = $("#PIC");
+                const inpNotes = $("#cart_notes");
 
                 const errRequestDate = $("#err-request-date");
                 const errProjectName = $("#err-project-name");
@@ -224,31 +226,30 @@
                 errProjectName.innerText = "";
                 errPIC.innerText = "";
                 errCartNotes.innerText = "";
-                $(input1).css("border", "none");
-                $(input2).css("border", "none");
-                $(input3).css("border", "none");
-                $(input4).css("border", "none");
+                $(inpReqDate).removeClass('is-invalid');
+                $(inpPIC).removeClass('is-invalid');
+                $(inpNotes).removeClass('is-invalid');
 
                 // Validasi input
                 let inputAman = true; // Status apakah sudah terjadi kesalahan input atau belum
 
-                if(!$(input1).val()){
-                    $(input1).css("border", "solid 1px red");
-                    $(errRequestDate).text("Invalid input :3");
+                if(!$(inpReqDate).val()){
+                    $(inpReqDate).addClass('is-invalid');
+                    $(errRequestDate).text("Harap masukkan tanggal request.");
 
                     inputAman = false;
                 }
 
-                if(!$(input2).val()){
-                    $(input2).css("border", "solid 1px red");
-                    $(errProjectName).text("Invalid input :3");
+                if(!$(inpProj).val()){
+                    $(inpProj).addClass('is-invalid');
+                    $(errProjectName).text("Harap pilih proyek.");
 
                     inputAman = false;
                 }
 
-                if(!$(input3).val()){
-                    $(input3).css("border", "solid 1px red");
-                    $(errPIC).text("Invalid input :3");
+                if(!$(inpPIC).val()){
+                    $(inpPIC).addClass('is-invalid');
+                    $(errPIC).text("Harap masukkan PIC request.");
 
                     inputAman = false;
                 }
@@ -262,25 +263,25 @@
                         $("<input>").attr({
                             "type": "hidden",
                             "name": "request_date",
-                            "value": $(input1).val()
+                            "value": $(inpReqDate).val()
                         })
                     ).append(
                         $("<input>").attr({
                             "type": "hidden",
                             "name": "project_id",
-                            "value": $(input2).val()
+                            "value": $(inpProj).val()
                         })
                     ).append(
                         $("<input>").attr({
                             "type": "hidden",
                             "name": "PIC",
-                            "value": $(input3).val()
+                            "value": $(inpPIC).val()
                         })
                     ).append(
                         $("<input>").attr({
                             "type": "hidden",
                             "name": "notes",
-                            "value": $(input4).val()
+                            "value": $(inpNotes).val()
                         })
                     );
 

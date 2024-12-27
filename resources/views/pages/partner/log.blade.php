@@ -3,12 +3,10 @@
 @section('content')
     <x-container>
         <div class="w-100 d-flex align-items-center justify-content-between">
-            <h1 class="mt-4">Partner Transaction Log</h1>
+            <h2 class="mt-4">Log Transaksi Pembelian dari Partner</h2>
         </div>
 
         <hr class="mt-2">
-
-        <br>
 
         @php
             $total = 0;
@@ -16,34 +14,34 @@
 
         <!-- tabel list data-->
 
-        @if($partner->purchases->count())
-            <table class="w-100">
-                <tr>
-                    <th class="border border-1 border-secondary w-25">Partner name</th>
-                    <td class="border border-1 border-secondary">{{ $partner->partner_name }}</td>
-                </tr>
-                <tr>
-                    <th class="border border-1 border-secondary w-25">Partner role</th>
-                    <td class="border border-1 border-secondary">{{ $partner->role }}</td>
-                </tr>
-                <tr>
-                    <th class="border border-1 border-secondary w-25">Partner address</th>
-                    <td class="border border-1 border-secondary">{{ $partner->address }}</td>
-                </tr>
-                <tr>
-                    <th class="border border-1 border-secondary w-25">Partner contacts</th>
-                    <td class="border border-1 border-secondary">
-                        <ul>
-                            <li>Email: {{ $partner->email ?? "N/A" }}</li>
-                            <li>Fax: {{ $partner->fax ?? "N/A" }}</li>
-                            <li>Mobile/Telephone: {{ $partner->phone ?? "N/A" }}/{{ $partner->contact ?? "N/A" }}</li>
-                        </ul>
-                    </td>
-                </tr>
-            </table>
-        @endif
+        <h5>Data Partner</h5>
+        <table class="w-100">
+            <tr>
+                <th class="border border-1 border-secondary w-25">Nama partner</th>
+                <td class="border border-1 border-secondary">{{ $partner->partner_name }}</td>
+            </tr>
+            <tr>
+                <th class="border border-1 border-secondary w-25">Role</th>
+                <td class="border border-1 border-secondary">{{ $partner->role }}</td>
+            </tr>
+            <tr>
+                <th class="border border-1 border-secondary w-25">Alamat</th>
+                <td class="border border-1 border-secondary">{{ $partner->address }}</td>
+            </tr>
+            <tr>
+                <th class="border border-1 border-secondary w-25">Kontak</th>
+                <td class="border border-1 border-secondary">
+                    <ul>
+                        <li>Email: {{ $partner->email ?? "N/A" }}</li>
+                        <li>Fax: {{ $partner->fax ?? "N/A" }}</li>
+                        <li>Mobile/Telephone: {{ $partner->phone ?? "N/A" }}/{{ $partner->contact ?? "N/A" }}</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
 
-        <div class="overflow-x-auto mt-5">
+        <h5 class="mt-4">Daftar Transaksi</h5>
+        <div class="overflow-x-auto">
             <table class="w-100">
                 <tr>
                     <th class="border border-1 border-secondary ">Nomor</th>
@@ -52,7 +50,7 @@
                     <th class="border border-1 border-secondary ">Nama Produk</th>
                     <th class="border border-1 border-secondary ">Varian</th>
                     <th class="border border-1 border-secondary ">Harga Akhir</th>
-                    <th class="border border-1 border-secondary ">Qty</th>
+                    <th class="border border-1 border-secondary ">Jumlah</th>
                 </tr>
 
                 @php

@@ -4,7 +4,7 @@
     <x-container>
         <br>
         <div class="w-100 d-flex align-items-center justify-content-between">
-            <h2>Sage Partners</h2>
+            <h2>Partner Sage</h2>
             @can('admin')
                 <div class="d-flex gap-3">
                     <a class="btn btn-secondary" href="{{ route('partner-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
@@ -28,7 +28,6 @@
             });
         </script>
         <hr>
-        <br>
 
         @if (session()->has('successAddPartner'))
             <p class="text-success fw-bold">{{ session('successAddPartner') }}</p>
@@ -41,7 +40,7 @@
         @can('admin')
             <a href="{{ route('partner-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
                 <i class="bi bi-plus-square"></i>
-                Add New Data</a>
+                Tambah Partner Baru</a>
             <br>
         @endcan
         <!-- tabel list data-->
@@ -52,12 +51,12 @@
                     <th>No</th>
                     <th>Nama Partner</th>
                     <th>Role</th>
-                    <th>Remark</th>
-                    <th>Address</th>
-                    <th>Contacts</th>
+                    <th>Alamat</th>
+                    <th>Kontak</th>
+                    <th>Catatan</th>
                     <th>Tempo</th>
                     @can('admin')
-                        <th>Action</th>
+                        <th>Aksi</th>
                     @endcan
                 </tr>
 
@@ -68,12 +67,11 @@
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 {{ $p->partner_name }}
                                 @can('admin')
-                                    <a href="{{ route('partner-log', $p->id) }}" class="btn btn-success">View Log</a>
+                                    <a href="{{ route('partner-log', $p->id) }}" class="btn btn-success">Lihat Log</a>
                                 @endcan
                             </div>
                         </td>
                         <td>{{ $p->role }}</td>
-                        <td>{{ $p->remark }}</td>
                         <td>{{ $p->address }}</td>
                         <td>
                             <ul>
@@ -82,6 +80,7 @@
                                 <li>Mobile/Telephone: {{ $p->phone ?? "N/A" }}/{{ $p->contact ?? "N/A" }}</li>
                             </ul>
                         </td>
+                        <td>{{ $p->remark }}</td>
                         <td>{{ $p->tempo }}</td>
                         {{-- <td >{{ $p->user->name }}</td> --}}
                         @can('admin')

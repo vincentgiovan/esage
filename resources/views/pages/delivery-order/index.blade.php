@@ -4,7 +4,7 @@
     <x-container>
         <br>
         <div class="w-100 d-flex align-items-center justify-content-between">
-            <h2>Delivery Orders</h2>
+            <h2>Pengiriman Barang</h2>
             @can("admin")
                 <div class="d-flex gap-3">
                     {{-- <a class="btn btn-secondary" href="{{ route('deliveryorder-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a> --}}
@@ -41,9 +41,8 @@
             });
         </script>
         <hr>
-        <br>
 
-        {{-- <h5>welcome back, {{ Auth::user()->name }}! </h5> --}}
+
 
         @if (session()->has('successAddOrder'))
             <p class="text-success fw-bold">{{ session('successAddOrder') }}</p>
@@ -58,7 +57,7 @@
         @can("admin")
             <a href="{{ route('deliveryorder-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
                 <i class="bi bi-plus-square"></i>
-                Add New Delivery</a>
+                Tambah Pengiriman Baru</a>
             <br>
         @endcan
 
@@ -68,27 +67,27 @@
             <table class="w-100">
                 <tr>
                     <th>No</th>
-                    <th>Delivery Date</th>
-                    <th>Project</th>
-                    <th>Register</th>
-                    <th class="text-center">Delivery Status</th>
-                    <th>Note</th>
+                    <th>Tanggal Pengiriman</th>
+                    <th>Proyek</th>
+                    <th>SKU</th>
+                    <th class="text-center">Status Pengiriman</th>
+                    <th>Catatan</th>
                     @can("admin")
-                        <th>Action</th>
+                        <th>Aksi</th>
                     @endcan
                 </tr>
 
                 @foreach ($deliveryorders as $p)
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ Carbon\Carbon::parse($p->delivery_date)->format("d M Y") }}</td>
+                        <td>{{ Carbon\Carbon::parse($p->delivery_date)->translatedFormat("d M Y") }}</td>
                         <td>{{ $p->project->project_name }}</td>
                         <td>
                             <div class="d-flex gap-5 w-100 justify-content-between align-items-center">
                                 {{ $p->register }}
                                 @can('admin')
                                     <a href="{{ route('deliveryorderproduct-viewitem', $p->id) }}" class="btn btn-success text-white"
-                                        style="font-size: 10pt"><i class="bi bi-cart"></i>View Cart</a>
+                                        style="font-size: 10pt"><i class="bi bi-cart"></i>Lihat Barang</a>
                                 @endcan
                             </div>
                         </td>

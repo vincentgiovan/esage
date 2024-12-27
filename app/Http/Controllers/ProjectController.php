@@ -14,7 +14,7 @@ class ProjectController extends Controller{
     {
         // Tampilkan halaman pages/project/index.blade.php beserta data yang diperlukan:
         return view("pages.project.index", [
-            "projects" => Project::all() // semua data project buat ditampilin satu-satu
+            "projects" => Project::where('archived', 0)->get() // semua data project buat ditampilin satu-satu
         ]);
     }
 
@@ -31,16 +31,17 @@ class ProjectController extends Controller{
         // Validasi data, kalo ga lolos ga lanjut
         $validatedData = $request->validate([
             "project_name" => "required|min:3",
-            "location"=>"required",
+            "location" => "required",
             "PIC" => "required|min:3",
-            "address" => "required"
+            "address" => "required",
+            "RAB" => "required"
         ]);
 
         // Buat dan tambahkan data project baru ke tabel projects
         Project::create($validatedData);
 
         // Arahkan user kembali ke halaman pages/project/index.blade.php
-        return redirect(route("project-index"))->with("successAddProject", "Project added successfully!");
+        return redirect(route("project-index"))->with("successAddProject", "Berhasil menambahkan proyek baru.");
     }
 
     // Form edit data project
@@ -48,7 +49,7 @@ class ProjectController extends Controller{
     {
         // Tampilkan halaman pages/project/edit.blade.php beserta data yang diperlukan di blade-nya:
         return view("pages.project.edit", [
-            "project" => Project::where("id", $id)->first() // data project yang mau di-edit buat autofill data di form
+            "project" => Project::find($id) // data project yang mau di-edit buat autofill data di form
         ]);
     }
 
@@ -60,24 +61,25 @@ class ProjectController extends Controller{
             "project_name" => "required|min:3",
             "location"=>"required",
             "PIC" => "required|min:3",
-            "address" => "required"
+            "address" => "required",
+            "RAB" => "required"
         ]);
 
         // Simpan perubahan datanya di tabel projects
-        Project::where("id", $id)->update($validatedData);
+        Project::find($id)->update($validatedData);
 
         // Arahkan user kembali ke halaman pages/project/index.blade.php
-        return redirect(route("project-index"))->with("successEditProject", "Project editted successfully!");
+        return redirect(route("project-index"))->with("successEditProject", "Berhasil memperbaharui data proyek.");
     }
 
     // Hapus data project dari database
     public function destroy($id)
     {
         // Hapus data project yang mau dihapus dari tabel projects
-        Project::destroy("id", $id);
+        Project::find($id)->update(["archived" => 1]);
 
         // Arahkan user kembali ke halaman pages/project/index.blade.php
-        return redirect(route("project-index"))->with("successDeleteProject", "Project deleted successfully!");
+        return redirect(route("project-index"))->with("successDeleteProject", "Berhasil menghapus data proyek.");
     }
 
     // READ DATA FROM CSV
@@ -102,7 +104,7 @@ class ProjectController extends Controller{
         // Delete the stored file after processing
         Storage::delete($path);
 
-        return redirect(route("project-index"))->with('success', 'CSV file uploaded and products added successfully.');
+        return redirect(route("project-index"))->with('success', 'Berhasil membaca file CSV dan menambahkan data proyek.');
     }
 
     private function processProjectDataCsv($filePath)

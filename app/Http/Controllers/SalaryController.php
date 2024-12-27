@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class SalaryController extends Controller
 {
     public function index(){
-        $salaries = Salary::all();
+        $salaries = Salary::filter(request(['from', 'until']))->with('employee.prepays')->get();
 
         return view("pages.salary.index", [
             "salaries" => $salaries,
@@ -34,7 +34,7 @@ class SalaryController extends Controller
             $startOfWeek = $currentSaturday->copy()->subDays(6); // Saturday
             $endOfWeek = $currentSaturday->copy(); // Friday
 
-            $employees = Employee::where("kalkulasi_gaji", "on")->get();
+            $employees = Employee::where("kalkulasi_gaji", "on")->where("status", "active")->get();
 
             foreach ($employees as $employee) {
                 $attendances = $employee->attendances()
@@ -46,7 +46,7 @@ class SalaryController extends Controller
                     $sub_normal = $atd->normal * $employee->pokok;
                     $sub_lembur = $atd->jam_lembur * $employee->lembur;
                     $sub_lembur_panjang = $atd->index_lembur_panjang * $employee->lembur_panjang;
-                    $sub_performa = $atd->index_performa * $employee->performa;
+                    $sub_performa = $atd->performa;
                     $total += $sub_normal + $sub_lembur + $sub_lembur_panjang + $sub_performa;
                 }
 
@@ -69,7 +69,7 @@ class SalaryController extends Controller
             $currentSaturday = $endOfWeek->copy()->addDay();
         }
 
-        return redirect(route('salary-index'))->with('successAutoGenerateSalary', 'Latest salary data has been generated successfully!');
+        return redirect(route('salary-index'))->with('successAutoGenerateSalary', 'Data gaji pegawai terbaru telah berhasil digenerasi!');
     }
 
     public function edit($id){
@@ -81,6 +81,6 @@ class SalaryController extends Controller
     public function update(Request $request, $id){
         Salary::find($id)->update(["keterangan" => $request->keterangan]);
 
-        return redirect(route('salary-index'))->with("successEditSalary", "Salary edited successfully!");
+        return redirect(route('salary-index'))->with("successEditSalary", "Berhasil memperbaharui data gaji pegawai.");
     }
 }

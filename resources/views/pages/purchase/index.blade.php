@@ -4,7 +4,7 @@
     <x-container>
         <br>
         <div class="w-100 d-flex align-items-center justify-content-between">
-            <h2>Purchases</h2>
+            <h2>Pembelian Barang</h2>
             @can("admin")
                 <div class="d-flex gap-3">
                     {{-- <a class="btn btn-secondary" href="{{ route('purchase-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a> --}}
@@ -41,9 +41,6 @@
             });
         </script>
         <hr>
-        <br>
-
-        {{-- <h5>welcome back, {{ Auth::user()->name }}! </h5> --}}
 
         @if (session()->has('successAddPurchase'))
             <p class="text-success fw-bold">{{ session('successAddPurchase') }}</p>
@@ -58,7 +55,7 @@
         @can("admin")
             <a href="{{ route('purchase-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
                 <i class="bi bi-plus-square"></i>
-                Add New Data</a>
+                Tambah Pembelian Baru</a>
             <br>
         @endcan
 
@@ -68,14 +65,14 @@
             <table class="w-100">
                 <tr>
                     <th>No</th>
-                    <th>Supplier </th>
-                    <th>Purchase Deadline</th>
-                    <th>Register</th>
-                    <th>Purchase Date</th>
-                    <th>Note</th>
-                    <th>Purchase Status</th>
+                    <th>Supplier</th>
+                    <th>Tanggal Pembelian</th>
+                    <th>Tenggat Pembelian</th>
+                    <th>SKU</th>
+                    <th>Total</th>
+                    <th>Status</th>
                     @can("admin")
-                        <th>Action</th>
+                        <th>Aksi</th>
                     @endcan
                 </tr>
 
@@ -83,20 +80,34 @@
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $p->partner->partner_name }}</td>
-                        <td>{{ Carbon\Carbon::parse($p->purchase_deadline)->format("d M Y") }}</td>
+                        <td>{{ Carbon\Carbon::parse($p->purchase_date)->translatedFormat("d M Y") }}</td>
+                        <td>{{ Carbon\Carbon::parse($p->purchase_deadline)->translatedFormat("d M Y") }}</td>
                         <td>
                             <div class="d-flex gap-5 w-100 justify-content-between align-items-center">
                                 {{ $p->register }}
                                 @can('admin')
                                     <a href="{{ route('purchaseproduct-viewitem', $p->id) }}" class="btn btn-success text-white"
-                                        style="font-size: 10pt"><i class="bi bi-cart"></i>View Cart</a>
+                                        style="font-size: 10pt"><i class="bi bi-cart"></i> Lihat Barang</a>
                                 @endcan
                             </div>
                         </td>
+                        <td>
+                            @php
+                                $total = 0;
+                                foreach ($p->products as $product){
+                                    $total += $product->price * (1 - ($product->discount / 100));
+                                }
 
-                        <td>{{ Carbon\Carbon::parse($p->purchase_date)->format("d M Y") }}</td>
-                        <td>{{ $p->note }}</td>
-                        <td class="fw-bold" style="color: @if($p->purchase_status == 'Ordered') blue @else green @endif;">{{ $p->purchase_status }}</td>
+                                echo "Rp " . number_format($total, 2, ',' , '.');
+                            @endphp
+                        </td>
+                        <td class="fw-semibold @if($p->purchase_status == 'Ordered') text-primary @else text-success @endif">
+                            @if($p->purchase_status == 'Ordered')
+                                Telah dipesan
+                            @else
+                                Diterima
+                            @endif
+                        </td>
                         {{-- <td >{{ $p->user->name }}</td> --}}
 
                         @can("admin")

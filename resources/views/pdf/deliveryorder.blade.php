@@ -22,7 +22,7 @@
     </style>
 </head>
 <body>
-        <h1>Delivery Orders</h1>
+        <h2>Delivery Orders</h2>
         <hr>
 
         <br>

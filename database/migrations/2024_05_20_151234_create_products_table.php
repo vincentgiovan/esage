@@ -27,7 +27,11 @@ return new class extends Migration
             $table->string("status");
             $table->unsignedFloat("markup")->nullable();
 
+            $table->string("is_returned")->default('no');
+
             $table->timestamps();
+
+            $table->unsignedInteger('archived')->default(0);
         });
     }
 

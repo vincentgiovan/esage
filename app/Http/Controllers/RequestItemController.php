@@ -12,7 +12,7 @@ class RequestItemController extends Controller
 {
     public function index(){
         return view("pages.request-item.index", [
-            "requests" => RequestItem::all()
+            "requests" => RequestItem::where('archived', 0)->get()
         ]);
     }
 
@@ -24,8 +24,8 @@ class RequestItemController extends Controller
 
     public function create(){
         return view("pages.request-item.create", [
-            "projects" => Project::all(),
-            "products" => Product::all()
+            "projects" => Project::where('archived', 0)->get(),
+            "products" => Product::where('archived', 0)->get()
         ]);
     }
 
@@ -45,15 +45,15 @@ class RequestItemController extends Controller
             ]);
         }
 
-        return redirect(route("requestitem-index"))->with("successAddRequest", "Successfully added new request item");
+        return redirect(route("requestitem-index"))->with("successAddRequest", "Berhasil menambahkan request barang baru.");
     }
 
     public function edit($id){
         return view("pages.request-item.edit", [
             "request_item" => RequestItem::find($id),
             "rip" => RequestItemProduct::where("request_item_id", $id)->get(),
-            "projects" => Project::all(),
-            "products" => Product::all()
+            "projects" => Project::where('archived', 0)->get(),
+            "products" => Product::where('archived', 0)->get()
         ]);
     }
 
@@ -69,7 +69,7 @@ class RequestItemController extends Controller
 
         $existing_rip = RequestItemProduct::where("request_item_id", $reqit->id)->get();
         foreach($existing_rip as $er){
-            RequestItemProduct::find($er->id)->delete();
+            RequestItemProduct::find($er->id)->update(["archived" => 1]);
         }
 
         foreach($request->products as $i => $prd_id){
@@ -80,12 +80,12 @@ class RequestItemController extends Controller
             ]);
         }
 
-        return redirect(route("requestitem-index"))->with("successEditRequest", "Successfully edited the request item");
+        return redirect(route("requestitem-index"))->with("successEditRequest", "Berhasil memperbaharui data request barang.");
     }
 
     public function destroy($id){
-        RequestItem::find($id)->delete();
+        RequestItem::find($id)->update(["archived" => 1]);
 
-        return redirect(route("requestitem-index"))->with("successDeleteRequest", "Successfully deleted the request item");
+        return redirect(route("requestitem-index"))->with("successDeleteRequest", "Berhasil menghapus data request barang.");
     }
 }
