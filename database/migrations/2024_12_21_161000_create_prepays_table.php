@@ -19,8 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('employee_id');
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
 
-            $table->date('start_period');
-            $table->date('end_period');
+            $table->date('prepay_date');
 
             $table->unsignedBigInteger('amount');
             $table->string('remark')->nullable;

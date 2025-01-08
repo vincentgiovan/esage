@@ -6,7 +6,9 @@ use App\Models\Salary;
 use App\Models\Partner;
 use App\Models\Product;
 use App\Models\Project;
+use App\Models\Employee;
 use App\Models\Purchase;
+use App\Models\Attendance;
 use Illuminate\Http\Request;
 use App\Models\DeliveryOrder;
 use App\Models\PurchaseProduct;
@@ -118,50 +120,79 @@ class PDFController extends Controller
     }
 
     public function export_salaries(Request $request){
-        $salaries = Salary::filter(request(['from', 'until']))
-            ->with(['employee.attendances' => function ($query) {
-                $filters = request(['from', 'until']);
+        // $salaries = Salary::filter(request(['from', 'until']))
+        //     ->with(['employee.attendances' => function ($query) {
+        //         $filters = request(['from', 'until']);
 
-                $query->when(isset($filters['from']) && isset($filters['until']), function ($query) use ($filters) {
-                    return $query->where(function ($query) use ($filters) {
-                        $query->whereBetween('attendance_date', [$filters['from'], $filters['until']])
-                            // ->orWhereBetween('attendance_date', [$filters['from'], $filters['until']])
-                            ->orWhere(function ($query) use ($filters) {
-                                $query->where('attendance_date', '>=', $filters['from'])
-                                        ->where('attendance_date', '<=', $filters['until']);
-                            });
-                    });
-                });
+        //         $query->when(isset($filters['from']) && isset($filters['until']), function ($query) use ($filters) {
+        //             return $query->where(function ($query) use ($filters) {
+        //                 $query->whereBetween('attendance_date', [$filters['from'], $filters['until']])
+        //                     // ->orWhereBetween('attendance_date', [$filters['from'], $filters['until']])
+        //                     ->orWhere(function ($query) use ($filters) {
+        //                         $query->where('attendance_date', '>=', $filters['from'])
+        //                                 ->where('attendance_date', '<=', $filters['until']);
+        //                     });
+        //             });
+        //         });
 
-                $query->when($filters['from'] ?? false, function ($query, $from) {
-                    return $query->where('attendance_date', '>=', $from);
-                });
+        //         $query->when($filters['from'] ?? false, function ($query, $from) {
+        //             return $query->where('attendance_date', '>=', $from);
+        //         });
 
-                $query->when($filters['until'] ?? false, function ($query, $until) {
-                    return $query->where('attendance_date', '<=', $until);
-                });
-            }, "employee.prepays" => function ($query) {
-                $filters = request(['from', 'until']);
+        //         $query->when($filters['until'] ?? false, function ($query, $until) {
+        //             return $query->where('attendance_date', '<=', $until);
+        //         });
+        //     }, "employee.prepays" => function ($query) {
+        //         $filters = request(['from', 'until']);
 
-                $query->when(isset($filters['from']) && isset($filters['until']), function ($query) use ($filters) {
-                    return $query->where(function ($query) use ($filters) {
-                        $query->where('start_period', '>=', $filters['from'])
-                            ->where('end_period', '<=', $filters['until']);
-                    });
-                });
+        //         $query->when(isset($filters['from']) && isset($filters['until']), function ($query) use ($filters) {
+        //             return $query->where(function ($query) use ($filters) {
+        //                 $query->where('start_period', '>=', $filters['from'])
+        //                     ->where('end_period', '<=', $filters['until']);
+        //             });
+        //         });
 
-                $query->when($filters['from'] ?? false, function ($query, $from) {
-                    return $query->where('start_period', '>=', $from);
-                });
+        //         $query->when($filters['from'] ?? false, function ($query, $from) {
+        //             return $query->where('start_period', '>=', $from);
+        //         });
 
-                $query->when($filters['until'] ?? false, function ($query, $until) {
-                    return $query->where('end_period', '<=', $until);
-                });
-            }])
+        //         $query->when($filters['until'] ?? false, function ($query, $until) {
+        //             return $query->where('end_period', '<=', $until);
+        //         });
+        //     }])
+        //     ->get();
+
+        $attendances = Attendance::filter(request(['from', 'until']))->with('project')
+            ->orderBy('attendance_date', 'asc')
+            ->orderBy(Employee::select('nama')
+                ->whereColumn('id', 'attendances.employee_id')
+                ->limit(1), 'asc')
+            ->orderBy(Project::select('project_name')
+                ->whereColumn('id', 'attendances.project_id')
+                ->limit(1), 'asc')
             ->get();
 
+        $subtotals = [];
+
+        foreach($attendances as $atd){
+            if($atd->employee->kalkulasi_gaji == "on"){
+                $sub_normal = $atd->normal * $atd->employee->pokok;
+                $sub_lembur = $atd->jam_lembur * $atd->employee->lembur;
+                $sub_lembur_panjang = $atd->index_lembur_panjang * $atd->employee->lembur_panjang;
+                $sub_performa = $atd->index_performa * $atd->employee->performa;
+
+                $subtotal = $sub_normal + $sub_lembur + $sub_lembur_panjang + $sub_performa;
+                array_push($subtotals, $subtotal);
+            }
+            else {
+                array_push($subtotals, 'N/A');
+            }
+        }
+
         $data = [
-            "salaries" => $salaries
+            // "salaries" => $salaries
+            "attendances" => $attendances,
+            "subtotals" => $subtotals,
         ];
 
         $pdf = Pdf::loadView('pdf.salary', $data)->setPaper("a4", "portrait");
