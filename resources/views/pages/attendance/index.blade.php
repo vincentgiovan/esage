@@ -41,10 +41,10 @@
                 <tr>
                     <th>#</th>
                     <th>Tanggal</th>
-                    <th>Jam Kerja</th>
                     <th>Proyek</th>
-                    <th>Nama</th>
-                    <th>Subtotal</th>
+                    <th>Pegawai</th>
+                    <th>Jam Masuk</th>
+                    <th>Jam Keluar</th>
                     <th>Aksi</th>
                 </tr>
 
@@ -52,16 +52,10 @@
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ Carbon\Carbon::parse($a->attendance_date)->translatedFormat("d M Y") }}</td>
-                        <td>{{ Carbon\Carbon::parse($a->jam_masuk)->format("H:i") }}-{{ Carbon\Carbon::parse($a->jam_keluar)->format("H:i") }}</td>
                         <td>{{ $a->project->project_name }}</td>
                         <td>{{ $a->employee->nama }}</td>
-                        <td>
-                            @if($subtotals[$loop->iteration - 1] != "N/A")
-                                Rp {{ number_format($subtotals[$loop->iteration - 1], 2, ",", ".") }}
-                            @else
-                                {{ $subtotals[$loop->iteration - 1] }}
-                            @endif
-                        </td>
+                        <td>{{ Carbon\Carbon::parse($a->jam_masuk)->format("H:i") }}</td>
+                        <td>{{ Carbon\Carbon::parse($a->jam_keluar)->format("H:i") }}</td>
                         <td>
                             <div class="d-flex gap-2 w-100">
                                 <a href="{{ route('attendance-show', $a->id) }}" class="btn btn-success text-white">
