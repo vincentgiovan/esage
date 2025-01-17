@@ -25,7 +25,7 @@ class TodoController extends Controller
         $i = $all_todos->count() - 1;
         foreach($all_todos as $todo){
             $new_status = ($request->checkboxes[$i] == "on")? "done" : "undone";
-            Todo::where("id", $todo->id)->update(["status" => $new_status]);
+            Todo::find($todo->id)->update(["status" => $new_status]);
 
             $i--;
         }

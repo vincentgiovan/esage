@@ -22,12 +22,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // User::create([
-        // "name" => "vincent",
-        // "email" => "vincent@gmail.com",
-        // "email_verified_at" => now(),
-        // "role" => 1,
-        // "password" => bcrypt("admin")]);
+        User::create([
+        "name" => "vincent",
+        "email" => "vincent@gmail.com",
+        "email_verified_at" => now(),
+        "role" => 1,
+        "password" => bcrypt("admin")]);
 
         // User::create([
         //     "name" => "Jemmy S",

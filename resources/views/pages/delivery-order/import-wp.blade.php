@@ -7,7 +7,7 @@
 @section('content')
     <x-container-middle>
         <div class="container bg-white rounded-4 p-5 mt-4 border border-1 card">
-            <h2 class="text-center fw-bold">Import Delivery Orders Data With Products</h2>
+            <h2>Import Delivery Orders Data With Products</h2>
 
             <p class="mt-4">Please make sure the columns order is the same as the shown image before saving as .csv file:</p>
             <img src="{{ asset('res/guide-importcsv-devorwp.png') }}" class="w-50" alt="guide-importcsv">

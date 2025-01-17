@@ -2,19 +2,54 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Employee;
 use Carbon\Carbon;
 use App\Models\Salary;
+use App\Models\Project;
+use App\Models\Employee;
+use App\Models\Attendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class SalaryController extends Controller
 {
     public function index(){
-        $salaries = Salary::all();
+        // $salaries = Salary::filter(request(['from', 'until']))->with('employee.prepays')->get();
+
+        // return view("pages.salary.index", [
+        //     "salaries" => $salaries,
+        // ]);
+
+        $attendances = Attendance::filter(request(['from', 'until']))->with('project')
+            ->orderBy('attendance_date', 'asc')
+            ->orderBy(Employee::select('nama')
+                ->whereColumn('id', 'attendances.employee_id')
+                ->limit(1), 'asc')
+            ->orderBy(Project::select('project_name')
+                ->whereColumn('id', 'attendances.project_id')
+                ->limit(1), 'asc')
+            ->get();
+
+        $subtotals = [];
+
+        foreach($attendances as $atd){
+            if($atd->employee->kalkulasi_gaji == "on"){
+                $sub_normal = $atd->normal * $atd->employee->pokok;
+                $sub_lembur = $atd->jam_lembur * $atd->employee->lembur;
+                $sub_lembur_panjang = $atd->index_lembur_panjang * $atd->employee->lembur_panjang;
+                $sub_performa = $atd->index_performa * $atd->employee->performa;
+
+                $subtotal = $sub_normal + $sub_lembur + $sub_lembur_panjang + $sub_performa;
+                array_push($subtotals, $subtotal);
+            }
+            else {
+                array_push($subtotals, 'N/A');
+            }
+        }
 
         return view("pages.salary.index", [
-            "salaries" => $salaries,
+            "attendances" => $attendances,
+            "subtotals" => $subtotals,
+            "projects" => Project::where('archived', 0)->get()
         ]);
     }
 
@@ -34,7 +69,7 @@ class SalaryController extends Controller
             $startOfWeek = $currentSaturday->copy()->subDays(6); // Saturday
             $endOfWeek = $currentSaturday->copy(); // Friday
 
-            $employees = Employee::where("kalkulasi_gaji", "on")->get();
+            $employees = Employee::where("kalkulasi_gaji", "on")->where("status", "active")->get();
 
             foreach ($employees as $employee) {
                 $attendances = $employee->attendances()
@@ -46,7 +81,7 @@ class SalaryController extends Controller
                     $sub_normal = $atd->normal * $employee->pokok;
                     $sub_lembur = $atd->jam_lembur * $employee->lembur;
                     $sub_lembur_panjang = $atd->index_lembur_panjang * $employee->lembur_panjang;
-                    $sub_performa = $atd->index_performa * $employee->performa;
+                    $sub_performa = $atd->performa;
                     $total += $sub_normal + $sub_lembur + $sub_lembur_panjang + $sub_performa;
                 }
 
@@ -69,7 +104,7 @@ class SalaryController extends Controller
             $currentSaturday = $endOfWeek->copy()->addDay();
         }
 
-        return redirect(route('salary-index'))->with('successAutoGenerateSalary', 'Latest salary data has been generated successfully!');
+        return redirect(route('salary-index'))->with('successAutoGenerateSalary', 'Data gaji pegawai terbaru telah berhasil digenerasi!');
     }
 
     public function edit($id){
@@ -81,6 +116,6 @@ class SalaryController extends Controller
     public function update(Request $request, $id){
         Salary::find($id)->update(["keterangan" => $request->keterangan]);
 
-        return redirect(route('salary-index'))->with("successEditSalary", "Salary edited successfully!");
+        return redirect(route('salary-index'))->with("successEditSalary", "Berhasil memperbaharui data gaji pegawai.");
     }
 }

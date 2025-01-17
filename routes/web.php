@@ -22,6 +22,9 @@ use App\Http\Controllers\RequestItemController;
 use App\Http\Controllers\DeliveryOrderController;
 use App\Http\Controllers\PurchaseProductController;
 use App\Http\Controllers\DeliveryOrderProductController;
+use App\Http\Controllers\EmployeeProjectController;
+use App\Http\Controllers\LeaveController;
+use App\Http\Controllers\PrepayController;
 
 Route::get('/', function(){
     return redirect("/dashboard");
@@ -137,6 +140,11 @@ Route::middleware(["auth", "verified"])->group(function(){
         //import
         Route::get("/project/import", [ProjectController::class, "import_project_form"])->name("project-import");
         Route::post("/project/import", [ProjectController::class, "import_project_store"])->name("project-import-store");
+
+        // manage employees
+        Route::get('/project/{id}/manage-employee', [EmployeeProjectController::class, "index"])->name("project-manageemployee-index");
+        Route::post('/project/{id}/assign-employee', [EmployeeProjectController::class, "assign_employee"])->name("project-manageemployee-assign");
+        Route::post('/project/{id}/unassign-employee', [EmployeeProjectController::class, "unassign_employee"])->name("project-manageemployee-unassign");
 
         //edit data
         Route::get('/project/{id}/edit', [ProjectController::class, "edit"] )->name("project-edit")->whereNumber("id");
@@ -277,14 +285,15 @@ Route::middleware(["auth", "verified"])->group(function(){
     Route::middleware("admin")->group(function(){
         // ===== ACCOUNTS ===== //
         Route::get('/account', [AccountController::class, 'index'])->name('account.index');
-        Route::post('/account', [AccountController::class, 'store'])->name('account.store');
+        Route::get('/account/create', [AccountController::class, 'create'])->name('account.create');
+        Route::post('/account/create', [AccountController::class, 'store'])->name('account.store');
         Route::get("/account/import-data", [AccountController::class, "import_user_form"])->name("account.import.form");
         Route::post("/account/import-data", [AccountController::class, "import_user_store"])->name("account.import.store");
         Route::get("/account/{id}", [AccountController::class, "show"])->name("account.show")->whereNumber("id");
         Route::put('/account/{id}', [AccountController::class, 'update'])->name('account.update')->whereNumber("id");
         Route::delete('/account/{id}', [AccountController::class, 'destroy'])->name('account.destroy')->whereNumber("id");
 
-        // ===== EMPLOYEES ===== //
+        // ===== EMPLOYEE, PREPAYS, AND LEAVES ===== //
         Route::get("/employee", [EmployeeController::class, "index"])->name("employee-index");
         Route::get("/employee/{id}", [EmployeeController::class, "show"])->name("employee-show")->whereNumber("id");
         Route::get("/employee/create", [EmployeeController::class, "create"])->name("employee-create");
@@ -300,24 +309,45 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::post("/employee/manage-form/{id}/delete-position", [EmployeeController::class, "manage_form_delete_position"])->name("employee-manageform-deleteposition")->whereNumber("id");
         Route::post("/employee/manage-form/{id}/delete-speciality", [EmployeeController::class, "manage_form_delete_speciality"])->name("employee-manageform-deletespeciality")->whereNumber("id");
 
+        Route::post("/employee/{id}/prepay/add", [PrepayController::class, "store"])->name("prepay-store")->whereNumber('id');
+        Route::post("/employee/{emp_id}/prepay/{ppay_id}/edit", [PrepayController::class, "update"])->name("prepay-update")->whereNumber('emp_id')->whereNumber('ppay_id');
+        Route::post("/employee/{emp_id}/prepay/{ppay_id}/delete", [PrepayController::class, "destroy"])->name("prepay-destroy")->whereNumber('emp_id')->whereNumber('ppay_id');
+
+        Route::get("/employee/leaves", [LeaveController::class, "admin_index"])->name('leave-admin-index');
+        Route::post("/employee/leaves/{id}/approve", [LeaveController::class, "admin_approve"])->name('leave-admin-approve')->whereNumber('id');
+        Route::post("/employee/leaves/{id}/reject", [LeaveController::class, "admin_reject"])->name('leave-admin-reject')->whereNumber('id');
+
         // ===== SALARY ===== //
         Route::get("/salary", [SalaryController::class, "index"])->name("salary-index");
         Route::post("/salary/auto-create", [SalaryController::class, "auto_create"])->name('salary-autocreate');
         Route::get("/salary/{id}/edit", [SalaryController::class, "edit"])->name("salary-edit")->whereNumber("id");
         Route::post("/salary/{id}/edit", [SalaryController::class, "update"])->name("salary-update")->whereNumber("id");
+        Route::post("/salary/export", [PDFController::class, "export_salaries"])->name("salary-export")->whereNumber("id");
 
         // ===== ATTENDANCE ===== //
         Route::get("/attendance", [AttendanceController::class, "index"])->name("attendance-index");
-        Route::get("/attendance/create", [AttendanceController::class, "create"])->name("attendance-create")->whereNumber("id");
-        Route::post("/attendance/create", [AttendanceController::class, "store"])->name("attendance-store")->whereNumber("id");
+        Route::get("/attendance/{id}", [AttendanceController::class, "show"])->name('attendance-show')->whereNumber("id");
+        Route::get("/attendance/create/admin", [AttendanceController::class, "create_admin"])->name("attendance-create-admin");
+        Route::post("/attendance/create/admin", [AttendanceController::class, "store_admin"])->name("attendance-store-admin");
         Route::get("/attendance/{id}/edit", [AttendanceController::class, "edit"])->name("attendance-edit")->whereNumber("id");
         Route::post("/attendance/{id}/edit", [AttendanceController::class, "update"])->name("attendance-update")->whereNumber("id");
         Route::post("/attendance/{id}/delete", [AttendanceController::class, "destroy"])->name("attendance-destroy")->whereNumber("id");
-        Route::get("/attendance/{id}/location", [AttendanceController::class, "location"])->name('attendance-location')->whereNumber("id");
 
         // ===== VISIT LOG ===== //
         Route::get("/visit-log", [AccountController::class, "visit_log"])->name("visitlog-index");
     });
+
+    // ===== SELF ATTENDANCE ===== //
+    Route::get("/attendance/self", [AttendanceController::class, "index_self"])->name("attendance-self-index")->middleware("self_attendance");
+    Route::get("/attendance/self/create/{project_id}/checkin", [AttendanceController::class, "check_in"])->name("attendance-self-checkin")->middleware("self_attendance")->whereNumber('project_id');
+    Route::post("/attendance/self/create/{project_id}/checkin", [AttendanceController::class, "check_in_store"])->name("attendance-self-checkin-store")->middleware("self_attendance")->whereNumber('project_id');
+    Route::get("/attendance/self/create/{project_id}/checkout", [AttendanceController::class, "check_out"])->name("attendance-self-checkout")->middleware("self_attendance")->whereNumber('project_id');
+    Route::post("/attendance/self/create/{project_id}/checkout", [AttendanceController::class, "check_out_store"])->name("attendance-self-checkout-store")->middleware("self_attendance")->whereNumber('project_id');
+
+    // ===== PROPOSE LEAVE ===== //
+    Route::get("/employee/leaves/mine", [LeaveController::class, "user_index"])->name("leave-user-index");
+    Route::get("/employee/leaves/mine/propose", [LeaveController::class, "user_propose"])->name("leave-user-propose");
+    Route::post("/employee/leaves/mine/propose", [LeaveController::class, "user_propose_store"])->name("leave-user-propose-store");
 });
 
 Auth::routes(["verify"=>true]);

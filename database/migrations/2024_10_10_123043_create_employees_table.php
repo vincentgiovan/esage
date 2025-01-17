@@ -16,6 +16,9 @@ return new class extends Migration
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
 
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+
             $table->string("nama");
             $table->string("NIK")->nullable();
             $table->string("foto_ktp")->nullable();
@@ -25,14 +28,16 @@ return new class extends Migration
             $table->unsignedBigInteger("pokok")->nullable();
             $table->unsignedBigInteger("lembur")->nullable();
             $table->unsignedBigInteger("lembur_panjang")->nullable();
-            $table->unsignedBigInteger("performa")->nullable();
             $table->date("masuk")->nullable();
             $table->date("keluar")->nullable();
             $table->string("payroll")->default("off");
-            $table->unsignedBigInteger("kasbon")->nullable();
+            // $table->unsignedBigInteger("kasbon")->nullable();
             $table->longText("keterangan")->nullable();
+            $table->string('status')->default('active');
 
             $table->timestamps();
+
+            $table->unsignedInteger('archived')->default(0);
         });
     }
 

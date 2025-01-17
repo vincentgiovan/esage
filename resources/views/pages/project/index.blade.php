@@ -4,7 +4,7 @@
     <x-container>
         <br>
         <div class="w-100 d-flex align-items-center justify-content-between">
-            <h2>Sage Projects</h2>
+            <h2>Proyek Sage</h2>
             @can('admin')
                 <div class="d-flex gap-3">
                     <a class="btn btn-secondary" href="{{ route('project-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
@@ -28,9 +28,8 @@
             });
         </script>
         <hr>
-        <br>
 
-        {{-- <h5>welcome back, {{ Auth::user()->name }}! </h5> --}}
+
 
         @if (session()->has('successAddProject'))
             <p class="text-success fw-bold">{{ session('successAddProject') }}</p>
@@ -43,7 +42,7 @@
         @can("admin")
             <a href="{{ route('project-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
                 <i class="bi bi-plus-square"></i>
-                Add New Project</a>
+                Tambah Proyek Baru</a>
             <br>
         @endcan
 
@@ -53,12 +52,12 @@
             <table class="w-100">
                 <tr>
                     <th>No</th>
-                    <th>Nama Project</th>
-                    <th>Location</th>
-                    <th>PIC Name</th>
-                    <th>Address</th>
+                    <th>Nama Proyek</th>
+                    <th>Lokasi</th>
+                    <th>PIC</th>
+                    <th>Alamat</th>
                     @can('admin')
-                        <th>Action</th>
+                        <th>Aksi</th>
                     @endcan
                 </tr>
 
@@ -69,7 +68,7 @@
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 {{ $p->project_name }}
                                 @can('admin')
-                                    <a href="{{ route('project-log', $p->id) }}" class="btn btn-success">View Items</a>
+                                    <a href="{{ route('project-log', $p->id) }}" class="btn btn-success">Lihat Item</a>
                                 @endcan
                             </div>
                         </td>
@@ -80,6 +79,10 @@
                         @can('admin')
                             <td>
                                 <div class="d-flex gap-2 w-100">
+                                    <a href="{{ route('project-manageemployee-index', $p->id) }}" class="btn btn-success text-white"
+                                        style="font-size: 10pt;">
+                                        <i class="bi bi-person-fill"></i>
+                                    </a>
                                     <a href="{{ route('project-edit', $p->id) }}" class="btn btn-warning text-white"
                                         style="font-size: 10pt; background-color: rgb(197, 167, 0);">
                                         <i class="bi bi-pencil"></i>

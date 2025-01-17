@@ -3,20 +3,37 @@
 @section("content")
     <x-container>
         <br>
-        <h2>Employee Attendance</h2>
+        <h3>Presensi Pegawai</h3>
         <hr>
 
         @if (session()->has('successEditAttendance'))
             <p class="text-success fw-bold">{{ session('successEditAttendance') }}</p>
-        @elseif (session()->has('successAddAttendance'))
-            <p class="text-success fw-bold">{{ session('successAddAttendance') }}</p>
+        @elseif (session()->has('successCreateAttendance'))
+            <p class="text-success fw-bold">{{ session('successCreateAttendance') }}</p>
         @endif
 
         @can('admin')
-            <a href="{{ route('attendance-create') }}" class="btn btn-primary text-white mt-3" style="font-size: 10pt">
-                <i class="bi bi-plus-square"></i>
-                Add New Attendance
-            </a>
+            <!-- Add Attendance Preform -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <button class="w-100 h-100 btn d-flex justify-content-between" type="button" id="add-new-attendance-btn">Buat Presensi Baru <i class="bi bi-chevron-down"></i></button>
+                </div>
+
+                <div class="card-body" id="add-new-attendance-form" style="display: none;">
+                    <form action="{{ route('attendance-create-admin') }}" method="GET">
+                        <div class="form-group mb-3">
+                            <label for="project">Pilih Proyek</label>
+                            <select class="form-select" id="project" name="project">
+                                @foreach ($projects as $project)
+                                    <option value="{{ $project->id }}">{{ $project->project_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Konfirmasi dan Lanjut</button>
+                    </form>
+                </div>
+            </div>
         @endcan
 
         <div class="overflow-x-auto mt-4">
@@ -25,28 +42,24 @@
                     <th>#</th>
                     <th>Tanggal</th>
                     <th>Proyek</th>
-                    <th>Nama</th>
-                    <th>Subtotal</th>
-                    <th>Actions</th>
+                    <th>Pegawai</th>
+                    <th>Jam Masuk</th>
+                    <th>Jam Keluar</th>
+                    <th>Aksi</th>
                 </tr>
 
                 @foreach ($attendances as $a)
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ Carbon\Carbon::parse($a->attendance_date)->format("d M Y") }}</td>
+                        <td>{{ Carbon\Carbon::parse($a->attendance_date)->translatedFormat("d M Y") }}</td>
                         <td>{{ $a->project->project_name }}</td>
                         <td>{{ $a->employee->nama }}</td>
-                        <td>
-                            @if($subtotals[$loop->iteration - 1] != "N/A")
-                                Rp {{ number_format($subtotals[$loop->iteration - 1], 2, ",", ".") }}
-                            @else
-                                {{ $subtotals[$loop->iteration - 1] }}
-                            @endif
-                        </td>
+                        <td>{{ Carbon\Carbon::parse($a->jam_masuk)->format("H:i") }}</td>
+                        <td>{{ Carbon\Carbon::parse($a->jam_keluar)->format("H:i") }}</td>
                         <td>
                             <div class="d-flex gap-2 w-100">
-                                <a href="{{ route('attendance-location', $a->id) }}" class="btn btn-success text-white">
-                                    <i class="bi bi-geo-alt-fill"></i>
+                                <a href="{{ route('attendance-show', $a->id) }}" class="btn btn-success text-white">
+                                    <i class="bi bi-eye"></i>
                                 </a>
                                 <a href="{{ route('attendance-edit', $a->id) }}" class="btn btn-warning text-white"
                                     style="font-size: 10pt; background-color: rgb(197, 167, 0);">
@@ -64,5 +77,13 @@
             </table>
         </div>
     </x-container>
+
+    <script>
+        $(document).ready(() => {
+            $("#add-new-attendance-btn").click(() => {
+                $("#add-new-attendance-form").slideToggle();
+            })
+        });
+    </script>
 
 @endsection

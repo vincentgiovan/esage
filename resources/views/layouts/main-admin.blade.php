@@ -8,8 +8,8 @@
         <title>eSage</title>
 
         <!-- Style punya template halaman -->
-        <link rel="stylesheet" href="{{ asset("vendors/ti-icons/css/themify-icons.css") }}">
-        <link rel="stylesheet" href="{{ asset("template/vendors/base/vendor.bundle.base.css") }}">
+        {{-- <link rel="stylesheet" href="{{ asset("vendors/ti-icons/css/themify-icons.css") }}">
+        <link rel="stylesheet" href="{{ asset("template/vendors/base/vendor.bundle.base.css") }}">  --}}
         <link rel="stylesheet" href="{{ asset("template/css/style.css") }}">
 
         <!-- Bootstrap CSS & icon -->
@@ -18,7 +18,7 @@
 
         <!-- Original asset -->
         <link rel="shortcut icon" href="{{ asset("res/sageico.ico") }}" />
-        <link rel="stylesheet" href="style.css">
+        {{-- <link rel="stylesheet" href="style.css"> --}}
 
         <!-- Custom styles -->
         <style>
@@ -162,12 +162,12 @@
         <script>
             $(document).ready(() => {
                 // Buat ngubah dropdown select product jadi select2 (yang ada fitur searchnya) dan sedikit styling
-                $('#select-product-dropdown').select2({
-                    placeholder: "Select a Student",
+                $('.select2').select2({
+                    placeholder: "Select an Item",
                     allowClear: false
                 });
 
-                $('#select-product-dropdown').next('.select2-container').find('.select2-selection').css({
+                $('.select2').next('.select2-container').find('.select2-selection').css({
                     "height": "2.4rem",
                     "padding-top": "0.3rem",
                     "border": "#dee2e6 solid 1px",
@@ -193,14 +193,14 @@
         </script>
 
         <!-- Template halaman -->
-        <script src="{{ asset("template/vendors/base/vendor.bundle.base.js") }}"></script>
+        {{-- <script src="{{ asset("template/vendors/base/vendor.bundle.base.js") }}"></script>
         <script src="{{ asset("template/vendors/chart.js/Chart.min.js") }}"></script>
         <script src="{{ asset("template/js/jquery.cookie.js") }}" type="text/javascript"></script>
         <script src="{{ asset("template/js/off-canvas.js") }}"></script>
         <script src="{{ asset("template/js/hoverable-collapse.js") }}"></script>
         <script src="{{ asset("template/js/template.js") }}"></script>
         <script src="{{ asset("template/js/todolist.js") }}"></script>
-        <script src="{{ asset("template/js/dashboard.js") }}"></script>
+        <script src="{{ asset("template/js/dashboard.js") }}"></script> --}}
 
         <!-- Include Select2 JavaScript -->
 		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>

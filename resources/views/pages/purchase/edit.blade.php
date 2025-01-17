@@ -2,78 +2,56 @@
 
 @section('content')
     <x-container-middle>
-        <div class="container bg-white p-5 rounded-4 border border-1 card">
-
-            <h2>Edit Item</h2>
-
-            {{-- @csrf kepake untuk token ,wajib --}}
+        <div class="container bg-white p-5 rounded-4 border border-1 card mt-4">
+            <h2>Edit Data Pembelian</h2>
 
             <form method="POST" action="{{ route('purchase-edit', $purchase->id) }}" id="bikinpurchase">
-                {{-- @csrf kepake untuk token ,wajib --}}
                 @csrf
-                {{-- <div class="mt-3">
-                    <select name="product_name" class="form-select">
-                        @foreach ($product_name as $s)
-                            <option value="{{ $s }}" @if ($product->product_name == $s) selected @endif>{{ $s }}</option>
-                        @endforeach
 
-                    </select>
-                    @error('product_name')
-                    <p style = "color: red; font-size: 10px;">{{$message }}</p>
-                    @enderror
-                </div> --}}
                 <div class="mt-3">
-                    <label for="partner_id">Nama Partner</label>
+                    <label for="partner_id">Supplier</label>
                     <select name="partner_id" id="partner_id" class="form-select">
                         @foreach ($supplier as $s)
                             <option value="{{ $s->id }}" @if ($s->id == old('partner_id')) selected @endif>
                                 {{ $s->partner_name }}</option>
                         @endforeach
-
                     </select>
-                    @error('supplier_id')
-                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
+                </div>
+
+                <div class="mt-3">
+                    <label for="purchase_date">Tanggal Pembelian</label>
+                    <input type="date" class="form-control @error("purchase_date") is-invalid @enderror" name="purchase_date" id="purchase_date"
+                        value = "{{ old('purchase_date', $purchase->purchase_date) }}">
+                    @error('purchase_date')
+                        <p class="text-danger">Harap masukkan tanggal pembelian.</p>
                     @enderror
                 </div>
+
                 <div class="mt-3">
-                    <label for="purchase_deadline">Deadline Pembelian</label>
-                    <input type="text" class="form-control" name="purchase_deadline" id="purchase_deadline"
-                        onfocus="(this.type='date')" onblur="(this.type='text')" placeholder="Purchase_deadine"
+                    <label for="purchase_deadline">Tenggat Pembelian</label>
+                    <input type="date" class="form-control @error("purchase_deadline") is-invalid @enderror" name="purchase_deadline" id="purchase_deadline"
                         value = "{{ old('purchase_deadline', $purchase->purchase_deadline) }}">
                     @error('purchase_deadline')
-                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">Harap masukkan tenggat pembelian.</p>
                     @enderror
                 </div>
+
                 <div class="mt-3">
                     <label for="fakeregister">SKU</label>
                     <input type="text" class="form-control" id="fakeregister" name="fakeregister" placeholder="Register"
                         disabled value="{{ $purchase->register }}">
                 </div>
+
                 <div class="mt-3">
-                    <label for="purchase_date">Tanggal Pembelian</label>
-                    <input type="text" class="form-control" name="purchase_date" id="purchase_date"
-                        onfocus="(this.type='date')" onblur="(this.type='text')" placeholder="Purchase Date"
-                        value = "{{ old('purchase_date', $purchase->purchase_date) }}">
-                    @error('purchase_date')
-                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
-                    @enderror
-                </div>
-                <div class="mt-3">
-                    <label for="purchase_status">Status</label>
+                    <label for="purchase_status">Status Pembelian</label>
                     <select name="purchase_status" id="purchase_status" class="form-select">
-                        @foreach ($status as $st)
-                            <option value="{{ $st }}" @if ($st == old('purchase_status')) selected @endif>
-                                {{ $st }}</option>
-                        @endforeach
-
+                        <option value="Ordered" @if(old('purchase_status', $purchase->purchase_status) == 'Ordered') selected @endif>Telah dipesan</option>
+                        <option value="Retrieved" @if(old('purchase_status', $purchase->purchase_status) == 'Retrieved') selected @endif>Diterima</option>
                     </select>
-                    @error('purchase_status')
-                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
-                    @enderror
                 </div>
 
-                <div class="mt-3">
-                    <input type="submit" class="btn btn-success px-3 py-1" value="Edit">
+                <div class="mt-4">
+                    <input type="submit" class="btn btn-success px-3 py-1" value="Simpan Perubahan">
                 </div>
             </form>
         </div>

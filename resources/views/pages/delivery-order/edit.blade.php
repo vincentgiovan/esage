@@ -4,30 +4,20 @@
     <x-container-middle>
         <div class="container bg-white p-5 rounded-4 border border-1 card">
 
-            <h2>Edit Item</h2>
+            <h2>Edit Data Pengiriman</h2>
 
             {{-- @csrf kepake untuk token ,wajib --}}
 
             <form method="POST" action="{{ route('deliveryorder-update', $delivery_order->id) }}" id="bikindevor">
                 @csrf
-                {{-- <div class="mt-3">
-                <select name="product_id" class="form-select">
-                @foreach ($products as $product)
-                    <option value="{{ $product->id }}" @if ($delivery_order->product_id == $product->id) selected @endif >{{ $product->product_name }}</option>
-                @endforeach
 
-                </select>
-                @error('product_id')
-                <p style = "color: red; font-size: 10px;">{{$message }}</p>
-                @enderror
-                </div> --}}
                 <div class="mt-3">
-                    <label for="delivery_date">Tanggal Delivery</label>
-                    <input type="date" class="form-control" id="delivery_date" name="delivery_date" placeholder="delivery_date"
+                    <label for="delivery_date">Tanggal Pengiriman</label>
+                    <input type="date" class="form-control @error("delivery_date") is-invalid @enderror" id="delivery_date" name="delivery_date" placeholder="delivery_date"
                         value = "{{ old('delivery_date', $delivery_order->delivery_date) }}">
 
                     @error('delivery_date')
-                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
+                        <p class="text-danger">Harap masukkan tanggal pengiriman</p>
                     @enderror
                 </div>
                 <div class="mt-3">
@@ -38,9 +28,6 @@
                                 {{ $pn->project_name }}</option>
                         @endforeach
                     </select>
-                    @error('project_id')
-                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
-                    @enderror
                 </div>
                 <div class="mt-3">
                     <div class="mt-3">
@@ -49,26 +36,20 @@
                     </div>
                 </div>
                 <div class="mt-3">
-                    <label for="delivery_status">Status Delivery</label>
+                    <label for="delivery_status">Status Pengiriman</label>
                     {{-- <input type="text" class="form-control" name="status" placeholder="Status"  value = "{{ old("status") }}"> --}}
                     <select name="delivery_status" id="delivery_status" class="form-select">
-                        <option value="Complete">Complete</option>
-                        <option value="Incomplete">Incomplete</option>
+                        <option value="Complete">Selesai</option>
+                        <option value="Incomplete">Belum selesai</option>
                     </select>
-                    @error('delivery_status')
-                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
-                    @enderror
                 </div>
                 <div class="mt-3">
                     <label for="note">Catatan</label>
                     <input type="text" class="form-control" id="note" name="note" placeholder="Note"
                         value = "{{ old('note', $delivery_order->note) }}">
-                    @error('note')
-                        <p style = "color: red; font-size: 10px;">{{ $message }}</p>
-                    @enderror
                 </div>
-                <div class="mt-3">
-                    <input type="submit" class="btn btn-success px-3 py-1" value="Edit">
+                <div class="mt-4">
+                    <input type="submit" class="btn btn-success px-3 py-1" value="Simpan Perubahan">
                 </div>
             </form>
         </div>
