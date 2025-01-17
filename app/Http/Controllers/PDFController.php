@@ -120,49 +120,7 @@ class PDFController extends Controller
     }
 
     public function export_salaries(Request $request){
-        // $salaries = Salary::filter(request(['from', 'until']))
-        //     ->with(['employee.attendances' => function ($query) {
-        //         $filters = request(['from', 'until']);
-
-        //         $query->when(isset($filters['from']) && isset($filters['until']), function ($query) use ($filters) {
-        //             return $query->where(function ($query) use ($filters) {
-        //                 $query->whereBetween('attendance_date', [$filters['from'], $filters['until']])
-        //                     // ->orWhereBetween('attendance_date', [$filters['from'], $filters['until']])
-        //                     ->orWhere(function ($query) use ($filters) {
-        //                         $query->where('attendance_date', '>=', $filters['from'])
-        //                                 ->where('attendance_date', '<=', $filters['until']);
-        //                     });
-        //             });
-        //         });
-
-        //         $query->when($filters['from'] ?? false, function ($query, $from) {
-        //             return $query->where('attendance_date', '>=', $from);
-        //         });
-
-        //         $query->when($filters['until'] ?? false, function ($query, $until) {
-        //             return $query->where('attendance_date', '<=', $until);
-        //         });
-        //     }, "employee.prepays" => function ($query) {
-        //         $filters = request(['from', 'until']);
-
-        //         $query->when(isset($filters['from']) && isset($filters['until']), function ($query) use ($filters) {
-        //             return $query->where(function ($query) use ($filters) {
-        //                 $query->where('start_period', '>=', $filters['from'])
-        //                     ->where('end_period', '<=', $filters['until']);
-        //             });
-        //         });
-
-        //         $query->when($filters['from'] ?? false, function ($query, $from) {
-        //             return $query->where('start_period', '>=', $from);
-        //         });
-
-        //         $query->when($filters['until'] ?? false, function ($query, $until) {
-        //             return $query->where('end_period', '<=', $until);
-        //         });
-        //     }])
-        //     ->get();
-
-        $attendances = Attendance::filter(request(['from', 'until']))->with('project')
+        $groupedAttendances = Attendance::filter(request(['from', 'until']))->with('project')
             ->orderBy('attendance_date', 'asc')
             ->orderBy(Employee::select('nama')
                 ->whereColumn('id', 'attendances.employee_id')
@@ -170,19 +128,25 @@ class PDFController extends Controller
             ->orderBy(Project::select('project_name')
                 ->whereColumn('id', 'attendances.project_id')
                 ->limit(1), 'asc')
-            ->get();
+            ->get()
+            ->groupBy('employee_id');
 
         $subtotals = [];
 
-        foreach($attendances as $atd){
-            if($atd->employee->kalkulasi_gaji == "on"){
-                $sub_normal = $atd->normal * $atd->employee->pokok;
-                $sub_lembur = $atd->jam_lembur * $atd->employee->lembur;
-                $sub_lembur_panjang = $atd->index_lembur_panjang * $atd->employee->lembur_panjang;
-                $sub_performa = $atd->index_performa * $atd->employee->performa;
+        foreach($groupedAttendances as $employee_id => $attendances){
+            if(Employee::find($employee_id)->kalkulasi_gaji == "on"){
+                $total_salary = 0;
 
-                $subtotal = $sub_normal + $sub_lembur + $sub_lembur_panjang + $sub_performa;
-                array_push($subtotals, $subtotal);
+                foreach($attendances as $atd){
+                    $sub_normal = $atd->normal * $atd->employee->pokok;
+                    $sub_lembur = $atd->jam_lembur * $atd->employee->lembur;
+                    $sub_lembur_panjang = $atd->index_lembur_panjang * $atd->employee->lembur_panjang;
+                    $sub_performa = $atd->performa;
+
+                    $total_salary += $sub_normal + $sub_lembur + $sub_lembur_panjang + $sub_performa;
+                }
+
+                $subtotals[$employee_id] = $total_salary;
             }
             else {
                 array_push($subtotals, 'N/A');
@@ -190,9 +154,10 @@ class PDFController extends Controller
         }
 
         $data = [
-            // "salaries" => $salaries
-            "attendances" => $attendances,
+            "grouped_attendances" => $groupedAttendances,
             "subtotals" => $subtotals,
+            "start_period" => $request->from,
+            "end_period" => $request->until
         ];
 
         $pdf = Pdf::loadView('pdf.salary', $data)->setPaper("a4", "portrait");

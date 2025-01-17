@@ -38,81 +38,77 @@
                 <th>Ket.</th>
             </tr>
 
-            @foreach($salaries as $i => $s)
+            @foreach($grouped_attendances as $emp_id => $attendances)
                 @php
-                    $total_all_project = 0;
-                    $grouped = [];
-
-                    foreach ($s->employee->attendances->where('attendance_date', '>=', $s->start_period)->where('attendance_date', '<=', $s->end_period) as $atd) {
-                        $projectName = $atd->project->project_name ?? 'Unknown';
-                        if (!isset($grouped[$projectName])) {
-                            $grouped[$projectName] = [
-                                'vals' => ['normal' => 0, 'lembur' => 0, 'lembur_panjang' => 0, 'performa' => 0],
-                                'tots' => ['normal' => 0, 'lembur' => 0, 'lembur_panjang' => 0],
-                            ];
-                        }
-
-                        $grouped[$projectName]['vals']['normal'] += $atd->normal;
-                        $grouped[$projectName]['vals']['lembur'] += $atd->jam_lembur;
-                        $grouped[$projectName]['vals']['lembur_panjang'] += $atd->index_lembur_panjang;
-                        $grouped[$projectName]['vals']['performa'] += $atd->performa;
-
-                        $grouped[$projectName]['tots']['normal'] += ($atd->normal * $s->employee->pokok);
-                        $grouped[$projectName]['tots']['lembur'] += ($atd->jam_lembur * $s->employee->lembur);
-                        $grouped[$projectName]['tots']['lembur_panjang'] += ($atd->index_lembur_panjang * $s->employee->lembur_panjang);
-
-                        // Add individual attendance contribution to total
-                        $attendance_total = ($atd->normal * $s->employee->pokok) +
-                                            ($atd->jam_lembur * $s->employee->lembur) +
-                                            ($atd->index_lembur_panjang * $s->employee->lembur_panjang) +
-                                            $atd->performa;
-
-                        $total_all_project += $attendance_total;
-                    }
-
-                    // Kasbon
-                    $kasubon = $s->employee->prepays->where('start_period', '>=', $s->start_period)->where('end_period', '<=', $s->end_period);
+                    $employee = App\Models\Employee::find(intval($emp_id));
+                    $kasubon = $employee->prepays->where('prepay_date', '>=', $start_period)->where('prepay_date', '<=', $end_period);
 
                     $total_kasbon = 0;
-                    foreach($kasubon as $kb){
-                        $total_kasbon += $kb->amount;
+                    foreach($kasubon as $k){
+                        $total_kasbon += $k->amount;
                     }
 
-                    $total_all_project -= $total_kasbon;
+                    $subtotals[$emp_id] -= $total_kasbon;
                 @endphp
 
                 <tr>
                     <td style="background-color: yellow;">{{ $loop->iteration }}</td>
-                    <td>{{ $s->start_period ? Carbon\Carbon::parse($s->start_period)->translatedFormat("d/m/Y") : "N/A" }} - {{ $s->end_period ? Carbon\Carbon::parse($s->end_period)->translatedFormat("d/m/Y") : "N/A" }}</td>
-                    <td>{{ $s->employee->nama }}</td>
-                    <td>{{ $s->employee->jabatan }}</td>
-                    <td style="background-color: yellow;">{{ number_format($total_all_project, 2, ',', '.') }}</td>
+                    <td>{{ Carbon\Carbon::parse($start_period)->translatedFormat("d/m/Y") }} - {{ Carbon\Carbon::parse($end_period)->translatedFormat("d/m/Y") }}</td>
+                    <td>{{ $employee->nama }}</td>
+                    <td>{{ $employee->jabatan }}</td>
+                    <td style="background-color: yellow;">{{ number_format($subtotals[$emp_id], 2, ',', '.') }}</td>
                     <td></td>
                 </tr>
 
-                @foreach($grouped as $project_name => $grp)
-                    @if($grp['vals']['normal'] != 0)
+                @foreach($attendances->groupBy('project_id') as $proj_id => $gbp)
+                    @php
+                        $total_jam_normal = 0;
+                        $total_jam_lembur = 0;
+                        $total_kali_lembur_panjang = 0;
+
+                        $total_gaji_normal = 0;
+                        $total_gaji_lembur = 0;
+                        $total_gaji_lembur_panjang = 0;
+                        $total_performa = 0;
+                    @endphp
+
+                    @foreach($gbp as $proj_id => $atd)
+                        @php
+                            $project_name = $atd->project->project_name;
+
+                            $total_jam_normal += $atd->normal;
+                            $total_jam_lembur += $atd->jam_lembur;
+                            $total_kali_lembur_panjang += $atd->index_lembur_panjang;
+
+                            $total_gaji_normal += $atd->normal * $atd->employee->pokok;
+                            $total_gaji_lembur += $atd->jam_lembur * $atd->employee->lembur;
+                            $total_gaji_lembur_panjang += $atd->index_lembur_panjang * $atd->lembur_panjang;
+                            $total_performa += $atd->performa;
+                        @endphp
+                    @endforeach
+
+                    @if($total_jam_normal != 0)
                         <tr>
-                            <td colspan="5">Normal: {{ $grp['vals']['normal'] }} jam ({{ $project_name }})</td>
-                            <td>{{ number_format($grp['tots']['normal'], 2, ',', '.') }}</td>
+                            <td colspan="5">Normal: {{ $total_jam_normal }} jam ({{ $project_name }})</td>
+                            <td>{{ number_format($total_gaji_normal, 2, ',', '.') }}</td>
                         </tr>
                     @endif
-                    @if($grp['vals']['lembur'] > 0)
+                    @if($total_jam_lembur > 0)
                         <tr>
-                            <td colspan="5">Lembur: {{ $grp['vals']['lembur'] }} jam ({{ $project_name }})</td>
-                            <td>{{ number_format($grp['tots']['lembur'], 2, ',', '.') }}</td>
+                            <td colspan="5">Lembur: {{ $total_jam_lembur }} jam ({{ $project_name }})</td>
+                            <td>{{ number_format($total_gaji_lembur, 2, ',', '.') }}</td>
                         </tr>
                     @endif
-                    @if($grp['vals']['lembur_panjang'] > 0)
+                    @if($total_kali_lembur_panjang > 0)
                         <tr>
-                            <td colspan="5">Lembur Panjang: {{ $grp['vals']['lembur_panjang'] }} hari ({{ $project_name }})</td>
-                            <td>{{ number_format($grp['tots']['lembur_panjang'], 2, ',', '.') }}</td>
+                            <td colspan="5">Lembur Panjang: {{ $total_kali_lembur_panjang }} hari ({{ $project_name }})</td>
+                            <td>{{ number_format($total_gaji_lembur_panjang, 2, ',', '.') }}</td>
                         </tr>
                     @endif
-                    @if($grp['vals']['performa'] > 0)
+                    @if($total_performa > 0)
                         <tr>
                             <td colspan="5">Performa ({{ $project_name }})</td>
-                            <td>{{ number_format($grp['vals']['performa'], 2, ',', '.') }}</td>
+                            <td>{{ number_format($total_performa, 2, ',', '.') }}</td>
                         </tr>
                     @endif
                 @endforeach
