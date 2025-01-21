@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AdminAccount
+class PurchasingAdminUser
 {
     /**
      * Handle an incoming request.
@@ -17,11 +17,10 @@ class AdminAccount
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::user()->role == "admin"){
+        if(Auth::user()->role == "purchasing_admin"){
             return $next($request);
         } else{
             abort(403);
         }
-
     }
 }

@@ -5,7 +5,7 @@
         <br>
         <div class="w-100 d-flex align-items-center justify-content-between">
             <h2>Pengajuan Cuti Karyawan</h2>
-            {{-- @can('admin')
+            {{-- @can('master')
                 <div class="d-flex gap-3">
                     <a class="btn btn-secondary" href="{{ route('partner-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
                     <div class="position-relative d-flex flex-column align-items-end">
@@ -35,7 +35,7 @@
             <p class="text-success fw-bold">{{ session('successRejectLeave') }}</p>
         @endif
 
-        {{-- @can('admin')
+        {{-- @can('master')
             <a href="{{ route('partner-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
                 <i class="bi bi-plus-square"></i>
                 Tambah Partner Baru</a>
@@ -52,7 +52,7 @@
                     <th>Periode Cuti</th>
                     <th>Alasan Cuti</th>
                     <th>Status</th>
-                    @can('admin')
+                    @can('master')
                         <th>Aksi</th>
                     @endcan
                 </tr>

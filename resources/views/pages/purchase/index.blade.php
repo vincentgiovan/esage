@@ -5,7 +5,7 @@
         <br>
         <div class="w-100 d-flex align-items-center justify-content-between">
             <h2>Pembelian Barang</h2>
-            @can("admin")
+            @can("master")
                 <div class="d-flex gap-3">
                     {{-- <a class="btn btn-secondary" href="{{ route('purchase-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a> --}}
                     <div class="position-relative d-flex flex-column align-items-end">
@@ -52,7 +52,7 @@
             <p class="text-success fw-bold">{{ session('successImportPurchase') }}</p>
         @endif
 
-        @can("admin")
+        @can("master")
             <a href="{{ route('purchase-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
                 <i class="bi bi-plus-square"></i>
                 Tambah Pembelian Baru</a>
@@ -71,7 +71,7 @@
                     <th>SKU</th>
                     <th>Total</th>
                     <th>Status</th>
-                    @can("admin")
+                    @can("master")
                         <th>Aksi</th>
                     @endcan
                 </tr>
@@ -85,7 +85,7 @@
                         <td>
                             <div class="d-flex gap-5 w-100 justify-content-between align-items-center">
                                 {{ $p->register }}
-                                @can('admin')
+                                @can('master')
                                     <a href="{{ route('purchaseproduct-viewitem', $p->id) }}" class="btn btn-success text-white"
                                         style="font-size: 10pt"><i class="bi bi-cart"></i> Lihat Barang</a>
                                 @endcan
@@ -110,7 +110,7 @@
                         </td>
                         {{-- <td >{{ $p->user->name }}</td> --}}
 
-                        @can("admin")
+                        @can("master")
                             <td>
                                 <div class="d-flex gap-2 w-100">
 

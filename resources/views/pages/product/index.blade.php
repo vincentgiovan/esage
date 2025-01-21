@@ -4,7 +4,7 @@
     <x-container>
         <div class="w-100 d-flex align-items-center justify-content-between">
             <h2 class="mt-4">Data Barang di Gudang</h2>
-            @can('admin')
+            @can('master')
                 <div class="d-flex gap-3">
                     <a class="btn btn-secondary" href="{{ route('product-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
                     <div class="position-relative d-flex flex-column align-items-end">
@@ -46,7 +46,7 @@
                 </form>
                 <a href="{{ route('product-index') }}" class="btn" style="background-color: rgb(191, 191, 191)"><i class="bi bi-x-lg"></i></a>
             </div>
-            @can('admin')
+            @can('master')
                 <a href="{{ route('product-create') }}" class="btn btn-primary text-white" style="font-size: 10pt">
                     <i class="bi bi-plus-square"></i>
                     Tambah Barang Baru
@@ -69,7 +69,7 @@
                     <th>Markup</th>
                     <th>Status</th>
                     <th class="text-center">Return</th>
-                    @can('admin')
+                    @can('master')
                         <th>Aksi</th>
                     @endcan
                 </tr>
@@ -104,7 +104,7 @@
                                     @endif
                                 </div>
                             </td>
-                            @can('admin')
+                            @can('master')
                                 <td>
                                     <button class="btn btn-success view-all-btn" data-prodgroup="{{ __(str_replace(' ', '', $p->product_name) . '-' . str_replace(' ', '', $p->variant) . '-' . $p->is_returned) }}">Lihat Semua</button>
                                 </td>
@@ -117,7 +117,7 @@
                             <td>
                                 <div class="w-100 d-flex justify-content-between align-items-center">
                                     <div>{{ $p->product_name }}</div>
-                                    @can('admin')
+                                    @can('master')
                                         @if($p->is_returned == 'no')
                                             <a href="{{ route('product-log', $p->id) }}" class="btn btn-success">Lihat Log</a>
                                         @endif
@@ -139,7 +139,7 @@
                                     @endif
                                 </div>
                             </td>
-                            @can('admin')
+                            @can('master')
                                 <td>
                                     <div class="d-flex gap-2 w-100">
                                         <a href="{{ route('product-edit', $p->id) }}" class="btn btn-warning text-white"

@@ -5,7 +5,7 @@
         <br>
         <div class="w-100 d-flex align-items-center justify-content-between">
             <h2>Visit Log</h2>
-            {{-- @can('admin')
+            {{-- @can('master')
                 <div class="d-flex gap-3">
                     <a class="btn btn-secondary" href="{{ route('partner-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
                     <div class="position-relative d-flex flex-column align-items-end">

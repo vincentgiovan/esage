@@ -31,7 +31,10 @@
                 <div class="form-group mb-3">
                     <label for="role">Pilih Role</label>
                     <select class="form-control text-black" id="role" name="role">
-                        <option value="admin">Admin</option>
+                        <option value="master">Master</option>
+                        <option value="accounting_admin">Accounting Admin</option>
+                        <option value="purchasing_admin">Purchasing Admin</option>
+                        <option value="project_manager">Project Manager</option>
                         <option value="user" selected>User</option>
                     </select>
                 </div>

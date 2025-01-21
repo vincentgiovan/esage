@@ -12,7 +12,7 @@
             <p class="text-success fw-bold">{{ session('successCreateAttendance') }}</p>
         @endif
 
-        @can('admin')
+        @can('master')
             <!-- Add Attendance Preform -->
             <div class="card mb-4">
                 <div class="card-header">

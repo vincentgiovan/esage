@@ -35,10 +35,24 @@ class AppServiceProvider extends ServiceProvider
             require_once $breadcrumbs;
         }
 
-        Gate::define("admin", function(User $user){
-            return $user->role == 'admin';
+        // Main role
+        Gate::define("master", function(User $user){
+            return $user->role == 'master';
         });
 
+        Gate::define("accounting_admin", function(User $user){
+            return $user->orle == 'accounting_admin';
+        });
+
+        Gate::define("purchasing_admin", function(User $user){
+            return $user->orle == 'purchasing_admin';
+        });
+        Gate::define("project_manager", function(User $user){
+            return $user->orle == 'project_manager';
+        });
+
+
+        // Other Permission
         Gate::define("self_attendance", function(User $user){
             return $user->allow_self_attendance == 'yes';
         });
