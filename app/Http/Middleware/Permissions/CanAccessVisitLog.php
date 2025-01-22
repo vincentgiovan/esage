@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace App\Http\Middleware\Permissions;
 
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AdminAccount
+class CanAccessVisitLog
 {
     /**
      * Handle an incoming request.
@@ -17,11 +17,11 @@ class AdminAccount
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::user()->role == "admin"){
+        if(in_array(Auth::user()->role, ['master', 'accounting_admin'])){
             return $next($request);
-        } else{
+        }
+        else {
             abort(403);
         }
-
     }
 }
