@@ -99,7 +99,6 @@
                                     </form>
                                 </div>
                             </td>
-                        @endauth
                     </tr>
                 @endforeach
             </table>
