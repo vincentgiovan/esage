@@ -63,8 +63,26 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'admin' => \App\Http\Middleware\AdminAccount::class,
+
+        'master' => \App\Http\Middleware\MasterAccount::class,
+        'accounting_admin' => \App\Http\Middleware\AccountingAdminUser::class,
+        'purchasing_admin' => \App\Http\Middleware\PurchasingAdminUser::class,
+        'project_manager' => \App\Http\Middleware\ProjectManagerUser::class,
         'user' => \App\Http\Middleware\NormalUser::class,
-        'self_attendance' => \App\Http\Middleware\AllowSelfAttendance::class,
+
+        'can_access_product' => \App\Http\Middleware\Permissions\CanAccessProduct::class,
+        'can_access_partner' => \App\Http\Middleware\Permissions\CanAccessPartner::class,
+        'can_access_project' => \App\Http\Middleware\Permissions\CanAccessProject::class,
+        'can_access_delivery_order' => \App\Http\Middleware\Permissions\CanAccessDeliveryOrder::class,
+        'can_access_purchase' => \App\Http\Middleware\Permissions\CanAccessPurchase::class,
+        'can_access_request_item' => \App\Http\Middleware\Permissions\CanAccessRequestItem::class,
+        'can_access_return_item' => \App\Http\Middleware\Permissions\CanAccessReturnItem::class,
+        'can_access_account' => \App\Http\Middleware\Permissions\CanAccessAccount::class,
+        'can_access_employee' => \App\Http\Middleware\Permissions\CanAccessEmployee::class,
+        'can_access_attendance' => \App\Http\Middleware\Permissions\CanAccessAttendance::class,
+        'can_access_salary' => \App\Http\Middleware\Permissions\CanAccessSalary::class,
+        'can_access_visit_log' => \App\Http\Middleware\Permissions\CanAccessVisitLog::class,
+        'can_access_propose_leave' => \App\Http\Middleware\Permissions\CanAccessProposeLeave::class,
+        'can_access_self_attendance' => \App\Http\Middleware\Permissions\CanAccessSelfAttendance::class,
     ];
 }

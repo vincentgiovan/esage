@@ -69,10 +69,10 @@
                             <ul>
                                 <li>Nama: {{ $ri->product->product_name }}</li>
                                 <li>Varian: {{ $ri->product->variant }}</li>
-                                @can('admin')
+
                                     <li>Harga: Rp {{ number_format($ri->product->price, "2", ",", ".") }}</li>
                                     <li>Diskon: {{ $ri->product->discount }}%</li>
-                                @endcan
+
                                 <li>Jumlah: {{ $ri->quantity }}</li>
                             </ul>
                         </td>

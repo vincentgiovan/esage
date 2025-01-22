@@ -12,7 +12,7 @@
             <p class="text-success fw-bold">{{ session('successCreateAttendance') }}</p>
         @endif
 
-        @can('admin')
+
             <!-- Add Attendance Preform -->
             <div class="card mb-4">
                 <div class="card-header">
@@ -34,7 +34,7 @@
                     </form>
                 </div>
             </div>
-        @endcan
+
 
         <div class="overflow-x-auto mt-4">
             <table class="w-100">

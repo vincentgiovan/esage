@@ -151,18 +151,18 @@
             <table class="w-100">
                 <tr>
                     <th>No</th>
-                    <th>Periode</th>
+                    <th>Tanggal</th>
                     <th>Jumlah</th>
                     <th>Keterangan</th>
                     <th>Aksi</th>
                 </tr>
 
-                @foreach ($employee->prepays()->orderBy('start_period')->get() as $kasbon)
+                @forelse ($employee->prepays()->orderBy('prepay_date')->get() as $kasbon)
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
                         <td style="width: 50px;">{{ $loop->iteration }}</td>
                         <td style="width: 500px;">
                             <div class="w-100 d-flex gap-3 align-items-center">
-                                {{ Carbon\Carbon::parse($kasbon->start_period)->translatedFormat('d F Y') }} - {{ Carbon\Carbon::parse($kasbon->end_period)->translatedFormat('d F Y') }}
+                                {{ Carbon\Carbon::parse($kasbon->prepay_date)->translatedFormat('d F Y') }}
                             </div>
                         </td>
                         <td style="width: 300px;">Rp {{ number_format($kasbon->amount, 2, ",", ".") }}</td>
@@ -223,7 +223,8 @@
                             </form>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                @endforelse
             </table>
         </div>
     </x-container>

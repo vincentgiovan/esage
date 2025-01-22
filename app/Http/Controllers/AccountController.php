@@ -49,7 +49,7 @@ class AccountController extends Controller
         ]);
 
         if($request->employee){
-            Employee::find($request->employee)->update(['user_id' => $request->employee]);
+            Employee::find($request->employee)->update(['user_id' => $request->user]);
         }
 
         // Arahin user balik ke halaman account/index.blade.php
@@ -96,7 +96,7 @@ class AccountController extends Controller
         }
 
         if($request->employee){
-            Employee::find($request->employee)->update(['user_id' => $request->employee]);
+            Employee::find($request->employee)->update(['user_id' => $user->id]);
         }
 
         // Kalo semuanya udah baru disimpan perubahannya di tabel users
