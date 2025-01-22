@@ -28,8 +28,11 @@
                 <div class="form-group mb-3">
                     <label for="role">Pilih Role</label>
                     <select class="form-control text-black" id="role" name="role">
-                        <option value="admin" @if(old('role', $user->role) == '1') selected @endif>Admin</option>
-                        <option value="user" @if(old('role', $user->role) == '2') selected @endif>User</option>
+                        <option value="master" @if(old('role', $user->role) == 'master') selected @endif>Master</option>
+                        <option value="accounting_admin" @if(old('role', $user->role) == 'accounting_admin') selected @endif>Accounting Admin</option>
+                        <option value="purchasing_admin" @if(old('role', $user->role) == 'purchase_admin') selected @endif>Purchasing Admin</option>
+                        <option value="project_manager" @if(old('role', $user->role) == 'projct_manager') selected @endif>Project Manager</option>
+                        <option value="user" @if(old('role', $user->role) == 'user') selected @endif>User</option>
                     </select>
                 </div>
 
@@ -76,7 +79,9 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-primary mt-3">Buat Akun</button>
+                <input type="hidden" name="user" value="{{ $user->id }}">
+
+                <button type="submit" class="btn btn-primary mt-3">Edit Data Akun</button>
             </form>
         </div>
     </x-container-middle>

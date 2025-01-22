@@ -5,7 +5,7 @@
         <br>
         <div class="w-100 d-flex align-items-center justify-content-between">
             <h2>Partner Sage</h2>
-            @can('master')
+
                 <div class="d-flex gap-3">
                     <a class="btn btn-secondary" href="{{ route('partner-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
                     <div class="position-relative d-flex flex-column align-items-end">
@@ -18,7 +18,7 @@
                         </div>
                     </div>
                 </div>
-            @endcan
+
         </div>
         <script>
             $(document).ready(() => {
@@ -37,12 +37,12 @@
             <p class="text-success fw-bold">{{ session('successDeletePartner') }}</p>
         @endif
 
-        @can('master')
+
             <a href="{{ route('partner-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
                 <i class="bi bi-plus-square"></i>
                 Tambah Partner Baru</a>
             <br>
-        @endcan
+
         <!-- tabel list data-->
 
         <div class="overflow-x-auto">
@@ -55,9 +55,9 @@
                     <th>Kontak</th>
                     <th>Catatan</th>
                     <th>Tempo</th>
-                    @can('master')
+
                         <th>Aksi</th>
-                    @endcan
+
                 </tr>
 
                 @foreach ($partners as $p)
@@ -66,9 +66,9 @@
                         <td>
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 {{ $p->partner_name }}
-                                @can('master')
+
                                     <a href="{{ route('partner-log', $p->id) }}" class="btn btn-success">Lihat Log</a>
-                                @endcan
+
                             </div>
                         </td>
                         <td>{{ $p->role }}</td>
@@ -83,7 +83,7 @@
                         <td>{{ $p->remark }}</td>
                         <td>{{ $p->tempo }}</td>
                         {{-- <td >{{ $p->user->name }}</td> --}}
-                        @can('master')
+
                             <td>
                                 <div class="d-flex gap-2 w-100">
                                     <a href="{{ route('partner-edit', $p->id) }}" class="btn btn-warning text-white"

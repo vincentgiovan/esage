@@ -15,6 +15,7 @@ class CanAccessSalary
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
+    
     public function handle(Request $request, Closure $next)
     {
         if(in_array(Auth::user()->role, ['master', 'accounting_admin'])){

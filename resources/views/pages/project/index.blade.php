@@ -5,7 +5,7 @@
         <br>
         <div class="w-100 d-flex align-items-center justify-content-between">
             <h2>Proyek Sage</h2>
-            @can('master')
+
                 <div class="d-flex gap-3">
                     <a class="btn btn-secondary" href="{{ route('project-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
                     <div class="position-relative d-flex flex-column align-items-end">
@@ -18,7 +18,7 @@
                         </div>
                     </div>
                 </div>
-            @endcan
+
         </div>
         <script>
             $(document).ready(() => {
@@ -39,12 +39,12 @@
             <p class="text-success fw-bold">{{ session('successDeleteProject') }}</p>
         @endif
 
-        @can("master")
+
             <a href="{{ route('project-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
                 <i class="bi bi-plus-square"></i>
                 Tambah Proyek Baru</a>
             <br>
-        @endcan
+
 
         <!-- tabel list data-->
 
@@ -56,9 +56,9 @@
                     <th>Lokasi</th>
                     <th>PIC</th>
                     <th>Alamat</th>
-                    @can('master')
+
                         <th>Aksi</th>
-                    @endcan
+
                 </tr>
 
                 @foreach ($projects as $p)
@@ -67,16 +67,16 @@
                         <td>
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 {{ $p->project_name }}
-                                @can('master')
+
                                     <a href="{{ route('project-log', $p->id) }}" class="btn btn-success">Lihat Item</a>
-                                @endcan
+
                             </div>
                         </td>
                         <td>{{ $p->location }}</td>
                         <td>{{ $p->PIC }}</td>
                         <td>{{ $p->address }}</td>
                         {{-- <td >{{ $p->user->name }}</td> --}}
-                        @can('master')
+
                             <td>
                                 <div class="d-flex gap-2 w-100">
                                     <a href="{{ route('project-manageemployee-index', $p->id) }}" class="btn btn-success text-white"
@@ -96,7 +96,7 @@
                                     </form>
                                 </div>
                             </td>
-                        @endcan
+
                     </tr>
                 @endforeach
             </table>

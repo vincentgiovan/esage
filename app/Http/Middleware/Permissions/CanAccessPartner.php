@@ -4,6 +4,7 @@ namespace App\Http\Middleware\Permissions;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CanAccessPartner
 {
@@ -16,6 +17,11 @@ class CanAccessPartner
      */
     public function handle(Request $request, Closure $next)
     {
-        return $next($request);
+        if(in_array(Auth::user()->role, ['master', 'accounting_admin'])){
+            return $next($request);
+        }
+        else {
+            abort(403);
+        }
     }
 }

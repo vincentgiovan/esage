@@ -14,9 +14,9 @@
             <p class="text-success fw-bold">{{ session('successDeleteAccount') }}</p>
         @endif
 
-        @can('master')
+
             <a href="{{ route('account.create') }}" class="btn btn-primary"><i class="bi bi-plus-square"></i> Buat Akun Baru</a>
-        @endcan
+
 
         <div class="w-full overflow-x-auto mt-3">
             <table class="w-100">
