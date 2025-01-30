@@ -11,8 +11,12 @@ class ReturnItem extends Model
 
     protected $guarded = ["id"];
 
-    public function product(){
-        return $this->belongsTo(Product::class);
+    public function return_item_products(){
+        return $this->hasMany(ReturnItemProduct::class);
+    }
+
+    public function return_item_images(){
+        return $this->hasMany(ReturnItemImage::class);
     }
 
     public function project(){

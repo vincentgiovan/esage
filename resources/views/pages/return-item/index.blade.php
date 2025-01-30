@@ -37,9 +37,14 @@
             <p class="text-success fw-bold">{{ session('successDeleteReturnItem') }}</p>
         @endif
 
-        <a href="{{ route('returnitem-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
-            <i class="bi bi-plus-square"></i>
-            Buat Pengembalian Barang Baru</a>
+        <div class="mb-3">
+            <a href="{{ route('returnitem-create') }}" class="btn btn-primary text-white" style="font-size: 10pt">
+                <i class="bi bi-plus-square"></i> Buat Pengembalian Barang Baru
+            </a>
+            <a href="{{ route('returnitem-conditionvalidation') }}" class="btn btn-success" style="font-size: 10pt">
+                <i class="bi bi-check-square"></i> Validasi Kondisi Barang Pengembalian
+            </a>
+        </div>
         <br>
         <!-- tabel list data-->
 
@@ -47,10 +52,10 @@
             <table class="w-100">
                 <tr>
                     <th>No</th>
+                    <th>Tanggal</th>
                     <th>Proyek Asal</th>
-                    <th>Produk</th>
-                    <th>Foto</th>
                     <th>PIC Return</th>
+                    <th>Supir</th>
                     <th>Status</th>
                     <th>Aksi</th>
                 </tr>
@@ -59,14 +64,18 @@
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
                         <td>{{ $loop->iteration }}</td>
                         <td>
-                            <ul>
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                {{ Carbon\Carbon::parse($ri->return_date)->translatedFormat('d M Y') }}
+                                <a href="{{ route('returnitem-list-view', $ri->id) }}" class="btn btn-success">Lihat Item</a>
+                            </div>
+                            {{-- <ul>
                                 <li>Proyek: {{ $ri->project->project_name }}</li>
                                 <li>Tanggal: {{ Carbon\Carbon::parse($ri->created_at)->translatedFormat("d M Y") }}</li>
-                            </ul>
-
+                            </ul> --}}
                         </td>
                         <td>
-                            <ul>
+                            {{ $ri->project->project_name }}
+                            {{-- <ul>
                                 <li>Nama: {{ $ri->product->product_name }}</li>
                                 <li>Varian: {{ $ri->product->variant }}</li>
 
@@ -74,16 +83,17 @@
                                     <li>Diskon: {{ $ri->product->discount }}%</li>
 
                                 <li>Jumlah: {{ $ri->quantity }}</li>
-                            </ul>
+                            </ul> --}}
                         </td>
-                        <td style="max-width: 200px;">
-                            @if($ri->foto)
+                        <td>
+                            {{ $ri->PIC }}
+                            {{-- @if($ri->foto)
                                 <img class="w-100" src="{{ Storage::url("app/public/" . $ri->foto) }}">
                             @else
                                 N/A
-                            @endif
+                            @endif --}}
                         </td>
-                        <td>{{ $ri->PIC }}</td>
+                        <td>{{ $ri->driver }}</td>
                         <td>
                             @if($ri->status == 'Ready to pickup')
                                 <i class="bi bi-check-circle-fill fs-4" style="color: green"></i>

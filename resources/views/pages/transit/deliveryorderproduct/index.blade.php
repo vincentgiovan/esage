@@ -86,7 +86,7 @@
                             <div class="d-flex gap-5 w-100">
                                 <form action="{{ route("deliveryorderproduct-destroy", [$deliveryorder->id, $deliveryorder_product->id] ) }}" method="POST">
                                     @csrf
-                                    <button class="btn btn-danger text-white" style="font-size: 10pt " onclick="return confirm('Do you want to remove this item from the deliveryorder?')">
+                                    <button class="btn btn-danger text-white" style="font-size: 10pt " onclick="return confirm('Apakah anda yakin ingin menghapus barang ini dari pengiriman ini?')">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </form>
