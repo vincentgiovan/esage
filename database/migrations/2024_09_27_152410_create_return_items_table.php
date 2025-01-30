@@ -19,13 +19,10 @@ return new class extends Migration
             $table->unsignedBigInteger("project_id");
             $table->foreign("project_id")->references("id")->on("projects")->onDelete('cascade');
 
-            $table->unsignedBigInteger("product_id");
-            $table->foreign("product_id")->references("id")->on("products")->onDelete('cascade');
-
-            $table->string("foto");
+            $table->date('return_date');
             $table->string("PIC");
+            $table->string('driver');
             $table->string("status");
-            $table->unsignedInteger("quantity");
 
             $table->timestamps();
 

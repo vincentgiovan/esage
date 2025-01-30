@@ -68,10 +68,8 @@
                     <th>Varian</th>
                     <th>Markup</th>
                     <th>Status</th>
-                    <th class="text-center">Return</th>
-
-                        <th>Aksi</th>
-
+                    <th class="text-center">Kondisi Bagus</th>
+                    <th>Aksi</th>
                 </tr>
 
                 @php
@@ -97,10 +95,10 @@
                             <td class="fw-semibold @if($p->status == 'Ready') text-primary @else text-danger @endif">{{ $p->status }}</td>
                             <td>
                                 <div class="w-100 d-flex justify-content-center">
-                                    @if($p->is_returned == "yes")
-                                        <i class="bi bi-check-circle-fill fs-4" style="color: red"></i>
+                                    @if($p->condition == "degraded")
+                                        <i class="bi bi-x-circle-fill fs-4" style="color: red"></i>
                                     @else
-                                        <i class="bi bi-x-circle-fill fs-4" style="color: green"></i>
+                                        <i class="bi bi-check-circle-fill fs-4" style="color: green"></i>
                                     @endif
                                 </div>
                             </td>
@@ -132,10 +130,10 @@
                             <td class="fw-semibold @if($p->status == 'Ready') text-primary @else text-danger @endif">{{ $p->status }}</td>
                             <td>
                                 <div class="w-100 d-flex justify-content-center">
-                                    @if($p->is_returned == "yes")
-                                        <i class="bi bi-check-circle-fill fs-4" style="color: red"></i>
+                                    @if($p->condition == "degraded")
+                                        <i class="bi bi-x-circle-fill fs-4" style="color: red"></i>
                                     @else
-                                        <i class="bi bi-x-circle-fill fs-4" style="color: green"></i>
+                                        <i class="bi bi-check-circle-fill fs-4" style="color: green"></i>
                                     @endif
                                 </div>
                             </td>
