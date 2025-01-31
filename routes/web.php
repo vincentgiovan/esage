@@ -22,6 +22,7 @@ use App\Http\Controllers\DeliveryOrderProductController;
 use App\Http\Controllers\EmployeeProjectController;
 use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\PrepayController;
+use App\Http\Controllers\ReturnItemProductController;
 
 Route::get('/', function(){
     return redirect("/dashboard");
@@ -144,11 +145,26 @@ Route::middleware(["auth", "verified"])->group(function(){
 
     // ===== RETURN ITEMS ===== //
     Route::middleware('can_access_return_item')->group(function(){
+        // Return
         Route::get('/return-item/create', [ReturnItemController::class, "create"] )->name("returnitem-create");
         Route::post('/return-item/store', [ReturnItemController::class, "store"] )->name("returnitem-store");
         Route::get('/return-item/{id}/edit', [ReturnItemController::class, "edit"] )->name("returnitem-edit")->whereNumber("id");
         Route::post('/return-item/{id}/edit', [ReturnItemController::class, "update"] )->name("returnitem-update")->whereNumber("id");
-        Route::post('/return-item/{id}', [ReturnItemController::class, "destroy"] )->name("returnitem-destroy")->whereNumber("id");
+        Route::post('/return-item/{id}/delete', [ReturnItemController::class, "destroy"] )->name("returnitem-destroy")->whereNumber("id");
+
+        // List item
+        Route::get('/return-item/{id}', [ReturnItemProductController::class, 'view_items'])->name('returnitem-list-view')->whereNumber('id');
+        Route::get('/return-item/{id}/add-item', [ReturnItemProductController::class, 'add_list'])->name('returnitem-list-add')->whereNumber('id');
+        Route::post('/return-item/{id}/add-item', [ReturnItemProductController::class, 'store_list'])->name('returnitem-list-store')->whereNumber('id');
+        Route::post('/return-item/{id}/remove-item', [ReturnItemProductController::class, 'remove_list'])->name('returnitem-list-remove')->whereNumber('id');
+
+        Route::get('/return-item/{id}/add-image', [ReturnItemProductController::class, 'add_image'])->name('returnitem-image-add')->whereNumber('id');
+        Route::post('/return-item/{id}/add-image', [ReturnItemProductController::class, 'store_image'])->name('returnitem-image-store')->whereNumber('id');
+        Route::post('/return-item/{id}/remove-image', [ReturnItemProductController::class, 'remove_image'])->name('returnitem-image-remove')->whereNumber('id');
+
+        // Condition Validation
+        Route::get('/return-item/condition-validation', [ReturnItemProductController::class, 'condition_validation'])->name('returnitem-conditionvalidation');
+        Route::post('/return-item/condition-validation/save-unvalid', [ReturnItemProductController::class, 'save_unvalids'])->name('returnitem-saveunvalid');
     });
 
     // ===== REQUEST ITEMS ===== //

@@ -78,7 +78,7 @@
                         <div class="d-flex gap-5 w-100">
                             <form action="{{ route("purchaseproduct-destroy", [$purchase->id, $purchase_product->id] ) }}" method="POST">
                                 @csrf
-                                <button class="btn btn-danger text-white" style="font-size: 10pt " onclick="return confirm('Do you want to remove this item from the purchase?')">
+                                <button class="btn btn-danger text-white" style="font-size: 10pt " onclick="return confirm('Apakah anda yakin ingin menghapus barang ini dari pembelian ini?')">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </form>
