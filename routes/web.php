@@ -39,7 +39,6 @@ Route::middleware(["auth", "verified"])->group(function(){
 
     // Normal Users Can Access These Pages
     Route::get('/delivery-order', [DeliveryOrderController::class, "index"] )->name("deliveryorder-index");
-    Route::get('/product', [ProductController::class, "index"] )->name("product-index");
     Route::get('/partner', [PartnerController::class, "index"] )->name("partner-index");
     Route::get('/project', [ProjectController::class, "index"] )->name("project-index");
     Route::get('/purchase', [PurchaseController::class, "index"] )->name("purchase-index");
@@ -52,14 +51,19 @@ Route::middleware(["auth", "verified"])->group(function(){
 
 
     // ===== PRODUCTS ===== //
-    Route::middleware('can_access_product')->group(function(){
-        Route::get('/product/create', [ProductController::class, "create"] )->name("product-create");
-        Route::post('/product/store', [ProductController::class, "store"] )->name("product-store");
-        Route::get("/product/import", [ProductController::class, "import_product_form"])->name("product-import");
-        Route::post("/product/import", [ProductController::class, "import_product_store"])->name("product-import-store");
-        Route::get('/product/{id}/edit', [ProductController::class, "edit"] )->name("product-edit")->whereNumber("id");
-        Route::post('/product/{id}/edit', [ProductController::class, "update"] )->name("product-update")->whereNumber("id");
-        Route::post('/product/{id}', [ProductController::class, "destroy"] )->name("product-destroy")->whereNumber("id");
+    Route::middleware('allow:master,accounting_admin,project_manager,purchasing_admin,gudang,subgudang')->group(function(){
+        Route::get('/product', [ProductController::class, "index"] )->name("product-index");
+
+        Route::middleware('block:subgudang')->group(function(){
+            Route::get('/product/create', [ProductController::class, "create"] )->name("product-create");
+            Route::post('/product/store', [ProductController::class, "store"] )->name("product-store");
+            Route::get("/product/import", [ProductController::class, "import_product_form"])->name("product-import");
+            Route::post("/product/import", [ProductController::class, "import_product_store"])->name("product-import-store");
+            Route::get('/product/{id}/edit', [ProductController::class, "edit"] )->name("product-edit")->whereNumber("id");
+            Route::post('/product/{id}/edit', [ProductController::class, "update"] )->name("product-update")->whereNumber("id");
+            Route::post('/product/{id}', [ProductController::class, "destroy"] )->name("product-destroy")->whereNumber("id");
+        });
+        
         Route::get("/product/export/{mode}", [PDFController::class, "export_product"])->name("product-export")->whereNumber("mode");
         Route::get("/product/{id}/log", [ProductController::class, "view_log"])->name("product-log")->whereNumber("id");
     });

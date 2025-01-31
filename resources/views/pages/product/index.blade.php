@@ -5,19 +5,18 @@
         <div class="w-100 d-flex align-items-center justify-content-between">
             <h2 class="mt-4">Data Barang di Gudang</h2>
 
-                <div class="d-flex gap-3">
-                    <a class="btn btn-secondary" href="{{ route('product-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
-                    <div class="position-relative d-flex flex-column align-items-end">
-                        <button class="btn btn-secondary" type="button" id="dd-toggler">
-                            <i class="bi bi-file-earmark-arrow-up"></i> Export
-                        </button>
-                        <div class="bg-white rounded-lg position-absolute z-2 border border-1" id="dd-menu" style="display: none; top: 40px;">
-                            <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export", 2) }}" target="blank">Export (PDF Portrait)</a></li>
-                            <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export", 1) }}" target="blank">Export (PDF Landscape)</a></li>
-                        </div>
+            <div class="d-flex gap-3">
+                <a class="btn btn-secondary" href="{{ route('product-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
+                <div class="position-relative d-flex flex-column align-items-end">
+                    <button class="btn btn-secondary" type="button" id="dd-toggler">
+                        <i class="bi bi-file-earmark-arrow-up"></i> Export
+                    </button>
+                    <div class="bg-white rounded-lg position-absolute z-2 border border-1" id="dd-menu" style="display: none; top: 40px;">
+                        <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export", 2) }}" target="blank">Export (PDF Portrait)</a></li>
+                        <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export", 1) }}" target="blank">Export (PDF Landscape)</a></li>
                     </div>
                 </div>
-
+            </div>
         </div>
 
         <script>
@@ -47,11 +46,12 @@
                 <a href="{{ route('product-index') }}" class="btn" style="background-color: rgb(191, 191, 191)"><i class="bi bi-x-lg"></i></a>
             </div>
 
+            @cannot('allow', 'subgudang')
                 <a href="{{ route('product-create') }}" class="btn btn-primary text-white" style="font-size: 10pt">
                     <i class="bi bi-plus-square"></i>
                     Tambah Barang Baru
                 </a>
-
+            @endcannot
         </div>
 
         <br>
@@ -102,11 +102,9 @@
                                     @endif
                                 </div>
                             </td>
-
-                                <td>
-                                    <button class="btn btn-success view-all-btn" data-prodgroup="{{ __(str_replace(' ', '', $p->product_name) . '-' . str_replace(' ', '', $p->variant) . '-' . $p->is_returned) }}">Lihat Semua</button>
-                                </td>
-
+                            <td>
+                                <button class="btn btn-success view-all-btn" data-prodgroup="{{ __(str_replace(' ', '', $p->product_name) . '-' . str_replace(' ', '', $p->variant) . '-' . $p->is_returned) }}">Lihat Semua</button>
+                            </td>
                         </tr>
                     @else
                         <tr class="bg-light {{ __(str_replace(' ', '', $p->product_name) . '-' . str_replace(' ', '', $p->variant) . '-' . $p->is_returned) }}" style="display: none;">
@@ -116,10 +114,9 @@
                                 <div class="w-100 d-flex justify-content-between align-items-center">
                                     <div>{{ $p->product_name }}</div>
 
-                                        @if($p->is_returned == 'no')
-                                            <a href="{{ route('product-log', $p->id) }}" class="btn btn-success">Lihat Log</a>
-                                        @endif
-
+                                    @if($p->is_returned == 'no')
+                                        <a href="{{ route('product-log', $p->id) }}" class="btn btn-success">Lihat Log</a>
+                                    @endif
                                 </div>
                             </td>
                             <td>{{ $p->stock }}</td>
@@ -137,8 +134,8 @@
                                     @endif
                                 </div>
                             </td>
-
-                                <td>
+                            <td>
+                                @cannot('allow', 'subgudang')
                                     <div class="d-flex gap-2 w-100">
                                         <a href="{{ route('product-edit', $p->id) }}" class="btn btn-warning text-white"
                                             style="font-size: 10pt; background-color: rgb(197, 167, 0);">
@@ -152,8 +149,8 @@
                                             </button>
                                         </form>
                                     </div>
-                                </td>
-
+                                @endcannot
+                            </td>
                         </tr>
                     @endif
                 @endforeach

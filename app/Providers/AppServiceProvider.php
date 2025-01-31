@@ -35,30 +35,17 @@ class AppServiceProvider extends ServiceProvider
             require_once $breadcrumbs;
         }
 
-        // Main role
-        Gate::define("master", function(User $user){
-            return $user->role->role_name == 'master';
-        });
-        Gate::define("accounting admin", function(User $user){
-            return $user->role->role_name == 'accounting admin';
-        });
-        Gate::define("purchasing admin", function(User $user){
-            return $user->role->role_name == 'purchasing admin';
-        });
-        Gate::define("project manager", function(User $user){
-            return $user->role->role_name == 'project manager';
-        });
-        Gate::define("product manager", function(User $user){
-            return $user->role->role_name == 'product manager';
-        });
-        Gate::define("gudang", function(User $user){
-            return $user->role->role_name == 'gudang';
-        });
-        Gate::define("subgudang", function(User $user){
-            return $user->role->role_name == 'subgudang';
+        // Gate for allowing only certain roles
+        Gate::define('allow', function ($user, ...$allowedRoles) {
+            return in_array($user->role->role_name, $allowedRoles);
         });
 
-        // Other Permission
+        // Gate for blocking certain roles
+        Gate::define('block', function ($user, ...$blockedRoles) {
+            return !in_array($user->role->role_name, $blockedRoles);
+        });
+
+        // Deprecated
         Gate::define("self_attendance", function(User $user){
             return $user->allow_self_attendance == 'yes';
         });

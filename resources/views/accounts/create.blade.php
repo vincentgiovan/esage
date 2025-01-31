@@ -32,7 +32,7 @@
                     <label for="role_id">Pilih Role</label>
                     <select class="form-control text-black" id="role_id" name="role_id">
                         @foreach(App\Models\Role::all() as $role)
-                            <option value="{{ $role->id }}" @if(old('role_id') == $role->id) selected @endif>{{ ucwords($role->role_name) }}</option>
+                            <option value="{{ $role->id }}" @if(old('role_id') == $role->id) selected @endif>{{ ucwords(str_replace('_', ' ', $role->role_name)) }}</option>
                         @endforeach
                     </select>
                 </div>

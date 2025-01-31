@@ -17,7 +17,7 @@ class CanAccessDeliveryOrder
      */
     public function handle(Request $request, Closure $next)
     {
-        if(in_array(Auth::user()->role->role_name, ['master', 'accounting admin', 'gudang', 'subgudang'])){
+        if(in_array(Auth::user()->role->role_name, ['master', 'accounting_admin', 'gudang', 'subgudang'])){
             return $next($request);
         }
         else {

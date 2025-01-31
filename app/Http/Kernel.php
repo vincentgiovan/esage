@@ -64,10 +64,15 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
+        // Allow and block
+        'allow' => \App\Http\Middleware\AllowedRoles::class,
+        'block' => \App\Http\Middleware\BlockedRoles::class,
+
+        // Deprecated
         'master' => \App\Http\Middleware\MasterAccount::class,
-        'accounting admin' => \App\Http\Middleware\AccountingAdminUser::class,
-        'purchasing admin' => \App\Http\Middleware\PurchasingAdminUser::class,
-        'project manager' => \App\Http\Middleware\ProjectManagerUser::class,
+        'accounting_admin' => \App\Http\Middleware\AccountingAdminUser::class,
+        'purchasing_admin' => \App\Http\Middleware\PurchasingAdminUser::class,
+        'project_manager' => \App\Http\Middleware\ProjectManagerUser::class,
         'user' => \App\Http\Middleware\NormalUser::class,
 
         'can_access_product' => \App\Http\Middleware\Permissions\CanAccessProduct::class,
