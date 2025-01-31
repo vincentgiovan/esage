@@ -17,7 +17,7 @@ class CanAccessProduct
      */
     public function handle(Request $request, Closure $next)
     {
-        if(in_array(Auth::user()->role, ['master', 'accounting_admin', 'project_manager'])){
+        if(in_array(Auth::user()->role->role_name, ['master', 'accounting admin', 'project manager', 'purchasing admin', 'gudang', 'subgudang'])){
             return $next($request);
         }
         else {

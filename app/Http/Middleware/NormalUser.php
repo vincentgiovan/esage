@@ -17,7 +17,7 @@ class NormalUser
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::user()->role == "user"){
+        if(Auth::user()->role->role_name == "user"){
             return $next($request);
         }
 

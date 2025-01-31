@@ -17,7 +17,7 @@ class CanAccessAttendance
      */
     public function handle(Request $request, Closure $next)
     {
-        if(in_array(Auth::user()->role, ['master', 'accounting_admin'])){
+        if(in_array(Auth::user()->role->role_name, ['master', 'accounting admin'])){
             return $next($request);
         }
         else {

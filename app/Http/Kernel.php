@@ -65,9 +65,9 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
         'master' => \App\Http\Middleware\MasterAccount::class,
-        'accounting_admin' => \App\Http\Middleware\AccountingAdminUser::class,
-        'purchasing_admin' => \App\Http\Middleware\PurchasingAdminUser::class,
-        'project_manager' => \App\Http\Middleware\ProjectManagerUser::class,
+        'accounting admin' => \App\Http\Middleware\AccountingAdminUser::class,
+        'purchasing admin' => \App\Http\Middleware\PurchasingAdminUser::class,
+        'project manager' => \App\Http\Middleware\ProjectManagerUser::class,
         'user' => \App\Http\Middleware\NormalUser::class,
 
         'can_access_product' => \App\Http\Middleware\Permissions\CanAccessProduct::class,

@@ -186,7 +186,7 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::post("/account/import-data", [AccountController::class, "import_user_store"])->name("account.import.store");
         Route::get("/account/{id}", [AccountController::class, "show"])->name("account.show")->whereNumber("id");
         Route::put('/account/{id}', [AccountController::class, 'update'])->name('account.update')->whereNumber("id");
-        Route::delete('/account/{id}', [AccountController::class, 'destroy'])->name('account.destroy')->whereNumber("id");
+        Route::post('/account/{id}', [AccountController::class, 'destroy'])->name('account.destroy')->whereNumber("id");
     });
 
     // ===== EMPLOYEES, PREPAYS, AND LEAVES ===== //

@@ -17,7 +17,7 @@ class AccountingAdminUser
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::user()->role == "accounting_admin"){
+        if(Auth::user()->role->role_name == "accounting admin"){
             return $next($request);
         } else{
             abort(403);

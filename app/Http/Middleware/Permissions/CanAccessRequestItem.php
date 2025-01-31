@@ -17,7 +17,7 @@ class CanAccessRequestItem
      */
     public function handle(Request $request, Closure $next)
     {
-        if(in_array(Auth::user()->role, ['master', 'accounting_admin', 'project_manager'])){
+        if(in_array(Auth::user()->role->role_name, ['master', 'accounting admin', 'project manager'])){
             return $next($request);
         }
         else {

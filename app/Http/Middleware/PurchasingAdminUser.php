@@ -17,7 +17,7 @@ class PurchasingAdminUser
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::user()->role == "purchasing_admin"){
+        if(Auth::user()->role->role_name == "purchasing admin"){
             return $next($request);
         } else{
             abort(403);

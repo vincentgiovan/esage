@@ -37,20 +37,26 @@ class AppServiceProvider extends ServiceProvider
 
         // Main role
         Gate::define("master", function(User $user){
-            return $user->role == 'master';
+            return $user->role->role_name == 'master';
         });
-
-        Gate::define("accounting_admin", function(User $user){
-            return $user->orle == 'accounting_admin';
+        Gate::define("accounting admin", function(User $user){
+            return $user->role->role_name == 'accounting admin';
         });
-
-        Gate::define("purchasing_admin", function(User $user){
-            return $user->orle == 'purchasing_admin';
+        Gate::define("purchasing admin", function(User $user){
+            return $user->role->role_name == 'purchasing admin';
         });
-        Gate::define("project_manager", function(User $user){
-            return $user->orle == 'project_manager';
+        Gate::define("project manager", function(User $user){
+            return $user->role->role_name == 'project manager';
         });
-
+        Gate::define("product manager", function(User $user){
+            return $user->role->role_name == 'product manager';
+        });
+        Gate::define("gudang", function(User $user){
+            return $user->role->role_name == 'gudang';
+        });
+        Gate::define("subgudang", function(User $user){
+            return $user->role->role_name == 'subgudang';
+        });
 
         // Other Permission
         Gate::define("self_attendance", function(User $user){
