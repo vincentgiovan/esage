@@ -36,18 +36,8 @@ class AppServiceProvider extends ServiceProvider
         }
 
         // Gate for allowing only certain roles
-        Gate::define('allow', function ($user, ...$allowedRoles) {
-            return in_array($user->role->role_name, $allowedRoles);
-        });
-
-        // Gate for blocking certain roles
-        Gate::define('block', function ($user, ...$blockedRoles) {
-            return !in_array($user->role->role_name, $blockedRoles);
-        });
-
-        // Deprecated
-        Gate::define("self_attendance", function(User $user){
-            return $user->allow_self_attendance == 'yes';
+        Gate::define('user-role', function ($user, ...$allowedUserRoles) {
+            return in_array($user->role->role_name, $allowedUserRoles);
         });
     }
 }

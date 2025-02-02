@@ -46,29 +46,32 @@
                 <a href="{{ route('product-index') }}" class="btn" style="background-color: rgb(191, 191, 191)"><i class="bi bi-x-lg"></i></a>
             </div>
 
-            @cannot('allow', 'subgudang')
+            @if(!in_array(Auth::user()->role->role_name, ['subgudang']))
                 <a href="{{ route('product-create') }}" class="btn btn-primary text-white" style="font-size: 10pt">
                     <i class="bi bi-plus-square"></i>
                     Tambah Barang Baru
                 </a>
-            @endcannot
+            @endif
         </div>
 
         <br>
 
-        <!-- tabel list data-->
         <div class="overflow-x-auto">
             <table class="w-100">
                 <tr>
                     <th>No</th>
                     <th>Nama Produk</th>
-                    <th>Total Stok</th>
-                    <th>Harga Terakhir</th>
-                    <th>Satuan</th>
                     <th>Varian</th>
-                    <th>Markup</th>
+                    <th>Total Stok</th>
+                    <th>Satuan</th>
                     <th>Status</th>
-                    <th class="text-center">Kondisi Bagus</th>
+                    @if(!in_array(Auth::user()->role->role_name, ['subgudang']))
+                        <th>Harga Terakhir</th>
+                    @endif
+                    @if(!in_array(Auth::user()->role->role_name, ['subgudang', 'product_manager']))
+                        <th>Markup</th>
+                        <th class="text-center">Kondisi</th>
+                    @endif
                     <th>Aksi</th>
                 </tr>
 
@@ -78,38 +81,39 @@
 
                 @foreach ($products as $p)
                     @if (isset($p->is_grouped) && $p->is_grouped)
+                        @php
+                            $status = $p->stock == 0? 'Out of Stock' : 'Ready'
+                        @endphp
                         <tr style="background: @if($i % 2 == 1) #E0E0E0 @else white @endif;">
-                            <td>
-                                {{ ++$i }}
-                            </td>
-                            <td>
-                                <div class="w-100 d-flex justify-content-between align-items-center">
-                                    <div>{{ $p->product_name }}</div>
-                                </div>
-                            </td>
-                            <td>{{ $p->stock }}</td>
-                            <td>Rp {{ number_format($p->price, 2, ',', '.') }}</td>
-                            <td>{{ $p->unit }}</td>
+                            <td>{{ ++$i }}</td>
+                            <td>{{ $p->product_name }}</td>
                             <td>{{ $p->variant }}</td>
-                            <td></td>
-                            <td class="fw-semibold @if($p->status == 'Ready') text-primary @else text-danger @endif">{{ $p->status }}</td>
-                            <td>
-                                <div class="w-100 d-flex justify-content-center">
-                                    @if($p->condition == "degraded")
-                                        <i class="bi bi-x-circle-fill fs-4" style="color: red"></i>
-                                    @else
-                                        <i class="bi bi-check-circle-fill fs-4" style="color: green"></i>
-                                    @endif
-                                </div>
+                            <td>{{ $p->stock }}</td>
+                            <td>{{ $p->unit }}</td>
+                            <td class="fw-semibold @if($status == 'Ready') text-primary @else text-danger @endif">
+                                {{ $status }}
                             </td>
+
+                            {{-- Harga dasar dan markup tidak ditampilkan kepada product manager dan subgudang --}}
+                            @if(!in_array(Auth::user()->role->role_name, ['subgudang', 'product_manager']))
+                                <td>Rp {{ number_format($p->price, 2, ',', '.') }}</td>
+                                <td></td>
+                                <td></td>
+                            @endif
+
+                            {{-- Harga sudah dikalikan markup khusus product manager --}}
+                            @if(in_array(Auth::user()->role->role_name, ['product_manager']))
+                                <td>Rp {{ number_format($p->price * (1 + $p->markup), 2, ',', '.') }}</td>
+                            @endif
+
                             <td>
+                                {{-- Toggler button untuk memperlihatkan detail varian data produk --}}
                                 <button class="btn btn-success view-all-btn" data-prodgroup="{{ __(str_replace(' ', '', $p->product_name) . '-' . str_replace(' ', '', $p->variant) . '-' . $p->is_returned) }}">Lihat Semua</button>
                             </td>
                         </tr>
                     @else
-                        <tr class="bg-light {{ __(str_replace(' ', '', $p->product_name) . '-' . str_replace(' ', '', $p->variant) . '-' . $p->is_returned) }}" style="display: none;">
-                            <td>
-                            </td>
+                        <tr class="{{ __(str_replace(' ', '', $p->product_name) . '-' . str_replace(' ', '', $p->variant) . '-' . $p->is_returned) }}" style="display: none; background: @if($i % 2 == 0) #E0E0E0 @else white @endif;">
+                            <td></td>
                             <td>
                                 <div class="w-100 d-flex justify-content-between align-items-center">
                                     <div>{{ $p->product_name }}</div>
@@ -119,23 +123,34 @@
                                     @endif
                                 </div>
                             </td>
-                            <td>{{ $p->stock }}</td>
-                            <td>Rp {{ number_format($p->price, 2, ',', '.') }}</td>
-                            <td>{{ $p->unit }}</td>
                             <td>{{ $p->variant }}</td>
-                            <td>{{ $p->markup }}</td>
+                            <td>{{ $p->stock }}</td>
+                            <td>{{ $p->unit }}</td>
                             <td class="fw-semibold @if($p->status == 'Ready') text-primary @else text-danger @endif">{{ $p->status }}</td>
+
+                            {{-- Harga dasar dan markup tidak ditampilkan kepada product manager dan subgudang --}}
+                            @if(!in_array(Auth::user()->role->role_name, ['subgudang', 'product_manager']))
+                                <td>Rp {{ number_format($p->price, 2, ',', '.') }}</td>
+                                <td>{{ $p->markup }}</td>
+                                <td>
+                                    <div class="w-100 d-flex justify-content-center">
+                                        @if($p->condition == "degraded")
+                                            <i class="bi bi-x-circle-fill fs-4" style="color: red"></i>
+                                        @else
+                                            <i class="bi bi-check-circle-fill fs-4" style="color: green"></i>
+                                        @endif
+                                    </div>
+                                </td>
+                            @endif
+
+                            {{-- Harga sudah dikalikan markup khusus product manager --}}
+                            @if(in_array(Auth::user()->role->role_name, ['product_manager']))
+                                <td>Rp {{ number_format($p->price * (1 + $p->markup), 2, ',', '.') }}</td>
+                            @endif
+
                             <td>
-                                <div class="w-100 d-flex justify-content-center">
-                                    @if($p->condition == "degraded")
-                                        <i class="bi bi-x-circle-fill fs-4" style="color: red"></i>
-                                    @else
-                                        <i class="bi bi-check-circle-fill fs-4" style="color: green"></i>
-                                    @endif
-                                </div>
-                            </td>
-                            <td>
-                                @cannot('allow', 'subgudang')
+                                {{-- Subgudang tidak bisa CRUD --}}
+                                @if(!in_array(Auth::user()->role->role_name, ['subgudang']))
                                     <div class="d-flex gap-2 w-100">
                                         <a href="{{ route('product-edit', $p->id) }}" class="btn btn-warning text-white"
                                             style="font-size: 10pt; background-color: rgb(197, 167, 0);">
@@ -149,13 +164,14 @@
                                             </button>
                                         </form>
                                     </div>
-                                @endcannot
+                                @endif
                             </td>
                         </tr>
                     @endif
                 @endforeach
             </table>
         </div>
+
         {{-- <div class="mt-4">
             {{ $products->links() }}
         </div> --}}

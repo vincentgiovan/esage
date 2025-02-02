@@ -77,6 +77,10 @@
                 background-color: rgb(100, 100, 100);
             }
 
+            input:disabled, select:disabled, textarea:disabled {
+                cursor: not-allowed;
+            }
+
             @media screen and (max-width: 600px) {
                 #sidebar {
                     display: none;

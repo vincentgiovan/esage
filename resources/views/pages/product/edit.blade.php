@@ -19,7 +19,9 @@
                 <div class="mt-3">
                     <label for="product_name">Nama Barang</label>
                     <input type="text" class="form-control" name="product_name" id="product_name" placeholder="Nama Barang"
-                        value="{{ old('product_name', $product->product_name) }}">
+                        value="{{ old('product_name', $product->product_name) }}"
+                        @if(in_array(Auth::user()->role->role_name, ['purchasing_admin', 'gudang'])) disabled @endif/>
+
                     @error('product_name')
                         <p class="text-danger">Harap masukkan nama barang.</p>
                     @enderror
@@ -28,7 +30,9 @@
                 <div class="mt-3">
                     <label for="variant">Varian</label>
                     <input type="text" class="form-control" name="variant" id="variant" placeholder="Variant"
-                        value="{{ old('variant', $product->variant) }}">
+                        value="{{ old('variant', $product->variant) }}"
+                        @if(in_array(Auth::user()->role->role_name, ['purchasing_admin', 'gudang'])) disabled @endif/>
+
                     @error('variant')
                         <p class="text-danger">Harap masukkan varian barang.</p>
                     @enderror
@@ -37,7 +41,9 @@
                 <div class="mt-3">
                     <label for="unit">Satuan</label>
                     <input type="text" class="form-control" name="unit" id="unit" placeholder="Unit"
-                        value="{{ old('unit', $product->unit) }}">
+                        value="{{ old('unit', $product->unit) }}"
+                        @if(in_array(Auth::user()->role->role_name, ['purchasing_admin', 'gudang'])) disabled @endif/>
+
                     @error('unit')
                         <p class="text-danger">Harap masukkan satuan barang.</p>
                     @enderror
@@ -46,7 +52,9 @@
                 <div class="mt-3">
                     <label for="stock">Stok</label>
                     <input type="number" class="form-control" name="stock" id="stock" placeholder="Stok"
-                        value="{{ old('stock', $product->stock) }}">
+                        value="{{ old('stock', $product->stock) }}"
+                        @if(in_array(Auth::user()->role->role_name, ['purchasing_admin'])) disabled @endif/>
+
                     @error('stock')
                         <p class="text-danger">Harap masukkan nilai minimal 0.</p>
                     @enderror
@@ -54,7 +62,9 @@
 
                 <div class="mt-3">
                     <label for="status">Status</label>
-                    <select name="status" id="status" class="form-select">
+                    <select name="status" id="status" class="form-select"
+                        @if(in_array(Auth::user()->role->role_name, ['purchasing_admin'])) disabled @endif>
+
                         <option value="Ready" @if(old('status', $product->status) == 'Ready') selected @endif>Tersedia</option>
                         <option value="Out of Stock" @if(old('status', $product->status) == 'Out of Stock') selected @endif>Stok kosong</option>
                     </select>
@@ -68,7 +78,9 @@
                 <div class="mt-3">
                     <label for="price">Harga</label>
                     <input type="number" class="form-control" name="price" id="price" placeholder="Harga"
-                        value="{{ old('price', $product->price) }}">
+                        value="{{ old('price', $product->price) }}"
+                        @if(in_array(Auth::user()->role->role_name, ['purchasing_admin', 'gudang'])) disabled @endif/>
+
                     @error('price')
                         <p class="text-danger">Harap masukkan nilai minimal 1.</p>
                     @enderror
@@ -76,8 +88,10 @@
 
                 <div class="mt-3">
                     <label for="markup">Markup</label>
-                    <input type="number" class="form-control" name="markup" id="markup" placeholder="Markup"
-                        value="{{ old('markup', $product->markup) }}">
+                    <input type="text" class="form-control" name="markup" id="markup" placeholder="Markup"
+                        value="{{ old('markup', $product->markup) }}"
+                        @if(in_array(Auth::user()->role->role_name, ['gudang'])) disabled @endif/>
+
                     @error('markup')
                         <p class="text-danger">{{ $message }}</p>
                     @enderror

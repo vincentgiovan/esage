@@ -153,7 +153,7 @@ class ReturnItemProductController extends Controller
                     "discount" => $product->discount,
                     "unit" => $product->unit,
                     "stock" => $reqitprod->qty, // Stock is set to the quantity being returned
-                    "status" => $product->status,
+                    "status" => $reqitprod->qty > 0? 'Ready' : 'Out of Stock',
                     "markup" => $product->markup,
                     "product_code" => $newProductCode,
                     "type" => $product->type,

@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Product;
-use App\Models\PurchaseProduct;
 use Illuminate\Http\Request;
+use App\Models\PurchaseProduct;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -93,17 +94,34 @@ class ProductController extends Controller{
     // Simpan perubahan data produk ke database
     public function update(Request $request, $id)
     {
-        // Validasi data, kalo ga lolos ga lanjut
-        $validatedData = $request->validate([
-            "product_name" => "required|min:3",
-            "price"=>"required|numeric|min:0|not_in:0",
-            "variant" => "required|min:3",
-            "stock" => "required|numeric|min:0|not_in:0",
-            "markup" => "nullable|numeric",
-            "status" => "required|min:3",
-            "product_code" => "required|min:3",
-            "unit"=>"required"
-        ]);
+        // Gudang bisa update stock
+        if(Auth::user()->role->role_name == 'gudang'){
+            $validatedData = $request->validate([
+                "stock" => "required|numeric|min:0",
+                "status" => "required|min:3",
+            ]);
+        }
+
+        // Product manager bisa update markup
+        else if(Auth::user()->role->role_name == 'purchasing_admin'){
+            $validatedData = $request->validate([
+                "markup" => "required|numeric|min:0",
+            ]);
+        }
+
+        // Role yang lain
+        else {
+            $validatedData = $request->validate([
+                "product_name" => "required|min:3",
+                "price"=>"required|numeric|min:0|not_in:0",
+                "variant" => "required|min:3",
+                "stock" => "required|numeric|min:0",
+                "markup" => "required|numeric|min:0",
+                "status" => "required|min:3",
+                "product_code" => "required|min:3",
+                "unit"=>"required"
+            ]);
+        }
 
         // Simpan perubahan datanya di data produk yang ditargetkan di tabel products
         Product::find($id)->update($validatedData);
