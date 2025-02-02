@@ -12,8 +12,9 @@
                         <i class="bi bi-file-earmark-arrow-up"></i> Export
                     </button>
                     <div class="bg-white rounded-lg position-absolute z-2 border border-1" id="dd-menu" style="display: none; top: 40px;">
-                        <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export", 2) }}" target="blank">Export (PDF Portrait)</a></li>
-                        <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export", 1) }}" target="blank">Export (PDF Landscape)</a></li>
+                        <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export-pdf", 2) }}" target="blank">Export (PDF Portrait)</a></li>
+                        <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export-pdf", 1) }}" target="blank">Export (PDF Landscape)</a></li>
+                        <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export-excel", 1) }}" target="blank">Export Excel</a></li>
                     </div>
                 </div>
             </div>
@@ -117,10 +118,7 @@
                             <td>
                                 <div class="w-100 d-flex justify-content-between align-items-center">
                                     <div>{{ $p->product_name }}</div>
-
-                                    @if($p->is_returned == 'no')
-                                        <a href="{{ route('product-log', $p->id) }}" class="btn btn-success">Lihat Log</a>
-                                    @endif
+                                    <a href="{{ route('product-log', $p->id) }}" class="btn btn-success">Lihat Log</a>
                                 </div>
                             </td>
                             <td>{{ $p->variant }}</td>

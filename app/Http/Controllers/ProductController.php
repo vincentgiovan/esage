@@ -9,6 +9,8 @@ use App\Models\PurchaseProduct;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use App\Exports\ProductsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class ProductController extends Controller{
@@ -211,10 +213,16 @@ class ProductController extends Controller{
         }
     }
 
+    // EXPORT EXCEL
+    public function export_excel()
+    {
+        return Excel::download(new ProductsExport, 'testus.xlsx');
+    }
+
     public function view_log($id){
         $product = Product::find($id);
 
-        $similars = Product::where("product_name", $product->product_name)->where("variant", $product->variant)->get();
+        $similars = Product::where("product_name", $product->product_name)->where("variant", $product->variant)->where('price', $product->price)->where('discount', $product->discount)->get();
 
         $purchaseproducts = [];
         foreach($similars as $s){

@@ -52,7 +52,9 @@ Route::middleware(["auth", "verified"])->group(function(){
             Route::post('/product/{id}', [ProductController::class, "destroy"] )->name("product-destroy")->whereNumber("id");
         });
 
-        Route::get("/product/export/{mode}", [PDFController::class, "export_product"])->name("product-export")->whereNumber("mode");
+        Route::get("/product/export-pdf/{mode}", [PDFController::class, "export_product"])->name("product-export-pdf")->whereNumber("mode");
+        Route::get('/product/export-excel', [ProductController::class, 'export_excel'])->name("product-export-excel");
+
         Route::get("/product/{id}/log", [ProductController::class, "view_log"])->name("product-log")->whereNumber("id");
     });
 
