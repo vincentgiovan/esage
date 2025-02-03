@@ -22,25 +22,25 @@
             </li>
         @endif
 
-        @if(Gate::allows('user-role', ['master', 'accounting_admin', 'purchasing_admin', 'gudang', 'subgudang']))
+        @if(Gate::allows('user-role', ['master', 'accounting_admin', 'purchasing_admin', 'gudang', 'subgudang', 'project_manager']))
             <li class="nav-item">
                 <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("project*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("project-index") }}"><i class="bi bi-building me-2"></i> Proyek Sage</a>
             </li>
         @endif
 
-        @if(Gate::allows('user-role', ['master', 'accounting_admin', 'purchasing_admin', 'product_manager', 'gudang', 'subgudang']))
+        @if(Gate::allows('user-role', ['master', 'accounting_admin', 'purchasing_admin', 'gudang', 'subgudang', 'project_manager']))
             <li class="nav-item">
                 <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("product*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("product-index") }}"><i class="bi bi-box-seam me-2"></i> Data Barang</a>
             </li>
         @endif
 
-        @if(Gate::allows('user-role', ['master', 'accounting_admin', 'project_manager']))
+        @if(Gate::allows('user-role', ['master', 'accounting_admin']))
             <li class="nav-item">
                 <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("request*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("requestitem-index") }}" ><i class="bi bi-bag-plus me-2"></i> Request Barang</a>
             </li>
         @endif
 
-        @if(Gate::allows('user-role', ['master', 'accounting_admin', 'project_manager', 'product_manager', 'gudang', 'subgudang']))
+        @if(Gate::allows('user-role', ['master', 'accounting_admin', 'project_manager', 'gudang', 'subgudang']))
             <li class="nav-item">
                 <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("return*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("returnitem-index") }}" ><i class="bi bi-bag-dash me-2"></i> Pengembalian</a>
             </li>
@@ -70,7 +70,7 @@
             </li>
         @endif
 
-        @if(Gate::allows('user-role', ['master', 'accounting_admin', 'project_manager']))
+        @if(Gate::allows('user-role', ['master', 'accounting_admin']))
             <li class="nav-item">
                 <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("attendance*self*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("attendance-self-index") }}" ><i class="bi bi-clipboard2-check me-2"></i> Presensi Mandiri</a>
             </li>

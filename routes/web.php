@@ -39,7 +39,7 @@ Route::middleware(["auth", "verified"])->group(function(){
 
 
     // ===== PRODUCTS ===== //
-    Route::middleware('allow:master,accounting_admin,project_manager,purchasing_admin,gudang,subgudang,product_manager')->group(function(){
+    Route::middleware('allow:master,accounting_admin,project_manager,purchasing_admin,gudang,subgudang')->group(function(){
         Route::get('/product', [ProductController::class, "index"] )->name("product-index");
 
         Route::middleware('block:subgudang')->group(function(){
@@ -73,7 +73,7 @@ Route::middleware(["auth", "verified"])->group(function(){
     });
 
     // ===== PROJECTS ===== //
-    Route::middleware('allow:master,accounting_admin,gudang,subgudang,purchasing_admin')->group(function(){
+    Route::middleware('allow:master,accounting_admin,gudang,subgudang,purchasing_admin,project_manager')->group(function(){
         Route::get('/project', [ProjectController::class, "index"] )->name("project-index");
         Route::get('/project/create', [ProjectController::class, "create"] )->name("project-create");
         Route::post('/project/store', [ProjectController::class, "store"] )->name("project-store");
@@ -144,7 +144,7 @@ Route::middleware(["auth", "verified"])->group(function(){
     });
 
     // ===== RETURN ITEMS ===== //
-    Route::middleware('allow:master,accounting_admin,project_manager,gudang,subgudang,product_manager')->group(function(){
+    Route::middleware('allow:master,accounting_admin,project_manager,gudang,subgudang')->group(function(){
         // Return
         Route::get('/return-item', [ReturnItemController::class, "index"] )->name("returnitem-index");
         Route::get('/return-item/create', [ReturnItemController::class, "create"] )->name("returnitem-create");
@@ -169,7 +169,7 @@ Route::middleware(["auth", "verified"])->group(function(){
     });
 
     // ===== REQUEST ITEMS ===== //
-    Route::middleware('allow:master,accounting_admin,project_manager')->group(function(){
+    Route::middleware('allow:master,accounting_admin')->group(function(){
         Route::get("/request-item", [RequestItemController::class, "index"])->name("requestitem-index");
         Route::get("/request-item/{id}", [RequestItemController::class, "show"])->name("requestitem-show")->whereNumber("id");
         Route::get('/request-item/create', [RequestItemController::class, "create"] )->name("requestitem-create");
@@ -253,7 +253,7 @@ Route::middleware(["auth", "verified"])->group(function(){
     });
 
     // ===== SELF ATTENDANCES ===== //
-    Route::middleware('allow:master,accounting_admin,project_manager')->group(function(){
+    Route::middleware('allow:master,accounting_admin')->group(function(){
         Route::get("/attendance/self", [AttendanceController::class, "index_self"])->name("attendance-self-index");
         Route::get("/attendance/self/create/{project_id}/checkin", [AttendanceController::class, "check_in"])->name("attendance-self-checkin")->whereNumber('project_id');
         Route::post("/attendance/self/create/{project_id}/checkin", [AttendanceController::class, "check_in_store"])->name("attendance-self-checkin-store")->whereNumber('project_id');

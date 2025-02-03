@@ -19,12 +19,23 @@
 
                 <div class="mt-3">
                     <label for="project_id">Pilih Asal Proyek</label>
-                    <select name="project_id" class="form-select @error('project_id') is-invalid @enderror" id="project_id">
-                        <option disabled selected>Pilih proyek</option>
-                        @foreach ($projects as $proj)
-                            <option value="{{ $proj->id }}" @if(old('project_id') == $proj->id) selected @endif>{{ $proj->project_name }}</option>
-                        @endforeach
-                    </select>
+
+                    @if(Auth::user()->role->role_name == 'project_manager')
+                        <select name="project_id" class="form-select @error('project_id') is-invalid @enderror" id="project_id">
+                            <option disabled selected>Pilih proyek</option>
+                            @forelse (Auth::user()->employee_data->projects as $proj)
+                                <option value="{{ $proj->id }}" @if(old('project_id') == $proj->id) selected @endif>{{ $proj->project_name }}</option>
+                            @empty
+                            @endforelse
+                        </select>
+                    @else
+                        <select name="project_id" class="form-select @error('project_id') is-invalid @enderror" id="project_id">
+                            <option disabled selected>Pilih proyek</option>
+                            @foreach ($projects as $proj)
+                                <option value="{{ $proj->id }}" @if(old('project_id') == $proj->id) selected @endif>{{ $proj->project_name }}</option>
+                            @endforeach
+                        </select>
+                    @endif
 
                     @error("project_id")
                         <p class="text-danger">Harap pilih project asal barang yang ingin dikembalikan.</p>
@@ -62,7 +73,7 @@
 
                 <div class="mt-3">
                     <label for="PIC">PIC</label>
-                    <input type="text" class="form-control @error('PIC') is-invalid @enderror" name="PIC" id="PIC" placeholder="Nama PIC" value = "{{ old("PIC")}}">
+                    <input type="text" class="form-control @error('PIC') is-invalid @enderror" name="PIC" id="PIC" placeholder="Nama PIC" value="{{ old('PIC', Auth::user()->name)}}">
                     @error("PIC")
                     <p class="text-danger">Harap masukkan nama PIC.</p>
                     @enderror

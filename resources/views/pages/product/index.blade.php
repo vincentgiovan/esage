@@ -5,19 +5,21 @@
         <div class="w-100 d-flex align-items-center justify-content-between">
             <h2 class="mt-4">Data Barang di Gudang</h2>
 
-            <div class="d-flex gap-3">
-                <a class="btn btn-secondary" href="{{ route('product-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
-                <div class="position-relative d-flex flex-column align-items-end">
-                    <button class="btn btn-secondary" type="button" id="dd-toggler">
-                        <i class="bi bi-file-earmark-arrow-up"></i> Export
-                    </button>
-                    <div class="bg-white rounded-lg position-absolute z-2 border border-1" id="dd-menu" style="display: none; top: 40px;">
-                        <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export-pdf", 2) }}" target="blank">Export (PDF Portrait)</a></li>
-                        <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export-pdf", 1) }}" target="blank">Export (PDF Landscape)</a></li>
-                        <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export-excel", 1) }}" target="blank">Export Excel</a></li>
+            @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
+                <div class="d-flex gap-3">
+                    <a class="btn btn-secondary" href="{{ route('product-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
+                    <div class="position-relative d-flex flex-column align-items-end">
+                        <button class="btn btn-secondary" type="button" id="dd-toggler">
+                            <i class="bi bi-file-earmark-arrow-up"></i> Export
+                        </button>
+                        <div class="bg-white rounded-lg position-absolute z-2 border border-1" id="dd-menu" style="display: none; top: 40px;">
+                            <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export-pdf", 2) }}" target="blank">Export (PDF Portrait)</a></li>
+                            <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export-pdf", 1) }}" target="blank">Export (PDF Landscape)</a></li>
+                            <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export-excel", 1) }}" target="blank">Export Excel</a></li>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
         </div>
 
         <script>
@@ -47,7 +49,7 @@
                 <a href="{{ route('product-index') }}" class="btn" style="background-color: rgb(191, 191, 191)"><i class="bi bi-x-lg"></i></a>
             </div>
 
-            @if(!in_array(Auth::user()->role->role_name, ['subgudang']))
+            @if(!in_array(Auth::user()->role->role_name, ['subgudang', 'project_manager']))
                 <a href="{{ route('product-create') }}" class="btn btn-primary text-white" style="font-size: 10pt">
                     <i class="bi bi-plus-square"></i>
                     Tambah Barang Baru
@@ -69,7 +71,7 @@
                     @if(!in_array(Auth::user()->role->role_name, ['subgudang']))
                         <th>Harga Terakhir</th>
                     @endif
-                    @if(!in_array(Auth::user()->role->role_name, ['subgudang', 'product_manager']))
+                    @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
                         <th>Markup</th>
                         <th class="text-center">Kondisi</th>
                     @endif
@@ -96,14 +98,14 @@
                             </td>
 
                             {{-- Harga dasar dan markup tidak ditampilkan kepada product manager dan subgudang --}}
-                            @if(!in_array(Auth::user()->role->role_name, ['subgudang', 'product_manager']))
+                            @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
                                 <td>Rp {{ number_format($p->price, 2, ',', '.') }}</td>
                                 <td></td>
                                 <td></td>
                             @endif
 
-                            {{-- Harga sudah dikalikan markup khusus product manager --}}
-                            @if(in_array(Auth::user()->role->role_name, ['product_manager']))
+                            {{-- Harga sudah dikalikan markup khusus product manager dan gudang --}}
+                            @if(in_array(Auth::user()->role->role_name, ['gudang', 'project_manager']))
                                 <td>Rp {{ number_format($p->price * (1 + $p->markup), 2, ',', '.') }}</td>
                             @endif
 
@@ -118,7 +120,11 @@
                             <td>
                                 <div class="w-100 d-flex justify-content-between align-items-center">
                                     <div>{{ $p->product_name }}</div>
-                                    <a href="{{ route('product-log', $p->id) }}" class="btn btn-success">Lihat Log</a>
+
+                                    {{-- Gudang, subgudang, dan project manager gabisa lihat --}}
+                                    @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
+                                        <a href="{{ route('product-log', $p->id) }}" class="btn btn-success">Lihat Log</a>
+                                    @endif
                                 </div>
                             </td>
                             <td>{{ $p->variant }}</td>
@@ -126,8 +132,8 @@
                             <td>{{ $p->unit }}</td>
                             <td class="fw-semibold @if($p->status == 'Ready') text-primary @else text-danger @endif">{{ $p->status }}</td>
 
-                            {{-- Harga dasar dan markup tidak ditampilkan kepada product manager dan subgudang --}}
-                            @if(!in_array(Auth::user()->role->role_name, ['subgudang', 'product_manager']))
+                            {{-- Harga dasar dan markup tidak ditampilkan kepada project manager, gudang, dan subgudang --}}
+                            @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
                                 <td>Rp {{ number_format($p->price, 2, ',', '.') }}</td>
                                 <td>{{ $p->markup }}</td>
                                 <td>
@@ -141,14 +147,14 @@
                                 </td>
                             @endif
 
-                            {{-- Harga sudah dikalikan markup khusus product manager --}}
-                            @if(in_array(Auth::user()->role->role_name, ['product_manager']))
+                            {{-- Harga sudah dikalikan markup khusus project manager, gudang, dan subgudang --}}
+                            @if(in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
                                 <td>Rp {{ number_format($p->price * (1 + $p->markup), 2, ',', '.') }}</td>
                             @endif
 
                             <td>
-                                {{-- Subgudang tidak bisa CRUD --}}
-                                @if(!in_array(Auth::user()->role->role_name, ['subgudang']))
+                                {{-- Subgudang dan gudang tidak bisa CRUD --}}
+                                @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
                                     <div class="d-flex gap-2 w-100">
                                         <a href="{{ route('product-edit', $p->id) }}" class="btn btn-warning text-white"
                                             style="font-size: 10pt; background-color: rgb(197, 167, 0);">
