@@ -86,7 +86,8 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::post('/project/{id}/edit', [ProjectController::class, "update"] )->name("project-update")->whereNumber("id");
         Route::post('/project/{id}', [ProjectController::class, "destroy"] )->name("project-destroy")->whereNumber("id");
         Route::get("/project/export/{mode}", [PDFController::class, "export_project"])->name("project-export")->whereNumber("mode");
-        Route::get("/project/{id}/log", [ProjectController::class, "view_log"])->name("project-log")->whereNumber("id");
+        Route::get("/project/{id}/delivery-log", [ProjectController::class, "delivery_log"])->name("project-deliverylog")->whereNumber("id");
+        Route::get("/project/{id}/return-log", [ProjectController::class, "return_log"])->name("project-returnlog")->whereNumber("id");
     });
 
     // ===== PURCHASES ===== //

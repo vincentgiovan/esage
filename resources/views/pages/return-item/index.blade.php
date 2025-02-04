@@ -41,7 +41,7 @@
             <a href="{{ route('returnitem-create') }}" class="btn btn-primary text-white" style="font-size: 10pt">
                 <i class="bi bi-plus-square"></i> Buat Pengembalian Barang Baru
             </a>
-            @if(in_array(Auth::user()->role->role_name, ['gudang']))
+            @if(in_array(Auth::user()->role->role_name, ['gudang', 'master']))
                 <a href="{{ route('returnitem-conditionvalidation') }}" class="btn btn-success" style="font-size: 10pt">
                     <i class="bi bi-check-square"></i> Validasi Kondisi Barang Pengembalian
                 </a>

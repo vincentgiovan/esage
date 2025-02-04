@@ -65,9 +65,10 @@
                         <td>
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 {{ $p->project_name }}
-
-                                    <a href="{{ route('project-log', $p->id) }}" class="btn btn-success">Lihat Item</a>
-
+                                <div class="">
+                                    <a href="{{ route('project-deliverylog', $p->id) }}" class="btn btn-success">Cek Pengiriman</a>
+                                    <a href="{{ route('project-returnlog', $p->id) }}" class="btn btn-success">Cek Pengembalian</a>
+                                </div>
                             </div>
                         </td>
                         <td>{{ $p->location }}</td>

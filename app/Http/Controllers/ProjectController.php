@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Project;
+use App\Models\ReturnItem;
 use Illuminate\Http\Request;
 use App\Models\DeliveryOrder;
+use PhpParser\Node\Stmt\Return_;
 use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller{
@@ -146,7 +148,16 @@ class ProjectController extends Controller{
         }
     }
 
-    public function view_log($id){
-        return view("pages.project.log", ["project" => Project::find($id)]);
+    public function delivery_log($id){
+        return view("pages.project.delivery-log", ["project" => Project::find($id)]);
+    }
+
+    public function return_log($id){
+        $project = Project::find($id);
+
+        return view("pages.project.return-log", [
+            "project" => $project,
+            "return_items" => ReturnItem::where('project_id', $project->id)->get()
+        ]);
     }
 }

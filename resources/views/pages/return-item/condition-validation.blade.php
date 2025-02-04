@@ -46,14 +46,19 @@
             <div class="overflow-x-auto mt-2">
                 <table class="w-100">
                     <tr>
-                        <th>No</th>
-                        <th>Tanggal Pengembalian</th>
-                        <th>Proyek Asal</th>
-                        <th>Nama Produk</th>
-                        <th>Varian</th>
-                        <th>Jumlah</th>
-                        <th>Status</th>
-                        <th>Kondisi Bagus</th>
+                        <th rowspan="2">No</th>
+                        <th rowspan="2">Tanggal Pengembalian</th>
+                        <th rowspan="2">Proyek Asal</th>
+                        <th rowspan="2">Nama Produk</th>
+                        <th rowspan="2">Varian</th>
+                        <th rowspan="2">Jumlah</th>
+                        {{-- <th rowspan="2">Status</th> --}}
+                        <th colspan="2" class="text-center">Kondisi Barang</th>
+                    </tr>
+
+                    <tr>
+                        <th class="text-center">Bagus</th>
+                        <th class="text-center">Bekas</th>
                     </tr>
 
                     @foreach ($unvalidated_return_item_products as $rip)
@@ -67,9 +72,12 @@
                             <td>{{ $rip->product->product_name }}</td>
                             <td>{{ $rip->product->variant }}</td>
                             <td>{{ $rip->qty }}</td>
-                            <td>{{ $rip->status }}</td>
-                            <td>
-                                <input type="checkbox" class="form-check-input inp-condition">
+                            {{-- <td>{{ $rip->status }}</td> --}}
+                            <td style="width: 100px;">
+                                <input type="text" value="0" class="w-100 inp-condition" name="good[{{ $rip->id }}]">
+                            </td>
+                            <td style="width: 100px;">
+                                <input type="text" value="0" class="w-100 inp-condition" name="bad[{{ $rip->id }}]">
                             </td>
                         </tr>
                     @endforeach
@@ -109,17 +117,6 @@
     <script>
         $('.inp-condition').on('change', function(){
             $('#save-unvalids-btn').show();
-        });
-
-        const unvalidatedForm = $('#unvalid-return-item-products');
-        unvalidatedForm.on('submit', function(e){
-            e.preventDefault();
-
-            $('.inp-condition').each(function(){
-                unvalidatedForm.append($('<input>').attr({'type': 'hidden', 'name': 'conditions[]', 'value': $(this).is(':checked')? 'on' : 'off'}));
-            });
-
-            this.submit();
         });
     </script>
 @endsection

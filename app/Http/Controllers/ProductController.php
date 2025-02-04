@@ -21,7 +21,7 @@ class ProductController extends Controller{
         $products = Product::filter(request(["search"]))->orderByRaw('CASE WHEN status = "Out of Stock" THEN 0 ELSE 1 END')->orderBy("product_name")->get(); // Data semua produk dari database buat ditampilin satu-satu (kalo user-nya searching tampilkan yang memenuhi keyword)
 
         $grouped_products = $products->groupBy(function ($product) {
-            return "{$product->product_name}|{$product->variant}|{$product->is_returned}";
+            return "{$product->product_name}|{$product->variant}";
         })->map(function ($group) {
             // Use the first product in the group as a base for the grouped product
             $baseProduct = $group->first()->replicate();

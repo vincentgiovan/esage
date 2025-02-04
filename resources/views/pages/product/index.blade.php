@@ -111,11 +111,11 @@
 
                             <td>
                                 {{-- Toggler button untuk memperlihatkan detail varian data produk --}}
-                                <button class="btn btn-success view-all-btn" data-prodgroup="{{ __(str_replace(' ', '', $p->product_name) . '-' . str_replace(' ', '', $p->variant) . '-' . $p->is_returned) }}">Lihat Semua</button>
+                                <button class="btn btn-success view-all-btn" data-prodgroup="{{ __(str_replace(' ', '', str_replace('/', '-', $p->product_name)) . '-' . str_replace(' ', '', $p->variant)) }}">Lihat Semua</button>
                             </td>
                         </tr>
                     @else
-                        <tr class="{{ __(str_replace(' ', '', $p->product_name) . '-' . str_replace(' ', '', $p->variant) . '-' . $p->is_returned) }}" style="display: none; background: @if($i % 2 == 0) #E0E0E0 @else white @endif;">
+                        <tr class="{{ __(str_replace(' ', '', str_replace('/', '-', $p->product_name)) . '-' . str_replace(' ', '', $p->variant)) }}" style="display: none; background: @if($i % 2 == 0) #E0E0E0 @else white @endif;">
                             <td></td>
                             <td>
                                 <div class="w-100 d-flex justify-content-between align-items-center">
