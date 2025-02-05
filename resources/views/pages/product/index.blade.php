@@ -59,6 +59,12 @@
 
         <br>
 
+        <div class="d-flex" style="gap: 1px;">
+            <a href="{{ route('product-index', ['condition' => 'good']) }}" class="btn" style="border-radius: 0; width: 100px; @if(request('condition') == 'good') background-color: rgb(59, 59, 59); @else background-color: rgb(142, 142, 142); @endif color: white;">Bagus</a>
+            <a href="{{ route('product-index', ['condition' => 'degraded']) }}" class="btn" style="border-radius: 0; width: 100px; @if(request('condition') == 'degraded') background-color: rgb(59, 59, 59); @else background-color: rgb(142, 142, 142); @endif color: white;">Rusak</a>
+            <a href="{{ route('product-index', ['condition' => 'refurbish']) }}" class="btn" style="border-radius: 0; width: 100px; @if(request('condition') == 'refurbish') background-color: rgb(59, 59, 59); @else background-color: rgb(142, 142, 142); @endif color: white;">Rekondisi</a>
+        </div>
+
         <div class="overflow-x-auto">
             <table class="w-100">
                 <tr>
@@ -136,15 +142,7 @@
                             @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
                                 <td>Rp {{ number_format($p->price, 2, ',', '.') }}</td>
                                 <td>{{ $p->markup }}</td>
-                                <td>
-                                    <div class="w-100 d-flex justify-content-center">
-                                        @if($p->condition == "degraded")
-                                            <i class="bi bi-x-circle-fill fs-4" style="color: red"></i>
-                                        @else
-                                            <i class="bi bi-check-circle-fill fs-4" style="color: green"></i>
-                                        @endif
-                                    </div>
-                                </td>
+                                <td>{{ ucwords($p->condition) }}</td>
                             @endif
 
                             {{-- Harga sudah dikalikan markup khusus project manager, gudang, dan subgudang --}}

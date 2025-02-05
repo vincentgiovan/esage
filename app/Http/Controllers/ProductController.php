@@ -18,7 +18,7 @@ class ProductController extends Controller{
     public function index()
     {
         $n_pagination = 10;
-        $products = Product::filter(request(["search"]))->orderByRaw('CASE WHEN status = "Out of Stock" THEN 0 ELSE 1 END')->orderBy("product_name")->get(); // Data semua produk dari database buat ditampilin satu-satu (kalo user-nya searching tampilkan yang memenuhi keyword)
+        $products = Product::filter(request(["condition", "search"]))->orderByRaw('CASE WHEN status = "Out of Stock" THEN 0 ELSE 1 END')->orderBy("product_name")->get(); // Data semua produk dari database buat ditampilin satu-satu (kalo user-nya searching tampilkan yang memenuhi keyword)
 
         $grouped_products = $products->groupBy(function ($product) {
             return "{$product->product_name}|{$product->variant}";
@@ -69,7 +69,8 @@ class ProductController extends Controller{
             "markup" => "nullable|numeric",
             "status" => "required|min:3",
             "product_code" => "required|min:3",
-            "unit" => "required"
+            "unit" => "required",
+            'condition' => 'required',
         ]);
 
         if(!$validatedData["markup"]){
@@ -121,7 +122,7 @@ class ProductController extends Controller{
                 "markup" => "required|numeric|min:0",
                 "status" => "required|min:3",
                 "product_code" => "required|min:3",
-                "unit"=>"required"
+                "unit"=>"required",
             ]);
         }
 

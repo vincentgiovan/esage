@@ -79,6 +79,18 @@
                     @enderror
                 </div>
 
+                <div class="mt-3">
+                    <label for="condition">Kondisi Barang</label>
+                    <select class="form-select @error('condition') is-invalid @enderror" name="condition" id="condition">
+                        <option value="good">Bagus</option>
+                        <option value="degraded">Rusak</option>
+                        <option value="refurbish">Rekondisi</option>
+                    </select>
+                    @error('condition')
+                        <p class="text-danger">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <div class="mt-4">
                     <input type="submit" class="btn btn-success px-3 py-1" value="Simpan Data Baru">
                 </div>
