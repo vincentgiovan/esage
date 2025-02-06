@@ -40,7 +40,7 @@
                     <label for="role">Account Role</label>
                     @php
                         $role = "";
-                        $role_id = Auth::user()->role;
+                        $role_id = Auth::user()->role->role_name;
                         switch($role_id){
                             case 1: $role = "Admin"; break;
                             case 2: $role = "User"; break;

@@ -6,6 +6,7 @@
         <div class="w-100 d-flex align-items-center justify-content-between">
             <h2>Pengiriman Barang</h2>
 
+            @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
                 <div class="d-flex gap-3">
                     {{-- <a class="btn btn-secondary" href="{{ route('deliveryorder-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a> --}}
                     <div class="position-relative d-flex flex-column align-items-end">
@@ -27,7 +28,7 @@
                         </div>
                     </div>
                 </div>
-
+            @endif
         </div>
         <script>
             $(document).ready(() => {
@@ -54,12 +55,12 @@
             <p class="text-success fw-bold">{{ session('successImportDevor') }}</p>
         @endif
 
-
+        @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
             <a href="{{ route('deliveryorder-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
                 <i class="bi bi-plus-square"></i>
                 Tambah Pengiriman Baru</a>
             <br>
-
+        @endif
 
         <!-- tabel list data-->
 
@@ -72,9 +73,9 @@
                     <th>SKU</th>
                     <th class="text-center">Status Pengiriman</th>
                     <th>Catatan</th>
-
+                    @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
                         <th>Aksi</th>
-
+                    @endif
                 </tr>
 
                 @foreach ($deliveryorders as $p)
@@ -85,10 +86,8 @@
                         <td>
                             <div class="d-flex gap-5 w-100 justify-content-between align-items-center">
                                 {{ $p->register }}
-
-                                    <a href="{{ route('deliveryorderproduct-viewitem', $p->id) }}" class="btn btn-success text-white"
-                                        style="font-size: 10pt"><i class="bi bi-cart"></i>Lihat Barang</a>
-
+                                <a href="{{ route('deliveryorderproduct-viewitem', $p->id) }}" class="btn btn-success text-white"
+                                    style="font-size: 10pt"><i class="bi bi-cart"></i>Lihat Barang</a>
                             </div>
                         </td>
 
@@ -103,7 +102,7 @@
                         </td>
                         <td>{{ $p->note }}</td>
                         {{-- <td >{{ $p->user->name }}</td> --}}
-
+                        @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
                             <td >
                                 <div class="d-flex gap-2 w-100">
                                     <a href="{{ route('deliveryorder-edit', $p->id) }}" class="btn text-white"
@@ -119,7 +118,7 @@
                                     </form>
                                 </div>
                             </td>
-
+                        @endif
                     </tr>
                 @endforeach
             </table>

@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Product;
-use App\Models\PurchaseProduct;
 use Illuminate\Http\Request;
+use App\Models\PurchaseProduct;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use App\Exports\ProductsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class ProductController extends Controller{
@@ -15,10 +18,10 @@ class ProductController extends Controller{
     public function index()
     {
         $n_pagination = 10;
-        $products = Product::filter(request(["search"]))->orderByRaw('CASE WHEN status = "Out of Stock" THEN 0 ELSE 1 END')->orderBy("product_name")->get(); // Data semua produk dari database buat ditampilin satu-satu (kalo user-nya searching tampilkan yang memenuhi keyword)
+        $products = Product::filter(request(["condition", "search"]))->orderByRaw('CASE WHEN status = "Out of Stock" THEN 0 ELSE 1 END')->orderBy("product_name")->get(); // Data semua produk dari database buat ditampilin satu-satu (kalo user-nya searching tampilkan yang memenuhi keyword)
 
         $grouped_products = $products->groupBy(function ($product) {
-            return "{$product->product_name}|{$product->variant}|{$product->is_returned}";
+            return "{$product->product_name}|{$product->variant}";
         })->map(function ($group) {
             // Use the first product in the group as a base for the grouped product
             $baseProduct = $group->first()->replicate();
@@ -66,7 +69,9 @@ class ProductController extends Controller{
             "markup" => "nullable|numeric",
             "status" => "required|min:3",
             "product_code" => "required|min:3",
-            "unit" => "required"
+            "unit" => "required",
+            'condition' => 'required',
+            'type' => 'required'
         ]);
 
         if(!$validatedData["markup"]){
@@ -93,17 +98,35 @@ class ProductController extends Controller{
     // Simpan perubahan data produk ke database
     public function update(Request $request, $id)
     {
-        // Validasi data, kalo ga lolos ga lanjut
-        $validatedData = $request->validate([
-            "product_name" => "required|min:3",
-            "price"=>"required|numeric|min:0|not_in:0",
-            "variant" => "required|min:3",
-            "stock" => "required|numeric|min:0|not_in:0",
-            "markup" => "nullable|numeric",
-            "status" => "required|min:3",
-            "product_code" => "required|min:3",
-            "unit"=>"required"
-        ]);
+        // Gudang bisa update stock
+        if(Auth::user()->role->role_name == 'gudang'){
+            $validatedData = $request->validate([
+                "stock" => "required|numeric|min:0",
+                "status" => "required|min:3",
+            ]);
+        }
+
+        // Product manager bisa update markup
+        else if(Auth::user()->role->role_name == 'purchasing_admin'){
+            $validatedData = $request->validate([
+                "markup" => "required|numeric|min:0",
+            ]);
+        }
+
+        // Role yang lain
+        else {
+            $validatedData = $request->validate([
+                "product_name" => "required|min:3",
+                "price"=>"required|numeric|min:0|not_in:0",
+                "variant" => "required|min:3",
+                "stock" => "required|numeric|min:0",
+                "markup" => "required|numeric|min:0",
+                "status" => "required|min:3",
+                "product_code" => "required|min:3",
+                "unit"=>"required",
+                'type' => 'required'
+            ]);
+        }
 
         // Simpan perubahan datanya di data produk yang ditargetkan di tabel products
         Product::find($id)->update($validatedData);
@@ -193,10 +216,16 @@ class ProductController extends Controller{
         }
     }
 
+    // EXPORT EXCEL
+    public function export_excel()
+    {
+        return Excel::download(new ProductsExport, 'testus.xlsx');
+    }
+
     public function view_log($id){
         $product = Product::find($id);
 
-        $similars = Product::where("product_name", $product->product_name)->where("variant", $product->variant)->get();
+        $similars = Product::where("product_name", $product->product_name)->where("variant", $product->variant)->where('price', $product->price)->where('discount', $product->discount)->get();
 
         $purchaseproducts = [];
         foreach($similars as $s){

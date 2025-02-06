@@ -59,14 +59,12 @@ class DeliveryOrderProductController extends Controller
                 'products.stock',
                 'products.status',
                 'products.markup',
-                'products.is_returned',
                 'products.created_at',
                 'products.updated_at',
                 'products.archived'
             )
             ->orderBy('products.product_name', 'asc') // Group by product name
             ->orderBy('products.variant', 'asc') // Then by variant
-            ->orderByRaw("CASE WHEN products.is_returned = 'no' THEN 1 ELSE 0 END") // Place returned products at the bottom
             ->orderBy('ordering_date', 'asc') // Order by oldest purchase date or created_at
             ->get()
         ]);

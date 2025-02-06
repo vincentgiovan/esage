@@ -6,6 +6,7 @@
         <div class="w-100 d-flex align-items-center justify-content-between">
             <h2>Proyek Sage</h2>
 
+            @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang']))
                 <div class="d-flex gap-3">
                     <a class="btn btn-secondary" href="{{ route('project-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
                     <div class="position-relative d-flex flex-column align-items-end">
@@ -18,7 +19,7 @@
                         </div>
                     </div>
                 </div>
-
+            @endif
         </div>
         <script>
             $(document).ready(() => {
@@ -29,8 +30,6 @@
         </script>
         <hr>
 
-
-
         @if (session()->has('successAddProject'))
             <p class="text-success fw-bold">{{ session('successAddProject') }}</p>
         @elseif (session()->has('successEditProject'))
@@ -39,15 +38,14 @@
             <p class="text-success fw-bold">{{ session('successDeleteProject') }}</p>
         @endif
 
-
+        @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang']))
             <a href="{{ route('project-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
                 <i class="bi bi-plus-square"></i>
                 Tambah Proyek Baru</a>
             <br>
-
+        @endif
 
         <!-- tabel list data-->
-
         <div class="overflow-x-auto">
             <table class="w-100">
                 <tr>
@@ -56,9 +54,9 @@
                     <th>Lokasi</th>
                     <th>PIC</th>
                     <th>Alamat</th>
-
+                    @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang']))
                         <th>Aksi</th>
-
+                    @endif
                 </tr>
 
                 @foreach ($projects as $p)
@@ -67,16 +65,17 @@
                         <td>
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 {{ $p->project_name }}
-
-                                    <a href="{{ route('project-log', $p->id) }}" class="btn btn-success">Lihat Item</a>
-
+                                <div class="">
+                                    <a href="{{ route('project-deliverylog', $p->id) }}" class="btn btn-success">Cek Pengiriman</a>
+                                    <a href="{{ route('project-returnlog', $p->id) }}" class="btn btn-success">Cek Pengembalian</a>
+                                </div>
                             </div>
                         </td>
                         <td>{{ $p->location }}</td>
                         <td>{{ $p->PIC }}</td>
                         <td>{{ $p->address }}</td>
                         {{-- <td >{{ $p->user->name }}</td> --}}
-
+                        @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang']))
                             <td>
                                 <div class="d-flex gap-2 w-100">
                                     <a href="{{ route('project-manageemployee-index', $p->id) }}" class="btn btn-success text-white"
@@ -96,7 +95,7 @@
                                     </form>
                                 </div>
                             </td>
-
+                        @endif
                     </tr>
                 @endforeach
             </table>

@@ -26,13 +26,11 @@
                     @enderror
                 </div>
                 <div class="form-group mb-3">
-                    <label for="role">Pilih Role</label>
-                    <select class="form-control text-black" id="role" name="role">
-                        <option value="master" @if(old('role', $user->role) == 'master') selected @endif>Master</option>
-                        <option value="accounting_admin" @if(old('role', $user->role) == 'accounting_admin') selected @endif>Accounting Admin</option>
-                        <option value="purchasing_admin" @if(old('role', $user->role) == 'purchase_admin') selected @endif>Purchasing Admin</option>
-                        <option value="project_manager" @if(old('role', $user->role) == 'projct_manager') selected @endif>Project Manager</option>
-                        <option value="user" @if(old('role', $user->role) == 'user') selected @endif>User</option>
+                    <label for="role_id">Pilih Role</label>
+                    <select class="form-control text-black" id="role_id" name="role_id">
+                        @foreach(App\Models\Role::all() as $role)
+                            <option value="{{ $role->id }}" @if(old('role_id', $user->role_id) == $role->id) selected @endif>{{ ucwords(str_replace('_', ' ', $role->role_name)) }}</option>
+                        @endforeach
                     </select>
                 </div>
 
