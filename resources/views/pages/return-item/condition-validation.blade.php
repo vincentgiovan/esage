@@ -45,41 +45,64 @@
             </div>
             <div class="overflow-x-auto mt-2">
                 <table class="w-100">
-                    <tr>
-                        <th>No</th>
-                        <th>Tanggal Pengembalian</th>
-                        <th>Proyek Asal</th>
-                        <th>Nama Produk</th>
-                        <th>Varian</th>
-                        <th>Jumlah</th>
-                        <th>Status</th>
-                        <th>Kondisi Bagus</th>
-                    </tr>
-
-                    @foreach ($unvalidated_return_item_products as $rip)
-                        <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
-                            <td>
-                                {{ $loop->iteration }}
-                                <input type="hidden" name="rip[]" value="{{ $rip->id }}">
-                            </td>
-                            <td>{{ Carbon\Carbon::parse($rip->return_item->return_date)->translatedFormat('d M Y') }}</td>
-                            <td>{{ $rip->return_item->project->project_name }}</td>
-                            <td>{{ $rip->product->product_name }}</td>
-                            <td>{{ $rip->product->variant }}</td>
-                            <td>{{ $rip->qty }}</td>
-                            <td>{{ $rip->status }}</td>
-                            <td>
-                                <input type="checkbox" class="form-check-input inp-condition">
-                            </td>
+                    <thead>
+                        <tr>
+                            <th rowspan="2">No</th>
+                            <th rowspan="2">Tanggal Pengembalian</th>
+                            <th rowspan="2">Proyek Asal</th>
+                            <th rowspan="2">Nama Produk</th>
+                            <th rowspan="2">Varian</th>
+                            <th rowspan="2">Jumlah</th>
+                            {{-- <th rowspan="2">Status</th> --}}
+                            <th colspan="2" class="text-center">Kondisi Barang</th>
                         </tr>
-                    @endforeach
+
+                        <tr>
+                            <th class="text-center">Bagus</th>
+                            <th class="text-center">Bekas</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @forelse ($unvalidated_return_item_products as $rip)
+                            <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
+                                <td>
+                                    {{ $loop->iteration }}
+                                    <input type="hidden" name="rip[]" value="{{ $rip->id }}">
+                                </td>
+                                <td>{{ Carbon\Carbon::parse($rip->return_item->return_date)->translatedFormat('d M Y') }}</td>
+                                <td>{{ $rip->return_item->project->project_name }}</td>
+                                <td>{{ $rip->product->product_name }}</td>
+                                <td>{{ $rip->product->variant }}</td>
+                                <td>{{ $rip->qty }}</td>
+                                {{-- <td>{{ $rip->status }}</td> --}}
+                                <td style="width: 100px;">
+                                    <input type="number" min="0" max="{{ $rip->qty }}" data-num="{{ $rip->qty }}" value="0" class="w-100 inp-condition num-good" name="good[{{ $rip->id }}]">
+                                </td>
+                                <td style="width: 100px;">
+                                    <input type="number" min="0" max="{{ $rip->qty }}" data-num="{{ $rip->qty }}" value="0" class="w-100 inp-condition num-bad" name="bad[{{ $rip->id }}]">
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="8" class="bg-white text-center">Tidak ada data</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
                 </table>
             </div>
         </form>
 
         <!-- tabel list data-->
-        <h5 class="mt-4">Kondisi Barang Telah Divalidasi</h5>
-        <div class="overflow-x-auto">
+        <div class="mt-4 d-flex align-items-center justify-content-between">
+            <h5>Kondisi Barang Telah Divalidasi</h5>
+            <form action="{{ route('returnitem-conditionvalidation') }}" class="d-flex gap-2">
+                <input type="text" name="project" placeholder="Cari project..." value="{{ request('project') }}"
+                    class="form-control border border-1 border-secondary">
+                <button class="btn " style="background-color: rgb(191, 191, 191)"><i class="bi bi-search"></i></button>
+            </form>
+        </div>
+        <div class="overflow-x-auto mt-3">
             <table class="w-100">
                 <tr>
                     <th>No</th>
@@ -107,19 +130,31 @@
     </x-container>
 
     <script>
-        $('.inp-condition').on('change', function(){
-            $('#save-unvalids-btn').show();
-        });
+        $('.inp-condition').on({
+            'input': function(){
+                $('#save-unvalids-btn').show();
 
-        const unvalidatedForm = $('#unvalid-return-item-products');
-        unvalidatedForm.on('submit', function(e){
-            e.preventDefault();
+                if($(this).hasClass('num-good')){
+                    const itemNum = $(this).data('num');
+                    const currNum = $(this).val();
+                    const otherNum = itemNum - currNum;
 
-            $('.inp-condition').each(function(){
-                unvalidatedForm.append($('<input>').attr({'type': 'hidden', 'name': 'conditions[]', 'value': $(this).is(':checked')? 'on' : 'off'}));
-            });
+                    $(this).parent().next().find('input').val(otherNum);
+                }
+                else {
+                    const itemNum = $(this).data('num');
+                    const currNum = $(this).val();
+                    const otherNum = itemNum - currNum;
 
-            this.submit();
+                    $(this).parent().prev().find('input').val(otherNum);
+                }
+            },
+
+            'blur': function(){
+                if($(this).val() == ''){
+                    $(this).val(0);
+                }
+            },
         });
     </script>
 @endsection

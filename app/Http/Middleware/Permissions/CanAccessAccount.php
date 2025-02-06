@@ -17,7 +17,7 @@ class CanAccessAccount
      */
     public function handle(Request $request, Closure $next)
     {
-        if(in_array(Auth::user()->role, ['master'])){
+        if(in_array(Auth::user()->role->role_name, ['master'])){
             return $next($request);
         }
         else {

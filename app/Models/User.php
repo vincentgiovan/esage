@@ -17,7 +17,7 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var array<int, string>
      */
-    protected $guarded = ["id"];
+    protected $fillable = ["name", "role_id", "email", "password", "allow_self_attendance", "archived"];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -44,6 +44,10 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function employee_data(){
         return $this->hasOne(Employee::class);
+    }
+
+    public function role(){
+        return $this->belongsTo(Role::class);
     }
 
     public function scopeFilter($query, array $filters){

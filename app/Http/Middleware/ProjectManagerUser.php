@@ -17,7 +17,7 @@ class ProjectManagerUser
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::user()->role == "project_manager"){
+        if(Auth::user()->role->role_name == "project_manager"){
             return $next($request);
         } else{
             abort(403);

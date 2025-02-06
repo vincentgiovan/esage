@@ -5,18 +5,21 @@
         <br>
         <div class="w-100 d-flex align-items-center justify-content-between">
             <h2>Daftar Barang di Pengiriman {{ $deliveryorder->register }}</h2>
-            <div class="d-flex gap-3">
-                <a class="btn btn-secondary" href="{{ route('deliveryorderproduct-import', $deliveryorder->id) }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
-                <div class="position-relative d-flex flex-column align-items-end">
-                    <button class="btn btn-secondary" type="button" id="dd-toggler">
-                        <i class="bi bi-file-earmark-arrow-up"></i> Export
-                    </button>
-                    <div class="bg-white rounded-lg position-absolute z-2 border border-1" id="dd-menu" style="display: none; top: 40px;">
-                        <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("deliveryorderproduct-export", [$deliveryorder->id, 2]) }}" target="blank">Export (PDF Portrait)</a></li>
-                        <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("deliveryorderproduct-export", [$deliveryorder->id, 1]) }}" target="blank">Export (PDF Landscape)</a></li>
+
+            @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
+                <div class="d-flex gap-3">
+                    <a class="btn btn-secondary" href="{{ route('deliveryorderproduct-import', $deliveryorder->id) }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
+                    <div class="position-relative d-flex flex-column align-items-end">
+                        <button class="btn btn-secondary" type="button" id="dd-toggler">
+                            <i class="bi bi-file-earmark-arrow-up"></i> Export
+                        </button>
+                        <div class="bg-white rounded-lg position-absolute z-2 border border-1" id="dd-menu" style="display: none; top: 40px;">
+                            <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("deliveryorderproduct-export", [$deliveryorder->id, 2]) }}" target="blank">Export (PDF Portrait)</a></li>
+                            <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("deliveryorderproduct-export", [$deliveryorder->id, 1]) }}" target="blank">Export (PDF Landscape)</a></li>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
         </div>
 
         <script>
@@ -37,9 +40,11 @@
             <p class="text-success fw-bold">{{ session("successDeleteProduct") }}</p>
         @endif
 
-        <a href="{{ route('deliveryorderproduct-create1', $deliveryorder->id) }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
-            <i class="bi bi-plus-square"></i> Tambah Barang ke Pengiriman
-        </a>
+        @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
+            <a href="{{ route('deliveryorderproduct-create1', $deliveryorder->id) }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
+                <i class="bi bi-plus-square"></i> Tambah Barang ke Pengiriman
+            </a>
+        @endif
 
         <br>
         <!-- tabel list data-->
@@ -56,7 +61,9 @@
                     <th>Harga Diskon</th>
                     <th>Jumlah</th>
                     <th>Subtotal</th>
-                    <th>Aksi</th>
+                    @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
+                        <th>Aksi</th>
+                    @endif
                 </tr>
 
                 @php
@@ -82,16 +89,18 @@
                         <td>Rp {{ number_format($disc_price, 2, ',', '.') }}</td>
                         <td>{{ $deliveryorder_product->quantity }}</td>
                         <td>Rp{{ number_format($subtotal, 2, ',', '.') }}</td>
-                        <td>
-                            <div class="d-flex gap-5 w-100">
-                                <form action="{{ route("deliveryorderproduct-destroy", [$deliveryorder->id, $deliveryorder_product->id] ) }}" method="POST">
-                                    @csrf
-                                    <button class="btn btn-danger text-white" style="font-size: 10pt " onclick="return confirm('Apakah anda yakin ingin menghapus barang ini dari pengiriman ini?')">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
+                        @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
+                            <td>
+                                <div class="d-flex gap-5 w-100">
+                                    <form action="{{ route("deliveryorderproduct-destroy", [$deliveryorder->id, $deliveryorder_product->id] ) }}" method="POST">
+                                        @csrf
+                                        <button class="btn btn-danger text-white" style="font-size: 10pt " onclick="return confirm('Apakah anda yakin ingin menghapus barang ini dari pengiriman ini?')">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        @endif
                     </tr>
 
                 @endforeach

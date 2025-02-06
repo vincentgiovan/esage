@@ -17,7 +17,7 @@ class MasterAccount
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::user()->role == "master"){
+        if(Auth::user()->role->role_name == "master"){
             return $next($request);
         } else{
             abort(403);

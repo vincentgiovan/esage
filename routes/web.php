@@ -22,6 +22,7 @@ use App\Http\Controllers\DeliveryOrderProductController;
 use App\Http\Controllers\EmployeeProjectController;
 use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\PrepayController;
+use App\Http\Controllers\RefurbishItemController;
 use App\Http\Controllers\ReturnItemProductController;
 
 Route::get('/', function(){
@@ -37,35 +38,30 @@ Route::middleware(["auth", "verified"])->group(function(){
     Route::get("/profile", [AccountController::class, "edit_profile"])->name("profile-edit");
     Route::post("/profile", [AccountController::class, "update_profile"])->name("profile-update");
 
-    // Normal Users Can Access These Pages
-    Route::get('/delivery-order', [DeliveryOrderController::class, "index"] )->name("deliveryorder-index");
-    Route::get('/product', [ProductController::class, "index"] )->name("product-index");
-    Route::get('/partner', [PartnerController::class, "index"] )->name("partner-index");
-    Route::get('/project', [ProjectController::class, "index"] )->name("project-index");
-    Route::get('/purchase', [PurchaseController::class, "index"] )->name("purchase-index");
-
-    Route::get('/purchase-product/{id}/viewitem', [PurchaseProductController::class, "view_items"] )->name("purchaseproduct-viewitem")->whereNumber("id");
-    Route::get('/delivery-order-product/{id}/viewitem', [DeliveryOrderProductController::class, "view_items"] )->name("deliveryorderproduct-viewitem")->whereNumber("id");
-
-    Route::get('/return-item', [ReturnItemController::class, "index"] )->name("returnitem-index");
-    Route::get("/request-item", [RequestItemController::class, "index"])->name("requestitem-index");
-
 
     // ===== PRODUCTS ===== //
-    Route::middleware('can_access_product')->group(function(){
-        Route::get('/product/create', [ProductController::class, "create"] )->name("product-create");
-        Route::post('/product/store', [ProductController::class, "store"] )->name("product-store");
-        Route::get("/product/import", [ProductController::class, "import_product_form"])->name("product-import");
-        Route::post("/product/import", [ProductController::class, "import_product_store"])->name("product-import-store");
-        Route::get('/product/{id}/edit', [ProductController::class, "edit"] )->name("product-edit")->whereNumber("id");
-        Route::post('/product/{id}/edit', [ProductController::class, "update"] )->name("product-update")->whereNumber("id");
-        Route::post('/product/{id}', [ProductController::class, "destroy"] )->name("product-destroy")->whereNumber("id");
-        Route::get("/product/export/{mode}", [PDFController::class, "export_product"])->name("product-export")->whereNumber("mode");
+    Route::middleware('allow:master,accounting_admin,project_manager,purchasing_admin,gudang,subgudang')->group(function(){
+        Route::get('/product', [ProductController::class, "index"] )->name("product-index");
+
+        Route::middleware('block:subgudang')->group(function(){
+            Route::get('/product/create', [ProductController::class, "create"] )->name("product-create");
+            Route::post('/product/store', [ProductController::class, "store"] )->name("product-store");
+            Route::get("/product/import", [ProductController::class, "import_product_form"])->name("product-import");
+            Route::post("/product/import", [ProductController::class, "import_product_store"])->name("product-import-store");
+            Route::get('/product/{id}/edit', [ProductController::class, "edit"] )->name("product-edit")->whereNumber("id");
+            Route::post('/product/{id}/edit', [ProductController::class, "update"] )->name("product-update")->whereNumber("id");
+            Route::post('/product/{id}', [ProductController::class, "destroy"] )->name("product-destroy")->whereNumber("id");
+        });
+
+        Route::get("/product/export-pdf/{mode}", [PDFController::class, "export_product"])->name("product-export-pdf")->whereNumber("mode");
+        Route::get('/product/export-excel', [ProductController::class, 'export_excel'])->name("product-export-excel");
+
         Route::get("/product/{id}/log", [ProductController::class, "view_log"])->name("product-log")->whereNumber("id");
     });
 
     // ===== PARTNERS ===== //
-    Route::middleware('can_access_partner')->group(function(){
+    Route::middleware('allow:master,accounting_admin,purchasing_admin')->group(function(){
+        Route::get('/partner', [PartnerController::class, "index"] )->name("partner-index");
         Route::get('/partner/create', [PartnerController::class, "create"] )->name("partner-create");
         Route::post('/partner/store', [PartnerController::class, "store"] )->name("partner-store");
         Route::get("/partner/import", [PartnerController::class, "import_partner_form"])->name("partner-import");
@@ -78,7 +74,8 @@ Route::middleware(["auth", "verified"])->group(function(){
     });
 
     // ===== PROJECTS ===== //
-    Route::middleware('can_access_project')->group(function(){
+    Route::middleware('allow:master,accounting_admin,gudang,subgudang,purchasing_admin,project_manager')->group(function(){
+        Route::get('/project', [ProjectController::class, "index"] )->name("project-index");
         Route::get('/project/create', [ProjectController::class, "create"] )->name("project-create");
         Route::post('/project/store', [ProjectController::class, "store"] )->name("project-store");
         Route::get("/project/import", [ProjectController::class, "import_project_form"])->name("project-import");
@@ -90,12 +87,14 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::post('/project/{id}/edit', [ProjectController::class, "update"] )->name("project-update")->whereNumber("id");
         Route::post('/project/{id}', [ProjectController::class, "destroy"] )->name("project-destroy")->whereNumber("id");
         Route::get("/project/export/{mode}", [PDFController::class, "export_project"])->name("project-export")->whereNumber("mode");
-        Route::get("/project/{id}/log", [ProjectController::class, "view_log"])->name("project-log")->whereNumber("id");
+        Route::get("/project/{id}/delivery-log", [ProjectController::class, "delivery_log"])->name("project-deliverylog")->whereNumber("id");
+        Route::get("/project/{id}/return-log", [ProjectController::class, "return_log"])->name("project-returnlog")->whereNumber("id");
     });
 
     // ===== PURCHASES ===== //
-    Route::middleware('can_access_purchase')->group(function(){
+    Route::middleware('allow:master,accounting_admin,purchasing_admin')->group(function(){
         // Purchase
+        Route::get('/purchase', [PurchaseController::class, "index"] )->name("purchase-index");
         Route::get('/purchase/create', [PurchaseController::class, "create"] )->name("purchase-create");
         Route::post('/purchase/store', [PurchaseController::class, "store"] )->name("purchase-store");
         Route::get("/purchase/import", [PurchaseController::class, "import_purchase_form"])->name("purchase-import");
@@ -108,6 +107,7 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::get("/purchase/export/{mode}", [PDFController::class, "export_purchase"])->name("purchase-export")->whereNumber("mode");
 
         // Carts
+        Route::get('/purchase-product/{id}/viewitem', [PurchaseProductController::class, "view_items"] )->name("purchaseproduct-viewitem")->whereNumber("id");
         Route::get("/purchase-product/{id}/import", [PurchaseProductController::class, "import_purchaseproduct_form"])->name("purchaseproduct-import")->whereNumber("id");
         Route::post("/purchase-product/{id}/import", [PurchaseProductController::class, "import_purchaseproduct_store"])->name("purchaseproduct-import-store")->whereNumber("id");
         Route::get('/purchase-product/{id}/create1', [PurchaseProductController::class, "add_existing_product"] )->name("purchaseproduct-create1")->whereNumber("id");
@@ -119,8 +119,9 @@ Route::middleware(["auth", "verified"])->group(function(){
     });
 
     // ===== DELIVERY ORDER AND CARTS ===== //
-    Route::middleware('can_access_delivery_order')->group(function(){
+    Route::middleware('allow:master,accounting_admin,gudang,subgudang')->group(function(){
         // Delivery Order
+        Route::get('/delivery-order', [DeliveryOrderController::class, "index"] )->name("deliveryorder-index");
         Route::get('/delivery-order/create', [DeliveryOrderController::class, "create"] )->name("deliveryorder-create");
         Route::post('/delivery-order/store', [DeliveryOrderController::class, "store"] )->name("deliveryorder-store");
         Route::get("/delivery-order/import", [DeliveryOrderController::class, "import_deliveryorder_form"])->name("deliveryorder-import");
@@ -133,6 +134,7 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::get("/delivery-order/export/{mode}", [PDFController::class, "export_deliveryorder"])->name("deliveryorder-export")->whereNumber("mode");
 
         // Carts
+        Route::get('/delivery-order-product/{id}/viewitem', [DeliveryOrderProductController::class, "view_items"] )->name("deliveryorderproduct-viewitem")->whereNumber("id");
         Route::get("/delivery-order-product/{id}/import", [DeliveryOrderProductController::class, "import_deliveryorderproduct_form"])->name("deliveryorderproduct-import")->whereNumber("id");
         Route::post("/delivery-order-product/{id}/import", [DeliveryOrderProductController::class, "import_deliveryorderproduct_store"])->name("deliveryorderproduct-import-store")->whereNumber("id");
         Route::get('/delivery-order-product/{id}/create1', [DeliveryOrderProductController::class, "add_existing_product"] )->name("deliveryorderproduct-create1")->whereNumber("id");
@@ -144,8 +146,9 @@ Route::middleware(["auth", "verified"])->group(function(){
     });
 
     // ===== RETURN ITEMS ===== //
-    Route::middleware('can_access_return_item')->group(function(){
+    Route::middleware('allow:master,accounting_admin,project_manager,gudang,subgudang')->group(function(){
         // Return
+        Route::get('/return-item', [ReturnItemController::class, "index"] )->name("returnitem-index");
         Route::get('/return-item/create', [ReturnItemController::class, "create"] )->name("returnitem-create");
         Route::post('/return-item/store', [ReturnItemController::class, "store"] )->name("returnitem-store");
         Route::get('/return-item/{id}/edit', [ReturnItemController::class, "edit"] )->name("returnitem-edit")->whereNumber("id");
@@ -168,7 +171,8 @@ Route::middleware(["auth", "verified"])->group(function(){
     });
 
     // ===== REQUEST ITEMS ===== //
-    Route::middleware('can_access_request_item')->group(function(){
+    Route::middleware('allow:master,accounting_admin')->group(function(){
+        Route::get("/request-item", [RequestItemController::class, "index"])->name("requestitem-index");
         Route::get("/request-item/{id}", [RequestItemController::class, "show"])->name("requestitem-show")->whereNumber("id");
         Route::get('/request-item/create', [RequestItemController::class, "create"] )->name("requestitem-create");
         Route::post('/request-item/store', [RequestItemController::class, "store"] )->name("requestitem-store");
@@ -177,8 +181,18 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::post('/request-item/{id}', [RequestItemController::class, "destroy"] )->name("requestitem-destroy")->whereNumber("id");
     });
 
+    // ===== REFURBISH ITEMS ===== //
+    Route::middleware([])->group(function(){
+        Route::get('/refurbish-item', [RefurbishItemController::class, 'index'])->name('refurbishitem-index');
+        Route::get('/refurbish-item/create', [RefurbishItemController::class, 'create'])->name('refurbishitem-create');
+        Route::post('/refurbish-item/create', [RefurbishItemController::class, 'store'])->name('refurbishitem-store');
+        Route::get('/refurbish-item/{id}/edit', [RefurbishItemController::class, 'edit'])->name('refurbishitem-edit');
+        Route::post('/refurbish-item/{id}/edit', [RefurbishItemController::class, 'update'])->name('refurbishitem-update');
+        Route::post('/refurbish-item/{id}/delete', [RefurbishItemController::class, 'destroy'])->name('refurbishitem-destroy');
+    });
+
     // ===== ACCOUNTS ===== //
-    Route::middleware('can_access_account')->group(function(){
+    Route::middleware('allow:master')->group(function(){
         Route::get('/account', [AccountController::class, 'index'])->name('account.index');
         Route::get('/account/create', [AccountController::class, 'create'])->name('account.create');
         Route::post('/account/create', [AccountController::class, 'store'])->name('account.store');
@@ -186,11 +200,11 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::post("/account/import-data", [AccountController::class, "import_user_store"])->name("account.import.store");
         Route::get("/account/{id}", [AccountController::class, "show"])->name("account.show")->whereNumber("id");
         Route::put('/account/{id}', [AccountController::class, 'update'])->name('account.update')->whereNumber("id");
-        Route::delete('/account/{id}', [AccountController::class, 'destroy'])->name('account.destroy')->whereNumber("id");
+        Route::post('/account/{id}', [AccountController::class, 'destroy'])->name('account.destroy')->whereNumber("id");
     });
 
     // ===== EMPLOYEES, PREPAYS, AND LEAVES ===== //
-    Route::middleware('can_access_employee')->group(function(){
+    Route::middleware('allow:master')->group(function(){
         // Employees
         Route::get("/employee", [EmployeeController::class, "index"])->name("employee-index");
         Route::get("/employee/{id}", [EmployeeController::class, "show"])->name("employee-show")->whereNumber("id");
@@ -219,7 +233,7 @@ Route::middleware(["auth", "verified"])->group(function(){
     });
 
     // ===== SALARIES ===== //
-    Route::middleware('can_access_salary')->group(function(){
+    Route::middleware('allow:master,accounting_admin')->group(function(){
         Route::get("/salary", [SalaryController::class, "index"])->name("salary-index");
         Route::post("/salary/auto-create", [SalaryController::class, "auto_create"])->name('salary-autocreate');
         Route::get("/salary/{id}/edit", [SalaryController::class, "edit"])->name("salary-edit")->whereNumber("id");
@@ -228,7 +242,7 @@ Route::middleware(["auth", "verified"])->group(function(){
     });
 
     // ===== ATTENDANCES ===== //
-    Route::middleware('can_access_attendance')->group(function(){
+    Route::middleware('allow:master,accounting_admin')->group(function(){
         Route::get("/attendance", [AttendanceController::class, "index"])->name("attendance-index");
         Route::get("/attendance/{id}", [AttendanceController::class, "show"])->name('attendance-show')->whereNumber("id");
         Route::get("/attendance/create/admin", [AttendanceController::class, "create_admin"])->name("attendance-create-admin");
@@ -239,19 +253,19 @@ Route::middleware(["auth", "verified"])->group(function(){
     });
 
     // ===== VISIT LOGS ===== //
-    Route::middleware('can_access_visit_log')->group(function(){
+    Route::middleware('allow:master,accounting_admin')->group(function(){
         Route::get("/visit-log", [AccountController::class, "visit_log"])->name("visitlog-index");
     });
 
     // ===== PROPOSE LEAVES ===== //
-    Route::middleware('can_access_propose_leave')->group(function(){
+    Route::middleware('allow:master,accounting_admin')->group(function(){
         Route::get("/employee/leaves/mine", [LeaveController::class, "user_index"])->name("leave-user-index");
         Route::get("/employee/leaves/mine/propose", [LeaveController::class, "user_propose"])->name("leave-user-propose");
         Route::post("/employee/leaves/mine/propose", [LeaveController::class, "user_propose_store"])->name("leave-user-propose-store");
     });
 
     // ===== SELF ATTENDANCES ===== //
-    Route::middleware('can_access_self_attendance')->group(function(){
+    Route::middleware('allow:master,accounting_admin')->group(function(){
         Route::get("/attendance/self", [AttendanceController::class, "index_self"])->name("attendance-self-index");
         Route::get("/attendance/self/create/{project_id}/checkin", [AttendanceController::class, "check_in"])->name("attendance-self-checkin")->whereNumber('project_id');
         Route::post("/attendance/self/create/{project_id}/checkin", [AttendanceController::class, "check_in_store"])->name("attendance-self-checkin-store")->whereNumber('project_id');

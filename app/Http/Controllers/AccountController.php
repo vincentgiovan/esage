@@ -36,20 +36,20 @@ class AccountController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            "role" => "required",
+            "role_id" => "required",
             'employee' => 'nullable'
         ]);
 
         // Kalo validasi lolos berarti langsung bikin dan tambahin datanya ke tabel users
-        User::create([
+        $newUser = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => $request->role,
+            'role_id' => $request->role_id,
         ]);
 
         if($request->employee){
-            Employee::find($request->employee)->update(['user_id' => $request->user]);
+            Employee::find($request->employee)->update(['user_id' => $newUser]);
         }
 
         // Arahin user balik ke halaman account/index.blade.php
@@ -79,6 +79,7 @@ class AccountController extends Controller
         $validationRule = [
             'name' => 'required|string|max:255',
             "email" => 'required|string|email|max:255',
+            "role_id" => 'required',
             'employee' => 'nullable'
         ];
 

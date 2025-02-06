@@ -36,9 +36,11 @@ class Product extends Model
 
     public function scopeFilter($query, array $filters){
         $query->when($filters["search"]?? false, function($query, $search) {
-            return $query->where(function($query) use($search) {
-                $query->where("product_name", "like", "%". $search. "%");
-            });
+            return $query->where("product_name", "like", "%". $search. "%");
+        });
+
+        $query->when($filters["condition"]?? false, function($query, $condition) {
+            return $query->where("condition", "like", "%". $condition. "%");
         });
     }
 }
