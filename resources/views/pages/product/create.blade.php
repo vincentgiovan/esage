@@ -80,6 +80,17 @@
                 </div>
 
                 <div class="mt-3">
+                    <label for="type">Jenis Barang</label>
+                    <select class="form-select @error('type') is-invalid @enderror" name="type" id="type">
+                        <option value="fast moving" @if(old('type') == 'fast moving') selected @endif>Fast Moving</option>
+                        <option value="asset" @if(old('type') == 'asset') selected @endif>Aset</option>
+                    </select>
+                    @error('type')
+                        <p class="text-danger">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="mt-3">
                     <label for="condition">Kondisi Barang</label>
                     <select class="form-select @error('condition') is-invalid @enderror" name="condition" id="condition">
                         <option value="good">Bagus</option>

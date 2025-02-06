@@ -71,6 +71,7 @@ class ProductController extends Controller{
             "product_code" => "required|min:3",
             "unit" => "required",
             'condition' => 'required',
+            'type' => 'required'
         ]);
 
         if(!$validatedData["markup"]){
@@ -123,6 +124,7 @@ class ProductController extends Controller{
                 "status" => "required|min:3",
                 "product_code" => "required|min:3",
                 "unit"=>"required",
+                'type' => 'required'
             ]);
         }
 

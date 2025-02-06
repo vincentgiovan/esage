@@ -46,6 +46,10 @@
             </li>
         @endif
 
+        <li class="nav-item">
+            <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("refurbish*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("refurbishitem-index") }}"><i class="bi bi-wrench-adjustable me-2"></i> Rekondisi</a>
+        </li>
+
         @if(Gate::allows('user-role', ['master']))
             <li class="nav-item">
                 <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("account*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("account.index") }}" ><i class="bi bi-person me-2"></i> Pengelolaan Akun</a>

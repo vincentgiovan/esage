@@ -22,6 +22,7 @@ use App\Http\Controllers\DeliveryOrderProductController;
 use App\Http\Controllers\EmployeeProjectController;
 use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\PrepayController;
+use App\Http\Controllers\RefurbishItemController;
 use App\Http\Controllers\ReturnItemProductController;
 
 Route::get('/', function(){
@@ -178,6 +179,16 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::get('/request-item/{id}/edit', [RequestItemController::class, "edit"] )->name("requestitem-edit")->whereNumber("id");
         Route::post('/request-item/{id}/edit', [RequestItemController::class, "update"] )->name("requestitem-update")->whereNumber("id");
         Route::post('/request-item/{id}', [RequestItemController::class, "destroy"] )->name("requestitem-destroy")->whereNumber("id");
+    });
+
+    // ===== REFURBISH ITEMS ===== //
+    Route::middleware([])->group(function(){
+        Route::get('/refurbish-item', [RefurbishItemController::class, 'index'])->name('refurbishitem-index');
+        Route::get('/refurbish-item/create', [RefurbishItemController::class, 'create'])->name('refurbishitem-create');
+        Route::post('/refurbish-item/create', [RefurbishItemController::class, 'store'])->name('refurbishitem-store');
+        Route::get('/refurbish-item/{id}/edit', [RefurbishItemController::class, 'edit'])->name('refurbishitem-edit');
+        Route::post('/refurbish-item/{id}/edit', [RefurbishItemController::class, 'update'])->name('refurbishitem-update');
+        Route::post('/refurbish-item/{id}/delete', [RefurbishItemController::class, 'destroy'])->name('refurbishitem-destroy');
     });
 
     // ===== ACCOUNTS ===== //

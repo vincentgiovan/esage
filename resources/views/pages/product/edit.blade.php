@@ -97,6 +97,17 @@
                     @enderror
                 </div>
 
+                <div class="mt-3">
+                    <label for="type">Jenis Barang</label>
+                    <select class="form-select @error('type') is-invalid @enderror" name="type" id="type">
+                        <option value="fast moving" @if(old('type', $product->condition) == 'fast moving') selected @endif>Fast Moving</option>
+                        <option value="asset" @if(old('type', $product->condition) == 'asset') selected @endif>Aset</option>
+                    </select>
+                    @error('type')
+                        <p class="text-danger">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <div class="mt-4">
                     <input type="submit" class="btn btn-success px-3 py-1" value="Simpan Perubahan">
                 </div>
