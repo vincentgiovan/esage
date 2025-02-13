@@ -154,12 +154,20 @@ class AttendanceController extends Controller
     }
 
     public function index_self(){
-        $existing_data = Attendance::where("attendance_date", Carbon::parse(now())->format('Y-m-d'))->where('employee_id', Auth::user()->employee_data->id)->get();
+        if(Auth::user()->employee_data){
+            $existing_data = Attendance::where("attendance_date", Carbon::parse(now())->format('Y-m-d'))->where('employee_id', Auth::user()->employee_data->id)->get();
 
-        return view("pages.attendance.index-self", [
-            "existing_attendances" => $existing_data,
-            "assigned_projects" => Auth::user()->employee_data->projects
-        ]);
+            return view("pages.attendance.index-self", [
+                'no_employee' => false,
+                "existing_attendances" => $existing_data,
+                "assigned_projects" => Auth::user()->employee_data->projects
+            ]);
+        }
+        else {
+            return view("pages.attendance.index-self", [
+                'no_employee' => true,
+            ]);
+        }
     }
 
     public function check_in($project_id){
