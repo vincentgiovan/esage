@@ -12,12 +12,14 @@ class RequestItemController extends Controller
 {
     public function index(){
         return view("pages.request-item.index", [
-            "requests" => RequestItem::where('archived', 0)->get()
+            "awaiting_requests" => RequestItem::where('status', 'awaiting')->where('archived', 0)->orderBy('request_date', 'desc')->get(),
+            "unawaiting_requests" => RequestItem::whereNot('status', 'awaiting')->where('archived', 0)->orderBy('request_date', 'desc')->get()
         ]);
     }
 
     public function show($id){
         return view("pages.request-item.show", [
+            'request_item' => RequestItem::find($id),
             "request_item_products" => RequestItemProduct::where("request_item_id", $id)->get()
         ]);
     }
@@ -25,7 +27,7 @@ class RequestItemController extends Controller
     public function create(){
         return view("pages.request-item.create", [
             "projects" => Project::where('archived', 0)->get(),
-            "products" => Product::where('archived', 0)->get()
+            "products" => Product::whereNot('condition', 'degraded')->where('archived', 0)->get()
         ]);
     }
 
@@ -49,12 +51,19 @@ class RequestItemController extends Controller
     }
 
     public function edit($id){
-        return view("pages.request-item.edit", [
-            "request_item" => RequestItem::find($id),
-            "rip" => RequestItemProduct::where("request_item_id", $id)->get(),
-            "projects" => Project::where('archived', 0)->get(),
-            "products" => Product::where('archived', 0)->get()
-        ]);
+        $reqit = RequestItem::find($id);
+
+        if($reqit->status != 'awaiting'){
+            return back();
+        }
+        else {
+            return view("pages.request-item.edit", [
+                "request_item" => RequestItem::find($id),
+                "rip" => RequestItemProduct::where("request_item_id", $id)->get(),
+                "projects" => Project::where('archived', 0)->get(),
+                "products" => Product::where('archived', 0)->get()
+            ]);
+        }
     }
 
     public function update(Request $request, $id){
@@ -69,7 +78,7 @@ class RequestItemController extends Controller
 
         $existing_rip = RequestItemProduct::where("request_item_id", $reqit->id)->get();
         foreach($existing_rip as $er){
-            RequestItemProduct::find($er->id)->update(["archived" => 1]);
+            RequestItemProduct::find($er->id)->delete();
         }
 
         foreach($request->products as $i => $prd_id){
@@ -83,9 +92,27 @@ class RequestItemController extends Controller
         return redirect(route("requestitem-index"))->with("successEditRequest", "Berhasil memperbaharui data request barang.");
     }
 
-    public function destroy($id){
-        RequestItem::find($id)->update(["archived" => 1]);
+    public function update_status(Request $request, $id){
+        $status = '';
+        switch($request->status){
+            case 'Setujui': $status = 'approved'; break;
+            case 'Tolak': $status = 'rejected'; break;
+        }
 
-        return redirect(route("requestitem-index"))->with("successDeleteRequest", "Berhasil menghapus data request barang.");
+        RequestItem::find($id)->update(['status' => $status]);
+
+        return redirect(route('requestitem-index'))->with('successUpdateStatus', 'Berhasil ' . ($status == 'approved'? 'menyetujui' : 'menolak') . 'request barang.');
+    }
+
+    public function destroy($id){
+        $reqit = RequestItem::find($id);
+
+        if($reqit->status != 'awaiting'){
+            return back();
+        }
+        else {
+            $reqit->update(["archived" => 1]);
+            return redirect(route("requestitem-index"))->with("successDeleteRequest", "Berhasil menghapus data request barang.");
+        }
     }
 }
