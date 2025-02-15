@@ -70,14 +70,25 @@
                     @enderror
                 </div>
 
-                <div class="mt-3">
-                    <label for="markup">Markup</label>
-                    <input type="number" class="form-control @error('markup') is-invalid @enderror" name="markup" id="markup" placeholder="Markup"
-                        value="{{ old('markup') }}">
-                    @error('markup')
-                        <p class="text-danger">{{ $message }}</p>
-                    @enderror
-                </div>
+                @if(in_array(Auth::user()->role->role_name, ['master', 'accounting_admin']))
+                    <div class="mt-3">
+                        <label for="discount">Diskon</label>
+                        <input type="text" class="form-control @error('discount') is-invalid @enderror" name="discount" id="discount" placeholder="Diskon"
+                            value="{{ old('discount', 0) }}">
+                        @error('discount')
+                            <p class="text-danger">Harap masukkan nilai minimal 0.</p>
+                        @enderror
+                    </div>
+
+                    <div class="mt-3">
+                        <label for="markup">Markup</label>
+                        <input type="text" class="form-control @error('markup') is-invalid @enderror" name="markup" id="markup" placeholder="Markup"
+                            value="{{ old('markup', 0) }}">
+                        @error('markup')
+                            <p class="text-danger">Harap masukkan nilai minimal 0.</p>
+                        @enderror
+                    </div>
+                @endif
 
                 <div class="mt-3">
                     <label for="type">Jenis Barang</label>

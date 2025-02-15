@@ -20,12 +20,16 @@ return new class extends Migration
             $table->string("variant")->nullable();
             $table->string("product_code");
             $table->unsignedBigInteger("price");
-            $table->unsignedFloat("discount")->default(0);
+
 
             $table->string("unit")->nullable();
             $table->unsignedInteger("stock");
             $table->string("status");
-            $table->unsignedFloat("markup")->nullable();
+            $table->string('condition');
+            $table->string('type');
+
+            $table->unsignedFloat("discount")->default(0);
+            $table->unsignedFloat("markup")->default(0);
 
             $table->string("is_returned")->default('no');
 

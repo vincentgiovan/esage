@@ -33,38 +33,42 @@
             <p class="text-success fw-bold">{{ session('successProposeLeave') }}</p>
         @endif
 
-        <a href="{{ route('leave-user-propose') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
-            <i class="bi bi-plus-square"></i>
-            Buat Pengajuan Cuti Baru</a>
-        <br>
-        <!-- tabel list data-->
+        @if(!$no_employee)
+            <a href="{{ route('leave-user-propose') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
+                <i class="bi bi-plus-square"></i>
+                Buat Pengajuan Cuti Baru</a>
+            <br>
+            <!-- tabel list data-->
 
-        <div class="overflow-x-auto">
-            <table class="w-100">
-                <tr>
-                    <th>No</th>
-                    <th>Periode Cuti</th>
-                    <th>Alasan Cuti</th>
-                    <th>Status</th>
-                </tr>
-
-                @foreach ($leaves as $cuti)
-                    <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ Carbon\Carbon::parse($cuti->start_period)->translatedFormat('d M Y') }} - {{ Carbon\Carbon::parse($cuti->end_period)->translatedFormat('d M Y') }}</td>
-                        <td>{{ $cuti->remark }}</td>
-                        <td class="fw-semibold @if($cuti->approved == 'awaiting') text-primary @elseif($cuti->approved == 'yes') text-success @else text-danger @endif">
-                            @if($cuti->approved == 'awaiting')
-                                Menunggu
-                            @elseif($cuti->approved == 'yes')
-                                Disetujui
-                            @else
-                                Tidak disetujui
-                            @endif
-                        </td>
+            <div class="overflow-x-auto">
+                <table class="w-100">
+                    <tr>
+                        <th>No</th>
+                        <th>Periode Cuti</th>
+                        <th>Alasan Cuti</th>
+                        <th>Status</th>
                     </tr>
-                @endforeach
-            </table>
-        </div>
+
+                    @foreach ($leaves as $cuti)
+                        <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ Carbon\Carbon::parse($cuti->start_period)->translatedFormat('d M Y') }} - {{ Carbon\Carbon::parse($cuti->end_period)->translatedFormat('d M Y') }}</td>
+                            <td>{{ $cuti->remark }}</td>
+                            <td class="fw-semibold @if($cuti->approved == 'awaiting') text-primary @elseif($cuti->approved == 'yes') text-success @else text-danger @endif">
+                                @if($cuti->approved == 'awaiting')
+                                    Menunggu
+                                @elseif($cuti->approved == 'yes')
+                                    Disetujui
+                                @else
+                                    Tidak disetujui
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                </table>
+            </div>
+        @else
+            - Tidak ada data pegawai yang terhubung ke akun ini -
+        @endif
     </x-container>
 @endsection

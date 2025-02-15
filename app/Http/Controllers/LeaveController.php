@@ -15,9 +15,17 @@ class LeaveController extends Controller
     }
 
     public function user_index(){
-        return view("pages.leave.index-user", [
-            "leaves" => Leave::where('employee_id', Auth::user()->employee_data->user_id)->get()
-        ]);
+        if(Auth::user()->employee_data){
+            return view("pages.leave.index-user", [
+                'no_employee' => false,
+                "leaves" => Leave::where('employee_id', Auth::user()->employee_data->user_id)->get()
+            ]);
+        }
+        else {
+            return view("pages.leave.index-user", [
+                'no_employee' => true
+            ]);
+        }
     }
 
     public function user_propose(){

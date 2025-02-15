@@ -59,6 +59,8 @@ class DeliveryOrderProductController extends Controller
                 'products.stock',
                 'products.status',
                 'products.markup',
+                'products.condition',
+                'products.type',
                 'products.created_at',
                 'products.updated_at',
                 'products.archived'
@@ -83,7 +85,7 @@ class DeliveryOrderProductController extends Controller
         $deliveryorder = DeliveryOrder::find($id);
 
         // Untuk setiap input produk yang dimasukkan, lakukan hal ini:
-        foreach($request->products as $index=>$product_id){
+        foreach($request->products as $index => $product_id){
             // Tambahkan produk sebagai bagian dari cart delivery order dengan cara tambahkan data baru di tabel delivery_order_products di mana id referensi diarahkan ke data produk dan delivery order yang sesuai
             DeliveryOrderProduct::create([
                 "delivery_order_id" => $deliveryorder->id,
