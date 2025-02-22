@@ -98,6 +98,15 @@
                 </div>
 
                 <div class="mt-3">
+                    <label for="discount">Diskon</label>
+                    <input type="text" class="form-control @error('discount') is-invalid @enderror" name="discount" id="discount" placeholder="Diskon"
+                        value="{{ old('discount', $product->discount) }}">
+                    @error('discount')
+                        <p class="text-danger">Harap masukkan nilai minimal 0.</p>
+                    @enderror
+                </div>
+
+                <div class="mt-3">
                     <label for="type">Jenis Barang</label>
                     <select class="form-select @error('type') is-invalid @enderror" name="type" id="type">
                         <option value="fast moving" @if(old('type', $product->condition) == 'fast moving') selected @endif>Fast Moving</option>

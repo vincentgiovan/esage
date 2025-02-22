@@ -34,7 +34,7 @@
             </li>
         @endif
 
-        @if(Gate::allows('user-role', ['master', 'accounting_admin']))
+        @if(Gate::allows('user-role', ['master', 'accounting_admin', 'project_manager']))
             <li class="nav-item">
                 <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("request*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("requestitem-index") }}" ><i class="bi bi-bag-plus me-2"></i> Request Barang</a>
             </li>

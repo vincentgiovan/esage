@@ -37,6 +37,8 @@
             <p class="text-success fw-bold">{{ session('successEditProduct') }}</p>
         @elseif (session()->has('successDeleteProduct'))
             <p class="text-success fw-bold">{{ session('successDeleteProduct') }}</p>
+        @elseif (session()->has('successImportExcel'))
+            <p class="text-success fw-bold">{{ session('successImportExcel') }}</p>
         @endif
 
         <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-2">
@@ -74,10 +76,11 @@
                     <th>Total Stok</th>
                     <th>Satuan</th>
                     <th>Status</th>
-                    @if(!in_array(Auth::user()->role->role_name, ['subgudang']))
+                    @if(in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
                         <th>Harga Terakhir</th>
                     @endif
                     @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
+                        <th>Harga Dasar</th>
                         <th>Markup</th>
                         <th class="text-center">Kondisi</th>
                     @endif
@@ -103,25 +106,25 @@
                                 {{ $status }}
                             </td>
 
-                            {{-- Harga dasar dan markup tidak ditampilkan kepada product manager dan subgudang --}}
+                            {{-- Harga dasar dan markup tidak ditampilkan kepada project manager dan subgudang --}}
                             @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
                                 <td>Rp {{ number_format($p->price, 2, ',', '.') }}</td>
                                 <td></td>
                                 <td></td>
                             @endif
 
-                            {{-- Harga sudah dikalikan markup khusus product manager dan gudang --}}
-                            @if(in_array(Auth::user()->role->role_name, ['gudang', 'project_manager']))
-                                <td>Rp {{ number_format($p->price * (1 + $p->markup), 2, ',', '.') }}</td>
+                            {{-- Harga sudah dikalikan markup khusus project manager dan gudang --}}
+                            @if(in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
+                                <td>Rp {{ number_format($p->price * (1 + ($p->markup / 100)), 2, ',', '.') }}</td>
                             @endif
 
                             <td>
                                 {{-- Toggler button untuk memperlihatkan detail varian data produk --}}
-                                <button class="btn btn-success view-all-btn" data-prodgroup="{{ __(str_replace(' ', '', str_replace('/', '-', $p->product_name)) . '-' . str_replace(' ', '', $p->variant)) }}">Lihat Semua</button>
+                                <button class="btn btn-success view-all-btn" data-prodgroup="{{ __(preg_replace('/[^a-zA-Z0-9-]/', '',  $p->product_name) . '-' . preg_replace('/[^a-zA-Z0-9-]/', '', $p->variant)) }}">Lihat Semua</button>
                             </td>
                         </tr>
                     @else
-                        <tr class="{{ __(str_replace(' ', '', str_replace('/', '-', $p->product_name)) . '-' . str_replace(' ', '', $p->variant)) }}" style="display: none; background: @if($i % 2 == 0) #E0E0E0 @else white @endif;">
+                        <tr class="{{ __(preg_replace('/[^a-zA-Z0-9-]/', '',  $p->product_name) . '-' . preg_replace('/[^a-zA-Z0-9-]/', '',  $p->variant)) }}" style="display: none; background: @if($i % 2 == 0) #E0E0E0 @else white @endif;">
                             <td></td>
                             <td>
                                 <div class="w-100 d-flex justify-content-between align-items-center">
@@ -147,7 +150,7 @@
 
                             {{-- Harga sudah dikalikan markup khusus project manager, gudang, dan subgudang --}}
                             @if(in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
-                                <td>Rp {{ number_format($p->price * (1 + $p->markup), 2, ',', '.') }}</td>
+                                <td>Rp {{ number_format($p->price * (1 + ($p->markup / 100)), 2, ',', '.') }}</td>
                             @endif
 
                             <td>
@@ -174,9 +177,9 @@
             </table>
         </div>
 
-        {{-- <div class="mt-4">
+        <div class="mt-4">
             {{ $products->links() }}
-        </div> --}}
+        </div>
     </x-container>
 
     <script>

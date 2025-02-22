@@ -2,23 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\User;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Exports\ProductsExport;
+use App\Imports\ProductsImport;
 use App\Models\PurchaseProduct;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
-use App\Exports\ProductsExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Pagination\LengthAwarePaginator;
+
 
 
 class ProductController extends Controller{
     // Tabel list semua product
-    public function index()
+    public function index(Request $request)
     {
-        $n_pagination = 10;
-        $products = Product::filter(request(["condition", "search"]))->orderByRaw('CASE WHEN status = "Out of Stock" THEN 0 ELSE 1 END')->orderBy("product_name")->get(); // Data semua produk dari database buat ditampilin satu-satu (kalo user-nya searching tampilkan yang memenuhi keyword)
+        $products = Product::filter(request(["condition", "search"]))->orderByRaw('CASE WHEN status = "Out of Stock" THEN 0 ELSE 1 END')->orderBy("product_name")->where('archived', 0)->get();
 
         $grouped_products = $products->groupBy(function ($product) {
             return "{$product->product_name}|{$product->variant}";
@@ -36,15 +39,55 @@ class ProductController extends Controller{
                 'grouped' => $baseProduct,
                 'originals' => $group
             ];
-        })->flatMap(function ($item) {
-            // Flatten each group to include the grouped product followed by originals
+        });
+        
+        // ->flatMap(function ($item) {
+        //     // Flatten each group to include the grouped product followed by originals
+        //     return $item['originals']->prepend($item['grouped']);
+        // })->values(); // Reset the keys for a clean indexed collection
+
+        // Paginate the grouped collection
+        // $page = $request->input('page', 1);
+        // $perPage = 30; // Adjust the number of items per page
+        // $offset = ($page - 1) * $perPage;
+
+        // $paginatedProducts = new LengthAwarePaginator(
+        //     $grouped_products->slice($offset, $perPage)->values(), // Items for current page
+        //     $grouped_products->count(), // Total items
+        //     $perPage, // Items per page
+        //     $page, // Current page
+        //     ['path' => $request->url(), 'query' => $request->query()] // Maintain query parameters
+        // );
+
+        // Convert the collection of groups into a paginatable format
+        $groupedArray = $grouped_products->values(); // Reset keys
+
+        // PAGINATE BEFORE FLATTENING
+        $page = $request->input('page', 1);
+        $perPage = 30; // Paginate by groups, not individual items
+        $totalGroups = $groupedArray->count();
+        $offset = ($page - 1) * $perPage;
+
+        // Slice only full groups (preserves grouped integrity)
+        $paginatedGroups = $groupedArray->slice($offset, $perPage);
+
+        // Flatten only AFTER paginating to ensure grouped items stay together
+        $flattenedResults = $paginatedGroups->flatMap(function ($item) {
             return $item['originals']->prepend($item['grouped']);
-        })->values(); // Reset the keys for a clean indexed collection
+        })->values();
+
+        // Create paginator with the correctly paginated dataset
+        $paginatedProducts = new LengthAwarePaginator(
+            $flattenedResults, // Only the sliced groups
+            $totalGroups, // Total groups count
+            $perPage, // Items per page (by groups)
+            $page, // Current page
+            ['path' => $request->url(), 'query' => $request->query()] // Maintain query parameters
+        );
 
         // Tampilkan halaman pages/product/index.blade.php
         return view("pages.product.index", [
-            "products" => $grouped_products,
-            "n_pagination" => $n_pagination
+            "products" => $paginatedProducts,
         ]);
     }
 
@@ -60,22 +103,36 @@ class ProductController extends Controller{
     // Simpan data produk baru ke database
     public function store(Request $request)
     {
-        // Validasi data, kalau ga lolos ga lanjut
-        $validatedData = $request->validate([
-            "product_name" => "required|min:3",
-            "price" => "required|numeric|min:0|not_in:0",
-            "variant" => "required|min:3",
-            "stock" => "required|numeric|min:0",
-            "markup" => "nullable|numeric",
-            "status" => "required|min:3",
-            "product_code" => "required|min:3",
-            "unit" => "required",
-            'condition' => 'required',
-            'type' => 'required'
-        ]);
+        // Gudang, subgudang, project manager bisa update stok doang
+        if(in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager'])){
+            $validatedData = $request->validate([
+                "product_name" => "required|min:3",
+                "price" => "required|numeric|min:0|not_in:0",
+                "variant" => "required|min:3",
+                "stock" => "required|numeric|min:0",
+                "status" => "required|min:3",
+                "product_code" => "required|min:3",
+                "unit" => "required",
+                'condition' => 'required',
+                'type' => 'required',
+            ]);
+        }
 
-        if(!$validatedData["markup"]){
-            $validatedData["markup"] = 0;
+        else {
+            // Validasi data, kalau ga lolos ga lanjut
+            $validatedData = $request->validate([
+                "product_name" => "required|min:3",
+                "price" => "required|numeric|min:0|not_in:0",
+                "variant" => "required|min:3",
+                "stock" => "required|numeric|min:0",
+                "markup" => "nullable|numeric|min:0",
+                "status" => "required|min:3",
+                "product_code" => "required|min:3",
+                "unit" => "required",
+                'condition' => 'required',
+                'type' => 'required',
+                'discount' => 'required|numeric|min:0'
+            ]);
         }
 
         // Bikin dan simpan data produk baru di tabel products
@@ -98,18 +155,19 @@ class ProductController extends Controller{
     // Simpan perubahan data produk ke database
     public function update(Request $request, $id)
     {
-        // Gudang bisa update stock
-        if(Auth::user()->role->role_name == 'gudang'){
+        // Gudang, subgudang, project manager bisa update stok doang
+        if(in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager'])){
             $validatedData = $request->validate([
                 "stock" => "required|numeric|min:0",
                 "status" => "required|min:3",
             ]);
         }
 
-        // Product manager bisa update markup
+        // Purchasing admin cuma markup ama diskon
         else if(Auth::user()->role->role_name == 'purchasing_admin'){
             $validatedData = $request->validate([
                 "markup" => "required|numeric|min:0",
+                'discount' => "required|numeric|min:0",
             ]);
         }
 
@@ -155,65 +213,26 @@ class ProductController extends Controller{
     {
         // Validate the uploaded file
         $request->validate([
-            'csv_file' => 'required|file|mimes:csv,txt',
+            'file_to_upload' => 'required|file|mimes:xlsx,xls,csv',
         ]);
 
-        // Store the file
-        $file = $request->file('csv_file');
-        $path = $file->store('csv_files');
+        $temp_path = $request->file('file_to_upload')->store('temp');
 
-        // Process the CSV file
-        $this->processProductDataCsv(storage_path('app/' . $path));
+        try {
+			Excel::import(new ProductsImport, $temp_path);
 
-        // Delete the stored file after processing
-        Storage::delete($path);
+            Storage::delete($temp_path);
 
-        return redirect(route("product-index"))->with('success', 'Berhasil membaca file CSV dan menambahkan data barang.');
-    }
+			return redirect(route("product-index"))->with('successImportExcel', 'Berhasil membaca file Excel dan menambahkan data barang.');
+		}
 
-    private function processProductDataCsv($filePath)
-    {
-        if (($handle = fopen($filePath, 'r')) !== FALSE) {
-            // Read the entire CSV file content
-            $fileContent = file_get_contents($filePath);
+		catch (Exception $e){
+            Storage::delete($temp_path);
 
-            // // Replace semicolons with commas
-            // $fileContent = str_replace(';', ',', $fileContent);
+            throw $e;
 
-            // Create a temporary file with the corrected content
-            $tempFilePath = tempnam(sys_get_temp_dir(), 'csv');
-            file_put_contents($tempFilePath, $fileContent);
-
-            // Re-open the temporary file for processing
-            if (($handle = fopen($tempFilePath, 'r')) !== FALSE) {
-                // Skip the header row if it exists
-                $header = fgetcsv($handle);
-
-                while (($data = fgetcsv($handle, 1000, ';')) !== FALSE) {
-                    // Insert into the products table
-                    Product::updateOrCreate(
-                        [
-                            "product_code" => $data[4],
-                        ],
-                        [
-                            'product_name' => $data[0],
-                            'unit' => $data[1],
-                            "status" => $data[2],
-                            "variant" => $data[3],
-                            "price" => intval($data[5]),
-                            "discount" => floatval(str_replace(',', '.', $data[6])),
-                            "markup" => floatval(str_replace(',', '.', $data[7])),
-                            "stock" => intval($data[8])
-                        ]
-                    );
-                }
-
-                fclose($handle);
-            }
-
-            // Remove the temporary file
-            unlink($tempFilePath);
-        }
+			// return back()->with('failedImportExcel', "Gagal membaca dan menambahkan produk dari file Excel, harap perhatikan format yang telah ditentukan dan silakan coba kembali.");
+		}
     }
 
     // EXPORT EXCEL

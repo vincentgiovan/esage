@@ -15,27 +15,40 @@
             <p class="text-success fw-bold">{{ session('successDeleteRequest') }}</p>
         @endif
 
-        <button class="btn btn-primary" onclick="history.back();"><i class="bi bi-arrow-left"></i> Return</button>
+        <div class="d-flex align-items-center justify-content-between">
+            <button class="btn btn-primary" onclick="history.back();"><i class="bi bi-arrow-left"></i> Return</button>
+            @if(in_array(Auth::user()->role->role_name, ['master', 'accounting_admin']))
+                <form action="{{ route('requestitem-update-status', $request_item->id) }}" method="post" class="d-flex align-items-center gap-2">
+                    @csrf
+                    <input type="submit" class="btn btn-success" name="status" value="Setujui">
+                    <input type="submit" class="btn btn-danger" name="status" value="Tolak">
+                </form>
+            @endif
+        </div>
 
         <div class="overflow-x-auto mt-3">
             <table class="w-100">
                 <tr>
                     <th class="border border-1 border-secondary ">#</th>
-                    <th class="border border-1 border-secondary ">Product Name</th>
-                    <th class="border border-1 border-secondary ">Product Variant</th>
-                    <th class="border border-1 border-secondary ">Price</th>
-                    <th class="border border-1 border-secondary ">Discount</th>
-                    <th class="border border-1 border-secondary ">Qty</th>
+                    <th class="border border-1 border-secondary ">SKU Barang</th>
+                    <th class="border border-1 border-secondary ">Nama Barang</th>
+                    <th class="border border-1 border-secondary ">Varian</th>
+                    <th class="border border-1 border-secondary ">Harga</th>
+                    <th class="border border-1 border-secondary ">Diskon</th>
+                    <th class="border border-1 border-secondary ">Markup</th>
+                    <th class="border border-1 border-secondary ">Jumlah Request</th>
                     {{-- <th class="border border-1 border-secondary ">Aksi</th> --}}
                 </tr>
 
                 @foreach ($request_item_products as $r)
                     <tr>
                         <td class="border border-1 border-secondary ">{{ $loop->iteration }}</td>
+                        <td class="border border-1 border-secondary ">{{ $r->product->product_code }}</td>
                         <td class="border border-1 border-secondary ">{{ $r->product->product_name }}</td>
                         <td class="border border-1 border-secondary ">{{ $r->product->variant }}</td>
-                        <td class="border border-1 border-secondary ">{{ $r->product->price }}</td>
-                        <td class="border border-1 border-secondary ">{{ $r->product->discount }}</td>
+                        <td class="border border-1 border-secondary ">Rp {{ number_format($r->product->price, 2, ',', '.') }}</td>
+                        <td class="border border-1 border-secondary ">{{ $r->product->discount }}%</td>
+                        <td class="border border-1 border-secondary ">{{ $r->product->markup }}</td>
                         <td class="border border-1 border-secondary ">{{ $r->quantity }}</td>
                         {{-- <td class="border border-1 border-secondary ">
                             <div class="d-flex gap-2 w-100 justify-content-center">

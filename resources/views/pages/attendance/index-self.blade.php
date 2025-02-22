@@ -16,52 +16,57 @@
             <p class="text-success">{{ session('successCheckOutSelfAttendance') }}</p>
         @endif
 
-        <h5>Daftar Proyek:</h5>
-        @foreach($assigned_projects as $asproj)
-            <div class="w-100 mt-4 border border-1 p-3">
-                <h6>{{ $asproj->project_name }}</h6>
+        @if(!$no_employee)
+            <h5>Daftar Proyek:</h5>
+            @forelse($assigned_projects as $asproj)
+                <div class="w-100 mt-4 border border-1 p-3">
+                    <h6>{{ $asproj->project_name }}</h6>
 
-                @php
-                    $already_check_in = false;
-                    $already_check_out = false;
-                    $atd = null;
+                    @php
+                        $already_check_in = false;
+                        $already_check_out = false;
+                        $atd = null;
 
-                    foreach($existing_attendances as $ea){
-                        if($ea->project_id == $asproj->id){
-                            if($ea->jam_keluar != null){
-                                $already_check_out = true;
+                        foreach($existing_attendances as $ea){
+                            if($ea->project_id == $asproj->id){
+                                if($ea->jam_keluar != null){
+                                    $already_check_out = true;
+                                }
+                                $already_check_in = true;
+                                $atd = $ea;
+                                break;
                             }
-                            $already_check_in = true;
-                            $atd = $ea;
-                            break;
                         }
-                    }
-                @endphp
+                    @endphp
 
-                <div class="w-100 d-flex gap-3">
-                    <div class="w-50">
-                        <label>Jam Masuk {!! $already_check_in ? '<i class="bi bi-check-lg text-success"></i>' : '' !!}</label>
-                        <div class="d-flex gap-2 w-100">
-                            <input type="text" class="form-control {{ $already_check_in ? '' : 'show-timer' }}" value="{{ $already_check_in ? $atd->jam_masuk : '' }}" disabled>
+                    <div class="w-100 d-flex gap-3">
+                        <div class="w-50">
+                            <label>Jam Masuk {!! $already_check_in ? '<i class="bi bi-check-lg text-success"></i>' : '' !!}</label>
+                            <div class="d-flex gap-2 w-100">
+                                <input type="text" class="form-control {{ $already_check_in ? '' : 'show-timer' }}" value="{{ $already_check_in ? $atd->jam_masuk : '' }}" disabled>
+                            </div>
+                        </div>
+
+                        <div class="w-50" id="check-out-form">
+                            @csrf
+                            <label>Jam Keluar {!! $atd && $already_check_out ? '<i class="bi bi-check-lg text-success"></i>' : '' !!}</label>
+                            <div class="d-flex gap-2 w-100">
+                                <input type="text" class="form-control {{ $already_check_out ? '' : 'show-timer' }}" value="{{ $atd && $already_check_out ? $atd->jam_keluar : 'N/A' }}" disabled>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="w-50" id="check-out-form">
-                        @csrf
-                        <label>Jam Keluar {!! $atd && $already_check_out ? '<i class="bi bi-check-lg text-success"></i>' : '' !!}</label>
-                        <div class="d-flex gap-2 w-100">
-                            <input type="text" class="form-control {{ $already_check_out ? '' : 'show-timer' }}" value="{{ $atd && $already_check_out ? $atd->jam_keluar : 'N/A' }}" disabled>
-                        </div>
+                    <div class="my-3">
+                        @if(!$already_check_in || !$already_check_out)
+                            <a href="{{ route(!$already_check_in ? 'attendance-self-checkin' : 'attendance-self-checkout', $asproj->id) }}" class="btn btn-primary px-3 py-1">{{ $already_check_in ? 'Check Out' : 'Check In' }}</a>
+                        @endif
                     </div>
                 </div>
-
-                <div class="my-3">
-                    @if(!$already_check_in || !$already_check_out)
-                        <a href="{{ route(!$already_check_in ? 'attendance-self-checkin' : 'attendance-self-checkout', $asproj->id) }}" class="btn btn-primary px-3 py-1">{{ $already_check_in ? 'Check Out' : 'Check In' }}</a>
-                    @endif
-                </div>
-            </div>
-        @endforeach
+            @empty
+            @endforelse
+        @else
+            - Tidak ada data pegawai yang terhubung dengan akun ini -
+        @endif
     </x-container>
 
     <script>

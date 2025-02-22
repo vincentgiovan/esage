@@ -171,13 +171,14 @@ Route::middleware(["auth", "verified"])->group(function(){
     });
 
     // ===== REQUEST ITEMS ===== //
-    Route::middleware('allow:master,accounting_admin')->group(function(){
+    Route::middleware('allow:master,accounting_admin,project_manager')->group(function(){
         Route::get("/request-item", [RequestItemController::class, "index"])->name("requestitem-index");
         Route::get("/request-item/{id}", [RequestItemController::class, "show"])->name("requestitem-show")->whereNumber("id");
         Route::get('/request-item/create', [RequestItemController::class, "create"] )->name("requestitem-create");
         Route::post('/request-item/store', [RequestItemController::class, "store"] )->name("requestitem-store");
         Route::get('/request-item/{id}/edit', [RequestItemController::class, "edit"] )->name("requestitem-edit")->whereNumber("id");
         Route::post('/request-item/{id}/edit', [RequestItemController::class, "update"] )->name("requestitem-update")->whereNumber("id");
+        Route::post('/request-item/{id}/update-status', [RequestItemController::class, 'update_status'])->name('requestitem-update-status')->whereNumber('id');
         Route::post('/request-item/{id}', [RequestItemController::class, "destroy"] )->name("requestitem-destroy")->whereNumber("id");
     });
 
