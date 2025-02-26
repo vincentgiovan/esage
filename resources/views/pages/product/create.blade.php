@@ -64,7 +64,7 @@
                 <div class="mt-3">
                     <label for="price">Harga</label>
                     <input type="number" class="form-control @error('price') is-invalid @enderror" name="price" id="price" placeholder="Harga"
-                        value="{{ old('price') }}">
+                        value="0">
                     @error('price')
                         <p class="text-danger">Harap masukkan nilai minimal 1.</p>
                     @enderror
@@ -74,18 +74,18 @@
                     <div class="mt-3">
                         <label for="discount">Diskon</label>
                         <input type="text" class="form-control @error('discount') is-invalid @enderror" name="discount" id="discount" placeholder="Diskon"
-                            value="{{ old('discount', 0) }}">
+                            value="0">
                         @error('discount')
-                            <p class="text-danger">Harap masukkan nilai minimal 0.</p>
+                            <p class="text-danger">Harap masukkan nilai minimal 0. Gunakan tanda titik untuk desimal.</p>
                         @enderror
                     </div>
 
                     <div class="mt-3">
                         <label for="markup">Markup</label>
                         <input type="text" class="form-control @error('markup') is-invalid @enderror" name="markup" id="markup" placeholder="Markup"
-                            value="{{ old('markup', 0) }}">
+                            value="0">
                         @error('markup')
-                            <p class="text-danger">Harap masukkan nilai minimal 0.</p>
+                            <p class="text-danger">Harap masukkan nilai minimal 0. Gunakan tanda titik untuk desimal.</p>
                         @enderror
                     </div>
                 @endif

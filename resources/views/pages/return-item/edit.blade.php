@@ -20,9 +20,11 @@
                 <div class="mt-3">
                     <label for="project_id">Pilih Asal Proyek</label>
                     <select name="project_id" class="form-select @error('project_id') is-invalid @enderror" id="project_id">
-                        @foreach ($projects as $proj)
-                            <option value="{{ $proj->id }}" @if(old('project_id', $return_item->project->id) == $proj->id) selected @endif>{{ $proj->project_name }}</option>
-                        @endforeach
+                        <option disabled selected>Pilih proyek</option>
+                        @forelse (Auth::user()->employee_data->projects ?? [] as $proj)
+                            <option value="{{ $proj->id }}" @if(old('project_id', $return_item->project->id) == $proj->id) selected @endif>{{ $proj->project_name }} (PIC: {{ $proj->PIC }})</option>
+                        @empty
+                        @endforelse
                     </select>
 
                     @error("project_id")

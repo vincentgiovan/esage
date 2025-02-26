@@ -29,7 +29,7 @@
                     <label for="remark">Alasan Cuti</label>
                     <textarea type="text" class="form-control @error('remark') is-invalid @enderror" name="remark" id="remark" placeholder="Alasan cuti" rows="4">{{ old('remark') }}</textarea>
                     @error('remark')
-                        <p class="text-danger">Harap masukkan satuan barang.</p>
+                        <p class="text-danger">Harap tuliskan alasan cuti anda.</p>
                     @enderror
                 </div>
 

@@ -18,7 +18,7 @@ class LeaveController extends Controller
         if(Auth::user()->employee_data){
             return view("pages.leave.index-user", [
                 'no_employee' => false,
-                "leaves" => Leave::where('employee_id', Auth::user()->employee_data->user_id)->get()
+                "leaves" => Leave::where('employee_id', Auth::user()->employee_data->id)->get()
             ]);
         }
         else {

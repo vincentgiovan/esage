@@ -48,13 +48,6 @@
                 <div class="mt-3">
                     <input type="submit" class="btn btn-success px-3 py-1" value="Simpan">
                 </div>
-                @error("prices")
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
-                <br>
-                @error("quantities")
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
             </form>
         </div>
     </x-container-middle>
@@ -97,7 +90,7 @@
             // Kalau input quantity kosong atau nilainya di bawah 1 maka mark merah input dan tampilkan pesan error
             if(!input4.value || input4.value < 1 || input4.value > converted.stock){
                 input4.style.border = "solid 1px red";
-                errQuantity.innerText = "Harap masukkan angka minimal 1";
+                errQuantity.innerText = "Harap masukkan nilai minimal 1.";
 
                 inputAman = false;
             }
@@ -154,6 +147,17 @@
                 confirmationForm.removeChild(susInput);
                 confirmationForm.removeChild(susInput3);
             });
+        });
+
+        $('#peon').on('submit', function(){
+            if($('#isibody').find('tr').length > 0){
+                this.submit();
+            }
+            else {
+                alert('Anda belum memasukkan data sama sekali.');
+
+                return;
+            }
         });
     </script>
 

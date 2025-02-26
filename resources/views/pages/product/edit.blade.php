@@ -93,7 +93,7 @@
                         @if(in_array(Auth::user()->role->role_name, ['gudang'])) disabled @endif/>
 
                     @error('markup')
-                        <p class="text-danger">{{ $message }}</p>
+                        <p class="text-danger">Harap masukkan nilai minimal 0. Gunakan tanda titik untuk desimal.</p>
                     @enderror
                 </div>
 
@@ -102,7 +102,7 @@
                     <input type="text" class="form-control @error('discount') is-invalid @enderror" name="discount" id="discount" placeholder="Diskon"
                         value="{{ old('discount', $product->discount) }}">
                     @error('discount')
-                        <p class="text-danger">Harap masukkan nilai minimal 0.</p>
+                        <p class="text-danger">Harap masukkan nilai minimal 0. Gunakan tanda titik untuk desimal.</p>
                     @enderror
                 </div>
 

@@ -19,11 +19,14 @@
 
                     <div class="mt-3">
                         <label for="select-project-dropdown">Nama Proyek</label>
-                        <select name="project_name" class="form-select" id="select-project-dropdown">
-                            @foreach ($projects as $project)
-                                <option value="{{ $project->id }}{{-- $project->toJson() --}}" @if ($project->project_name == old("project_name")) selected @endif>{{ $project->project_name }} ({{ $project->location }}) (PIC :  {{ $project->PIC }})</option>
-                            @endforeach
+                        <select name="project_id" class="form-select @error('project_id') is-invalid @enderror" id="select-project-dropdown">
+                            <option disabled selected>Pilih proyek</option>
+                            @forelse (Auth::user()->employee_data->projects ?? [] as $proj)
+                                <option value="{{ $proj->id }}" @if(old('project_id') == $proj->id) selected @endif>{{ $proj->project_name }} (PIC: {{ $proj->PIC }})</option>
+                            @empty
+                            @endforelse
                         </select>
+
                         <p class="text-danger" id="err-project-name"></p>
                     </div>
 
@@ -199,6 +202,15 @@
 
         $(confirmationForm).on("submit", function(e){
             e.preventDefault();
+
+            if($('#isibody').find('tr').length > 0){
+                this.submit();
+            }
+            else {
+                alert('Anda belum memasukkan data sama sekali.');
+
+                return false;
+            }
 
             const inpReqDate = $("#request_date");
             const inpProj = $("#select-project-dropdown");
