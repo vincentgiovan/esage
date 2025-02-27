@@ -15,6 +15,7 @@
                         <p class="text-danger">Harap masukkan tanggal pengiriman</p>
                     @enderror
                 </div>
+
                 <div class="mt-3">
                     <label for="project_id">Proyek</label>
                     <select name="project_id" class="form-select" id="project_id">
@@ -24,22 +25,40 @@
 
                     </select>
                 </div>
+
                 <div class="mt-3">
                     <label for="fakeregister">SKU</label>
                     <input type="text" class="form-control" id="fakeregister" name="fakeregister" placeholder="Register"  disabled>
                 </div>
-                <div class="mt-3">
-                    {{-- <input type="text" class="form-control" name="status" placeholder="Status"  value = "{{ old("status") }}"> --}}
+
+                {{-- <div class="mt-3">
                     <label for="delivery_status">Status Pengiriman</label>
                     <select name="delivery_status" class="form-select" id="delivery_status">
                         <option value="Complete">Selesai</option>
                         <option value="Incomplete">Belum selesai</option>
                     </select>
+                </div> --}}
+
+                <div class="mt-3">
+                    <label>Status Pengiriman</label>
+
+                    <div class="d-flex gap-3">
+                        <div class="d-flex gap-2 rounded-3 py-2">
+                            <input class="form-check-input" type="radio" name="delivery_status" id="delivery_status1" value="Complete" @if(old('delivery_status') == "Complete") checked @endif checked>
+                            <label class="form-check-label" for="delivery_status1">Selesai</label>
+                        </div>
+                        <div class="d-flex gap-2 rounded-3 py-2">
+                            <input class="form-check-input" type="radio" name="delivery_status" id="delivery_status2" value="Incomplete" @if(old('delivery_status') == "Incomplete") checked @endif>
+                            <label class="form-check-label" for="delivery_status2">Belum Selesai</label>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="mt-3">
                     <label for="note">Catatan</label>
                     <input type="text" class="form-control" name="note" id="note" placeholder="Note" value = "{{ old("note")}}">
                 </div>
+
                 <div class="mt-4">
                     <input type="submit" class="btn btn-success px-3 py-1" value="Simpan Data Baru">
                 </div>

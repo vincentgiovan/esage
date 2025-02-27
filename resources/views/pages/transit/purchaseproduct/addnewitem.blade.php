@@ -13,55 +13,97 @@
                         <input type="text" class="form-control" name="product_name" id="product_name" placeholder="Nama Barang" value = "{{ old("product_name" ) }}">
                         <p class="text-danger" id="errProductName"></p>
                     </div>
+
                     <div class="mt-3">
                         <div class="unit">Satuan</div>
                         <input type="text" class="form-control" name="unit" id="unit" placeholder="Unit"  value = "{{ old("unit") }}">
                         <p class="text-danger" id="errUnit"></p>
                     </div>
-                    <div class="mt-3">
+
+                    {{-- <div class="mt-3">
                         <div class="status">Status</div>
                         <select name="status" class="form-select" id="status">
                             <option value="Ready">Tersedia</option>
                             <option value="Out Of Stock">Stok kosong</option>
                         </select>
                         <p class="text-danger" id="errStatus"></p>
+                    </div> --}}
+
+                    <div class="mt-3">
+                        <label>Status</label>
+
+                        <div class="d-flex gap-3">
+                            <div class="d-flex gap-2 rounded-3 py-2">
+                                <input class="form-check-input" type="radio" name="status" id="status1" value="Ready" checked>
+                                <label class="form-check-label" for="status1">Tersedia</label>
+                            </div>
+                            <div class="d-flex gap-2 rounded-3 py-2">
+                                <input class="form-check-input" type="radio" name="status" id="status2" value="Out of Stock">
+                                <label class="form-check-label" for="status2">Stok kosong</label>
+                            </div>
+                        </div>
+
+                        <p class="text-danger" id="errStatus"></p>
                     </div>
+
                     <div class="mt-3">
                         <label for="variant">Variant</label>
                         <input type="text" class="form-control" name="variant"  id="variant" placeholder="Variant">
                         <p class="text-danger" id="errVariant"></p>
                     </div>
+
                     <div class="mt-3">
                         <label for="fake_product_code">SKU</label>
                         <input type="text" class="form-control" name="fake_product_code" id="fake_product_code" placeholder="(Dibuat otomatis oleh sistem)" disabled>
                         <p class="text-danger" id="errProductCode"></p>
                     </div>
+
                     <div class="mt-3">
                         <label for="price">Harga</label>
                         <input type="number" class="form-control" name="price" id="price" placeholder="Harga" value="0">
                         <p class="text-danger" id="errPrice"></p>
                     </div>
+
                     <div class="mt-3">
                         <label for="markup">Markup</label>
                         <input type="text" class="form-control" name="markup" id="markup" placeholder="Markup"  value="0">
                         <p class="text-danger" id="errMarkup"></p>
                     </div>
+
                     <div class="mt-3">
                         <label for="stock">Stok</label>
                         <input type="number" class="form-control" name="stock"  id="stock" placeholder="Stok"  value="0">
                         <p class="text-danger" id="errStock"></p>
                     </div>
+
                     <div class="mt-3">
                         <label for="discount">Diskon</label>
                         <input type="text" class="form-control" name="discount"  id="discount" placeholder="Diskon"  value="0">
                         <p class="text-danger" id="errDiscount"></p>
                     </div>
-                    <div class="mt-3">
+
+                    {{-- <div class="mt-3">
                         <label for="type">Jenis Barang</label>
                         <select class="form-select" name="type" id="type">
                             <option value="fast moving">Fast Moving</option>
                             <option value="asset">Aset</option>
                         </select>
+                        <p class="text-danger" id="errType"></p>
+                    </div> --}}
+
+                    <div class="mt-3">
+                        <label>Jenis Barang</label>
+
+                        <div class="d-flex gap-3">
+                            <div class="d-flex gap-2 rounded-3 py-2">
+                                <input class="form-check-input" type="radio" name="type" id="type1" value="fast moving" checked>
+                                <label class="form-check-label" for="type1">Fast Moving</label>
+                            </div>
+                            <div class="d-flex gap-2 rounded-3 py-2">
+                                <input class="form-check-input" type="radio" name="type" id="type2" value="asset">
+                                <label class="form-check-label" for="type2">Aset</label>
+                            </div>
+                        </div>
                         <p class="text-danger" id="errType"></p>
                     </div>
 
@@ -152,14 +194,14 @@
             // Targetkan elemen-elemen input data purchase produk yang diperlukan (buat nanti diambil nilainya)
             const input1 = document.getElementById("product_name");
             const input2 = document.getElementById("unit");
-            const input3 = document.getElementById("status");
+            const input3 = document.querySelector('input[name="status"]:checked');
             const input4 = document.getElementById("variant");
             const input5 = document.getElementById("fake_product_code");
             const input6 = document.getElementById("price");
             const input7 = document.getElementById("markup");
             const input8 = document.getElementById("stock");
             const input9 = document.getElementById("discount");
-            const input10 = document.getElementById('type')
+            const input10 = document.querySelector('input[name="type"]:checked')
 
             // Targetkan elemen-elemen error message (buat nanti display error message)
             const errProductName = document.getElementById("errProductName");

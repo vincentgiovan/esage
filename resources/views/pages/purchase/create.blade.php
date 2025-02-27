@@ -47,12 +47,27 @@
                         disabled>
                 </div>
 
-                <div class="mt-3">
+                {{-- <div class="mt-3">
                     <label for="purchase_status">Status Pembelian</label>
                     <select name="purchase_status" id="purchase_status" class="form-select">
                         <option value="Ordered" @if(old('purchase_status') == 'Ordered') selected @endif>Telah dipesan</option>
                         <option value="Retrieved" @if(old('purchase_status') == 'Retrieved') selected @endif>Diterima</option>
                     </select>
+                </div> --}}
+
+                <div class="mt-3">
+                    <label>Status Pembelian</label>
+
+                    <div class="d-flex gap-3">
+                        <div class="d-flex gap-2 rounded-3 py-2">
+                            <input class="form-check-input" type="radio" name="purchase_status" id="purchase_status1" value="Ordered" @if(old('purchase_status') == "Ordered") checked @endif checked>
+                            <label class="form-check-label" for="purchase_status1">Telah dipesan</label>
+                        </div>
+                        <div class="d-flex gap-2 rounded-3 py-2">
+                            <input class="form-check-input" type="radio" name="purchase_status" id="purchase_status2" value="Retrieved" @if(old('purchase_status') == "Retrieved") checked @endif>
+                            <label class="form-check-label" for="purchase_status2">Diterima</label>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="mt-4">

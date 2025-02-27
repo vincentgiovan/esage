@@ -48,12 +48,27 @@
                     @enderror
                 </div>
 
-                <div class="mt-3">
+                {{-- <div class="mt-3">
                     <label for="status">Status</label>
                     <select name="status" id="status" class="form-select @error('status') is-invalid @enderror">
                         <option value="Ready" @if(old('status') == 'Ready') selected @endif>Tersedia</option>
                         <option value="Out of Stock" @if(old('status') == 'Out of Stock') selected @endif>Stok kosong</option>
                     </select>
+                </div> --}}
+
+                <div class="mt-3">
+                    <label>Status</label>
+
+                    <div class="d-flex gap-3">
+                        <div class="d-flex gap-2 rounded-3 py-2">
+                            <input class="form-check-input" type="radio" name="status" id="status1" value="Ready" @if(old('status') == "Ready") checked @endif checked>
+                            <label class="form-check-label" for="status1">Tersedia</label>
+                        </div>
+                        <div class="d-flex gap-2 rounded-3 py-2">
+                            <input class="form-check-input" type="radio" name="status" id="status2" value="Out of Stock" @if(old('status') == "Out of Stock") checked @endif>
+                            <label class="form-check-label" for="status2">Stok Kosong</label>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="mt-3">
@@ -90,7 +105,7 @@
                     </div>
                 @endif
 
-                <div class="mt-3">
+                {{-- <div class="mt-3">
                     <label for="type">Jenis Barang</label>
                     <select class="form-select @error('type') is-invalid @enderror" name="type" id="type">
                         <option value="fast moving" @if(old('type') == 'fast moving') selected @endif>Fast Moving</option>
@@ -99,9 +114,24 @@
                     @error('type')
                         <p class="text-danger">{{ $message }}</p>
                     @enderror
-                </div>
+                </div> --}}
 
                 <div class="mt-3">
+                    <label>Jenis Barang</label>
+
+                    <div class="d-flex gap-3">
+                        <div class="d-flex gap-2 rounded-3 py-2">
+                            <input class="form-check-input" type="radio" name="type" id="type1" value="fast moving" @if(old('type') == "fast moving") checked @endif checked>
+                            <label class="form-check-label" for="type1">Fast Moving</label>
+                        </div>
+                        <div class="d-flex gap-2 rounded-3 py-2">
+                            <input class="form-check-input" type="radio" name="type" id="type2" value="asset" @if(old('type') == "asset") checked @endif>
+                            <label class="form-check-label" for="type2">Asset</label>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- <div class="mt-3">
                     <label for="condition">Kondisi Barang</label>
                     <select class="form-select @error('condition') is-invalid @enderror" name="condition" id="condition">
                         <option value="good">Bagus</option>
@@ -111,6 +141,25 @@
                     @error('condition')
                         <p class="text-danger">{{ $message }}</p>
                     @enderror
+                </div> --}}
+
+                <div class="mt-3">
+                    <label>Kondisi</label>
+
+                    <div class="d-flex gap-3">
+                        <div class="d-flex gap-2 rounded-3 py-2">
+                            <input class="form-check-input" type="radio" name="condition" id="condition1" value="good" @if(old('condition') == "good") checked @endif checked>
+                            <label class="form-check-label" for="condition1">Bagus</label>
+                        </div>
+                        <div class="d-flex gap-2 rounded-3 py-2">
+                            <input class="form-check-input" type="radio" name="condition" id="condition2" value="degraded" @if(old('condition') == "degraded") checked @endif>
+                            <label class="form-check-label" for="condition2">Rusak</label>
+                        </div>
+                        <div class="d-flex gap-2 rounded-3 py-2">
+                            <input class="form-check-input" type="radio" name="condition" id="condition3" value="refurbish" @if(old('condition') == "refurbish") checked @endif>
+                            <label class="form-check-label" for="condition3">Rekondisi</label>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="mt-4">

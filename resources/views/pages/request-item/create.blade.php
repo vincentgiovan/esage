@@ -3,7 +3,7 @@
 @section("content")
 
     <x-container-middle>
-        <div class="container bg-white rounded-4 mt-4">
+        <div class="container bg-white rounded-4 mt-4 p-4">
 
             <h2>Buat Request Baru</h2>
 
