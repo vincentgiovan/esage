@@ -111,63 +111,64 @@
                                         <div class="d-flex flex-column gap-2">
                                             <div>
                                                 <label for="product_name">Nama Produk</label>
-                                                <input type="text" class="form-control" name="product_name" id="product_name" placeholder="Nama Barang" value = "{{ old("product_name" ) }}">
-                                                <p class="invalid-feedback" id="errProductName"></p>
+                                                <input type="text" class="form-control productName" name="product_name[]" placeholder="Nama Barang" value = "{{ old("product_name" ) }}">
+                                                <p class="invalid-feedback errProductName"></p>
                                             </div>
 
                                             <button class="btn btn-secondary newprod-detail-btn" type="button">Sembunyikan detail</button>
 
-                                            <div class="d-flex flex-column gap-2 newprod-detail-area">
+                                            <div class="collapse.show gap-2 newprod-detail-area">
                                                 <div>
                                                     <label for="variant">Variant</label>
-                                                    <input type="text" class="form-control" name="variant"  id="variant" placeholder="Variant">
-                                                    <p class="invalid-feedback" id="errVariant"></p>
+                                                    <input type="text" class="form-control variant" name="variant[]" placeholder="Variant">
+                                                    <p class="invalid-feedback errVariant"></p>
                                                 </div>
 
-                                                <div>
-                                                    <label for="fake_product_code">SKU</label>
-                                                    <input type="text" class="form-control" name="fake_product_code" id="fake_product_code" placeholder="(Dibuat otomatis oleh sistem)" disabled>
-                                                    <p class="invalid-feedback" id="errProductCode"></p>
+                                                <div class="mt-2">
+                                                    <label for="product_code">SKU</label>
+                                                    <input type="text" class="form-control fakeCode" name="fake_product_code" placeholder="(Dibuat otomatis oleh sistem)" disabled>
+                                                    <input type="hidden" name="product_code[]" class="productCode">
+                                                    <p class="invalid-feedback errProductCode"></p>
                                                 </div>
 
-                                                <div>
+                                                <div class="mt-2">
                                                     <div class="unit">Satuan</div>
-                                                    <input type="text" class="form-control" name="unit" id="unit" placeholder="Unit"  value = "{{ old("unit") }}">
-                                                    <p class="invalid-feedback" id="errUnit"></p>
+                                                    <input type="text" class="form-control" name="unit[]" placeholder="Unit">
+                                                    <p class="invalid-feedback errUnit"></p>
                                                 </div>
 
-                                                <div>
+                                                <div class="mt-2">
                                                     <label for="price">Harga</label>
-                                                    <input type="number" class="form-control" name="price" id="price" placeholder="Harga" value="0">
-                                                    <p class="invalid-feedback" id="errPrice"></p>
+                                                    <input type="number" class="form-control price" name="price[]" placeholder="Harga" value="0">
+                                                    <p class="invalid-feedback errPrice"></p>
                                                 </div>
 
-                                                <div>
+                                                <div class="mt-2">
                                                     <label for="markup">Markup</label>
-                                                    <input type="text" class="form-control" name="markup" id="markup" placeholder="Markup"  value="0">
-                                                    <p class="invalid-feedback" id="errMarkup"></p>
+                                                    <input type="text" class="form-control markup" name="markup[]" placeholder="Markup"  value="0">
+                                                    <p class="invalid-feedback errMarkup"></p>
                                                 </div>
 
-                                                <div>
+                                                <div class="mt-2">
                                                     <label for="discount">Diskon</label>
-                                                    <input type="text" class="form-control" name="discount"  id="discount" placeholder="Diskon"  value="0">
-                                                    <p class="invalid-feedback" id="errDiscount"></p>
+                                                    <input type="text" class="form-control discount" name="discount[]" placeholder="Diskon"  value="0">
+                                                    <p class="invalid-feedback errDiscount"></p>
                                                 </div>
 
-                                                <div>
+                                                <div class="mt-2">
                                                     <label>Jenis Barang</label>
 
                                                     <div class="d-flex gap-3">
                                                         <div class="d-flex gap-2 rounded-3 py-2">
-                                                            <input class="form-check-input" type="radio" name="type" id="type1" value="fast moving" checked>
-                                                            <label class="form-check-label" for="type1">Fast Moving</label>
+                                                            <input class="form-check-input type1" type="radio" name="type[{{ round(microtime(true) * 1000) }}]" id="type{{ round(microtime(true) * 1000) }}" value="fast moving" checked>
+                                                            <label class="form-check-label" for="type{{ round(microtime(true) * 1000) }}">Fast Moving</label>
                                                         </div>
                                                         <div class="d-flex gap-2 rounded-3 py-2">
-                                                            <input class="form-check-input" type="radio" name="type" id="type2" value="asset">
-                                                            <label class="form-check-label" for="type2">Aset</label>
+                                                            <input class="form-check-input type2" type="radio" name="type[{{ round(microtime(true) * 1000) }}]" id="type{{ round(microtime(true) * 1000) }}2" value="asset">
+                                                            <label class="form-check-label" for="type{{ round(microtime(true) * 1000) }}2">Aset</label>
                                                         </div>
                                                     </div>
-                                                    <p class="invalid-feedback" id="errType"></p>
+                                                    <p class="invalid-feedback errType"></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -219,6 +220,17 @@
             return `${day}/${month}/${year}`;
         }
 
+        function makeCapitalizedEachWordAndNoSpace(text){
+            // Remove extra spaces, split into words, capitalize each, and join back together
+            const processedText = text
+                .trim() // Trim any leading/trailing spaces
+                .split(/\s+/) // Split by any space characters
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize each word
+                .join(''); // Join without spaces
+
+            return processedText;
+        }
+
         // Ambil data dari Laravel
         const allpurchasesdata = @json($purchases);
         const allproducts = @json($products);
@@ -232,6 +244,61 @@
         $(document).on('change', '.qty-input', function(){
             if($(this).val() < 1){
                 $(this).val(1);
+            }
+        });
+
+        $(document).on('click', '.newprod-detail-btn', function(){
+            const botan = $(this);
+            $(this).closest('td').find('.newprod-detail-area').toggle(0, function(){
+                if($(this).is(':visible')){
+                    botan.text('Sembuyikan Detail');
+                } else {
+                    botan.text('Perlihatkan Detail');
+                }
+            });
+        });
+
+        $(document).on('change', '.productName', function(){
+            if($(this).closest('td').find('.variant').val()){
+                const inputProductName = $(this).val();
+                const inputVariant = $(this).closest('td').find('.variant').val();
+
+                const allProducts = @json($products);
+
+                let n = 1;
+                for (let product of allProducts) {
+                    if (product.product_name == inputProductName && product.variant == inputVariant) {
+                        n++;
+                    }
+                }
+
+                const productCode = `${makeCapitalizedEachWordAndNoSpace(inputProductName)}/${makeCapitalizedEachWordAndNoSpace(inputVariant)}/${n.toString()}`;
+
+                console.log(productCode);
+
+                $(this).closest('td').find('.fakeCode').val(productCode);
+                $(this).closest('td').find('.productCode').val(productCode);
+            }
+        });
+
+        $(document).on('change', '.variant', function(){
+            if($(this).closest('td').find('.productName').val()){
+                const inputProductName = $(this).closest('td').find('.productName').val();
+                const inputVariant = $(this).val();
+
+                const allProducts = @json($products);
+
+                let n = 1;
+                for (let product of allProducts) {
+                    if (product.product_name == inputProductName && product.variant == inputVariant) {
+                        n++;
+                    }
+                }
+
+                const productCode = `${makeCapitalizedEachWordAndNoSpace(inputProductName)}/${makeCapitalizedEachWordAndNoSpace(inputVariant)}/${n.toString()}`;
+
+                $(this).closest('td').find('.fakeCode').val(productCode);
+                $(this).closest('td').find('.productCode').val(productCode);
             }
         });
 
@@ -260,6 +327,22 @@
                 );
 
                 reinitializeselect2();
+            });
+
+            $('#add-row-btn-unregistered').on('click', function(){
+                const newRow = $('#isibody-unregistered').children().first().clone();
+                newRow.find('label').each(function(){
+                    const oldFor = $(this).attr('for');
+                    $(this).attr('for', oldFor + Date.now().toString());
+                });
+                newRow.find('input').val('');
+                newRow.find('.price, .markup, .discount').val(0);
+                newRow.find('.qty-input').val(1);
+                newRow.find('.type1').attr({'name': `type[${Date.now().toString()}]`, 'id': `type${Date.now().toString()}`});
+                newRow.find('.type1').next().attr({'for': `type${Date.now().toString()}`});
+                newRow.find('.type2').attr({'name': `type[${Date.now().toString()}]`, 'id': `type${Date.now().toString()}2`});
+                newRow.find('.type2').next().attr({'for': `type${Date.now().toString()}2`});
+                $('#isibody-unregistered').append(newRow);
             });
 
             $('#purchase_date').on('change', function(){
