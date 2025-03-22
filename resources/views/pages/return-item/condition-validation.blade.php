@@ -4,7 +4,7 @@
     <x-container>
         <br>
         <div class="w-100 d-flex align-items-center justify-content-between">
-            <h2>Validasi Kondisi Barang Pengembalian</h2>
+            <h3>Validasi Kondisi Barang Pengembalian</h3>
             {{-- <div class="d-flex gap-3">
                 <a class="btn btn-secondary" href="{{ route('deliveryorder-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
                 <div class="position-relative d-flex flex-column align-items-end">
@@ -35,7 +35,7 @@
             <p class="text-success fw-bold">{{ session('successDeleteReturnItem') }}</p>
         @endif
 
-        <!-- tabel list data-->
+        {{-- tabel list data--}}
         <form action="{{ route('returnitem-saveunvalid') }}" method="post" id="unvalid-return-item-products">
             @csrf
 
@@ -93,7 +93,7 @@
             </div>
         </form>
 
-        <!-- tabel list data-->
+        {{-- tabel list data--}}
         <div class="mt-4 d-flex align-items-center justify-content-between">
             <h5>Kondisi Barang Telah Divalidasi</h5>
             <form action="{{ route('returnitem-conditionvalidation') }}" class="d-flex gap-2">

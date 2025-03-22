@@ -3,7 +3,7 @@
 @section("content")
     <x-container>
         <br>
-        <h2>Sage Employees - Manage Form</h2>
+        <h3>Sage Employees - Manage Form</h3>
 
         @if (session()->has('successAddPosition'))
             <p class="text-success fw-bold">{{ session('successAddPosition') }}</p>

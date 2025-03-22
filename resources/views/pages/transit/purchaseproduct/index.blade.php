@@ -4,7 +4,7 @@
 <x-container>
     <br>
     <div class="w-100 d-flex align-items-center justify-content-between">
-        <h2>Daftar Barang di Pembelian {{ $purchase->register }}</h2>
+        <h3>Daftar Barang di Pembelian {{ $purchase->register }}</h3>
         <div class="d-flex gap-3">
             <a class="btn btn-secondary" href="{{ route('purchaseproduct-import', $purchase->id) }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
             <div class="position-relative d-flex flex-column align-items-end">
@@ -44,7 +44,7 @@
         <i class="bi bi-plus-square"></i> Tambah dan Buat Data Barang Baru
     </a>
     <br>
-    <!-- tabel list data-->
+    {{-- tabel list data--}}
 
     <div class="overflow-x-auto">
         <table class="w-100">

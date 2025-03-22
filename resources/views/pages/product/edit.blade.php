@@ -8,12 +8,12 @@
     <x-container-middle>
         <div class="container bg-white py-4 px-5 rounded-4 mt-4 border border-1 card">
 
-            <h2>Edit Data Barang</h2>
+            <h3>Edit Data Barang</h3>
 
-            {{-- @csrf kepake untuk token ,wajib --}}
+
 
             <form method="POST" action="{{ route('product-edit', $product->id) }}" id="folm">
-                {{-- @csrf kepake untuk token ,wajib --}}
+
                 @csrf
 
                 <div class="mt-3">

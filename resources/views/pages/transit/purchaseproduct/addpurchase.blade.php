@@ -6,7 +6,7 @@
     <x-container-middle>
         <div class="container border border-1 card py-4 px-5 mt-4">
 
-            <h2>Tambah Barang ke Pembelian</h2>
+            <h3>Tambah Barang ke Pembelian</h3>
                 <div>
                     <div class="mt-3 ">
                         <label for="select-product-dropdown">Nama Produk</label>
@@ -57,7 +57,7 @@
                 </div>
 
                 <form method="POST" action="{{ route("purchaseproduct-store1", $purchase->id ) }}" class="mt-5" id="peon">
-                {{-- @csrf kepake untuk token ,wajib --}}
+
                     @csrf
 
                     <button class="btn btn-success" type="submit">Simpan</button>

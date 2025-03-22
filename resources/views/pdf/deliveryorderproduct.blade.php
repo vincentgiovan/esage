@@ -22,7 +22,7 @@
     </style>
 </head>
 <body>
-    <h2>NOTA PENGIRIMAN</h2>
+    <h3>NOTA PENGIRIMAN</h3>
     <hr>
 
     <h3>Data Transaksi</h3>
@@ -46,7 +46,7 @@
 
     </table>
 
-    <!-- tabel list data-->
+    {{-- tabel list data--}}
 
     <h3 style="margin-top: 40px;">List Barang</h3>
     <table>

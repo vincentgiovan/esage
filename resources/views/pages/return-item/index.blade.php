@@ -4,7 +4,7 @@
     <x-container>
         <br>
         <div class="w-100 d-flex align-items-center justify-content-between">
-            <h2>Pengembalian Barang</h2>
+            <h3>Pengembalian Barang</h3>
             {{-- <div class="d-flex gap-3">
                 <a class="btn btn-secondary" href="{{ route('deliveryorder-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
                 <div class="position-relative d-flex flex-column align-items-end">
@@ -48,7 +48,7 @@
             @endif
         </div>
         <br>
-        <!-- tabel list data-->
+        {{-- tabel list data--}}
 
         <div class="overflow-x-auto">
             <table class="w-100">

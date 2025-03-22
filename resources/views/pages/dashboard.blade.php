@@ -11,7 +11,7 @@
             <p class="text-success fs-5">{{ session('successfulLogin') }}</p>
         @endif
 
-        <!-- Title -->
+        {{-- Title --}}
         <div class="row">
             <div class="col-md-12 grid-margin">
                 <div class="d-flex justify-content-between align-items-center gap-3">
@@ -50,7 +50,7 @@
             </div>
         </div>
 
-        <!-- Summary -->
+        {{-- Summary --}}
         {{-- Gaboleh muncul di project manager --}}
         @if(!in_array(Auth::user()->role->role_name, ['project_manager']))
             <div class="d-flex align-items-stretch justify-content-between w-100 mb-4">
@@ -250,9 +250,9 @@
                     </div>
                 </div>
             </div> --}}
-            <!-- nanti ubah jadi col-md-5 kalo top product mau dimunculin -->
+            {{-- nanti ubah jadi col-md-5 kalo top product mau dimunculin --}}
 
-            <!-- Todo list -->
+            {{-- Todo list --}}
             <div class="col-md-12 grid-margin stretch-card mt-4">
                 <div class="card">
                     <form action="{{ route('todo-update') }}" method="post" class="card-body" id="porm">
@@ -349,7 +349,7 @@
                         <div class="row">
                             <div class="col-md-12 col-xl-3 d-flex flex-column justify-content-center">
                                 <div class="ml-xl-4">
-                                    <h2>33500</h2>
+                                    <h3>33500</h3>
                                     <h3 class="font-weight-light mb-xl-4">Sales</h3>
                                     <p class="text-muted mb-2 mb-xl-0">The total number of sessions within the date range.
                                         It is the period time a user is actively engaged with your website, page or app, etc
@@ -454,8 +454,8 @@
             </div>
         </div> --}}
     </div>
-    <!-- content-wrapper ends -->
-    <!-- partial:partials/_footer.html -->
+    {{-- content-wrapper ends --}}
+    {{-- partial:partials/_footer.html --}}
 
-    <!-- partial -->
+    {{-- partial --}}
 @endsection

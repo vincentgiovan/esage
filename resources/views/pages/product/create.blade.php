@@ -7,9 +7,9 @@
 @section('content')
     <x-container-middle>
         <div class="container bg-white rounded-4 p-5 mt-4 border border-1 card">
-            <h2>Tambah Produk Baru</h2>
+            <h3>Tambah Produk Baru</h3>
             <form method="POST" action="{{ route('product-store') }}" id="folm">
-                {{-- @csrf kepake untuk token ,wajib --}}
+
                 @csrf
 
                 <div class="mt-3">

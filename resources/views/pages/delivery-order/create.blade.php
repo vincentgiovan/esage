@@ -1,130 +1,229 @@
 @extends('layouts.main-admin')
 
 @section("content")
+    <x-container class="mt-4">
+        <form method="POST" action="{{ route("deliveryorder-store" ) }}" id="bikindevor">
+            @csrf
 
-    <x-container-middle>
-        <div class="container rounded-4 p-5 bg-white border border-1 card mt-4">
-            <h2>Tambah Pengiriman Baru</h2>
-            <form method="POST" action="{{ route("deliveryorder-store"{{-- ,$delivery_order->id--}} ) }}" id="bikindevor">
-                @csrf
-                <div class="mt-3">
-                    <label for="delivery_date">Tanggal Pengiriman</label>
-                    <input type="date" class="form-control @error("delivery_date") is-invalid @enderror" id="delivery_date" name="delivery_date" placeholder="delivery_date"  value="{{ old("delivery_date") }}">
+            <h3>Tambah Pengiriman Baru</h3>
 
-                    @error("delivery_date")
-                        <p class="text-danger">Harap masukkan tanggal pengiriman</p>
-                    @enderror
-                </div>
+            {{-- Data Pengiriman --}}
+            <div class="container rounded-4 p-4 bg-white border border-1 card mt-4">
+                <h4>Data Pengiriman</h4>
+                <div>
+                    <div class="mt-3">
+                        <label for="delivery_date">Tanggal Pengiriman</label>
+                        <input type="date" class="form-control @error("delivery_date") is-invalid @enderror" id="delivery_date" name="delivery_date" placeholder="delivery_date"  value="{{ Carbon\Carbon::today()->format('Y-m-d') }}">
+                    </div>
 
-                <div class="mt-3">
-                    <label for="project_id">Proyek</label>
-                    <select name="project_id" class="form-select" id="project_id">
-                        @foreach ($projects as $pn)
-                            <option value="{{ $pn->id}}">{{ $pn->project_name }}</option>
-                        @endforeach
+                    <div class="mt-3">
+                        <label for="project_id">Proyek</label>
+                        <select name="project_id" class="form-select select2" id="project_id">
+                            @foreach ($projects as $pn)
+                                <option value="{{ $pn->id}}">{{ $pn->project_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
-                    </select>
-                </div>
+                    <div class="mt-3">
+                        <label for="_register">SKU</label>
+                        <input type="text" class="form-control" id="_register" name="_register" placeholder="(Dibuat otomatis oleh sistem)"  value="{{ __('DO/' . Carbon\Carbon::today()->format('dmY') . '/' . $delivery_orders->where('delivery_date', Carbon\Carbon::today()->format('Y-m-d'))->count() + 1) }}" disabled>
+                        <input type="hidden" name="register" id="register" value="{{ __('DO/' . Carbon\Carbon::today()->format('dmY') . '/' . $delivery_orders->where('delivery_date', Carbon\Carbon::today()->format('Y-m-d'))->count() + 1) }}">
+                    </div>
 
-                <div class="mt-3">
-                    <label for="fakeregister">SKU</label>
-                    <input type="text" class="form-control" id="fakeregister" name="fakeregister" placeholder="Register"  disabled>
-                </div>
+                    <div class="mt-3">
+                        <label>Status Pengiriman</label>
 
-                {{-- <div class="mt-3">
-                    <label for="delivery_status">Status Pengiriman</label>
-                    <select name="delivery_status" class="form-select" id="delivery_status">
-                        <option value="Complete">Selesai</option>
-                        <option value="Incomplete">Belum selesai</option>
-                    </select>
-                </div> --}}
-
-                <div class="mt-3">
-                    <label>Status Pengiriman</label>
-
-                    <div class="d-flex gap-3">
-                        <div class="d-flex gap-2 rounded-3 py-2">
-                            <input class="form-check-input" type="radio" name="delivery_status" id="delivery_status1" value="Complete" @if(old('delivery_status') == "Complete") checked @endif checked>
-                            <label class="form-check-label" for="delivery_status1">Selesai</label>
+                        <div class="d-flex gap-3">
+                            <div class="d-flex gap-2 rounded-3 py-2">
+                                <input class="form-check-input" type="radio" name="delivery_status" id="delivery_status1" value="Complete" checked>
+                                <label class="form-check-label" for="delivery_status1">Selesai</label>
+                            </div>
+                            <div class="d-flex gap-2 rounded-3 py-2">
+                                <input class="form-check-input" type="radio" name="delivery_status" id="delivery_status2" value="Incomplete">
+                                <label class="form-check-label" for="delivery_status2">Belum Selesai</label>
+                            </div>
                         </div>
-                        <div class="d-flex gap-2 rounded-3 py-2">
-                            <input class="form-check-input" type="radio" name="delivery_status" id="delivery_status2" value="Incomplete" @if(old('delivery_status') == "Incomplete") checked @endif>
-                            <label class="form-check-label" for="delivery_status2">Belum Selesai</label>
-                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        <label for="note">Catatan</label>
+                        <input type="text" class="form-control" name="note" id="note" placeholder="Note">
+                    </div>
+                </div>
+            </div>
+
+            {{-- Cart pengiriman --}}
+            <div class="container bg-white rounded-4 p-4 border border-1 card mt-4">
+                <h4>Daftar Barang</h4>
+
+                <div class="overflow-x-auto">
+                    <table class="w-100 mt-4">
+                        <thead>
+                            <th>Barang</th>
+                            <th>Jumlah</th>
+                            <th>Aksi</th>
+                        </thead>
+                        <tbody id="isibody">
+                            <tr>
+                                <td>
+                                    <select name="products[]" class="form-select select2">
+                                    @foreach ($products as $product)
+                                        <option value="{{ $product->id }}">
+                                            {{ $product->product_name }} - {{ $product->variant }} (Harga: Rp {{ number_format($product->price, 2, ',', '.') }}, Stok:  {{ $product->stock }}, Diskon: {{ $product->discount }}%) [Tgl beli: {{ Carbon\Carbon::parse($product->ordering_date)->format('d/m/Y') }}]
+                                        </option>
+                                    @endforeach
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control qty-input" name="quantities[]" min="1" value="1">
+                                </td>
+                                <td><button type="button" class="btn btn-danger remove-row-btn"><i class="bi bi-trash3"></i></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="invalid-feedback">Harap pilih nama barang</p>
+
+                    <div class="d-flex justify-content-end mt-3">
+                        <button type="button" class="btn btn-primary" id="add-row-btn">Tambah Data Baru</button>
                     </div>
                 </div>
 
-                <div class="mt-3">
-                    <label for="note">Catatan</label>
-                    <input type="text" class="form-control" name="note" id="note" placeholder="Note" value = "{{ old("note")}}">
+                <div>
+                    <button type="button" class="btn btn-success px-3 py-1" id="submit-btn">Simpan</button>
                 </div>
+            </div>
 
-                <div class="mt-4">
-                    <input type="submit" class="btn btn-success px-3 py-1" value="Simpan Data Baru">
-                </div>
-            </form>
-        </div>
-
-
-        <!-- Bikin change button color on hover pake js -->
-        {{-- <script>
-            const susbtn = document.querySelector("#susbtn");
-            susbtn.addEventListener("mouseover", () => {
-                susbtn.classList.remove("btn-success");
-                susbtn.classList.add("btn-secondary");
-            });
-            susbtn.addEventListener("mouseout", () => {
-                susbtn.classList.remove("btn-secondary");
-                susbtn.classList.add("btn-success");
-            });
-        </script> --}}
-    </x-container-middle>
+            <ul class="text-danger fw-bold mt-3">
+                @if($errors->any())
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                @endif
+            </ul>
+        </form>
+    </x-container>
 
     <script>
-        // Jika input delivery_date berubah, maka jalankan perintah berikut
-        const delivery_date = document.getElementById("delivery_date");
-        delivery_date.addEventListener("change", function(){
+        function reinitializeselect2(){
+			// select-2 initialization
+			$('.select2').select2({
+				allowClear: false
+			});
 
-            // Ambil data dari Laravel
-            const alldeliveryorderdata = @json($delivery_orders);
+			// Apply resize observer to each container with class 'container-select2'
+			$('.container-select2').each(function () {
+				const container = this;
+				const resizeObserver = new ResizeObserver(() => {
+					$(container).find('.select2').each(function () {
+						$(this).select2('destroy').select2({
+							allowClear: false
+						});
+					});
+				});
+			});
+		}
 
-            // Hitung berapa data delivery order yang punya delivery_date yang sama
-            let n = 0;
-            for(let delord of alldeliveryorderdata) {
-                if(delord.delivery_date == delivery_date.value){
-                    n++;
-                }
+        function formatNumber(number) {
+            return new Intl.NumberFormat('de-DE', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            }).format(number);
+        }
+
+        function formatCurrency(number){
+            return new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(number);
+        }
+
+        function formatDate(dateString) {
+            let date = new Date(dateString);
+            let day = String(date.getDate()).padStart(2, '0');
+            let month = String(date.getMonth() + 1).padStart(2, '0');
+            let year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+
+        // Ambil data dari Laravel
+        const alldeliveryorderdata = @json($delivery_orders);
+        const allproducts = @json($products);
+
+        $(document).on('click', '.remove-row-btn', function(){
+            if($('#isibody').find('tr').length > 1){
+                $(this).closest('tr').remove();
             }
-
-            // Formatting ulang data tanggal dari Y-M-D jadi DMY
-            const [year, month, day] = delivery_date.value.split('-');
-            const formattedDate = `${day}${month}${year}`;
-
-            // Generate SKU dan masukin hasilnya langsung ke input fakeregister (yang tampil di user)
-            const generatedsku = "DO/"+ formattedDate +"/"+ (n + 1);
-            const fakeregister = document.getElementById("fakeregister");
-            fakeregister.value = generatedsku;
         });
 
-        // Jika form bikindevor di-submit, jalankan perintah berikut
-        const purchaseForm = document.getElementById("bikindevor");
-        purchaseForm.addEventListener("submit", function(event){
-            // Cegah form buat submit
-            event.preventDefault();
+        $(document).on('change', '.qty-input', function(){
+            if($(this).val() < 1){
+                $(this).val(1);
+            }
+        });
 
-            // Ambil nilai SKU dari input fakeregister
-            const fakeRegister = document.querySelector('input[name="fakeregister"]');
+        $(document).ready(() => {
+            $('#add-row-btn').on('click', function(){
+                const newProdSel = $('<select>').attr('name', 'products[]').addClass('form-select select2');
+                allproducts.forEach(prod => {
+                    newProdSel.append($('<option>').attr('value', prod.id).text(`${prod.product_name} - ${prod.variant} (Harga: Rp ${formatCurrency(prod.price)}, Stok: ${[prod.stock]}, Diskon: ${prod.discount}) [Tgl beli: ${formatDate(prod.ordering_date)}]`));
+                });
 
-            // Bikin elemen input tersembunyi buat bantu kirim data ke Laravel (karena by default-nya Laravel ga nganggap disabled input) dan nilainya diambil dari fakeregister
-            const hiddenInput = document.createElement("input");
-            hiddenInput.setAttribute("type", "hidden");
-            hiddenInput.setAttribute("name", "register");
-            hiddenInput.setAttribute("value", fakeRegister.value);
+                $('#isibody').append(
+                    $('<tr>')
+                        .append(
+                            $('<td>').append(newProdSel)
+                        )
+                        .append(
+                            $('<td>').append(
+                                $('<input>').attr({'type': 'number', 'name': 'quantities[]', 'min': 1}).addClass('form-control qty-input').val(1)
+                            )
+                        )
+                        .append(
+                            $('<td>').append(
+                                $('<button>').attr('type', 'button').addClass('btn btn-danger remove-row-btn').html('<i class="bi bi-trash3"></i>')
+                            )
+                        )
+                );
 
-            purchaseForm.appendChild(hiddenInput);
+                reinitializeselect2();
+            });
 
-            // Baru submit form-nya
-            purchaseForm.submit();
-        })
+            $('#delivery_date').on('change', function(){
+                // Hitung berapa data delivery order yang punya delivery_date yang sama
+                let n = 0;
+                for(let delord of alldeliveryorderdata) {
+                    if(delord.delivery_date == delivery_date.value){
+                        n++;
+                    }
+                }
+
+                // Formatting ulang data tanggal dari Y-M-D jadi DMY
+                const [year, month, day] = $(this).val().split('-');
+                const formattedDate = `${day}${month}${year}`;
+
+                // Generate SKU dan masukin hasilnya langsung ke input fakeregister (yang tampil di user)
+                const generatedsku = "DO/"+ formattedDate +"/"+ (n + 1);
+                $('#register').val(generatedsku);
+            });
+
+            $('#submit-btn').on('click', function(){
+                $('input, select').removeClass('is-invalid');
+
+                // Validations
+                const inpProject = $('#project_id');
+                const inpDeliveryDate = $('#delivery_date');
+                const inpProductNames = $('select[name="products[]"]');
+
+                let inputError = false;
+
+                if(!inpDeliveryDate.val()){
+                    inpDeliveryDate.addClass('is-invalid');
+                    inputError = true;
+                }
+
+                if(!inputError){
+                    $('form').submit();
+                }
+            });
+        });
+
     </script>
 @endsection

@@ -3,7 +3,7 @@
 @section("content")
     <x-container>
         <br>
-        <h2>Gaji Pegawai</h2>
+        <h3>Gaji Pegawai</h3>
         <hr>
 
         @if (session()->has('successEditSalary'))

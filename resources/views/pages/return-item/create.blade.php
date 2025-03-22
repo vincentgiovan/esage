@@ -4,7 +4,7 @@
 
     <x-container-middle>
         <div class="container rounded-4 p-5 bg-white border border-1 card mt-4">
-            <h2>Return Barang Baru</h2>
+            <h3>Return Barang Baru</h3>
 
             <form method="POST" action="{{ route('returnitem-store') }}" enctype="multipart/form-data">
                 @csrf

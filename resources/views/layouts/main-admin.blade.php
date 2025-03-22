@@ -1,26 +1,26 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <!-- Meta data & title -->
+        {{-- Meta data & title --}}
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
         <title>eSage</title>
 
-        <!-- Style punya template halaman -->
+        {{-- Style punya template halaman --}}
         {{-- <link rel="stylesheet" href="{{ asset("vendors/ti-icons/css/themify-icons.css") }}">
         <link rel="stylesheet" href="{{ asset("template/vendors/base/vendor.bundle.base.css") }}">  --}}
         <link rel="stylesheet" href="{{ asset("template/css/style.css") }}">
 
-        <!-- Bootstrap CSS & icon -->
+        {{-- Bootstrap CSS & icon --}}
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-        <!-- Original asset -->
+        {{-- Original asset --}}
         <link rel="shortcut icon" href="{{ asset("res/sageico.ico") }}" />
         {{-- <link rel="stylesheet" href="style.css"> --}}
 
-        <!-- Custom styles -->
+        {{-- Custom styles --}}
         <style>
             body{
                 background-color: white;
@@ -98,17 +98,17 @@
             }
         </style>
 
-        <!-- Include Select2 CSS -->
+        {{-- Include Select2 CSS --}}
 		<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
-        <!-- Include jQuery  -->
+        {{-- Include jQuery  --}}
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     </head>
 
     <body style="min-height: 100vh;">
         <div class="h-100 w-100">
-            <!-- Navbar -->
+            {{-- Navbar --}}
             @auth
                 <div class="fixed-top" style="z-index: 100;">
                     @include("component.navbar")
@@ -116,12 +116,12 @@
             @endauth
 
             <div class="container-fluid d-flex justify-content-end position-relative w-100" style="padding: 0;">
-                <!-- Sidebar -->
+                {{-- Sidebar --}}
                 @auth
                     @include("component.sidebar")
                 @endauth
 
-                <!-- Main -->
+                {{-- Main --}}
                 <div class="d-flex flex-column" id="main-content-div" style="min-height: 100vh; padding-left: 0;">
                     <div class="content-wrapper d-flex flex-column bg-light" style="width: 100%;">
                         @if(!Request::is("dashboard"))
@@ -129,15 +129,15 @@
                                 <a href="{{ route('dashboard') }}" class="text-decoration-none fw-semibold">Dashboard</a>
                                 <?php $link = "" ?>
                                 @foreach(Request::segments() as $index => $segment)
-                                    <!-- Construct the full URL -->
+                                    {{-- Construct the full URL --}}
                                     @php
                                         $link .= "/" . $segment;
                                     @endphp
 
-                                    <!-- Separator -->
+                                    {{-- Separator --}}
                                     <span><i class="bi bi-chevron-right"></i></span>
 
-                                    <!-- Link activation logic -->
+                                    {{-- Link activation logic --}}
                                     @if ($index < count(Request::segments()) - 1 && !is_numeric($segment))
                                         <a href="{{ url($link) }}" class="text-decoration-none fw-semibold">{{ ucwords(str_replace('-', ' ', $segment)) }}</a>
                                     @else
@@ -147,7 +147,7 @@
                             </div>
                         @endif
 
-                        <!-- Content -->
+                        {{-- Content --}}
                         <div class="flex-grow-1 d-flex flex-column">
                             @yield("content")
                         </div>
@@ -159,10 +159,10 @@
             </div>
         </div>
 
-        <!-- Gatau buat apa -->
+        {{-- Gatau buat apa --}}
         <div style="color: rgb(197, 197, 197)"></div>
 
-        <!-- Custom javascript -->
+        {{-- Custom javascript --}}
         <script>
             $(document).ready(() => {
                 // Buat ngubah dropdown select product jadi select2 (yang ada fitur searchnya) dan sedikit styling
@@ -200,10 +200,10 @@
             });
         </script>
 
-        <!-- Include Select2 JavaScript -->
+        {{-- Include Select2 JavaScript --}}
 		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-        <!-- Import bootstrap -->
+        {{-- Import bootstrap --}}
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     </body>

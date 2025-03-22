@@ -4,12 +4,12 @@
     <x-container-middle>
         <div class="container bg-white rounded-4 py-4 px-5 border border-1 card mt-4">
 
-            <h2>Tambah Pembelian Baru</h2>
+            <h3>Tambah Pembelian Baru</h3>
 
-            {{-- @csrf kepake untuk token ,wajib --}}
+
 
             <form method="POST" action="{{ route('purchase-store') }}" id="bikinpurchase">
-                {{-- @csrf kepake untuk token ,wajib --}}
+
                 @csrf
 
                 <div class="mt-3">

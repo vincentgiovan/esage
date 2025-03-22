@@ -4,7 +4,7 @@
     <x-container>
         <br>
         <div class="w-100 d-flex justify-content-between align-items-center">
-            <h2>Data Pegawai</h2>
+            <h3>Data Pegawai</h3>
             <a href="{{ route('employee-manageform') }}" class="btn btn-primary">Atur Jabatan dan Keahlian</a>
         </div>
         <hr>

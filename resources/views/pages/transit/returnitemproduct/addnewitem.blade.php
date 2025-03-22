@@ -6,7 +6,7 @@
     <x-container-middle>
         <div class="container bg-white py-4 px-5 rounded-4 border border-1 card mt-4">
 
-            <h2>Tambah Barang ke Pengembalian</h2>
+            <h3>Tambah Barang ke Pengembalian</h3>
                 <div>
                     <div class="mt-3">
                         <label for="product_id">Nama Produk</label>
@@ -43,7 +43,7 @@
                 </div>
 
                 <form method="POST" action="{{ route('returnitem-list-store', $return_item->id ) }}" class="mt-5" id="peon">
-                {{-- @csrf kepake untuk token ,wajib --}}
+
                     @csrf
 
                     <div class="mt-3">

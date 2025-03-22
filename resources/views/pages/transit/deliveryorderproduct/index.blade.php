@@ -4,7 +4,7 @@
     <x-container>
         <br>
         <div class="w-100 d-flex align-items-center justify-content-between">
-            <h2>Daftar Barang di Pengiriman {{ $deliveryorder->register }}</h2>
+            <h3>Daftar Barang di Pengiriman {{ $deliveryorder->register }}</h3>
 
             @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
                 <div class="d-flex gap-3">
@@ -40,14 +40,14 @@
             <p class="text-success fw-bold">{{ session("successDeleteProduct") }}</p>
         @endif
 
-        @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
+        {{-- @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
             <a href="{{ route('deliveryorderproduct-create1', $deliveryorder->id) }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
                 <i class="bi bi-plus-square"></i> Tambah Barang ke Pengiriman
             </a>
-        @endif
+        @endif --}}
 
         <br>
-        <!-- tabel list data-->
+        {{-- tabel list data--}}
 
         <div class="overflow-x-auto">
             <table class="w-100">
@@ -61,9 +61,9 @@
                     <th>Harga Diskon</th>
                     <th>Jumlah</th>
                     <th>Subtotal</th>
-                    @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
+                    {{-- @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
                         <th>Aksi</th>
-                    @endif
+                    @endif --}}
                 </tr>
 
                 @php
@@ -89,7 +89,7 @@
                         <td>Rp {{ number_format($disc_price, 2, ',', '.') }}</td>
                         <td>{{ $deliveryorder_product->quantity }}</td>
                         <td>Rp{{ number_format($subtotal, 2, ',', '.') }}</td>
-                        @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
+                        {{-- @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
                             <td>
                                 <div class="d-flex gap-5 w-100">
                                     <form action="{{ route("deliveryorderproduct-destroy", [$deliveryorder->id, $deliveryorder_product->id] ) }}" method="POST">
@@ -100,7 +100,7 @@
                                     </form>
                                 </div>
                             </td>
-                        @endif
+                        @endif --}}
                     </tr>
 
                 @endforeach

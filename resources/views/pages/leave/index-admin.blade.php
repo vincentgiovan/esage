@@ -4,7 +4,7 @@
     <x-container>
         <br>
         <div class="w-100 d-flex align-items-center justify-content-between">
-            <h2>Pengajuan Cuti Karyawan</h2>
+            <h3>Pengajuan Cuti Karyawan</h3>
             {{--
                 <div class="d-flex gap-3">
                     <a class="btn btn-secondary" href="{{ route('partner-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
@@ -41,7 +41,7 @@
                 Tambah Partner Baru</a>
             <br>
          --}}
-        <!-- tabel list data-->
+        {{-- tabel list data--}}
 
         <div class="overflow-x-auto">
             <table class="w-100">

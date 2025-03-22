@@ -5,7 +5,7 @@
     <x-container-middle>
         <div class="container bg-white rounded-4 mt-4">
 
-            <h2>Edit Request Items</h2>
+            <h3>Edit Request Items</h3>
 
             <div>
                 <div class="p-3 border border-2 rounded-4 mt-4">
@@ -89,7 +89,7 @@
             </div>
 
             <form method="POST" action="{{ route('requestitem-update', $request_item->id) }}" class="mt-5" id="peon">
-            {{-- @csrf kepake untuk token ,wajib --}}
+
                 @csrf
 
                 @foreach($rip as $r)

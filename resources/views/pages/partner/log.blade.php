@@ -3,7 +3,7 @@
 @section('content')
     <x-container>
         <div class="w-100 d-flex align-items-center justify-content-between">
-            <h2 class="mt-4">Log Transaksi Pembelian dari Partner</h2>
+            <h3 class="mt-4">Log Transaksi Pembelian dari Partner</h3>
         </div>
 
         <hr class="mt-2">
@@ -12,7 +12,7 @@
             $total = 0;
         @endphp
 
-        <!-- tabel list data-->
+        {{-- tabel list data--}}
 
         <h5>Data Partner</h5>
         <table class="w-100">

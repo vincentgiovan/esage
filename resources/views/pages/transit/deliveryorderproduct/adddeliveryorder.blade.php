@@ -5,7 +5,7 @@
 
     <x-container-middle>
         <div class="container bg-white rounded-4 py-4 px-5 border border-1 card mt-4">
-            <h2>Tambah Barang ke Pengiriman</h2>
+            <h3>Tambah Barang ke Pengiriman</h3>
             <div>
                 <div class="mt-3">
                     <label for="select-product-dropdown">Nama Produk</label>
@@ -42,7 +42,7 @@
             </div>
 
             <form method="POST" action="{{ route("deliveryorderproduct-store1", $deliveryorder->id ) }}" class="mt-5" id="peon">
-                {{-- @csrf kepake untuk token ,wajib --}}
+
                 @csrf
 
                 <div class="mt-3">

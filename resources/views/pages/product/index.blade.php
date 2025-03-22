@@ -3,7 +3,7 @@
 @section('content')
     <x-container>
         <div class="w-100 d-flex align-items-center justify-content-between">
-            <h2 class="mt-4">Data Barang di Gudang</h2>
+            <h3 class="mt-4">Data Barang di Gudang</h3>
 
             @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
                 <div class="d-flex gap-3">

@@ -7,7 +7,7 @@
 @section('content')
     <x-container-middle>
         <div class="container bg-white py-4 px-5 rounded-4 mt-4 border border-1 card">
-            <h2>Data Pegawai Baru</h2>
+            <h3>Data Pegawai Baru</h3>
 
             <form method="POST" action="{{ route('employee-store') }}" id="folm" enctype="multipart/form-data">
                 @csrf

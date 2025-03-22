@@ -4,7 +4,7 @@
     <x-container>
 
         <br>
-        <h2>Rekondisi Barang</h2>
+        <h3>Rekondisi Barang</h3>
         <hr>
 
         @if (session()->has('successCreateRefurbishItem'))

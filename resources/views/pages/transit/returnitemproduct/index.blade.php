@@ -4,7 +4,7 @@
 <x-container>
     <br>
     <div class="w-100 d-flex align-items-center justify-content-between">
-        <h2>Daftar Barang di Pengembalian {{ Carbon\Carbon::parse($return_item->return_date)->translatedFormat('d M Y') }} - {{ $return_item->project->project_name }}</h2>
+        <h3>Daftar Barang di Pengembalian {{ Carbon\Carbon::parse($return_item->return_date)->translatedFormat('d M Y') }} - {{ $return_item->project->project_name }}</h3>
 
         {{-- <div class="d-flex gap-3">
             <a class="btn btn-secondary" href="{{ route('purchaseproduct-import', $purchase->id) }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
@@ -46,7 +46,7 @@
     </a>
 
     <br>
-    <!-- tabel list data-->
+    {{-- tabel list data--}}
 
     <h5>Daftar Barang</h5>
     <div class="overflow-x-auto">

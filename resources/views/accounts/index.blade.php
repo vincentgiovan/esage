@@ -2,10 +2,10 @@
 
 @section('content')
     <x-container>
-        <h2 class="my-4">Kelola Akun</h2>
+        <h3 class="my-4">Kelola Akun</h3>
         <hr class="mt-2">
 
-        <!-- Users List -->
+        {{-- Users List --}}
         @if (session()->has('successCreateAccount'))
             <p class="text-success fw-bold">{{ session('successCreateAccount') }}</p>
         @elseif (session()->has('successEditAccount'))

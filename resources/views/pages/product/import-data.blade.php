@@ -7,7 +7,7 @@
 @section('content')
     <x-container-middle>
         <div class="container bg-white rounded-4 p-5 mt-4 border border-1 card">
-            <h2>Import Excel Data Barang</h2>
+            <h3>Import Excel Data Barang</h3>
 
             @if(session()->has('failedImportExcel'))
                 <p class="text-danger">{{ session('failedImportExcel') }}</p>

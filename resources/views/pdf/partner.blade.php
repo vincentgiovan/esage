@@ -22,13 +22,13 @@
     </style>
 </head>
 <body>
-        <h2>Partners</h2>
+        <h3>Partners</h3>
         <hr>
 
         <br>
 
 
-        <!-- tabel list data-->
+        {{-- tabel list data--}}
         <table style="width: 100%; border: 1px solid black;">
             <tr>
                 <th>Nomor</th>

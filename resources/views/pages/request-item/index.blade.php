@@ -4,7 +4,7 @@
     <x-container>
 
         <br>
-        <h2>Request Barang</h2>
+        <h3>Request Barang</h3>
         <hr>
 
         @if (session()->has('successAddRequest'))

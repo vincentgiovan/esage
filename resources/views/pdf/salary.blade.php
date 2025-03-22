@@ -23,11 +23,11 @@
     </head>
 
     <body>
-        <h2>Gaji Pegawai</h2>
+        <h3>Gaji Pegawai</h3>
         <hr>
         <br>
 
-        <!-- tabel list data-->
+        {{-- tabel list data--}}
         <table style="width: 100%; border: 1px solid black;">
             <tr>
                 <th>No</th>

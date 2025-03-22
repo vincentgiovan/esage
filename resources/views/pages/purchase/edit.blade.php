@@ -3,7 +3,7 @@
 @section('content')
     <x-container-middle>
         <div class="container bg-white p-5 rounded-4 border border-1 card mt-4">
-            <h2>Edit Data Pembelian</h2>
+            <h3>Edit Data Pembelian</h3>
 
             <form method="POST" action="{{ route('purchase-edit', $purchase->id) }}" id="bikinpurchase">
                 @csrf

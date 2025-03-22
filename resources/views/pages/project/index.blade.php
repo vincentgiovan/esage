@@ -4,7 +4,7 @@
     <x-container>
         <br>
         <div class="w-100 d-flex align-items-center justify-content-between">
-            <h2>Proyek Sage</h2>
+            <h3>Proyek Sage</h3>
 
             @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
                 <div class="d-flex gap-3">
@@ -45,7 +45,7 @@
             <br>
         @endif
 
-        <!-- tabel list data-->
+        {{-- tabel list data--}}
         <div class="overflow-x-auto">
             <table class="w-100">
                 <tr>

@@ -3,7 +3,7 @@
 @section('content')
     <x-container-middle>
         <div class="container bg-white rounded-4 p-5 mt-4 border border-1 card">
-            <h2>Edit Data Akun</h2>
+            <h3>Edit Data Akun</h3>
             <form action="{{ route('account.update', $user->id) }}" method="POST">
                 @method('put')
                 @csrf

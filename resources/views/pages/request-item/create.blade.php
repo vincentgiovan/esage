@@ -5,7 +5,7 @@
     <x-container-middle>
         <div class="container bg-white rounded-4 mt-4 p-4">
 
-            <h2>Buat Request Baru</h2>
+            <h3>Buat Request Baru</h3>
 
             <div>
                 <div class="p-3 border border-2 rounded-4 mt-4">
@@ -83,7 +83,7 @@
             </div>
 
             <form method="POST" action="{{ route('requestitem-store') }}" class="mt-5" id="peon">
-            {{-- @csrf kepake untuk token ,wajib --}}
+
                 @csrf
 
                 <div class="mt-3">

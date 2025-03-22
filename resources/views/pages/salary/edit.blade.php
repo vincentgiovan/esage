@@ -8,7 +8,7 @@
     <x-container-middle>
         <div class="container bg-white py-4 px-5 rounded-4 mt-4 border border-1 card">
 
-            <h2>Edit Salary Data</h2>
+            <h3>Edit Salary Data</h3>
 
             <table class="w-100 my-3">
                 <tr>
@@ -26,7 +26,7 @@
             </table>
 
             <form method="POST" action="{{ route('salary-edit', $salary->id) }}">
-                {{-- @csrf kepake untuk token ,wajib --}}
+
                 @csrf
 
                 <div class="mt-3">

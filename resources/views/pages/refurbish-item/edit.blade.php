@@ -3,7 +3,7 @@
 @section('content')
     <x-container-middle>
         <div class="container bg-white rounded-4 p-5 mt-4 border border-1 card">
-            <h2>Rekondisi Barang</h2>
+            <h3>Rekondisi Barang</h3>
 
             <form method="POST" action="{{ route('refurbishitem-update', $refurbish_item->id) }}">
                 @csrf

@@ -6,7 +6,7 @@
     <x-container-middle>
         <div class="container bg-white py-4 px-5 rounded-4 border border-1 card mt-4">
 
-            <h2>Tambah Barang ke Pembelian dan Data Barang</h2>
+            <h3>Tambah Barang ke Pembelian dan Data Barang</h3>
                 <div>
                     <div class="mt-3">
                         <label for="product_name">Nama Produk</label>

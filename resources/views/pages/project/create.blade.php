@@ -3,9 +3,9 @@
 @section('content')
     <x-container-middle>
         <div class="container bg-white rounded-4 py-4 px-5 border border-1 card mt-4 mt-4">
-            <h2>Tambah Proyek Baru</h2>
+            <h3>Tambah Proyek Baru</h3>
             <form method="POST" action="{{ route('project-store') }}">
-                {{-- @csrf kepake untuk token ,wajib --}}
+
                 @csrf
 
                 <div class="mt-3">

@@ -3,7 +3,7 @@
 @section('content')
     <x-container-middle>
         <div class="container bg-white rounded-4 py-4 px-5 border border-1 card mt-4">
-            <h2>Laporan Presensi Baru</h2>
+            <h3>Laporan Presensi Baru</h3>
             <h6 class="fw-normal">Untuk proyek: {{ $project->project_name }}</h6>
 
             <form method="POST" action="{{ route('attendance-store-admin') }}">

@@ -13,7 +13,7 @@
         @endif
 
 
-            <!-- Add Attendance Preform -->
+            {{-- Add Attendance Preform --}}
             <div class="card mb-4">
                 <div class="card-header">
                     <button class="w-100 h-100 btn d-flex justify-content-between" type="button" id="add-new-attendance-btn">Buat Presensi Baru <i class="bi bi-chevron-down"></i></button>

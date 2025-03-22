@@ -3,7 +3,7 @@
 @section("content")
     <x-container>
         <br>
-        <h2>Data Pegawai</h2>
+        <h3>Data Pegawai</h3>
         <hr>
 
         @if (session()->has('successAddPrepay'))

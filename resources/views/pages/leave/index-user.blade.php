@@ -4,7 +4,7 @@
     <x-container>
         <br>
         <div class="w-100 d-flex align-items-center justify-content-between">
-            <h2>Pengajuan Cuti Saya</h2>
+            <h3>Pengajuan Cuti Saya</h3>
             {{--
                 <div class="d-flex gap-3">
                     <a class="btn btn-secondary" href="{{ route('partner-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
@@ -38,7 +38,7 @@
                 <i class="bi bi-plus-square"></i>
                 Buat Pengajuan Cuti Baru</a>
             <br>
-            <!-- tabel list data-->
+            {{-- tabel list data--}}
 
             <div class="overflow-x-auto">
                 <table class="w-100">

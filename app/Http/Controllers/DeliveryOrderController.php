@@ -8,7 +8,9 @@ use App\Models\Product;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use App\Models\DeliveryOrder;
+use Illuminate\Support\Facades\DB;
 use App\Models\DeliveryOrderProduct;
+use Exception;
 use Illuminate\Support\Facades\Storage;
 
 class DeliveryOrderController extends Controller{
@@ -29,24 +31,91 @@ class DeliveryOrderController extends Controller{
         return view("pages.delivery-order.create", [
             "projects" => Project::where('archived', 0)->get(), // Semua data project (buat dropdown/select project)
             "delivery_orders" => DeliveryOrder::where('archived', 0)->get(), // Semua data delivery order (buat auto generate SKU)
+            "products" => Product::select('products.*', DB::raw('COALESCE(MIN(purchases.purchase_date), products.created_at) as ordering_date'))
+            ->leftJoin('purchase_products', 'products.id', '=', 'purchase_products.product_id') // Join with purchase_products
+            ->leftJoin('purchases', 'purchase_products.purchase_id', '=', 'purchases.id') // Join with purchases
+            ->where('products.archived', 0)->where('stock', '!=', 0)
+            ->groupBy(
+                'products.id',
+                'products.product_name',
+                'products.variant',
+                'products.product_code',
+                'products.price',
+                'products.discount',
+                'products.unit',
+                'products.stock',
+                'products.status',
+                'products.markup',
+                'products.condition',
+                'products.type',
+                'products.created_at',
+                'products.updated_at',
+                'products.archived'
+            )
+            ->orderBy('products.product_name', 'asc') // Group by product name
+            ->orderBy('products.variant', 'asc') // Then by variant
+            ->orderBy('ordering_date', 'asc') // Order by oldest purchase date or created_at
+            ->get()
+
         ]);
     }
 
     // Simpan data delivery order baru ke database
     public function store(Request $request)
     {
+        // return $request;
+
         // Validasi data, kalau ga lolos ga lanjut
-        $validatedData = $request->validate([
-            // "product_id" => "required",
+        $request->validate([
             "delivery_date"=>"required|date",
             "project_id" => "required",
-            "register" => "required|min:0|not_in:0",
+            "register" => "required",
             "delivery_status" => "required",
-            "note"=>"nullable"
+            "note" => "nullable",
+            "products.*" => "required",
+            "quantities.*" => "required",
         ]);
 
-        // Kalo data udah aman bikin dan tambahin data delivery order baru di tabel delivery_orders
-        DeliveryOrder::create($validatedData);
+        try {
+            DB::beginTransaction();
+
+            // Kalo data udah aman bikin dan tambahin data delivery order baru di tabel delivery_orders
+            $newDevor = DeliveryOrder::create([
+                'delivery_date' => $request->delivery_date,
+                'project_id' => $request->project_id,
+                'register' => $request->register,
+                'delivery_status' => $request->delivery_status,
+                'note' => $request->note
+            ]);
+
+            // Untuk setiap input produk yang dimasukkan, lakukan hal ini:
+            foreach($request->products as $index => $product_id){
+                // Tambahkan produk sebagai bagian dari cart delivery order dengan cara tambahkan data baru di tabel delivery_order_products di mana id referensi diarahkan ke data produk dan delivery order yang sesuai
+                DeliveryOrderProduct::create([
+                    "delivery_order_id" => $newDevor->id,
+                    "product_id" => $product_id,
+                    "quantity" => $request->quantities[$index],
+                ]);
+
+                // Karena delivery order sifatnya mengurangi stok produk, maka update stok product di tabel aslinya:
+                $oldstock = Product::find($product_id)->stock; // Ambil stok lama produk
+                $newstock = $oldstock - $request->quantities[$index]; // Stok yang baru
+
+                $toUpdate = ["stock" => $newstock]; // Simpen kolom data yang mau di-update by default
+                if($newstock == 0){ // Kalo ternyata jumlah produk jadi 0 statusnya juga di-update
+                    $toUpdate["status"] = "Out of Stock";
+                }
+
+                Product::find($product_id)->update($toUpdate); // Update datanya
+            };
+
+            DB::commit();
+        }
+        catch(Exception $e){
+            DB::rollback();
+
+            throw $e;
+        }
 
         // Arahkan user kembali ke halaman pages/delivery-order/index.blade.php
         return redirect(route("deliveryorder-index"))->with("successAddOrder", "Berhasil menambahkan pengiriman baru.");
@@ -61,6 +130,31 @@ class DeliveryOrderController extends Controller{
             "projects" => Project::where('archived', 0)->get(), // data semua project (buat dropdown/select project)
             "status"=> ["complete", "incomplete"], // buat dropdown status delivery order
             "delivery_orders" => DeliveryOrder::where('archived', 0)->get(), // data semua delivery order (buat auto generate SKU)
+            "products" => Product::select('products.*', DB::raw('COALESCE(MIN(purchases.purchase_date), products.created_at) as ordering_date'))
+            ->leftJoin('purchase_products', 'products.id', '=', 'purchase_products.product_id') // Join with purchase_products
+            ->leftJoin('purchases', 'purchase_products.purchase_id', '=', 'purchases.id') // Join with purchases
+            ->where('products.archived', 0)
+            ->groupBy(
+                'products.id',
+                'products.product_name',
+                'products.variant',
+                'products.product_code',
+                'products.price',
+                'products.discount',
+                'products.unit',
+                'products.stock',
+                'products.status',
+                'products.markup',
+                'products.condition',
+                'products.type',
+                'products.created_at',
+                'products.updated_at',
+                'products.archived'
+            )
+            ->orderBy('products.product_name', 'asc') // Group by product name
+            ->orderBy('products.variant', 'asc') // Then by variant
+            ->orderBy('ordering_date', 'asc') // Order by oldest purchase date or created_at
+            ->get()
         ]);
     }
 
@@ -68,17 +162,67 @@ class DeliveryOrderController extends Controller{
     public function update(Request $request, $id)
     {
         // Validasi data, kalo ga lolos ga lanjut
-        $validatedData = $request->validate([
+        $request->validate([
             "delivery_date"=>"required|date",
-            "project_id" => "required|min:1",
-            "register" => "required|min:0|not_in:0",
+            "project_id" => "required",
+            "register" => "required",
             "delivery_status" => "required",
-            "note"=>"nullable"
+            "note" => "nullable",
+            "products.*" => "required",
+            "quantities.*" => "required",
         ]);
 
+        try {
+            DB::beginTransaction();
 
-        // Kalo semuanya aman, update data delivery order tersebut di tabel delivery_orders
-        DeliveryOrder::find($id)->update($validatedData);
+            $devor = DeliveryOrder::find($id);
+
+            // Revert stock back
+            foreach($devor->delivery_order_products as $dop){
+                $product = Product::find($dop->product_id);
+                $product->stock += $dop->quantity;
+                $product->save();
+            }
+
+            $devor->delivery_order_products()->delete();
+
+            // Kalo semuanya aman, update data delivery order tersebut di tabel delivery_orders
+            $devor->update([
+                'delivery_date' => $request->delivery_date,
+                'project_id' => $request->project_id,
+                'register' => $request->register,
+                'delivery_status' => $request->delivery_status,
+                'note' => $request->note
+            ]);
+
+            // Untuk setiap input produk yang dimasukkan, lakukan hal ini:
+            foreach($request->products as $index => $product_id){
+                // Tambahkan produk sebagai bagian dari cart delivery order dengan cara tambahkan data baru di tabel delivery_order_products di mana id referensi diarahkan ke data produk dan delivery order yang sesuai
+                DeliveryOrderProduct::create([
+                    "delivery_order_id" => $devor->id,
+                    "product_id" => $product_id,
+                    "quantity" => $request->quantities[$index],
+                ]);
+
+                // Karena delivery order sifatnya mengurangi stok produk, maka update stok product di tabel aslinya:
+                $oldstock = Product::find($product_id)->stock; // Ambil stok lama produk
+                $newstock = $oldstock - $request->quantities[$index]; // Stok yang baru
+
+                $toUpdate = ["stock" => $newstock]; // Simpen kolom data yang mau di-update by default
+                if($newstock == 0){ // Kalo ternyata jumlah produk jadi 0 statusnya juga di-update
+                    $toUpdate["status"] = "Out of Stock";
+                }
+
+                Product::find($product_id)->update($toUpdate); // Update datanya
+            };
+
+            DB::commit();
+        }
+        catch(Exception $e){
+            DB::rollback();
+
+            throw $e;
+        }
 
         // Arahkan user kembali ke halaman pages/delivery-order/index.blade.php
         return redirect(route("deliveryorder-index"))->with("successEditOrder", "Berhasil memperbaharui data pengiriman.");
