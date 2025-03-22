@@ -16,7 +16,7 @@ class AccountController extends Controller
     public function index()
     {
         // Ambil semua data akun dari tabel user
-        $users = User::where('archived', 0)->get();
+        $users = User::all();
 
         // Tampilkan halaman account/index.blade.php dan kirimkan data semua akun ke blade-nya
         return view('accounts.index', compact('users'));
@@ -24,7 +24,7 @@ class AccountController extends Controller
 
     public function create(){
         return view('accounts.create', [
-            "employees" => Employee::where('archived', 0)->orderBy('nama', 'asc')->get()
+            "employees" => Employee::orderBy('nama', 'asc')->get()
         ]);
     }
 
@@ -65,7 +65,7 @@ class AccountController extends Controller
         // Tampilkan halaman accounts/edit.blade.php dan kirim data akun tersebut ke blade-nya
         return view("accounts.edit", [
             "user" => $user,
-            "employees" => Employee::where('archived', 0)->orderBy('nama', 'asc')->get()
+            "employees" => Employee::orderBy('nama', 'asc')->get()
         ]);
     }
 
@@ -111,7 +111,7 @@ class AccountController extends Controller
     public function destroy($id)
     {
         // Targetkan data akun yang mau dihapus sesuai dengan akun mana yang dipilih di halaman sebelumnya
-        User::find($id)->update(["archived" => 1]);
+        User::find($id)->delete();
 
         // Arahkan user kembali ke halaman accounts/index.blade.php
         return redirect()->route('account.index')->with("successDeleteAccount", "Berhasil menghapus akun.");

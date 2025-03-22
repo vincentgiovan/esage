@@ -157,13 +157,13 @@ class EmployeeController extends Controller
     }
 
     public function manage_form_delete_position($id){
-        Position::find($id)->update(["archived" => 1]);
+        Position::find($id)->delete();
 
         return back()->with("successDeletePosition", "Berhasil menghapus pilihan posisi.");
     }
 
     public function manage_form_delete_speciality($id){
-        Speciality::find($id)->update(["archived" => 1]);
+        Speciality::find($id)->delete();
 
         return back()->with("successDeletePosition", "Berhasil menghapus pilihan keahlian.");
     }

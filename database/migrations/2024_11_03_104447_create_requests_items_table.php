@@ -25,7 +25,7 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->unsignedInteger('archived')->default(0);
+
         });
     }
 

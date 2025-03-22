@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string("purchase_status");
             $table->foreign("partner_id")->references("id")->on("partners")->onDelete('cascade');
 
-            $table->unsignedInteger('archived')->default(0);
+
         });
     }
 

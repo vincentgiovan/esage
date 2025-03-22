@@ -11,24 +11,30 @@
             <div class="container rounded-4 p-4 bg-white border border-1 card mt-4">
                 <h4>Data Pengiriman</h4>
                 <div>
-                    <div class="mt-3">
-                        <label for="delivery_date">Tanggal Pengiriman</label>
-                        <input type="date" class="form-control @error("delivery_date") is-invalid @enderror" id="delivery_date" name="delivery_date" placeholder="delivery_date"  value="{{ Carbon\Carbon::today()->format('Y-m-d') }}">
+                    <div class="d-flex gap-3">
+                        <div class="mt-3 w-50">
+                            <label for="delivery_date">Tanggal Pengiriman</label>
+                            <input type="date" class="form-control @error("delivery_date") is-invalid @enderror" id="delivery_date" name="delivery_date" placeholder="delivery_date"  value="{{ Carbon\Carbon::today()->format('Y-m-d') }}">
+                            <p class="invalid-feedback">Harap masukkan tanggal pengiriman</p>
+                        </div>
+
+                        <div class="mt-3 w-50">
+                            <label for="project_id">Proyek</label>
+                            <select name="project_id" class="form-select select2" id="project_id">
+                                @foreach ($projects as $pn)
+                                    <option value="{{ $pn->id}}">{{ $pn->project_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="mt-3">
-                        <label for="project_id">Proyek</label>
-                        <select name="project_id" class="form-select select2" id="project_id">
-                            @foreach ($projects as $pn)
-                                <option value="{{ $pn->id}}">{{ $pn->project_name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="mt-3">
-                        <label for="_register">SKU</label>
-                        <input type="text" class="form-control" id="_register" name="_register" placeholder="(Dibuat otomatis oleh sistem)"  value="{{ __('DO/' . Carbon\Carbon::today()->format('dmY') . '/' . $delivery_orders->where('delivery_date', Carbon\Carbon::today()->format('Y-m-d'))->count() + 1) }}" disabled>
-                        <input type="hidden" name="register" id="register" value="{{ __('DO/' . Carbon\Carbon::today()->format('dmY') . '/' . $delivery_orders->where('delivery_date', Carbon\Carbon::today()->format('Y-m-d'))->count() + 1) }}">
+                    <div class="d-flex gap-3">
+                        <div class="mt-3 w-50">
+                            <label for="_register">SKU</label>
+                            <input type="text" class="form-control" id="_register" name="_register" placeholder="(Dibuat otomatis oleh sistem)"  value="{{ __('DO/' . Carbon\Carbon::today()->format('dmY') . '/' . $delivery_orders->where('delivery_date', Carbon\Carbon::today()->format('Y-m-d'))->count() + 1) }}" disabled>
+                            <input type="hidden" name="register" id="register" value="{{ __('DO/' . Carbon\Carbon::today()->format('dmY') . '/' . $delivery_orders->where('delivery_date', Carbon\Carbon::today()->format('Y-m-d'))->count() + 1) }}">
+                        </div>
+                        <div class="mt-3 w-50"></div>
                     </div>
 
                     <div class="mt-3">
@@ -105,25 +111,6 @@
     </x-container>
 
     <script>
-        function reinitializeselect2(){
-			// select-2 initialization
-			$('.select2').select2({
-				allowClear: false
-			});
-
-			// Apply resize observer to each container with class 'container-select2'
-			$('.container-select2').each(function () {
-				const container = this;
-				const resizeObserver = new ResizeObserver(() => {
-					$(container).find('.select2').each(function () {
-						$(this).select2('destroy').select2({
-							allowClear: false
-						});
-					});
-				});
-			});
-		}
-
         function formatNumber(number) {
             return new Intl.NumberFormat('de-DE', {
                 minimumFractionDigits: 2,
@@ -163,7 +150,7 @@
             $('#add-row-btn').on('click', function(){
                 const newProdSel = $('<select>').attr('name', 'products[]').addClass('form-select select2');
                 allproducts.forEach(prod => {
-                    newProdSel.append($('<option>').attr('value', prod.id).text(`${prod.product_name} - ${prod.variant} (Harga: Rp ${formatCurrency(prod.price)}, Stok: ${[prod.stock]}, Diskon: ${prod.discount}) [Tgl beli: ${formatDate(prod.ordering_date)}]`));
+                    newProdSel.append($('<option>').attr('value', prod.id).text(`${prod.product_name} - ${prod.variant} (Harga: Rp ${formatCurrency(prod.price)}, Stok: ${[prod.stock]}, Diskon: ${prod.discount}%) [Tgl beli: ${formatDate(prod.ordering_date)}]`));
                 });
 
                 $('#isibody').append(
@@ -190,7 +177,7 @@
                 // Hitung berapa data delivery order yang punya delivery_date yang sama
                 let n = 0;
                 for(let delord of alldeliveryorderdata) {
-                    if(delord.delivery_date == delivery_date.value){
+                    if(delord.delivery_date == $(this).val()){
                         n++;
                     }
                 }
@@ -201,6 +188,7 @@
 
                 // Generate SKU dan masukin hasilnya langsung ke input fakeregister (yang tampil di user)
                 const generatedsku = "DO/"+ formattedDate +"/"+ (n + 1);
+                $('#_register').val(generatedsku);
                 $('#register').val(generatedsku);
             });
 
@@ -208,9 +196,7 @@
                 $('input, select').removeClass('is-invalid');
 
                 // Validations
-                const inpProject = $('#project_id');
                 const inpDeliveryDate = $('#delivery_date');
-                const inpProductNames = $('select[name="products[]"]');
 
                 let inputError = false;
 

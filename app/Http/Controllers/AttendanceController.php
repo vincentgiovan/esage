@@ -24,7 +24,7 @@ class AttendanceController extends Controller
 
         return view("pages.attendance.index", [
             "attendances" => $attendances,
-            "projects" => Project::where('archived', 0)->get()
+            "projects" => Project::all()
         ]);
     }
 
@@ -320,8 +320,8 @@ class AttendanceController extends Controller
     public function edit($id){
         return view("pages.attendance.edit", [
             "attendance" => Attendance::find($id),
-            "projects" => Project::where('archived', 0)->get(),
-            "employees" => Employee::where('archived', 0)->get()
+            "projects" => Project::all(),
+            "employees" => Employee::all()
         ]);
     }
 
@@ -345,7 +345,7 @@ class AttendanceController extends Controller
     }
 
     public function destroy($id){
-        Attendance::find($id)->update(["archived" => 1]);
+        Attendance::find($id)->delete();
 
         return redirect(route("attendance-index"))->with("successDeleteAttendance", "Berhasil menghapus data presensi.");
     }

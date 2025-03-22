@@ -21,7 +21,7 @@ class PDFController extends Controller
     public function export_product($mode)
     {
         $data = [
-            "products" => Product::where('archived', 0)->get()
+            "products" => Product::all()
         ];
 
         $pdf = Pdf::loadView('pdf.allproduct', $data)->setPaper("a4", ($mode == 1)? "landscape" : "portrait");
@@ -69,7 +69,7 @@ class PDFController extends Controller
     // Export semua delvery order
     public function export_deliveryorder($mode){
         // Targetkan delivery order semua
-        $deliveryorders = DeliveryOrder::where('archived', 0)->get();
+        $deliveryorders = DeliveryOrder::all();
 
         $data = [
             "deliveryorders" => $deliveryorders, // list product yang tercatat di delivery order yang ingin dicek cart-nya
@@ -82,7 +82,7 @@ class PDFController extends Controller
 
     public function export_purchase($mode){
         // Targetkan delivery order semua
-        $purchases = Purchase::where('archived', 0)->get();
+        $purchases = Purchase::all();
 
         $data = [
             "purchases" => $purchases, // list product yang tercatat di delivery order yang ingin dicek cart-nya
@@ -95,7 +95,7 @@ class PDFController extends Controller
 
     public function export_partner($mode){
         // Targetkan delivery order semua
-        $partners = Partner::where('archived', 0)->get();
+        $partners = Partner::all();
 
         $data = [
             "partners" => $partners, // list product yang tercatat di delivery order yang ingin dicek cart-nya
@@ -108,7 +108,7 @@ class PDFController extends Controller
 
     public function export_project($mode){
         // Targetkan delivery order semua
-        $projects = Project::where('archived', 0)->get();
+        $projects = Project::all();
 
         $data = [
             "projects" => $projects, // list product yang tercatat di delivery order yang ingin dicek cart-nya

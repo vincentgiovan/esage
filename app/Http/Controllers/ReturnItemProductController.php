@@ -24,7 +24,7 @@ class ReturnItemProductController extends Controller
     public function add_list($id){
         return view('pages.transit.returnitemproduct.addnewitem', [
             'return_item' => ReturnItem::find($id),
-            'products' => Product::where('archived', 0)->get()
+            'products' => Product::all()
         ]);
     }
 

@@ -20,14 +20,14 @@ use PhpParser\Node\Stmt\Return_;
 class ReturnItemController extends Controller {
     public function index(){
         return view("pages.return-item.index", [
-            "return_items" => ReturnItem::where('archived', 0)->get()
+            "return_items" => ReturnItem::orderBy('return_date', 'desc')->get()
         ]);
     }
 
     public function create(){
         return view("pages.return-item.create", [
-            "projects" => Project::where('archived', 0)->get(),
-            "products" => Product::where('archived', 0)->get()
+            "projects" => Project::all(),
+            "products" => Product::all()
         ]);
     }
 
@@ -48,8 +48,8 @@ class ReturnItemController extends Controller {
     public function edit($id){
         return view("pages.return-item.edit", [
             "return_item" => ReturnItem::find($id),
-            "projects" => Project::where('archived', 0)->get(),
-            "products" => Product::where('archived', 0)->get()
+            "projects" => Project::all(),
+            "products" => Product::all()
         ]);
     }
 
@@ -100,11 +100,11 @@ class ReturnItemController extends Controller {
         if($return_item->quantity < $existingReturnedProduct->stock){
             $prevStock = $existingReturnedProduct->stock;
             $existingReturnedProduct->update(["stock" => $prevStock - $return_item->quantity]);
-            $return_item->update(["archived" => 1]);
+            $return_item->delete();
         }
         else {
-            $existingReturnedProduct->update(["archived" => 1]);
-            $return_item->update(["archived" => 1]);
+            $existingReturnedProduct->delete();
+            $return_item->delete();
         }
 
         return redirect(route("returnitem-index"))->with("successDeleteReturnItem", "Berhasil menghapus data pengembalian barang.");

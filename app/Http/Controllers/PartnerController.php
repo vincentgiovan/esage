@@ -15,7 +15,7 @@ class PartnerController extends Controller{
     {
         // Tampilkan halaman pages/partner/index.blade.php beserta data yang diperlukan di blade-nya:
         return view("pages.partner.index", [
-            "partners" => Partner::where('archived', 0)->get() // semua data partner buat ditampilin satu-satu di tabel
+            "partners" => Partner::all() // semua data partner buat ditampilin satu-satu di tabel
         ]);
     }
 
@@ -85,7 +85,7 @@ class PartnerController extends Controller{
     // Hapus partner dari database
     public function destroy($id){
         // Hapus data partner dari tabel partners yang punya id sama kayak data yang mau dihapus
-        Partner::find($id)->update(["archived" => 1]);
+        Partner::find($id)->delete();
 
         // Arahkan user kembali ke halaman pages/partner/index.blade.php
         return redirect(route("partner-index"))->with("successDeletePartner", "Berhasil menghapus data partner.");

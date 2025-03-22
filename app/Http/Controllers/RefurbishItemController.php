@@ -16,7 +16,7 @@ class RefurbishItemController extends Controller
 
     public function create(){
         return view('pages.refurbish-item.create', [
-            'products' => Product::where('condition', 'degraded')->where('stock', '>', 0)->where('archived', 0)->get()
+            'products' => Product::where('condition', 'degraded')->where('stock', '>', 0)->orderBy('refurbish_date', 'desc')->get()
         ]);
     }
 
@@ -86,7 +86,7 @@ class RefurbishItemController extends Controller
     public function edit($id){
         // return view('pages.refurbish-item.edit', [
         //     'refurbish_item' => RefurbishItem::find($id),
-        //     'products' => Product::where('condition', 'degraded')->where('stock', '>', 0)->where('archived', 0)->get()
+        //     'products' => Product::where('condition', 'degraded')->where('stock', '>', 0)->get()
         // ]);
     }
 

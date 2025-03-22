@@ -22,7 +22,7 @@ return new class extends Migration
             $table->longText("address");
             $table->string("RAB");
 
-            $table->unsignedInteger('archived')->default(0);
+
 
             $table->timestamps();
         });

@@ -20,7 +20,7 @@ class PurchaseController extends Controller
     {
         // Tampilkan halaman pages/purchase/index.blade.php beserta data yang diperlukan di blade-nya:
         return view("pages.purchase.index", [
-            "purchases" => Purchase::where('archived', 0)->get() // semua data purchases buat ditampilin satu-satu
+            "purchases" => Purchase::orderBy('purchase_date', 'desc')->get() // semua data purchases buat ditampilin satu-satu
         ]);
     }
 
@@ -29,8 +29,9 @@ class PurchaseController extends Controller
     {
         // Tampilkan halaman pages/purchase/create.blade.php dan data-data yang diperlukan di blade-nya:
         return view("pages.purchase.create", [
-            "supplier" => Partner::where('archived', 0)->get(), // data semua partner (supplier) untuk dropdown/select partner
-            "purchases" => Purchase::where('archived', 0)->get() // data semua purchase untuk auto generate SKU
+            "supplier" => Partner::all(), // data semua partner (supplier) untuk dropdown/select partner
+            "purchases" => Purchase::all(), // data semua purchase untuk auto generate SKU
+            "products" => Product::orderBy('product_name', 'asc')->orderBy('variant', 'asc')->get()
         ]);
     }
 
@@ -59,8 +60,8 @@ class PurchaseController extends Controller
         // Tampilkan halaman pages/purchase/edit.blade.php beserta data yang diperlukan di blade-nya:
         return view("pages.purchase.edit", [
             "purchase" => Purchase::find($id), // data purchase yang mau di-edit buat auto fill form
-            "supplier" => Partner::where('archived', 0)->get(), // data semua partner (supplier) buat dropdown/select partner
-            "purchases" => Purchase::where('archived', 0)->get() // data semua purchase untuk auto generate SKU
+            "supplier" => Partner::all(), // data semua partner (supplier) buat dropdown/select partner
+            "purchases" => Purchase::all() // data semua purchase untuk auto generate SKU
         ]);
     }
 
@@ -99,7 +100,7 @@ class PurchaseController extends Controller
         }
 
         // Hapus data purchase dari tabel purchases
-        Purchase::find($id)->update(["archived" => 1]);
+        Purchase::find($id)->delete();
 
         // Arahkan user kembali ke halaman pages/purchase/index.blade.php
         return redirect(route("purchase-index"))->with("successDeletePurchase", "Berhasil menghapus data pengiriman.");

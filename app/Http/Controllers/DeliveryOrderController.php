@@ -20,7 +20,7 @@ class DeliveryOrderController extends Controller{
     {
         // Tampilkan halaman pages/delivery-order/index.blade.php beserta data yang diperlukan di blade-nya
         return view("pages.delivery-order.index", [
-            "deliveryorders" => DeliveryOrder::where('archived', 0)->get() // Semua data delivery orders (buat ditampilin satu satu di tabel)
+            "deliveryorders" => DeliveryOrder::orderBy('delivery_date', 'desc')->get() // Semua data delivery orders (buat ditampilin satu satu di tabel)
         ]);
     }
 
@@ -29,12 +29,12 @@ class DeliveryOrderController extends Controller{
     {
         // Tampilkan halaman pages/delivery-order/create.blade.php beserta data yang diperlukan di blade-nya
         return view("pages.delivery-order.create", [
-            "projects" => Project::where('archived', 0)->get(), // Semua data project (buat dropdown/select project)
-            "delivery_orders" => DeliveryOrder::where('archived', 0)->get(), // Semua data delivery order (buat auto generate SKU)
+            "projects" => Project::all(), // Semua data project (buat dropdown/select project)
+            "delivery_orders" => DeliveryOrder::all(), // Semua data delivery order (buat auto generate SKU)
             "products" => Product::select('products.*', DB::raw('COALESCE(MIN(purchases.purchase_date), products.created_at) as ordering_date'))
             ->leftJoin('purchase_products', 'products.id', '=', 'purchase_products.product_id') // Join with purchase_products
             ->leftJoin('purchases', 'purchase_products.purchase_id', '=', 'purchases.id') // Join with purchases
-            ->where('products.archived', 0)->where('stock', '!=', 0)
+            ->where('stock', '!=', 0)
             ->groupBy(
                 'products.id',
                 'products.product_name',
@@ -50,7 +50,6 @@ class DeliveryOrderController extends Controller{
                 'products.type',
                 'products.created_at',
                 'products.updated_at',
-                'products.archived'
             )
             ->orderBy('products.product_name', 'asc') // Group by product name
             ->orderBy('products.variant', 'asc') // Then by variant
@@ -127,13 +126,12 @@ class DeliveryOrderController extends Controller{
         // Tampilkan halaman pages/deliver-order/edit.blade.php beserta data-data yang diperlukan di blade-nya
         return view("pages.delivery-order.edit", [
             "delivery_order" => DeliveryOrder::find($id), // data delivery order yang mau di-edit buat nanti auto fill di form edit
-            "projects" => Project::where('archived', 0)->get(), // data semua project (buat dropdown/select project)
+            "projects" => Project::all(), // data semua project (buat dropdown/select project)
             "status"=> ["complete", "incomplete"], // buat dropdown status delivery order
-            "delivery_orders" => DeliveryOrder::where('archived', 0)->get(), // data semua delivery order (buat auto generate SKU)
+            "delivery_orders" => DeliveryOrder::all(), // data semua delivery order (buat auto generate SKU)
             "products" => Product::select('products.*', DB::raw('COALESCE(MIN(purchases.purchase_date), products.created_at) as ordering_date'))
             ->leftJoin('purchase_products', 'products.id', '=', 'purchase_products.product_id') // Join with purchase_products
             ->leftJoin('purchases', 'purchase_products.purchase_id', '=', 'purchases.id') // Join with purchases
-            ->where('products.archived', 0)
             ->groupBy(
                 'products.id',
                 'products.product_name',
@@ -149,7 +147,6 @@ class DeliveryOrderController extends Controller{
                 'products.type',
                 'products.created_at',
                 'products.updated_at',
-                'products.archived'
             )
             ->orderBy('products.product_name', 'asc') // Group by product name
             ->orderBy('products.variant', 'asc') // Then by variant
@@ -244,7 +241,7 @@ class DeliveryOrderController extends Controller{
         }
 
         // Jika setiap product yang terkait sudah dikembalikan ke semula stoknya kita baru hapus data delivery order dari tabel delivery_orders
-        DeliveryOrder::find($id)->update(["archived" => 1]);
+        DeliveryOrder::find($id)->delete();
 
         // Arahkan user kembali ke halaman pages/delivery-order/index.blade.php
         return redirect(route("deliveryorder-index"))->with("successDeleteOrder", "Berhasil menghapus data pengiriman.");

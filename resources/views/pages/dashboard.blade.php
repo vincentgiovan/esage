@@ -53,7 +53,7 @@
         {{-- Summary --}}
         {{-- Gaboleh muncul di project manager --}}
         @if(!in_array(Auth::user()->role->role_name, ['project_manager']))
-            <div class="d-flex align-items-stretch justify-content-between w-100 mb-4">
+            <div class="d-flex align-items-stretch justify-content-between w-100 mb-4 mt-4">
                 <div style="width: 18%;">
                     <div class="card">
                         <div class="card-body">

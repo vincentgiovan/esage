@@ -49,7 +49,7 @@ class SalaryController extends Controller
         return view("pages.salary.index", [
             "attendances" => $attendances,
             "subtotals" => $subtotals,
-            "projects" => Project::where('archived', 0)->get()
+            "projects" => Project::all()
         ]);
     }
 

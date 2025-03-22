@@ -13,8 +13,8 @@ class RequestItemController extends Controller
 {
     public function index(){
         return view("pages.request-item.index", [
-            "awaiting_requests" => RequestItem::where('status', 'awaiting')->where('archived', 0)->orderBy('request_date', 'desc')->get(),
-            "unawaiting_requests" => RequestItem::whereNot('status', 'awaiting')->where('archived', 0)->orderBy('request_date', 'desc')->get()
+            "awaiting_requests" => RequestItem::where('status', 'awaiting')->orderBy('request_date', 'desc')->get(),
+            "unawaiting_requests" => RequestItem::whereNot('status', 'awaiting')->orderBy('request_date', 'desc')->get()
         ]);
     }
 
@@ -27,8 +27,8 @@ class RequestItemController extends Controller
 
     public function create(){
         return view("pages.request-item.create", [
-            "projects" => Project::where('archived', 0)->get(),
-            "products" => Product::whereNot('condition', 'degraded')->where('archived', 0)->get()
+            "projects" => Project::all(),
+            "products" => Product::whereNot('condition', 'degraded')->get()
         ]);
     }
 
@@ -61,8 +61,8 @@ class RequestItemController extends Controller
             return view("pages.request-item.edit", [
                 "request_item" => RequestItem::find($id),
                 "rip" => RequestItemProduct::where("request_item_id", $id)->get(),
-                "projects" => Project::where('archived', 0)->get(),
-                "products" => Product::where('archived', 0)->get()
+                "projects" => Project::all(),
+                "products" => Product::all()
             ]);
         }
     }
@@ -112,7 +112,7 @@ class RequestItemController extends Controller
             return back();
         }
         else {
-            $reqit->update(["archived" => 1]);
+            $reqit->delete();
             return redirect(route("requestitem-index"))->with("successDeleteRequest", "Berhasil menghapus data request barang.");
         }
     }

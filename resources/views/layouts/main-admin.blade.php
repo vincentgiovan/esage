@@ -8,8 +8,6 @@
         <title>eSage</title>
 
         {{-- Style punya template halaman --}}
-        {{-- <link rel="stylesheet" href="{{ asset("vendors/ti-icons/css/themify-icons.css") }}">
-        <link rel="stylesheet" href="{{ asset("template/vendors/base/vendor.bundle.base.css") }}">  --}}
         <link rel="stylesheet" href="{{ asset("template/css/style.css") }}">
 
         {{-- Bootstrap CSS & icon --}}
@@ -18,7 +16,6 @@
 
         {{-- Original asset --}}
         <link rel="shortcut icon" href="{{ asset("res/sageico.ico") }}" />
-        {{-- <link rel="stylesheet" href="style.css"> --}}
 
         {{-- Custom styles --}}
         <style>
@@ -26,11 +23,6 @@
                 background-color: white;
                 font-size: 11pt;
             }
-
-            /* button[type="button"], button[type="submit"]:hover {
-                background-color: gray;
-                border-color: gray;
-            } */
 
             table th, td{
                 padding: 5px 10px;
@@ -47,8 +39,8 @@
             }
 
             .select2-selection__arrow {
-				margin-top: 5px;
-				margin-right: 10px;
+				margin-top: 5px !important;
+				margin-right: 10px !important;
 			}
 
             button#sidebarToggler {
@@ -72,13 +64,17 @@
                 width: 15%;
             }
 
-
             .nav-link:hover{
                 background-color: rgb(100, 100, 100);
             }
 
             input:disabled, select:disabled, textarea:disabled {
                 cursor: not-allowed;
+            }
+
+            .form-control, .form-select {
+                border-width: 2px !important;
+                border-color: rgb(169, 169, 169) !important;
             }
 
             @media screen and (max-width: 600px) {
@@ -122,8 +118,8 @@
                 @endauth
 
                 {{-- Main --}}
-                <div class="d-flex flex-column" id="main-content-div" style="min-height: 100vh; padding-left: 0;">
-                    <div class="content-wrapper d-flex flex-column bg-light" style="width: 100%;">
+                <div class="d-flex flex-column justify-content-between" id="main-content-div" style="min-height: 100vh; padding-left: 0;">
+                    <div class="content-wrapper d-flex flex-column bg-light p-4" style="width: 100%;">
                         @if(!Request::is("dashboard"))
                             <div class="d-flex gap-2 flex-wrap align-items-start fs-6">
                                 <a href="{{ route('dashboard') }}" class="text-decoration-none fw-semibold">Dashboard</a>
@@ -164,19 +160,24 @@
 
         {{-- Custom javascript --}}
         <script>
-            $(document).ready(() => {
-                // Buat ngubah dropdown select product jadi select2 (yang ada fitur searchnya) dan sedikit styling
+            function reinitializeselect2(){
+                // select-2 initialization
                 $('.select2').select2({
-                    placeholder: "Select an Item",
                     allowClear: false
                 });
 
                 $('.select2').next('.select2-container').find('.select2-selection').css({
                     "height": "2.4rem",
                     "padding-top": "0.3rem",
-                    "border": "#dee2e6 solid 1px",
-                    "width": "100%"
+                    "border": "rgb(169, 169, 169) solid 2px",
+                    "width": "100%",
+                    "border-radius": "6px"
                 });
+            }
+
+            $(document).ready(() => {
+                // Buat ngubah dropdown select product jadi select2 (yang ada fitur searchnya) dan sedikit styling
+                reinitializeselect2();
 
                 // Sidebar toggle
                 $("#sidebarToggler").click(() => {
