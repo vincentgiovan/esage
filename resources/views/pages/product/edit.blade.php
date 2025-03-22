@@ -60,7 +60,7 @@
                     @enderror
                 </div>
 
-                <div class="mt-3">
+                {{-- <div class="mt-3">
                     <label for="status">Status</label>
                     <select name="status" id="status" class="form-select"
                         @if(in_array(Auth::user()->role->role_name, ['purchasing_admin'])) disabled @endif>
@@ -68,6 +68,21 @@
                         <option value="Ready" @if(old('status', $product->status) == 'Ready') selected @endif>Tersedia</option>
                         <option value="Out of Stock" @if(old('status', $product->status) == 'Out of Stock') selected @endif>Stok kosong</option>
                     </select>
+                </div> --}}
+
+                <div class="mt-3">
+                    <label>Status</label>
+
+                    <div class="d-flex gap-3">
+                        <div class="d-flex gap-2 rounded-3 py-2">
+                            <input class="form-check-input" type="radio" name="status" id="status1" value="Ready" @if(old('status', $product->status) == "Ready") checked @endif checked @if(in_array(Auth::user()->role->role_name, ['purchasing_admin', 'gudang'])) disabled @endif>
+                            <label class="form-check-label" for="status1">Tersedia</label>
+                        </div>
+                        <div class="d-flex gap-2 rounded-3 py-2">
+                            <input class="form-check-input" type="radio" name="status" id="status2" value="Out of Stock" @if(old('status', $product->status) == "Out of Stock") checked @endif @if(in_array(Auth::user()->role->role_name, ['purchasing_admin', 'gudang'])) disabled @endif>
+                            <label class="form-check-label" for="status2">Stok Kosong</label>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="mt-3">
@@ -93,7 +108,7 @@
                         @if(in_array(Auth::user()->role->role_name, ['gudang'])) disabled @endif/>
 
                     @error('markup')
-                        <p class="text-danger">{{ $message }}</p>
+                        <p class="text-danger">Harap masukkan nilai minimal 0. Gunakan tanda titik untuk desimal.</p>
                     @enderror
                 </div>
 
@@ -102,11 +117,11 @@
                     <input type="text" class="form-control @error('discount') is-invalid @enderror" name="discount" id="discount" placeholder="Diskon"
                         value="{{ old('discount', $product->discount) }}">
                     @error('discount')
-                        <p class="text-danger">Harap masukkan nilai minimal 0.</p>
+                        <p class="text-danger">Harap masukkan nilai minimal 0. Gunakan tanda titik untuk desimal.</p>
                     @enderror
                 </div>
 
-                <div class="mt-3">
+                {{-- <div class="mt-3">
                     <label for="type">Jenis Barang</label>
                     <select class="form-select @error('type') is-invalid @enderror" name="type" id="type">
                         <option value="fast moving" @if(old('type', $product->condition) == 'fast moving') selected @endif>Fast Moving</option>
@@ -115,6 +130,21 @@
                     @error('type')
                         <p class="text-danger">{{ $message }}</p>
                     @enderror
+                </div> --}}
+
+                <div class="mt-3">
+                    <label>Jenis Barang</label>
+
+                    <div class="d-flex gap-3">
+                        <div class="d-flex gap-2 rounded-3 py-2">
+                            <input class="form-check-input" type="radio" name="type" id="type1" value="fast moving" @if(old('type', $product->type) == "fast moving") checked @endif checked>
+                            <label class="form-check-label" for="type1">Fast Moving</label>
+                        </div>
+                        <div class="d-flex gap-2 rounded-3 py-2">
+                            <input class="form-check-input" type="radio" name="type" id="type2" value="asset" @if(old('type', $product->type) == "asset") checked @endif>
+                            <label class="form-check-label" for="type2">Asset</label>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="mt-4">

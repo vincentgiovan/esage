@@ -13,7 +13,7 @@
                     <input type="text" class="form-control @error('project_name') is-invalid @enderror" id="project_name" name="project_name" placeholder="Nama proyek"
                         value="{{ old('project_name') }}">
                     @error('project_name')
-                        <p class="text-danger">{{ $message }}</p>
+                        <p class="text-danger">Harap masukkan nama proyek.</p>
                     @enderror
                 </div>
 
@@ -22,7 +22,7 @@
                     <input type="text" class="form-control @error('location') is-invalid @enderror" id="location" name="location" placeholder="Lokasi"
                         value="{{ old('location') }}">
                     @error('location')
-                        <p class="text-danger">{{ $message }}</p>
+                        <p class="text-danger">Harap masukkan lokasi proyek.</p>
                     @enderror
                 </div>
 
@@ -31,7 +31,7 @@
                     <input type="text" class="form-control @error('PIC') is-invalid @enderror" id="PIC" name="PIC" placeholder="PIC"
                         value="{{ old('PIC') }}">
                     @error('PIC')
-                        <p class="text-danger">{{ $message }}</p>
+                        <p class="text-danger">Harap masukkan nama PIC proyek.</p>
                     @enderror
                 </div>
 
@@ -40,7 +40,7 @@
                     <input type="text" class="form-control @error('address') is-invalid @enderror" id="address" name="address" placeholder="Alamat proyek"
                         value="{{ old('address') }}">
                     @error('address')
-                        <p class="text-danger">{{ $message }}</p>
+                        <p class="text-danger">Harap masukkan alamat proyek.</p>
                     @enderror
                 </div>
 
@@ -49,7 +49,7 @@
                     <input type="text" class="form-control @error('RAB') is-invalid @enderror" id="RAB" name="RAB" placeholder="Nomor RAB"
                         value="{{ old('RAB') }}">
                     @error('RAB')
-                        <p class="text-danger">{{ $message }}</p>
+                        <p class="text-danger">Harap masukkan nomor RAB.</p>
                     @enderror
                 </div>
 

@@ -83,6 +83,7 @@ class PurchaseProductController extends Controller
                     "unit" => $lastprod->unit,
                     "discount" => $request->discounts[$index],
                     'condition' => 'good',
+                    'type' => $lastprod->type,
                 ]);
 
                 PurchaseProduct::create([
@@ -127,7 +128,7 @@ class PurchaseProductController extends Controller
         // Tampilkan halaman pages/transit/purchaseproduct/addnewitem.blade.php beserta data yang diperlukan di blade-nya:
         return view("pages.transit.purchaseproduct.addnewitem", [
             "purchase" => $purchase, // data purchase yang ingin ditambahkan cart-nya
-            "products" => Product::where('archived', 0)->where('is_returned', 'no')->get()
+            "products" => Product::where('archived', 0)->get()
         ]);
     }
 
@@ -136,15 +137,16 @@ class PurchaseProductController extends Controller
     {
         // Validasi data, pastiin ga dikirim data kosong
         $request->validate([
-            "product_name" => "required",
-            "unit" => "required",
-            "status" => "required",
-            "variant" => "required",
-            "product_code" => "required",
-            "price" => "required",
-            "markup" => "required",
-            "stock" => "required",
-            "discount" => "required"
+            "product_name.*" => "required",
+            "unit.*" => "required",
+            "status.*" => "required",
+            "variant.*" => "required",
+            "product_code.*" => "required",
+            "price.*" => "required",
+            "markup.*" => "required",
+            "stock.*" => "required",
+            "discount.*" => "required",
+            "type.*" => "required"
         ]);
 
         // Targetkan purchase yang cart-nya mau ditambahin
@@ -162,6 +164,8 @@ class PurchaseProductController extends Controller
                 "price" => $request->price[$index],
                 "markup" => $request->markup[$index],
                 "stock" => $request->stock[$index],
+                "type" => $request->type[$index],
+                "condition" => "good",
             ]);
 
             // Tambahkan data ke tabel purchase_product di mana id product sama dengan yang dibuat dan purchase sama dengan target cart purchase

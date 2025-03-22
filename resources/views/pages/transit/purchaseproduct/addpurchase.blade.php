@@ -20,19 +20,19 @@
 
                     <div class="mt-3">
                         <label for="price">Harga</label>
-                        <input type="number" class="form-control" name="price" id="price"  placeholder="Price"  value = "{{ old("price") }}">
+                        <input type="number" class="form-control" name="price" id="price"  placeholder="Price"  value="0">
                         <p class="text-danger" id="errPrice"></p>
                     </div>
 
                     <div class="mt-3">
                         <label for="discount">Diskon</label>
-                        <input type="number" class="form-control" name="discount"  id="discount" placeholder="Diskon"  value = "{{ old("discount") }}">
+                        <input type="text" class="form-control" name="discount"  id="discount" placeholder="Diskon" value="0">
                         <p class="text-danger" id="errDiscount"></p>
                     </div>
 
                     <div class="mt-3">
                         <label for="quantity">Jumlah</label>
-                        <input type="number" class="form-control" name="quantity" id="quantity"  placeholder="Quantity" value = "{{ old("quantity")}}">
+                        <input type="number" class="form-control" name="quantity" id="quantity"  placeholder="Quantity" value="0">
                         <p class="text-danger" id="errQuantity"></p>
                     </div>
 
@@ -60,16 +60,7 @@
                 {{-- @csrf kepake untuk token ,wajib --}}
                     @csrf
 
-                    <div class="mt-3">
-                        <input type="submit" class="btn btn-success px-3 py-1" value="Simpan">
-                    </div>
-                    @error("prices")
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                    <br>
-                    @error("quantities")
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
+                    <button class="btn btn-success" type="submit">Simpan</button>
                 </form>
 
         </div>
@@ -115,7 +106,7 @@
             let inputAman = true; // Status apakah sudah terjadi kesalahan input atau belum
 
             // Kalau input price kosong atau nilainya di bawah 1 maka mark merah input dan tampilkan pesan error
-            if(!input2.value && input2.value < 1){
+            if(!input2.value || input2.value < 1){
                 input2.classList.add("is-invalid");
                 errPrice.innerText = "Harap masukkan nilai minimal 1.";
 
@@ -123,12 +114,13 @@
             }
 
             // Kalau input diskon kosong maka mark merah input dan tampilkan pesan error
-            if(!input3.value){
-                input3.value = 0;
+            if(!input3.value || input3.value < 0){
+                input3.classList.add("is-invalid");
+                errDiscount.innerText = "Harap masukkan nilai minimal 0. Gunakan tanda titik untuk desimal.";
             }
 
             // Kalau input quantity kosong atau nilainya di bawah 1 maka mark merah input dan tampilkan pesan error
-            if(!input4.value && input4.value < 1){
+            if(!input4.value || input4.value < 1){
                 input4.classList.add("is-invalid");
                 errQuantity.innerText = "Harap masukkan nilai minimal 1.";
 
@@ -208,6 +200,17 @@
                 confirmationForm.removeChild(susInput3);
                 confirmationForm.removeChild(susInput4);
             });
+        });
+
+        $('#peon').on('submit', function(){
+            if($('#isibody').find('tr').length > 0){
+                this.submit();
+            }
+            else {
+                alert('Anda belum memasukkan data sama sekali.');
+
+                return false;
+            }
         });
     </script>
 

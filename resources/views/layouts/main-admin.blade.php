@@ -193,18 +193,12 @@
                         }
                     });
                 });
+
+                $('input[type=date]').on('click', function(){
+                    this.showPicker();
+                });
             });
         </script>
-
-        <!-- Template halaman -->
-        {{-- <script src="{{ asset("template/vendors/base/vendor.bundle.base.js") }}"></script>
-        <script src="{{ asset("template/vendors/chart.js/Chart.min.js") }}"></script>
-        <script src="{{ asset("template/js/jquery.cookie.js") }}" type="text/javascript"></script>
-        <script src="{{ asset("template/js/off-canvas.js") }}"></script>
-        <script src="{{ asset("template/js/hoverable-collapse.js") }}"></script>
-        <script src="{{ asset("template/js/template.js") }}"></script>
-        <script src="{{ asset("template/js/todolist.js") }}"></script>
-        <script src="{{ asset("template/js/dashboard.js") }}"></script> --}}
 
         <!-- Include Select2 JavaScript -->
 		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>

@@ -40,7 +40,7 @@ class ProductController extends Controller{
                 'originals' => $group
             ];
         });
-        
+
         // ->flatMap(function ($item) {
         //     // Flatten each group to include the grouped product followed by originals
         //     return $item['originals']->prepend($item['grouped']);
@@ -125,7 +125,7 @@ class ProductController extends Controller{
                 "price" => "required|numeric|min:0|not_in:0",
                 "variant" => "required|min:3",
                 "stock" => "required|numeric|min:0",
-                "markup" => "nullable|numeric|min:0",
+                "markup" => "required|numeric|min:0",
                 "status" => "required|min:3",
                 "product_code" => "required|min:3",
                 "unit" => "required",

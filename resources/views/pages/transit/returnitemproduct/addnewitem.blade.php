@@ -99,9 +99,9 @@
             }
 
             // Kalo satuan kosong maka mark merah input dan tampilkan error message
-            if(!inpQty.val()){
+            if(!inpQty.val() || inpQty.val() < 1){
                 inpQty.addClass("is-invalid");
-                errQty.text("Harap masukkan satuan/unit barang.");
+                errQty.text("Harap masukkan nilai minimal 1.");
 
                 inputAman = false;
             }
@@ -140,6 +140,17 @@
                 hidProdName.remove();
                 hidQty.remove();
             });
+        });
+
+        $('#peon').on('submit', function(){
+            if($('#isibody').find('tr').length > 0){
+                this.submit();
+            }
+            else {
+                alert('Anda belum memasukkan data sama sekali.');
+
+                return false;
+            }
         });
     </script>
 

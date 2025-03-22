@@ -20,9 +20,11 @@
                 <div class="mt-3">
                     <label for="project_id">Pilih Asal Proyek</label>
                     <select name="project_id" class="form-select @error('project_id') is-invalid @enderror" id="project_id">
-                        @foreach ($projects as $proj)
-                            <option value="{{ $proj->id }}" @if(old('project_id', $return_item->project->id) == $proj->id) selected @endif>{{ $proj->project_name }}</option>
-                        @endforeach
+                        <option disabled selected>Pilih proyek</option>
+                        @forelse (Auth::user()->employee_data->projects ?? [] as $proj)
+                            <option value="{{ $proj->id }}" @if(old('project_id', $return_item->project->id) == $proj->id) selected @endif>{{ $proj->project_name }} (PIC: {{ $proj->PIC }})</option>
+                        @empty
+                        @endforelse
                     </select>
 
                     @error("project_id")
@@ -31,24 +33,26 @@
                 </div>
 
                 {{-- <div class="mt-3">
-                    <label for="product">Produk yang akan dikembalikan</label>
-                    <input type="text" name="product" class="form-control" id="product" value="{{ $return_item->product->product_name }}">
-                </div> --}}
-
-                {{-- <div class="mt-3">
-                    <label for="quantity">Jumlah</label>
-                    <input type="text" class="form-control @error('quantity') is-invalid @enderror" name="quantity" id="quantity" placeholder="Jumlah" value = "{{ old("quantity", $return_item->quantity)}}">
-                    @error("quantity")
-                    <p class="text-danger">Harap masukkan nilai minimal 1.</p>
-                    @enderror
-                </div> --}}
-
-                <div class="mt-3">
                     <label for="status">Status</label>
                     <select name="status" class="form-select" id="status">
                         <option value="Ready to pickup" @if(old('status', $return_item->status) == "Ready to pickup") selected @endif>Siap diangkut</option>
                         <option value="Not ready yet" @if(old('status', $return_item->status) == "Not ready yet") selected @endif>Belum siap diangkut</option>
                     </select>
+                </div> --}}
+
+                <div class="mt-3">
+                    <label>Status</label>
+
+                    <div class="d-flex gap-3">
+                        <div class="d-flex gap-2 rounded-3 py-2">
+                            <input class="form-check-input" type="radio" name="status" id="status1" value="Ready to pickup" @if(old('status', $return_item->status) == "Ready to pickup") checked @endif checked>
+                            <label class="form-check-label" for="status1">Siap diangkut</label>
+                        </div>
+                        <div class="d-flex gap-2 rounded-3 py-2">
+                            <input class="form-check-input" type="radio" name="status" id="status2" value="Not ready yet" @if(old('status', $return_item->status) == "Not ready yet") checked @endif>
+                            <label class="form-check-label" for="status2">Belum siap diangkut</label>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="mt-3">
@@ -66,16 +70,6 @@
                     <p class="text-danger">Harap masukkan nama driver.</p>
                     @enderror
                 </div>
-
-                {{-- <div class="mt-3">
-                    <label for="image">Foto Barang</label>
-                    <input type="file" class="form-control @error('image') is-invalid @enderror" name="image" id="image">
-                    @error('image')
-                        <p class="text-danger">Harap upload foto untuk barang yang ingin dikembalikan.</p>
-                    @enderror
-                </div>
-
-                <img id="img-preview" class="w-25 mt-2" @if($return_item->foto) src="{{ Storage::url("app/public/" . $return_item->foto) }}" @endif> --}}
 
                 <div class="mt-4">
                     <input type="submit" class="btn btn-success px-3 py-1" value="Simpan Perubahan">

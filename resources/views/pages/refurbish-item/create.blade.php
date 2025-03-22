@@ -30,10 +30,10 @@
 
                 <div class="mt-3">
                     <label for="qty">Jumlah</label>
-                    <input type="text" class="form-control" name="qty" id="qty" placeholder="Jumlah"
-                        value = "{{ old('qty') }}">
+                    <input type="text" class="form-control @error('qty') is-invalid @enderror" name="qty" id="qty" placeholder="Jumlah"
+                        value="0">
                     @error('qty')
-                        <p class="text-danger">Harap masukkan nilai minimal 0.</p>
+                        <p class="text-danger">Harap masukkan nilai minimal 1.</p>
                     @enderror
                 </div>
 

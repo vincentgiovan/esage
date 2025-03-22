@@ -13,48 +13,98 @@
                         <input type="text" class="form-control" name="product_name" id="product_name" placeholder="Nama Barang" value = "{{ old("product_name" ) }}">
                         <p class="text-danger" id="errProductName"></p>
                     </div>
+
                     <div class="mt-3">
                         <div class="unit">Satuan</div>
                         <input type="text" class="form-control" name="unit" id="unit" placeholder="Unit"  value = "{{ old("unit") }}">
                         <p class="text-danger" id="errUnit"></p>
                     </div>
-                    <div class="mt-3">
+
+                    {{-- <div class="mt-3">
                         <div class="status">Status</div>
                         <select name="status" class="form-select" id="status">
                             <option value="Ready">Tersedia</option>
                             <option value="Out Of Stock">Stok kosong</option>
                         </select>
                         <p class="text-danger" id="errStatus"></p>
+                    </div> --}}
+
+                    <div class="mt-3">
+                        <label>Status</label>
+
+                        <div class="d-flex gap-3">
+                            <div class="d-flex gap-2 rounded-3 py-2">
+                                <input class="form-check-input" type="radio" name="status" id="status1" value="Ready" checked>
+                                <label class="form-check-label" for="status1">Tersedia</label>
+                            </div>
+                            <div class="d-flex gap-2 rounded-3 py-2">
+                                <input class="form-check-input" type="radio" name="status" id="status2" value="Out of Stock">
+                                <label class="form-check-label" for="status2">Stok kosong</label>
+                            </div>
+                        </div>
+
+                        <p class="text-danger" id="errStatus"></p>
                     </div>
+
                     <div class="mt-3">
                         <label for="variant">Variant</label>
-                        <input type="text" class="form-control" name="variant"  id="variant" placeholder="Variant"  value = "{{ old("variant") }}">
+                        <input type="text" class="form-control" name="variant"  id="variant" placeholder="Variant">
                         <p class="text-danger" id="errVariant"></p>
                     </div>
+
                     <div class="mt-3">
                         <label for="fake_product_code">SKU</label>
                         <input type="text" class="form-control" name="fake_product_code" id="fake_product_code" placeholder="(Dibuat otomatis oleh sistem)" disabled>
                         <p class="text-danger" id="errProductCode"></p>
                     </div>
+
                     <div class="mt-3">
                         <label for="price">Harga</label>
-                        <input type="number" class="form-control" name="price" id="price" placeholder="Harga" value = "{{ old("price") }}">
+                        <input type="number" class="form-control" name="price" id="price" placeholder="Harga" value="0">
                         <p class="text-danger" id="errPrice"></p>
                     </div>
+
                     <div class="mt-3">
                         <label for="markup">Markup</label>
-                        <input type="number" class="form-control" name="markup" id="markup" placeholder="Markup"  value = "{{ old("markup") }}">
+                        <input type="text" class="form-control" name="markup" id="markup" placeholder="Markup"  value="0">
                         <p class="text-danger" id="errMarkup"></p>
                     </div>
+
                     <div class="mt-3">
                         <label for="stock">Stok</label>
-                        <input type="number" class="form-control" name="stock"  id="stock" placeholder="Stok"  value = "{{ old("stock") }}">
+                        <input type="number" class="form-control" name="stock"  id="stock" placeholder="Stok"  value="0">
                         <p class="text-danger" id="errStock"></p>
                     </div>
+
                     <div class="mt-3">
                         <label for="discount">Diskon</label>
-                        <input type="number" class="form-control" name="discount"  id="discount" placeholder="Diskon"  value = "{{ old("discount") }}">
+                        <input type="text" class="form-control" name="discount"  id="discount" placeholder="Diskon"  value="0">
                         <p class="text-danger" id="errDiscount"></p>
+                    </div>
+
+                    {{-- <div class="mt-3">
+                        <label for="type">Jenis Barang</label>
+                        <select class="form-select" name="type" id="type">
+                            <option value="fast moving">Fast Moving</option>
+                            <option value="asset">Aset</option>
+                        </select>
+                        <p class="text-danger" id="errType"></p>
+                    </div> --}}
+
+                    <div class="mt-3">
+                        <label>Jenis Barang</label>
+
+                        <div class="d-flex gap-3">
+                            <div class="d-flex gap-2 rounded-3 py-2">
+                                <input class="form-check-input" type="radio" name="type" id="type1" value="fast moving" checked>
+                                <label class="form-check-label" for="type1">Fast Moving</label>
+                            </div>
+                            <div class="d-flex gap-2 rounded-3 py-2">
+                                <input class="form-check-input" type="radio" name="type" id="type2" value="asset">
+                                <label class="form-check-label" for="type2">Aset</label>
+                            </div>
+                        </div>
+                        <p class="text-danger" id="errType"></p>
                     </div>
 
                     <div class="mt-3">
@@ -74,6 +124,7 @@
                             <th>Mark Up</th>
                             <th>Stok</th>
                             <th>Diskon</th>
+                            <th>Jenis</th>
                             <th>Aksi</th>
                         </thead>
                         <tbody id="isibody">
@@ -83,40 +134,11 @@
                 </div>
 
                 <form method="POST" action="{{ route("purchaseproduct-store2", $purchase->id ) }}" class="mt-5" id="peon">
-                {{-- @csrf kepake untuk token ,wajib --}}
                     @csrf
 
                     <div class="mt-3">
                         <input type="submit" class="btn btn-success px-3 py-1" value="Simpan">
                     </div>
-                    @error("product_name")
-                        <span class="text-danger">{{ $message }}</span><br>
-                    @enderror
-                    @error("unit")
-                        <span class="text-danger">{{ $message }}</span><br>
-                    @enderror
-                    @error("status")
-                        <span class="text-danger">{{ $message }}</span><br>
-                    @enderror
-                    @error("variant")
-                        <span class="text-danger">{{ $message }}</span><br>
-                    @enderror
-                    @error("product_code")
-                        <span class="text-danger">{{ $message }}</span><br>
-                    @enderror
-                    @error("price")
-                        <span class="text-danger">{{ $message }}</span><br>
-                    @enderror
-                    @error("markup")
-                        <span class="text-danger">{{ $message }}</span><br>
-                    @enderror
-                    @error("stock")
-                        <span class="text-danger">{{ $message }}</span><br>
-                    @enderror
-                    @error("discount")
-                        <span class="text-danger">{{ $message }}</span><br>
-                    @enderror
-
                 </form>
 
         </div>
@@ -158,14 +180,6 @@
             $("#fake_product_code").val(productCode);
         });
 
-        // $("#folm").on("submit", function(event){
-        //     event.preventDefault();
-
-        //     $(this).append($("<input>").attr({"type":"hidden", "name": "product_code", "value": $("#fake_product_code").val()}));
-
-        //     this.submit();
-        // });
-
         // Targetkan form buat submit data
         const confirmationForm = document.getElementById("peon");
 
@@ -180,13 +194,14 @@
             // Targetkan elemen-elemen input data purchase produk yang diperlukan (buat nanti diambil nilainya)
             const input1 = document.getElementById("product_name");
             const input2 = document.getElementById("unit");
-            const input3 = document.getElementById("status");
+            const input3 = document.querySelector('input[name="status"]:checked');
             const input4 = document.getElementById("variant");
             const input5 = document.getElementById("fake_product_code");
             const input6 = document.getElementById("price");
             const input7 = document.getElementById("markup");
             const input8 = document.getElementById("stock");
             const input9 = document.getElementById("discount");
+            const input10 = document.querySelector('input[name="type"]:checked')
 
             // Targetkan elemen-elemen error message (buat nanti display error message)
             const errProductName = document.getElementById("errProductName");
@@ -198,6 +213,7 @@
             const errMarkup = document.getElementById("errMarkup");
             const errStock = document.getElementById("errStock");
             const errDiscount = document.getElementById("errDiscount");
+            const errType = document.getElementById('errType');
 
             // Hilangkan error message dan mark merah pada input dan error message sebelum validasi
             errProductName.innerText = "";
@@ -209,6 +225,7 @@
             errMarkup.innerText = "";
             errStock.innerText = "";
             errDiscount.innerText = "";
+            errType.innerText = "";
 
             input1.classList.remove("is-invalid");
             input2.classList.remove("is-invalid");
@@ -219,6 +236,7 @@
             input7.classList.remove("is-invalid");
             input8.classList.remove("is-invalid");
             input9.classList.remove("is-invalid");
+            input10.classList.remove("is-invalid");
 
             // Validasi input
             let inputAman = true;
@@ -248,7 +266,7 @@
             }
 
             // Kalo harga kosong atau di bawah 1 maka mark merah input dan tampilkan error message
-            if(!input6.value && input6.value < 1){
+            if(!input6.value || input6.value < 1){
                 input6.classList.add("is-invalid");
                 errPrice.innerText = "Harap masukkan nilai minimal 1.";
 
@@ -256,15 +274,15 @@
             }
 
             // Kalo markup kosong atau di bawah 1 maka mark merah input dan tampilkan error message
-            if(input7.value && input7.value < 1){
+            if(!input7.value || input7.value < 0){
                 input7.classList.add("is-invalid");
-                errMarkup.innerText = "Harap masukkan nilai minimal 1.";
+                errMarkup.innerText = "Harap masukkan nilai minimal 0. Gunakan tanda titik untuk desimal.";
 
                 inputAman = false;
             }
 
             // Kalo stock kosong atau di bawah 1 maka mark merah input dan tampilkan error message
-            if(!input8.value && input8.value < 1){
+            if(!input8.value || input8.value < 1){
                 input8.classList.add("is-invalid");
                 errStock.innerText = "Harap masukkan nilai minimal 1.";
 
@@ -274,7 +292,7 @@
             // Kalo diskon kosong maka mark merah input dan tampilkan error message
             if(!input9.value){
                 input9.classList.add("is-invalid");
-                errDiscount.innerText = "Harap masukkan nilai minimal 0.";
+                errDiscount.innerText = "Harap masukkan nilai minimal 0. Gunakan tanda titik untuk desimal.";
 
                 inputAman = false;
             }
@@ -296,6 +314,7 @@
             const column8 = document.createElement("td");
             const column9 = document.createElement("td");
             const column10 = document.createElement("td");
+            const column11 = document.createElement("td");
 
             // Untuk setiap kolom yang dibentuk masukkan data dari setiap input yang sesuai
             column1.innerText = input1.value; // Misalnya kolom paling kiri yang pertama diisi sama nilai dari input 1 which is product name
@@ -307,13 +326,14 @@
             column7.innerText = input7.value;
             column8.innerText = input8.value;
             column9.innerText = input9.value;
+            column10.innerText = input10.value;
 
             // Buat tombol merah tong sampah buat nanti dipake buat hapus 1 row data
             const deleteButton = document.createElement("button");
             deleteButton.classList.add("btn", "btn-danger");
             deleteButton.setAttribute("type", "button");
             deleteButton.innerText = "Remove";
-            column10.appendChild(deleteButton); // display tombol merah di kolom action
+            column11.appendChild(deleteButton); // display tombol merah di kolom action
 
             // Gabungkan semua kolom data menjadi 1 row data
             newRow.appendChild(column1);
@@ -326,6 +346,7 @@
             newRow.appendChild(column8);
             newRow.appendChild(column9);
             newRow.appendChild(column10);
+            newRow.appendChild(column11);
 
             // Tambahkan row data baru ke tabel untuk di-display
             tbody.appendChild(newRow);
@@ -376,6 +397,11 @@
             susInput9.setAttribute("name", "discount[]");
             susInput9.setAttribute("value", input9.value);
 
+            const susInput10 = document.createElement("input");
+            susInput10.setAttribute("type", "hidden");
+            susInput10.setAttribute("name", "type[]");
+            susInput10.setAttribute("value", input10.value);
+
             // Tambahkan semua hidden input ke form submit
             confirmationForm.appendChild(susInput1);
             confirmationForm.appendChild(susInput2);
@@ -386,6 +412,7 @@
             confirmationForm.appendChild(susInput7);
             confirmationForm.appendChild(susInput8);
             confirmationForm.appendChild(susInput9);
+            confirmationForm.appendChild(susInput10);
 
             // Kalau tombol merah diklik maka lakukan:
             deleteButton.addEventListener("click", function(){
@@ -401,7 +428,19 @@
                 confirmationForm.removeChild(susInput7);
                 confirmationForm.removeChild(susInput8);
                 confirmationForm.appendChild(susInput9);
+                confirmationForm.appendChild(susInput10);
             });
+        });
+
+        $('#peon').on('submit', function(){
+            if($('#isibody').find('tr').length > 0){
+                this.submit();
+            }
+            else {
+                alert('Anda belum memasukkan data sama sekali.');
+
+                return false;
+            }
         });
     </script>
 

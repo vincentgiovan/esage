@@ -67,6 +67,11 @@
                 @endforeach
             </table>
         </div>
+
+        <div class="mt-4">
+            <h6 class="fw-bold">Catatan:</h6>
+            <p>{{ $request_item->notes }}</p>
+        </div>
     </x-container>
 
 @endsection

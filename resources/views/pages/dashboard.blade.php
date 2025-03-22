@@ -18,107 +18,115 @@
                     <div>
                         <h4 class="font-weight-bold mb-0">WMS Sage Summary</h4>
                     </div>
-                    <div>
-                        <div class="w-100 d-flex align-items-center justify-content-between">
-                            <div class="position-relative d-flex flex-column align-items-end">
-                                <button class="btn btn-primary" type="button" id="dd-toggler">
-                                    <i class="bi bi-file-earmark-arrow-up"></i> Laporan Bulanan
-                                </button>
-                                <div class="bg-white rounded-lg position-absolute z-2 border border-1" id="dd-menu" style="display: none; top: 40px;">
-                                    <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("deliveryorder-export", 1) }}" target="blank">Delivery Order</a></li>
-                                    <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("purchase-export", 1) }}" target="blank">Purchase</a></li>
-                                    <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export-pdf", 1) }}" target="blank">Product</a></li>
-                                    <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("partner-export", 1) }}" target="blank">Partner</a></li>
-                                    <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("project-export", 1) }}" target="blank">Project</a></li>
+
+                    {{-- Gabisa muncul di project manager --}}
+                    @if(!in_array(Auth::user()->role->role_name, ['project_manager']))
+                        <div>
+                            <div class="w-100 d-flex align-items-center justify-content-between">
+                                <div class="position-relative d-flex flex-column align-items-end">
+                                    <button class="btn btn-primary" type="button" id="dd-toggler">
+                                        <i class="bi bi-file-earmark-arrow-up"></i> Laporan Bulanan
+                                    </button>
+                                    <div class="bg-white rounded-lg position-absolute z-2 border border-1" id="dd-menu" style="display: none; top: 40px;">
+                                        <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("deliveryorder-export", 1) }}" target="blank">Delivery Order</a></li>
+                                        <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("purchase-export", 1) }}" target="blank">Purchase</a></li>
+                                        <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export-pdf", 1) }}" target="blank">Product</a></li>
+                                        <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("partner-export", 1) }}" target="blank">Partner</a></li>
+                                        <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("project-export", 1) }}" target="blank">Project</a></li>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <script>
-                            $(document).ready(() => {
-                                $("#dd-toggler").click(function(){
-                                    $("#dd-menu").toggle();
+                            <script>
+                                $(document).ready(() => {
+                                    $("#dd-toggler").click(function(){
+                                        $("#dd-menu").toggle();
+                                    });
                                 });
-                            });
-                        </script>
-                    </div>
+                            </script>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
 
         <!-- Summary -->
-        <div class="d-flex align-items-stretch justify-content-between w-100">
-            <div style="width: 18%;">
-                <div class="card">
-                    <div class="card-body">
-                        <p class="card-title text-md-center text-xl-left fs-6"><i class="bi bi-clipboard-x"></i> Stok Kosong</p>
-                        <div
-                            class="d-flex flex-wrap justify-content-md-center justify-content-xl-center align-items-center">
-                            <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-center fs-1">{{ $totalemptyproduct }}</h3>
-                            <i class="ti-calendar icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+        {{-- Gaboleh muncul di project manager --}}
+        @if(!in_array(Auth::user()->role->role_name, ['project_manager']))
+            <div class="d-flex align-items-stretch justify-content-between w-100 mb-4">
+                <div style="width: 18%;">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-title text-md-center text-xl-left fs-6"><i class="bi bi-clipboard-x"></i> Stok Kosong</p>
+                            <div
+                                class="d-flex flex-wrap justify-content-md-center justify-content-xl-center align-items-center">
+                                <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-center fs-1">{{ $totalemptyproduct }}</h3>
+                                <i class="ti-calendar icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                            </div>
+                            <p class="mb-0 mt-2 text-center"><span class="text-black "><small>(30 hari terakhir)</small></span>
+                            </p>
                         </div>
-                        <p class="mb-0 mt-2 text-center"><span class="text-black "><small>(30 hari terakhir)</small></span>
-                        </p>
                     </div>
                 </div>
-            </div>
 
-            <div style="width: 18%;">
-                <div class="card">
-                    <div class="card-body">
-                        <p class="card-title text-md-center text-xl-left fs-6"><i class="bi bi-truck"></i> Total D.Order</p>
-                        <div
-                            class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-center align-items-center">
-                            <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-center fs-1">{{ $totaldelivery }}</h3>
-                            <i class="ti-user icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                <div style="width: 18%;">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-title text-md-center text-xl-left fs-6"><i class="bi bi-truck"></i> Total D.Order</p>
+                            <div
+                                class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-center align-items-center">
+                                <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-center fs-1">{{ $totaldelivery }}</h3>
+                                <i class="ti-user icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                            </div>
+                            <p class="mb-0 mt-2 text-center "><span class="text-black "><small>(30 hari terakhir)</small></span>
+                            </p>
                         </div>
-                        <p class="mb-0 mt-2 text-center "><span class="text-black "><small>(30 hari terakhir)</small></span>
-                        </p>
                     </div>
                 </div>
-            </div>
 
-            <div style="width: 18%;">
-                <div class="card">
-                    <div class="card-body">
-                        <p class="card-title text-md-center text-xl-left fs-6"><i class="bi bi-cart4"></i> Total Pembelian</p>
-                        <div
-                            class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-center align-items-center">
-                            <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-center fs-1">{{ $totalpurchase }}</h3>
-                            <i class="ti-agenda icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                <div style="width: 18%;">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-title text-md-center text-xl-left fs-6"><i class="bi bi-cart4"></i> Total Pembelian</p>
+                            <div
+                                class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-center align-items-center">
+                                <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-center fs-1">{{ $totalpurchase }}</h3>
+                                <i class="ti-agenda icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                            </div>
+                            <p class="mb-0 mt-2 text-center "><span class="text-black "><small>(30 hari terakhir)</small></span></p>
                         </div>
-                        <p class="mb-0 mt-2 text-center "><span class="text-black "><small>(30 hari terakhir)</small></span></p>
                     </div>
                 </div>
-            </div>
 
-            <div style="width: 18%;">
-                <div class="card">
-                    <div class="card-body">
-                        <p class="card-title text-md-center text-xl-left fs-6"><i class="bi bi-building"></i> Proyek Baru</p>
-                        <div
-                            class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-center align-items-center">
-                            <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-center fs-1">{{ $totalnewproject }}</h3>
-                            <i class="ti-layers-alt icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                <div style="width: 18%;">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-title text-md-center text-xl-left fs-6"><i class="bi bi-building"></i> Proyek Baru</p>
+                            <div
+                                class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-center align-items-center">
+                                <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-center fs-1">{{ $totalnewproject }}</h3>
+                                <i class="ti-layers-alt icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                            </div>
+                            <p class="mb-0 mt-2 text-center"><span class="text-black "><small>(30 hari terakhir)</small></span></p>
                         </div>
-                        <p class="mb-0 mt-2 text-center"><span class="text-black "><small>(30 hari terakhir)</small></span></p>
+                    </div>
+                </div>
+                <div style="width: 18%;">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-title text-md-center text-xl-left fs-6"><i class="bi bi-building"></i> Pegawai Aktif</p>
+                            <div
+                                class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-center align-items-center">
+                                <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-center fs-1">{{ $activeemployee }}</h3>
+                                <i class="ti-layers-alt icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                            </div>
+                            <p class="mb-0 mt-2 text-center"><span class="text-black "><small>Dari total {{ $totalemployee }} pegawai</small></span></p>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div style="width: 18%;">
-                <div class="card">
-                    <div class="card-body">
-                        <p class="card-title text-md-center text-xl-left fs-6"><i class="bi bi-building"></i> Pegawai Aktif</p>
-                        <div
-                            class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-center align-items-center">
-                            <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0 text-center fs-1">{{ $activeemployee }}</h3>
-                            <i class="ti-layers-alt icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
-                        </div>
-                        <p class="mb-0 mt-2 text-center"><span class="text-black "><small>Dari total {{ $totalemployee }} pegawai</small></span></p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @endif
+
         {{-- <div class="row">
             <div class="col-md-6 grid-margin stretch-card">
                 <div class="card">
@@ -184,7 +192,7 @@
                     </div>
                 </div>
         </div> --}}
-        <div class="row mt-4">
+        <div class="row">
             {{-- <div class="col-md-7 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
