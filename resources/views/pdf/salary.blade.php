@@ -22,23 +22,23 @@
         </style>
     </head>
 
-    <body>
-        <h3>Gaji Pegawai</h3>
-        <hr>
-        <br>
+    {{-- tabel list data--}}
+    @foreach($grouped_attendances as $emp_id => $attendances)
+        <body>
+            <h3>Gaji Pegawai</h3>
+            <hr>
+            <br>
 
-        {{-- tabel list data--}}
-        <table style="width: 100%; border: 1px solid black;">
-            <tr>
-                <th>No</th>
-                <th>Periode</th>
-                <th>Nama</th>
-                <th>Jabatan</th>
-                <th>Total</th>
-                <th>Ket.</th>
-            </tr>
+            <table style="width: 100%; border: 1px solid black;">
+                <tr>
+                    <th>No</th>
+                    <th>Periode</th>
+                    <th>Nama</th>
+                    <th>Jabatan</th>
+                    <th>Total</th>
+                    <th>Ket.</th>
+                </tr>
 
-            @foreach($grouped_attendances as $emp_id => $attendances)
                 @php
                     $employee = App\Models\Employee::find(intval($emp_id));
                     $kasubon = $employee->prepays->where('prepay_date', '>=', $start_period)->where('prepay_date', '<=', $end_period);
@@ -119,8 +119,8 @@
                         <td>-{{ number_format($ppay->amount, 2, ',', '.') }}</td>
                     </tr>
                 @endforeach
-            @endforeach
-        </table>
-    </body>
+            </table>
+        </body>
+    @endforeach
 </html>
 

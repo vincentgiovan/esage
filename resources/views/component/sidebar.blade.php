@@ -63,8 +63,12 @@
         @endif
 
         @if(Gate::allows('user-role', ['master', 'accounting_admin']))
+            @php
+                $lastFriday = Carbon\Carbon::now()->previous(Carbon\Carbon::FRIDAY);
+                $lastSaturday = $lastFriday->copy()->previous(Carbon\Carbon::SATURDAY);
+            @endphp
             <li class="nav-item">
-                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("salary*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("salary-index") }}" ><i class="bi bi-currency-dollar me-2"></i> Gaji Pegawai</a>
+                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("salary*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("salary-index", ['from' => $lastSaturday->toDateString(), 'until' => $lastFriday->toDateString()]) }}" ><i class="bi bi-currency-dollar me-2"></i> Gaji Pegawai</a>
             </li>
         @endif
 

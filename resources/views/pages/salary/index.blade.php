@@ -25,7 +25,7 @@
                         </form>
                     </div>
                 </div>
-                <form action="{{ route('salary-export') }}" method="post">
+                <form action="{{ route('salary-export') }}" method="post" target="_blank">
                     @csrf
                     <button type="submit" class="btn btn-primary px-4">Export PDF</button>
                 </form>
@@ -38,14 +38,110 @@
                     <th>Tanggal</th>
                     <th>Nama</th>
                     <th>Jabatan</th>
-                    <th>Proyek</th>
-                    <th>Subtotal</th>
-                    <th>Kasbon</th>
-                    {{-- <th>Keterangan</th> --}}
+                    <th>Total</th>
+                    <th></th>
                     <th>Aksi</th>
                 </tr>
 
-                @foreach ($attendances as $a)
+                @foreach($grouped_attendances as $emp_id => $attendances)
+                    @php
+                        $employee = App\Models\Employee::find(intval($emp_id));
+                        $kasubon = $employee->prepays->where('prepay_date', '>=', $start_period)->where('prepay_date', '<=', $end_period);
+
+                        $total_kasbon = 0;
+                        foreach($kasubon as $k){
+                            $total_kasbon += $k->amount;
+                        }
+
+                        $subtotals[$emp_id] -= $total_kasbon;
+
+                        $iterasus = $loop->index;
+                    @endphp
+
+                    <tr style="background-color: @if($iterasus % 2 == 0) #E0E0E0 @else white @endif;">
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ Carbon\Carbon::parse($start_period)->translatedFormat("d/m/Y") }} - {{ Carbon\Carbon::parse($end_period)->translatedFormat("d/m/Y") }}</td>
+                        <td>{{ $employee->nama }}</td>
+                        <td>{{ $employee->jabatan }}</td>
+                        <td>{{ number_format($subtotals[$emp_id], 0, ',', '.') }}</td>
+                        <td></td>
+                        <td>
+                            <button class="btn btn-success see-detail-btn" data-empid="{{ $emp_id }}">Rincian</button>
+                        </td>
+                    </tr>
+
+                    @foreach($attendances->groupBy('project_id') as $proj_id => $gbp)
+                        @php
+                            $total_jam_normal = 0;
+                            $total_jam_lembur = 0;
+                            $total_kali_lembur_panjang = 0;
+
+                            $total_gaji_normal = 0;
+                            $total_gaji_lembur = 0;
+                            $total_gaji_lembur_panjang = 0;
+                            $total_performa = 0;
+                        @endphp
+
+                        @foreach($gbp as $proj_id => $atd)
+                            @php
+                                $project_name = $atd->project->project_name;
+
+                                $total_jam_normal += $atd->normal;
+                                $total_jam_lembur += $atd->jam_lembur;
+                                $total_kali_lembur_panjang += $atd->index_lembur_panjang;
+
+                                $total_gaji_normal += $atd->normal * $atd->employee->pokok;
+                                $total_gaji_lembur += $atd->jam_lembur * $atd->employee->lembur;
+                                $total_gaji_lembur_panjang += $atd->index_lembur_panjang * $atd->lembur_panjang;
+                                $total_performa += $atd->performa;
+                            @endphp
+                        @endforeach
+
+                        @if($total_jam_normal != 0)
+                            <tr class="detail-area{{ $emp_id }}" style="display: none; background-color: @if($iterasus % 2 == 0) #E0E0E0 @else white @endif;">
+                                <td class="py-2"></td>
+                                <td class="py-2" colspan="4">Normal: {{ $total_jam_normal }} jam ({{ $project_name }})</td>
+                                <td class="py-2">{{ number_format($total_gaji_normal, 0, ',', '.') }}</td>
+                                <td class="py-2"></td>
+                            </tr>
+                        @endif
+                        @if($total_jam_lembur > 0)
+                            <tr class="detail-area{{ $emp_id }}" style="display: none; background-color: @if($iterasus % 2 == 0) #E0E0E0 @else white @endif;">
+                                <td class="py-2"></td>
+                                <td class="py-2" colspan="4">Lembur: {{ $total_jam_lembur }} jam ({{ $project_name }})</td>
+                                <td class="py-2">{{ number_format($total_gaji_lembur, 0, ',', '.') }}</td>
+                                <td class="py-2"></td>
+                            </tr>
+                        @endif
+                        @if($total_kali_lembur_panjang > 0)
+                            <tr class="detail-area{{ $emp_id }}" style="display: none; background-color: @if($iterasus % 2 == 0) #E0E0E0 @else white @endif;">
+                                <td class="py-2"></td>
+                                <td class="py-2" colspan="4">Lembur Panjang: {{ $total_kali_lembur_panjang }} hari ({{ $project_name }})</td>
+                                <td class="py-2">{{ number_format($total_gaji_lembur_panjang, 0, ',', '.') }}</td>
+                                <td class="py-2"></td>
+                            </tr>
+                        @endif
+                        @if($total_performa > 0)
+                            <tr class="detail-area{{ $emp_id }}" style="display: none; background-color: @if($iterasus % 2 == 0) #E0E0E0 @else white @endif;">
+                                <td class="py-2"></td>
+                                <td class="py-2" colspan="4">Performa ({{ $project_name }})</td>
+                                <td class="py-2">{{ number_format($total_performa, 0, ',', '.') }}</td>
+                                <td class="py-2"></td>
+                            </tr>
+                        @endif
+                    @endforeach
+
+                    @foreach($kasubon as $ppay)
+                        <tr class="detail-area{{ $emp_id }}" style="display: none; background-color: @if($iterasus % 2 == 0) #E0E0E0 @else white @endif;">
+                            <td class="py-2"></td>
+                            <td class="py-2" colspan="4">Potongan kasbon @if($ppay->remark)({{ $ppay->remark }})@endif</td>
+                            <td class="py-2">-{{ number_format($ppay->amount, 0, ',', '.') }}</td>
+                            <td class="py-2"></td>
+                        </tr>
+                    @endforeach
+                @endforeach
+
+                {{-- @foreach ($attendances as $a)
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $a->attendance_date ? Carbon\Carbon::parse($a->attendance_date)->translatedFormat("d M Y") : "N/A" }}</td>
@@ -71,7 +167,6 @@
                                 echo 'Rp ' . number_format($ppamount, 2, ",", ".");
                             @endphp
                         </td>
-                        {{-- <td>{{ $a->keterangan ?? "N/A" }}</td> --}}
                         <td>
                             <div class="d-flex gap-2 w-100">
                                 <a href="{{ route('salary-edit', $a->id) }}" class="btn btn-warning text-white"
@@ -82,20 +177,27 @@
                         </td>
 
                     </tr>
-                @endforeach
+                @endforeach --}}
             </table>
         </div>
     </x-container>
 
     <script>
-        $("form").on("submit", function(e){
-            e.preventDefault();
+        $(document).ready(() => {
+            $('.see-detail-btn').on('click', function(){
+                $(this).closest('tbody').find(`.detail-area${$(this).data('empid')}`).toggle();
+            });
 
-            $(this).append($("<input>").attr({"type": "hidden", "name": "from", "value": $("#filter-start-date").val()}));
-            $(this).append($("<input>").attr({"type": "hidden", "name": "until", "value": $("#filter-end-date").val()}));
+            $("form").on("submit", function(e){
+                e.preventDefault();
 
-            this.submit();
+                $(this).append($("<input>").attr({"type": "hidden", "name": "from", "value": $("#filter-start-date").val()}));
+                $(this).append($("<input>").attr({"type": "hidden", "name": "until", "value": $("#filter-end-date").val()}));
+
+                this.submit();
+            });
         });
+
     </script>
 
 @endsection

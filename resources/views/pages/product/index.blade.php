@@ -71,6 +71,7 @@
             <table class="w-100">
                 <tr>
                     <th>No</th>
+                    <th>SKU</th>
                     <th>Nama Produk</th>
                     <th>Varian</th>
                     <th>Total Stok</th>
@@ -98,6 +99,7 @@
                         @endphp
                         <tr style="background: @if($i % 2 == 1) #E0E0E0 @else white @endif;">
                             <td>{{ ++$i }}</td>
+                            <td></td>
                             <td>{{ $p->product_name }}</td>
                             <td>{{ $p->variant }}</td>
                             <td>{{ $p->stock }}</td>
@@ -126,6 +128,7 @@
                     @else
                         <tr class="{{ __(preg_replace('/[^a-zA-Z0-9-]/', '',  $p->product_name) . '-' . preg_replace('/[^a-zA-Z0-9-]/', '',  $p->variant)) }}" style="display: none; background: @if($i % 2 == 0) #E0E0E0 @else white @endif;">
                             <td></td>
+                            <td>{{ $p->product_code }}</td>
                             <td>
                                 <div class="w-100 d-flex justify-content-between align-items-center">
                                     <div>{{ $p->product_name }}</div>
@@ -184,7 +187,6 @@
 
     <script>
         $('.view-all-btn').click(function(){
-            console.log($(this).data('prodgroup'));
             $(`.${$(this).data('prodgroup')}`).toggle();
         });
     </script>
