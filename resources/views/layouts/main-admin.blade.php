@@ -69,7 +69,7 @@
                 cursor: not-allowed;
             }
 
-            input:not(.is-invalid), select:not(.is-invalid) {
+            input:not(.is-invalid), select:not(.is-invalid), input:not([type="submit"]) {
                 border-width: 2px !important;
                 border-color: rgb(169, 169, 169) !important;
             }

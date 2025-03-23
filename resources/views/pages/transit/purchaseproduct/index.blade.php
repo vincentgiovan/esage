@@ -6,7 +6,7 @@
     <div class="w-100 d-flex align-items-center justify-content-between">
         <h3>Daftar Barang di Pembelian {{ $purchase->register }}</h3>
         <div class="d-flex gap-3">
-            <a class="btn btn-secondary" href="{{ route('purchaseproduct-import', $purchase->id) }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
+            {{-- <a class="btn btn-secondary" href="{{ route('purchaseproduct-import', $purchase->id) }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a> --}}
             <div class="position-relative d-flex flex-column align-items-end">
                 <button class="btn btn-secondary" type="button" id="dd-toggler">
                     <i class="bi bi-file-earmark-arrow-up"></i> Export
@@ -44,8 +44,29 @@
         <i class="bi bi-plus-square"></i> Tambah dan Buat Data Barang Baru
     </a>
     <br> --}}
-    {{-- tabel list data--}}
 
+    <h5>Data Pembelian</h5>
+    <table class="w-100">
+        <tr>
+            <th class="border border-1 border-secondary w-25">SKU</th>
+            <td class="border border-1 border-secondary">{{ $purchase->register }}</td>
+        </tr>
+        <tr>
+            <th class="border border-1 border-secondary w-25">Partner</th>
+            <td class="border border-1 border-secondary">{{ $purchase->partner->partner_name }}</td>
+        </tr>
+        <tr>
+            <th class="border border-1 border-secondary w-25">Tanggal Pembelian</th>
+            <td class="border border-1 border-secondary">{{ Carbon\Carbon::parse($purchase->purchase_date)->format('d M Y') }}</td>
+        </tr>
+        <tr>
+            <th class="border border-1 border-secondary w-25">Status</th>
+            <td class="border border-1 border-secondary">{{ $purchase->purchase_status }}</td>
+        </tr>
+    </table>
+
+    {{-- tabel list data--}}
+    <h5 class="mt-4">Daftar Barang</h5>
     <div class="overflow-x-auto">
         <table class="w-100">
             <tr>

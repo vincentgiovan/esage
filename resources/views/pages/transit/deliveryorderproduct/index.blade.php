@@ -4,11 +4,11 @@
     <x-container>
         <br>
         <div class="w-100 d-flex align-items-center justify-content-between">
-            <h3>Daftar Barang di Pengiriman {{ $deliveryorder->register }}</h3>
+            <h3>Daftar Barang Pengiriman</h3>
 
             @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
                 <div class="d-flex gap-3">
-                    <a class="btn btn-secondary" href="{{ route('deliveryorderproduct-import', $deliveryorder->id) }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
+                    {{-- <a class="btn btn-secondary" href="{{ route('deliveryorderproduct-import', $deliveryorder->id) }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a> --}}
                     <div class="position-relative d-flex flex-column align-items-end">
                         <button class="btn btn-secondary" type="button" id="dd-toggler">
                             <i class="bi bi-file-earmark-arrow-up"></i> Export
@@ -46,9 +46,28 @@
             </a>
         @endif --}}
 
-        <br>
-        {{-- tabel list data--}}
+        <h5>Data Pengiriman</h5>
+        <table class="w-100">
+            <tr>
+                <th class="border border-1 border-secondary w-25">SKU</th>
+                <td class="border border-1 border-secondary">{{ $deliveryorder->register }}</td>
+            </tr>
+            <tr>
+                <th class="border border-1 border-secondary w-25">Proyek</th>
+                <td class="border border-1 border-secondary">{{ $deliveryorder->project->project_name }}</td>
+            </tr>
+            <tr>
+                <th class="border border-1 border-secondary w-25">Tanggal</th>
+                <td class="border border-1 border-secondary">{{ Carbon\Carbon::parse($deliveryorder->delivery_date)->format('d M Y') }}</td>
+            </tr>
+            <tr>
+                <th class="border border-1 border-secondary w-25">Status</th>
+                <td class="border border-1 border-secondary">{{ $deliveryorder->delivery_status }}</td>
+            </tr>
+        </table>
 
+        {{-- tabel list data--}}
+        <h5 class="mt-4">Daftar Barang</h5>
         <div class="overflow-x-auto">
             <table class="w-100">
                 <tr>

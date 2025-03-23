@@ -38,12 +38,24 @@
             <p class="text-success fw-bold">{{ session('successDeleteProject') }}</p>
         @endif
 
-        @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang']))
-            <a href="{{ route('project-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
-                <i class="bi bi-plus-square"></i>
-                Tambah Proyek Baru</a>
-            <br>
-        @endif
+        <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-2">
+            <div class="d-flex gap-2 ">
+                <form action="{{ route('project-index') }}" class="d-flex gap-2">
+                    <div class="position-relative">
+                    <input type="text" name="search" placeholder="Cari proyek..." value="{{ request('search') }}" class="form-control border border-1 border-secondary pe-5" style="width: 300px;">
+                        <a href="{{ route('project-index') }}" class="btn position-absolute top-0 end-0"><i class="bi bi-x-lg"></i></a>
+                    </div>
+                    <button class="btn btn-primary"><i class="bi bi-search"></i></button>
+                </form>
+            </div>
+
+            @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang']))
+                <a href="{{ route('project-create') }}" class="btn btn-primary text-white" style="font-size: 10pt">
+                    <i class="bi bi-plus-square"></i>
+                    Tambah Proyek Baru</a>
+            @endif
+        </div>
+        <br>
 
         {{-- tabel list data--}}
         <div class="overflow-x-auto">

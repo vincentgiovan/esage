@@ -20,7 +20,7 @@ class DeliveryOrderController extends Controller{
     {
         // Tampilkan halaman pages/delivery-order/index.blade.php beserta data yang diperlukan di blade-nya
         return view("pages.delivery-order.index", [
-            "deliveryorders" => DeliveryOrder::orderBy('delivery_date', 'desc')->get() // Semua data delivery orders (buat ditampilin satu satu di tabel)
+            "deliveryorders" => DeliveryOrder::filter(request(['search']))->orderBy('delivery_date', 'desc')->get() // Semua data delivery orders (buat ditampilin satu satu di tabel)
         ]);
     }
 

@@ -14,59 +14,47 @@
 
                 @csrf
 
-                <div class="mt-3">
-                    <label for="product_name">Nama Barang</label>
-                    <input type="text" class="form-control" name="product_name" id="product_name" placeholder="Nama Barang"
-                        value="{{ old('product_name', $product->product_name) }}"
-                        @if(in_array(Auth::user()->role->role_name, ['purchasing_admin', 'gudang'])) disabled @endif/>
+                <div class="d-flex gap-3">
+                    <div class="mt-3 w-50">
+                        <label for="product_name">Nama Barang</label>
+                        <input type="text" class="form-control" name="product_name" id="product_name" placeholder="Nama Barang"
+                            value="{{ old('product_name', $product->product_name) }}"
+                            @if(in_array(Auth::user()->role->role_name, ['purchasing_admin', 'gudang'])) disabled @endif/>
 
-                    @error('product_name')
-                        <p class="text-danger">Harap masukkan nama barang.</p>
-                    @enderror
+                        @error('product_name')
+                            <p class="text-danger">Harap masukkan nama barang.</p>
+                        @enderror
+                    </div>
+
+                    <div class="mt-3 w-50">
+                        <label for="variant">Varian</label>
+                        <input type="text" class="form-control" name="variant" id="variant" placeholder="Variant"
+                            value="{{ old('variant', $product->variant) }}"
+                            @if(in_array(Auth::user()->role->role_name, ['purchasing_admin', 'gudang'])) disabled @endif/>
+
+                        @error('variant')
+                            <p class="text-danger">Harap masukkan varian barang.</p>
+                        @enderror
+                    </div>
                 </div>
 
-                <div class="mt-3">
-                    <label for="variant">Varian</label>
-                    <input type="text" class="form-control" name="variant" id="variant" placeholder="Variant"
-                        value="{{ old('variant', $product->variant) }}"
-                        @if(in_array(Auth::user()->role->role_name, ['purchasing_admin', 'gudang'])) disabled @endif/>
+                <div class="d-flex gap-3">
+                    <div class="mt-3 w-50">
+                        <label for="fake_product_code">SKU</label>
+                        <input type="text" class="form-control" name="fake_product_code" id="fake_product_code" value="{{ old('product_code', $product->product_code) }}" placeholder="(Dibuat otomatis oleh sistem)" disabled>
+                    </div>
 
-                    @error('variant')
-                        <p class="text-danger">Harap masukkan varian barang.</p>
-                    @enderror
+                    <div class="mt-3 w-50">
+                        <label for="stock">Stok</label>
+                        <input type="number" class="form-control" name="stock" id="stock" placeholder="Stok"
+                            value="{{ old('stock', $product->stock) }}"
+                            @if(in_array(Auth::user()->role->role_name, ['purchasing_admin'])) disabled @endif/>
+
+                        @error('stock')
+                            <p class="text-danger">Harap masukkan nilai minimal 0.</p>
+                        @enderror
+                    </div>
                 </div>
-
-                <div class="mt-3">
-                    <label for="unit">Satuan</label>
-                    <input type="text" class="form-control" name="unit" id="unit" placeholder="Unit"
-                        value="{{ old('unit', $product->unit) }}"
-                        @if(in_array(Auth::user()->role->role_name, ['purchasing_admin', 'gudang'])) disabled @endif/>
-
-                    @error('unit')
-                        <p class="text-danger">Harap masukkan satuan barang.</p>
-                    @enderror
-                </div>
-
-                <div class="mt-3">
-                    <label for="stock">Stok</label>
-                    <input type="number" class="form-control" name="stock" id="stock" placeholder="Stok"
-                        value="{{ old('stock', $product->stock) }}"
-                        @if(in_array(Auth::user()->role->role_name, ['purchasing_admin'])) disabled @endif/>
-
-                    @error('stock')
-                        <p class="text-danger">Harap masukkan nilai minimal 0.</p>
-                    @enderror
-                </div>
-
-                {{-- <div class="mt-3">
-                    <label for="status">Status</label>
-                    <select name="status" id="status" class="form-select"
-                        @if(in_array(Auth::user()->role->role_name, ['purchasing_admin'])) disabled @endif>
-
-                        <option value="Ready" @if(old('status', $product->status) == 'Ready') selected @endif>Tersedia</option>
-                        <option value="Out of Stock" @if(old('status', $product->status) == 'Out of Stock') selected @endif>Stok kosong</option>
-                    </select>
-                </div> --}}
 
                 <div class="mt-3">
                     <label>Status</label>
@@ -83,52 +71,51 @@
                     </div>
                 </div>
 
-                <div class="mt-3">
-                    <label for="fake_product_code">SKU</label>
-                    <input type="text" class="form-control" name="fake_product_code" id="fake_product_code" value="{{ old('product_code', $product->product_code) }}" placeholder="(Dibuat otomatis oleh sistem)" disabled>
+                <div class="d-flex gap-3">
+                    <div class="mt-3 w-50">
+                        <label for="unit">Satuan</label>
+                        <input type="text" class="form-control" name="unit" id="unit" placeholder="Unit"
+                            value="{{ old('unit', $product->unit) }}"
+                            @if(in_array(Auth::user()->role->role_name, ['purchasing_admin', 'gudang'])) disabled @endif/>
+
+                        @error('unit')
+                            <p class="text-danger">Harap masukkan satuan barang.</p>
+                        @enderror
+                    </div>
+
+                    <div class="mt-3 w-50">
+                        <label for="price">Harga</label>
+                        <input type="number" class="form-control" name="price" id="price" placeholder="Harga"
+                            value="{{ old('price', $product->price) }}"
+                            @if(in_array(Auth::user()->role->role_name, ['purchasing_admin', 'gudang'])) disabled @endif/>
+
+                        @error('price')
+                            <p class="text-danger">Harap masukkan nilai minimal 1.</p>
+                        @enderror
+                    </div>
                 </div>
 
-                <div class="mt-3">
-                    <label for="price">Harga</label>
-                    <input type="number" class="form-control" name="price" id="price" placeholder="Harga"
-                        value="{{ old('price', $product->price) }}"
-                        @if(in_array(Auth::user()->role->role_name, ['purchasing_admin', 'gudang'])) disabled @endif/>
+                <div class="d-flex gap-3">
+                    <div class="mt-3 w-50">
+                        <label for="markup">Markup</label>
+                        <input type="text" class="form-control" name="markup" id="markup" placeholder="Markup"
+                            value="{{ old('markup', $product->markup) }}"
+                            @if(in_array(Auth::user()->role->role_name, ['gudang'])) disabled @endif/>
 
-                    @error('price')
-                        <p class="text-danger">Harap masukkan nilai minimal 1.</p>
-                    @enderror
+                        @error('markup')
+                            <p class="text-danger">Harap masukkan nilai minimal 0. Gunakan tanda titik untuk desimal.</p>
+                        @enderror
+                    </div>
+
+                    <div class="mt-3 w-50">
+                        <label for="discount">Diskon</label>
+                        <input type="text" class="form-control @error('discount') is-invalid @enderror" name="discount" id="discount" placeholder="Diskon"
+                            value="{{ old('discount', $product->discount) }}">
+                        @error('discount')
+                            <p class="text-danger">Harap masukkan nilai minimal 0. Gunakan tanda titik untuk desimal.</p>
+                        @enderror
+                    </div>
                 </div>
-
-                <div class="mt-3">
-                    <label for="markup">Markup</label>
-                    <input type="text" class="form-control" name="markup" id="markup" placeholder="Markup"
-                        value="{{ old('markup', $product->markup) }}"
-                        @if(in_array(Auth::user()->role->role_name, ['gudang'])) disabled @endif/>
-
-                    @error('markup')
-                        <p class="text-danger">Harap masukkan nilai minimal 0. Gunakan tanda titik untuk desimal.</p>
-                    @enderror
-                </div>
-
-                <div class="mt-3">
-                    <label for="discount">Diskon</label>
-                    <input type="text" class="form-control @error('discount') is-invalid @enderror" name="discount" id="discount" placeholder="Diskon"
-                        value="{{ old('discount', $product->discount) }}">
-                    @error('discount')
-                        <p class="text-danger">Harap masukkan nilai minimal 0. Gunakan tanda titik untuk desimal.</p>
-                    @enderror
-                </div>
-
-                {{-- <div class="mt-3">
-                    <label for="type">Jenis Barang</label>
-                    <select class="form-select @error('type') is-invalid @enderror" name="type" id="type">
-                        <option value="fast moving" @if(old('type', $product->condition) == 'fast moving') selected @endif>Fast Moving</option>
-                        <option value="asset" @if(old('type', $product->condition) == 'asset') selected @endif>Aset</option>
-                    </select>
-                    @error('type')
-                        <p class="text-danger">{{ $message }}</p>
-                    @enderror
-                </div> --}}
 
                 <div class="mt-3">
                     <label>Jenis Barang</label>

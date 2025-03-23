@@ -37,15 +37,26 @@
             <p class="text-success fw-bold">{{ session('successDeleteReturnItem') }}</p>
         @endif
 
-        <div class="mb-3">
-            <a href="{{ route('returnitem-create') }}" class="btn btn-primary text-white" style="font-size: 10pt">
-                <i class="bi bi-plus-square"></i> Buat Pengembalian Barang Baru
-            </a>
-            @if(in_array(Auth::user()->role->role_name, ['gudang', 'master']))
-                <a href="{{ route('returnitem-conditionvalidation') }}" class="btn btn-success" style="font-size: 10pt">
-                    <i class="bi bi-check-square"></i> Validasi Kondisi Barang Pengembalian
+        <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-2">
+            <div class="d-flex gap-2 ">
+                <form action="{{ route('returnitem-index') }}" class="d-flex gap-2">
+                    <div class="position-relative">
+                    <input type="text" name="search" placeholder="Cari pengembalian..." value="{{ request('search') }}" class="form-control border border-1 border-secondary pe-5" style="width: 300px;">
+                        <a href="{{ route('returnitem-index') }}" class="btn position-absolute top-0 end-0"><i class="bi bi-x-lg"></i></a>
+                    </div>
+                    <button class="btn btn-primary"><i class="bi bi-search"></i></button>
+                </form>
+            </div>
+            <div>
+                <a href="{{ route('returnitem-create') }}" class="btn btn-primary text-white" style="font-size: 10pt">
+                    <i class="bi bi-plus-square"></i> Buat Pengembalian Barang Baru
                 </a>
-            @endif
+                @if(in_array(Auth::user()->role->role_name, ['gudang', 'master']))
+                    <a href="{{ route('returnitem-conditionvalidation') }}" class="btn btn-success" style="font-size: 10pt">
+                        <i class="bi bi-check-square"></i> Validasi Kondisi Barang Pengembalian
+                    </a>
+                @endif
+            </div>
         </div>
         <br>
         {{-- tabel list data--}}

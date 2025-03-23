@@ -16,7 +16,7 @@ class AttendanceController extends Controller
 {
     public function index(){
         $attendances = Attendance::with('project')
-            ->orderBy('attendance_date', 'asc')
+            ->orderBy('attendance_date', 'desc')
             ->orderBy(Project::select('project_name')
                 ->whereColumn('id', 'attendances.project_id')
                 ->limit(1), 'asc')
@@ -53,14 +53,14 @@ class AttendanceController extends Controller
             foreach($request->employee as $remp){
                 $employee = Employee::find($remp);
 
-                if($request->kasbon[$remp]){
-                    Prepay::create([
-                        "employee_id" => $employee->id,
-                        "start_period" => Carbon::parse($request->start_date)->format("Y-m-d"),
-                        "end_period" => Carbon::parse($request->start_date)->addDays(7)->format("Y-m-d"),
-                        "amount" => intval($request->kasbon[$remp])
-                    ]);
-                }
+                // if($request->kasbon[$remp]){
+                //     Prepay::create([
+                //         "employee_id" => $employee->id,
+                //         "start_period" => Carbon::parse($request->start_date)->format("Y-m-d"),
+                //         "end_period" => Carbon::parse($request->start_date)->addDays(7)->format("Y-m-d"),
+                //         "amount" => intval($request->kasbon[$remp])
+                //     ]);
+                // }
 
                 for($j = 0; $j < 7; $j++){
                     $atd_start_date = Carbon::parse($request->start_date);

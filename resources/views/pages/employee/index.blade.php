@@ -19,12 +19,16 @@
             <a href="{{ route('employee-create') }}" class="btn btn-primary"><i class="bi bi-plus-square"></i> Data Pegawai Baru</a>
 
             <form action="{{ route('employee-index') }}" class="d-flex gap-3 items-center">
+                <div class="position-relative">
+                    <input type="text" name="search" placeholder="Cari pegawai..." value="{{ request('search') }}" class="form-control border border-1 border-secondary pe-5" style="width: 300px;">
+                    <a href="{{ route('deliveryorder-index') }}" class="btn position-absolute top-0 end-0"><i class="bi bi-x-lg"></i></a>
+                </div>
                 <select type="text" class="form-select" name="status">
                     <option value="">Semua</option>
                     <option value="active" @if(request('status') == 'active') selected @endif>Aktif</option>
                     <option value="passive" @if(request('status') == 'passive') selected @endif>Tidak Aktif</option>
                 </select>
-                <button class="btn btn-primary" type="submit">Filter</button>
+                <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
             </form>
         </div>
 

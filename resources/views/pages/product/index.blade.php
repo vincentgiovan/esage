@@ -44,11 +44,12 @@
         <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-2">
             <div class="d-flex gap-2 ">
                 <form action="{{ route('product-index') }}" class="d-flex gap-2">
-                    <input type="text" name="search" placeholder="Cari barang..." value="{{ request('search') }}"
-                        class="form-control border border-1 border-secondary">
-                    <button class="btn " style="background-color: rgb(191, 191, 191)"><i class="bi bi-search"></i></button>
+                    <div class="position-relative">
+                    <input type="text" name="search" placeholder="Cari barang..." value="{{ request('search') }}" class="form-control border border-1 border-secondary pe-5" style="width: 300px;">
+                        <a href="{{ route('product-index') }}" class="btn position-absolute top-0 end-0"><i class="bi bi-x-lg"></i></a>
+                    </div>
+                    <button class="btn btn-primary"><i class="bi bi-search"></i></button>
                 </form>
-                <a href="{{ route('product-index') }}" class="btn" style="background-color: rgb(191, 191, 191)"><i class="bi bi-x-lg"></i></a>
             </div>
 
             @if(!in_array(Auth::user()->role->role_name, ['subgudang', 'project_manager']))
@@ -62,12 +63,12 @@
         <br>
 
         <div class="d-flex" style="gap: 1px;">
-            <a href="{{ route('product-index', ['condition' => 'good']) }}" class="btn" style="border-radius: 0; width: 100px; @if(request('condition') == 'good') background-color: rgb(59, 59, 59); @else background-color: rgb(142, 142, 142); @endif color: white;">Bagus</a>
-            <a href="{{ route('product-index', ['condition' => 'degraded']) }}" class="btn" style="border-radius: 0; width: 100px; @if(request('condition') == 'degraded') background-color: rgb(59, 59, 59); @else background-color: rgb(142, 142, 142); @endif color: white;">Rusak</a>
-            <a href="{{ route('product-index', ['condition' => 'refurbish']) }}" class="btn" style="border-radius: 0; width: 100px; @if(request('condition') == 'refurbish') background-color: rgb(59, 59, 59); @else background-color: rgb(142, 142, 142); @endif color: white;">Rekondisi</a>
+            <a href="{{ route('product-index', ['condition' => 'good']) }}" class="btn" style="border-radius: 0; width: 100px; @if(!request('condition') || request('condition') == 'good') border-bottom: 3px solid rgb(59, 59, 59); @else border-bottom: none; @endif">Bagus</a>
+            <a href="{{ route('product-index', ['condition' => 'degraded']) }}" class="btn" style="border-radius: 0; width: 100px; @if(request('condition') == 'degraded') border-bottom: 3px solid rgb(59, 59, 59); @else border-bottom: none; @endif">Rusak</a>
+            <a href="{{ route('product-index', ['condition' => 'refurbish']) }}" class="btn" style="border-radius: 0; width: 100px; @if(request('condition') == 'refurbish') border-bottom: 3px solid rgb(59, 59, 59); @else border-bottom: none; @endif">Rekondisi</a>
         </div>
 
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto mt-3">
             <table class="w-100">
                 <tr>
                     <th>No</th>

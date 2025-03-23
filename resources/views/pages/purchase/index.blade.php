@@ -52,12 +52,21 @@
             <p class="text-success fw-bold">{{ session('successImportPurchase') }}</p>
         @endif
 
-
+        <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-2">
+            <div class="d-flex gap-2 ">
+                <form action="{{ route('purchase-index') }}" class="d-flex gap-2">
+                    <div class="position-relative">
+                    <input type="text" name="search" placeholder="Cari pembelian..." value="{{ request('search') }}" class="form-control border border-1 border-secondary pe-5" style="width: 300px;">
+                        <a href="{{ route('purchase-index') }}" class="btn position-absolute top-0 end-0"><i class="bi bi-x-lg"></i></a>
+                    </div>
+                    <button class="btn btn-primary"><i class="bi bi-search"></i></button>
+                </form>
+            </div>
             <a href="{{ route('purchase-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
                 <i class="bi bi-plus-square"></i>
                 Tambah Pembelian Baru</a>
-            <br>
-
+        </div>
+        <br>
 
         {{-- tabel list data--}}
 

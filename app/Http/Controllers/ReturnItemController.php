@@ -20,7 +20,7 @@ use PhpParser\Node\Stmt\Return_;
 class ReturnItemController extends Controller {
     public function index(){
         return view("pages.return-item.index", [
-            "return_items" => ReturnItem::orderBy('return_date', 'desc')->get()
+            "return_items" => ReturnItem::filter(request(['search']))->orderBy('return_date', 'desc')->get()
         ]);
     }
 

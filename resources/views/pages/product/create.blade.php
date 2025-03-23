@@ -12,49 +12,41 @@
 
                 @csrf
 
-                <div class="mt-3">
-                    <label for="product_name">Nama Barang</label>
-                    <input type="text" class="form-control @error('product_name') is-invalid @enderror" name="product_name" id="product_name" placeholder="Nama Barang"
-                        value="{{ old('product_name') }}">
-                    @error('product_name')
-                        <p class="text-danger">Harap masukkan nama barang.</p>
-                    @enderror
+                <div class="d-flex gap-3">
+                    <div class="mt-3 w-50">
+                        <label for="product_name">Nama Barang</label>
+                        <input type="text" class="form-control @error('product_name') is-invalid @enderror" name="product_name" id="product_name" placeholder="Nama Barang"
+                            value="{{ old('product_name') }}">
+                        @error('product_name')
+                            <p class="text-danger">Harap masukkan nama barang.</p>
+                        @enderror
+                    </div>
+
+                    <div class="mt-3 w-50">
+                        <label for="variant">Varian</label>
+                        <input type="text" class="form-control @error('variant') is-invalid @enderror" name="variant" id="variant" placeholder="Variant"
+                            value="{{ old('variant') }}">
+                        @error('variant')
+                            <p class="text-danger">Harap masukkan varian barang.</p>
+                        @enderror
+                    </div>
                 </div>
 
-                <div class="mt-3">
-                    <label for="variant">Varian</label>
-                    <input type="text" class="form-control @error('variant') is-invalid @enderror" name="variant" id="variant" placeholder="Variant"
-                        value="{{ old('variant') }}">
-                    @error('variant')
-                        <p class="text-danger">Harap masukkan varian barang.</p>
-                    @enderror
-                </div>
+                <div class="d-flex gap-3">
+                    <div class="mt-3 w-50">
+                        <label for="fake_product_code">SKU</label>
+                        <input type="text" class="form-control" name="fake_product_code" id="fake_product_code" placeholder="(Dibuat otomatis oleh sistem)" value="{{ old('fake_product_code') }}" disabled>
+                    </div>
 
-                <div class="mt-3">
-                    <label for="unit">Satuan</label>
-                    <input type="text" class="form-control @error('unit') is-invalid @enderror" name="unit" id="unit" placeholder="Unit"
-                        value="{{ old('unit') }}">
-                    @error('unit')
-                        <p class="text-danger">Harap masukkan satuan barang.</p>
-                    @enderror
+                    <div class="mt-3 w-50">
+                        <label for="stock">Stok</label>
+                        <input type="number" class="form-control @error('stock') is-invalid @enderror" name="stock" id="stock" placeholder="Stok"
+                            value="{{ old('stock') }}">
+                        @error('stock')
+                            <p class="text-danger">Harap masukkan nilai minimal 0.</p>
+                        @enderror
+                    </div>
                 </div>
-
-                <div class="mt-3">
-                    <label for="stock">Stok</label>
-                    <input type="number" class="form-control @error('stock') is-invalid @enderror" name="stock" id="stock" placeholder="Stok"
-                        value="{{ old('stock') }}">
-                    @error('stock')
-                        <p class="text-danger">Harap masukkan nilai minimal 0.</p>
-                    @enderror
-                </div>
-
-                {{-- <div class="mt-3">
-                    <label for="status">Status</label>
-                    <select name="status" id="status" class="form-select @error('status') is-invalid @enderror">
-                        <option value="Ready" @if(old('status') == 'Ready') selected @endif>Tersedia</option>
-                        <option value="Out of Stock" @if(old('status') == 'Out of Stock') selected @endif>Stok kosong</option>
-                    </select>
-                </div> --}}
 
                 <div class="mt-3">
                     <label>Status</label>
@@ -71,37 +63,45 @@
                     </div>
                 </div>
 
-                <div class="mt-3">
-                    <label for="fake_product_code">SKU</label>
-                    <input type="text" class="form-control" name="fake_product_code" id="fake_product_code" placeholder="(Dibuat otomatis oleh sistem)" value="{{ old('fake_product_code') }}" disabled>
-                </div>
-
-                <div class="mt-3">
-                    <label for="price">Harga</label>
-                    <input type="number" class="form-control @error('price') is-invalid @enderror" name="price" id="price" placeholder="Harga"
-                        value="0">
-                    @error('price')
-                        <p class="text-danger">Harap masukkan nilai minimal 1.</p>
-                    @enderror
-                </div>
-
-                @if(in_array(Auth::user()->role->role_name, ['master', 'accounting_admin']))
-                    <div class="mt-3">
-                        <label for="discount">Diskon</label>
-                        <input type="text" class="form-control @error('discount') is-invalid @enderror" name="discount" id="discount" placeholder="Diskon"
-                            value="0">
-                        @error('discount')
-                            <p class="text-danger">Harap masukkan nilai minimal 0. Gunakan tanda titik untuk desimal.</p>
+                <div class="d-flex gap-3">
+                    <div class="mt-3 w-50">
+                        <label for="unit">Satuan</label>
+                        <input type="text" class="form-control @error('unit') is-invalid @enderror" name="unit" id="unit" placeholder="Unit"
+                            value="{{ old('unit') }}">
+                        @error('unit')
+                            <p class="text-danger">Harap masukkan satuan barang.</p>
                         @enderror
                     </div>
 
-                    <div class="mt-3">
-                        <label for="markup">Markup</label>
-                        <input type="text" class="form-control @error('markup') is-invalid @enderror" name="markup" id="markup" placeholder="Markup"
+                    <div class="mt-3 w-50">
+                        <label for="price">Harga</label>
+                        <input type="number" class="form-control @error('price') is-invalid @enderror" name="price" id="price" placeholder="Harga"
                             value="0">
-                        @error('markup')
-                            <p class="text-danger">Harap masukkan nilai minimal 0. Gunakan tanda titik untuk desimal.</p>
+                        @error('price')
+                            <p class="text-danger">Harap masukkan nilai minimal 1.</p>
                         @enderror
+                    </div>
+                </div>
+
+                @if(in_array(Auth::user()->role->role_name, ['master', 'accounting_admin']))
+                    <div class="d-flex gap-3">
+                        <div class="mt-3 w-50">
+                            <label for="discount">Diskon</label>
+                            <input type="text" class="form-control @error('discount') is-invalid @enderror" name="discount" id="discount" placeholder="Diskon"
+                                value="0">
+                            @error('discount')
+                                <p class="text-danger">Harap masukkan nilai minimal 0. Gunakan tanda titik untuk desimal.</p>
+                            @enderror
+                        </div>
+
+                        <div class="mt-3 w-50">
+                            <label for="markup">Markup</label>
+                            <input type="text" class="form-control @error('markup') is-invalid @enderror" name="markup" id="markup" placeholder="Markup"
+                                value="0">
+                            @error('markup')
+                                <p class="text-danger">Harap masukkan nilai minimal 0. Gunakan tanda titik untuk desimal.</p>
+                            @enderror
+                        </div>
                     </div>
                 @endif
 

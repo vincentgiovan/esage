@@ -15,7 +15,7 @@ class PartnerController extends Controller{
     {
         // Tampilkan halaman pages/partner/index.blade.php beserta data yang diperlukan di blade-nya:
         return view("pages.partner.index", [
-            "partners" => Partner::all() // semua data partner buat ditampilin satu-satu di tabel
+            "partners" => Partner::filter(request(['search']))->get() // semua data partner buat ditampilin satu-satu di tabel
         ]);
     }
 
