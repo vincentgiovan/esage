@@ -137,7 +137,7 @@
         const allproducts = @json($products);
 
         $(document).on('click', '.remove-row-btn', function(){
-            if($('#isibody').find('tr').length > 1){
+            if($('#isibody').find('tr').length > 1 && confirm('Apakah anda yakin ingin menghapus item ini?')){
                 $(this).closest('tr').remove();
             }
         });
@@ -176,6 +176,16 @@
             });
 
             $('#delivery_date').on('change', function(){
+                const today = new Date();
+                const todayDate = today.toISOString().split('T')[0];
+
+                if($(this).val() == todayDate){
+                    $('#_register').val('{{ $delivery_order->register }}');
+                    $('#register').val('{{ $delivery_order->register }}');
+
+                    return;
+                }
+
                 // Hitung berapa data delivery order yang punya delivery_date yang sama
                 let n = 0;
                 for(let delord of alldeliveryorderdata) {

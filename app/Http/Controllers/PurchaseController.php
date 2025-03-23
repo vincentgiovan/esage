@@ -38,17 +38,93 @@ class PurchaseController extends Controller
     // Simpan data purchase baru ke database
     public function store(Request $request)
     {
+        // return $request;
+
         // Validasi data, ga lolos ga lanjut
-        $validatedData = $request->validate([
+        $validatedPurchaseData = $request->validate([
             "purchase_date" => "required",
             "purchase_deadline" => "required",
             "register" => "required|min:3",
             "partner_id" => "required",
-            "purchase_status" => "required"
+            "purchase_status" => "required",
         ]);
 
-        // Buat dan simpan data purchase baru ke tabel purchases
-        Purchase::create($validatedData);
+        $request->validate([
+            "products" => "required",
+            "quantities" => "required",
+
+            "product_name.*" => "required",
+            "unit.*" => "required",
+            "status.*" => "required",
+            "variant.*" => "required",
+            "product_code.*" => "required",
+            "price.*" => "required",
+            "markup.*" => "required",
+            "stock.*" => "required",
+            "discount.*" => "required",
+            "type.*" => "required"
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            // Buat dan simpan data purchase baru ke tabel purchases
+            $newPurchase = Purchase::create($validatedPurchaseData);
+
+            // Untuk setiap produk yang sudah ada lakukan:
+            if($request->products > 0){
+                foreach($request->products as $index => $product_id){
+                    $product = Product::find($product_id);
+                    $product->stock += $request->quantities[$index];
+
+                    PurchaseProduct::create([
+                        "purchase_id" => $newPurchase->id,
+                        "product_id" => $product->id,
+                        "discount" => $product->discount,
+                        "quantity" => $request->quantities[$index],
+                        "price" => $product->price
+                    ]);
+
+                    $product->save();
+                }
+            }
+
+            // Untuk setiap produk baru lakukan:
+            if($request->product_name){
+                $request_types = array_values($request->type);
+                foreach($request->product_name as $index => $product){
+                    // Bikin dan tambahkan data produk ke tabel products
+                    $new_product = Product::create([
+                        "product_name" => $product,
+                        "unit" => $request->unit[$index],
+                        "status" => 'Ready',
+                        "variant" => $request->variant[$index],
+                        "product_code" => $request->product_code[$index],
+                        "price" => $request->price[$index],
+                        "markup" => $request->markup[$index],
+                        "stock" => $request->stock[$index],
+                        "type" => $request_types[$index],
+                        "condition" => "good",
+                    ]);
+
+                    // Tambahkan data ke tabel purchase_product di mana id product sama dengan yang dibuat dan purchase sama dengan target cart purchase
+                    PurchaseProduct::create([
+                        "purchase_id" => $newPurchase->id,
+                        "product_id" => $new_product->id,
+                        "discount" => $request->discount[$index],
+                        "quantity" => $request->stock[$index],
+                        "price" => $request->price[$index]
+                    ]);
+                }
+            }
+
+            DB::commit();
+        }
+        catch(Exception $e){
+            DB::rollback();
+
+            throw $e;
+        }
 
         // Arahkan user kembali ke halaman pages/purchase/index.blade.php
         return redirect(route("purchase-index"))->with("successAddPurchase", "Berhasil menambahkan pembelian baru.");
@@ -61,7 +137,8 @@ class PurchaseController extends Controller
         return view("pages.purchase.edit", [
             "purchase" => Purchase::find($id), // data purchase yang mau di-edit buat auto fill form
             "supplier" => Partner::all(), // data semua partner (supplier) buat dropdown/select partner
-            "purchases" => Purchase::all() // data semua purchase untuk auto generate SKU
+            "purchases" => Purchase::all(), // data semua purchase untuk auto generate SKU
+            "products" => Product::orderBy('product_name', 'asc')->orderBy('variant', 'asc')->get()
         ]);
     }
 
@@ -77,8 +154,62 @@ class PurchaseController extends Controller
             "purchase_status" => "required"
         ]);
 
-        // Simpan perubahannya di data yang sesuai di tabel purchases
-        Purchase::find($id)->update($validatedData);
+        $request->validate([
+            "products" => "required",
+            "quantities" => "required",
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $purchase = Purchase::find($id);
+
+            $prev_data_list = [];
+
+            foreach($purchase->purchase_products as $pp){
+                $prev_data_list[] = [
+                    'discount' => $pp->discount,
+                    'price' => $pp->price,
+                ];
+
+                $product = Product::find($pp->product_id);
+                $product->stock -= $pp->quantity;
+                $product->save();
+            }
+
+            $purchase->purchase_products()->delete();
+
+            foreach($request->products as $i => $reqprod){
+                PurchaseProduct::create([
+                    'purchase_id' => $purchase->id,
+                    'product_id' => $reqprod,
+                    "discount" => $prev_data_list[$i]['discount'],
+                    "quantity" => $request->quantities[$i],
+                    "price" => $prev_data_list[$i]['price'],
+                ]);
+
+                // Karena purchase sifatnya menambah stok produk, maka update stok product di tabel aslinya:
+                $oldstock = Product::find($reqprod)->stock; // Ambil stok lama produk
+                $newstock = $oldstock + $request->quantities[$i]; // Stok yang baru
+
+                $toUpdate = ["stock" => $newstock]; // Simpen kolom data yang mau di-update by default
+                if($newstock == 0){ // Kalo ternyata jumlah produk jadi 0 statusnya juga di-update
+                    $toUpdate["status"] = "Out of Stock";
+                }
+
+                Product::find($reqprod)->update($toUpdate); // Update datanya
+            }
+
+            // Simpan perubahannya di data yang sesuai di tabel purchases
+            $purchase->update($validatedData);
+
+        DB::commit();
+        }
+        catch(Exception $e){
+            DB::rollback();
+
+            throw $e;
+        }
 
         // Arahkan user kembali ke halaman pages/purchase/index.blade.php
         return redirect(route("purchase-index"))->with("successEditPurchase", "Berhasil memperbaharui data pembelian.");

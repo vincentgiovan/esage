@@ -125,8 +125,12 @@
                             <label class="form-check-label" for="type1">Fast Moving</label>
                         </div>
                         <div class="d-flex gap-2 rounded-3 py-2">
-                            <input class="form-check-input" type="radio" name="type" id="type2" value="asset" @if(old('type') == "asset") checked @endif>
-                            <label class="form-check-label" for="type2">Asset</label>
+                            <input class="form-check-input" type="radio" name="type" id="type2" value="slow moving" @if(old('type') == "slow moving") checked @endif>
+                            <label class="form-check-label" for="type2">Slow Moving</label>
+                        </div>
+                        <div class="d-flex gap-2 rounded-3 py-2">
+                            <input class="form-check-input" type="radio" name="type" id="type3" value="asset" @if(old('type') == "asset") checked @endif>
+                            <label class="form-check-label" for="type3">Asset</label>
                         </div>
                     </div>
                 </div>

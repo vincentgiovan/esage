@@ -40,8 +40,8 @@
 
                     <div class="mt-3 w-50">
                         <label for="fakeregister">SKU</label>
-                        <input type="text" class="form-control" id="_register" name="_register" placeholder="(Dibuat otomatis oleh sistem)"  value="{{ __('DO/' . Carbon\Carbon::today()->format('dmY') . '/' . $purchases->where('purchase_date', Carbon\Carbon::today()->format('Y-m-d'))->count() + 1) }}" disabled>
-                            <input type="hidden" name="register" id="register" value="{{ __('DO/' . Carbon\Carbon::today()->format('dmY') . '/' . $purchases->where('purchase_date', Carbon\Carbon::today()->format('Y-m-d'))->count() + 1) }}">
+                        <input type="text" class="form-control" id="_register" name="_register" placeholder="(Dibuat otomatis oleh sistem)"  value="{{ __('PU/' . Carbon\Carbon::today()->format('dmY') . '/' . $purchases->where('purchase_date', Carbon\Carbon::today()->format('Y-m-d'))->count() + 1) }}" disabled>
+                            <input type="hidden" name="register" id="register" value="{{ __('PU/' . Carbon\Carbon::today()->format('dmY') . '/' . $purchases->where('purchase_date', Carbon\Carbon::today()->format('Y-m-d'))->count() + 1) }}">
                     </div>
                 </div>
 
@@ -111,8 +111,8 @@
                                         <div class="d-flex flex-column gap-2">
                                             <div>
                                                 <label for="product_name">Nama Produk</label>
-                                                <input type="text" class="form-control productName" name="product_name[]" placeholder="Nama Barang" value = "{{ old("product_name" ) }}">
-                                                <p class="invalid-feedback errProductName"></p>
+                                                <input type="text" class="form-control productName" name="product_name[]" placeholder="Nama Barang">
+                                                <p class="invalid-feedback errProductName">Harap masukkan nama produk</p>
                                             </div>
 
                                             <button class="btn btn-secondary newprod-detail-btn" type="button">Sembunyikan detail</button>
@@ -121,38 +121,37 @@
                                                 <div>
                                                     <label for="variant">Variant</label>
                                                     <input type="text" class="form-control variant" name="variant[]" placeholder="Variant">
-                                                    <p class="invalid-feedback errVariant"></p>
+                                                    <p class="invalid-feedback errVariant">Harap masukkan varian</p>
                                                 </div>
 
                                                 <div class="mt-2">
                                                     <label for="product_code">SKU</label>
-                                                    <input type="text" class="form-control fakeCode" name="fake_product_code" placeholder="(Dibuat otomatis oleh sistem)" disabled>
+                                                    <input type="text" class="form-control fakeCode" name="fake_product_code[]" placeholder="(Dibuat otomatis oleh sistem)" disabled>
                                                     <input type="hidden" name="product_code[]" class="productCode">
-                                                    <p class="invalid-feedback errProductCode"></p>
                                                 </div>
 
                                                 <div class="mt-2">
                                                     <div class="unit">Satuan</div>
                                                     <input type="text" class="form-control" name="unit[]" placeholder="Unit">
-                                                    <p class="invalid-feedback errUnit"></p>
+                                                    <p class="invalid-feedback errUnit">Harap masukkan satuan</p>
                                                 </div>
 
                                                 <div class="mt-2">
                                                     <label for="price">Harga</label>
-                                                    <input type="number" class="form-control price" name="price[]" placeholder="Harga" value="0">
-                                                    <p class="invalid-feedback errPrice"></p>
+                                                    <input type="number" class="form-control" name="price[]" placeholder="Harga" value="0">
+                                                    <p class="invalid-feedback errPrice">Harap masukkan nilai minimal 1</p>
                                                 </div>
 
                                                 <div class="mt-2">
                                                     <label for="markup">Markup</label>
-                                                    <input type="text" class="form-control markup" name="markup[]" placeholder="Markup"  value="0">
-                                                    <p class="invalid-feedback errMarkup"></p>
+                                                    <input type="text" class="form-control" name="markup[]" placeholder="Markup"  value="0">
+                                                    <p class="invalid-feedback errMarkup">Harap masukkan nilai minimal 0</p>
                                                 </div>
 
                                                 <div class="mt-2">
                                                     <label for="discount">Diskon</label>
-                                                    <input type="text" class="form-control discount" name="discount[]" placeholder="Diskon"  value="0">
-                                                    <p class="invalid-feedback errDiscount"></p>
+                                                    <input type="text" class="form-control" name="discount[]" placeholder="Diskon"  value="0">
+                                                    <p class="invalid-feedback errDiscount">Harap masukkan nilai minimal 0</p>
                                                 </div>
 
                                                 <div class="mt-2">
@@ -160,22 +159,25 @@
 
                                                     <div class="d-flex gap-3">
                                                         <div class="d-flex gap-2 rounded-3 py-2">
-                                                            <input class="form-check-input type1" type="radio" name="type[{{ round(microtime(true) * 1000) }}]" id="type{{ round(microtime(true) * 1000) }}" value="fast moving" checked>
-                                                            <label class="form-check-label" for="type{{ round(microtime(true) * 1000) }}">Fast Moving</label>
+                                                            <input class="form-check-input" type="radio" name="type[{{ round(microtime(true) * 1000) }}]" id="type{{ round(microtime(true) * 1000) }}_fm" value="fast moving" checked>
+                                                            <label class="form-check-label" for="type{{ round(microtime(true) * 1000) }}_fm">Fast Moving</label>
                                                         </div>
                                                         <div class="d-flex gap-2 rounded-3 py-2">
-                                                            <input class="form-check-input type2" type="radio" name="type[{{ round(microtime(true) * 1000) }}]" id="type{{ round(microtime(true) * 1000) }}2" value="asset">
-                                                            <label class="form-check-label" for="type{{ round(microtime(true) * 1000) }}2">Aset</label>
+                                                            <input class="form-check-input" type="radio" name="type[{{ round(microtime(true) * 1000) }}]" id="type{{ round(microtime(true) * 1000) }}_sm" value="slow moving">
+                                                            <label class="form-check-label" for="type{{ round(microtime(true) * 1000) }}_sm">Slow Moving</label>
+                                                        </div>
+                                                        <div class="d-flex gap-2 rounded-3 py-2">
+                                                            <input class="form-check-input" type="radio" name="type[{{ round(microtime(true) * 1000) }}]" id="type{{ round(microtime(true) * 1000) }}_as" value="asset">
+                                                            <label class="form-check-label" for="type{{ round(microtime(true) * 1000) }}_as">Aset</label>
                                                         </div>
                                                     </div>
-                                                    <p class="invalid-feedback errType"></p>
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="d-flex h-100 align-items-start">
-                                            <input type="number" class="form-control qty-input" name="quantities[]" min="1" value="1">
+                                            <input type="number" class="form-control qty-input" name="stock[]" min="1" value="1">
                                         </div>
                                     </td>
                                     <td>
@@ -231,12 +233,14 @@
             return processedText;
         }
 
+        let templateNewProd = undefined;
+
         // Ambil data dari Laravel
         const allpurchasesdata = @json($purchases);
         const allproducts = @json($products);
 
         $(document).on('click', '.remove-row-btn', function(){
-            if($(this).closest('tbody').find('tr').length > 1){
+            if(confirm('Apakah anda yakin ingin menghapus item ini?')){
                 $(this).closest('tr').remove();
             }
         });
@@ -273,8 +277,6 @@
                 }
 
                 const productCode = `${makeCapitalizedEachWordAndNoSpace(inputProductName)}/${makeCapitalizedEachWordAndNoSpace(inputVariant)}/${n.toString()}`;
-
-                console.log(productCode);
 
                 $(this).closest('td').find('.fakeCode').val(productCode);
                 $(this).closest('td').find('.productCode').val(productCode);
@@ -330,19 +332,145 @@
             });
 
             $('#add-row-btn-unregistered').on('click', function(){
-                const newRow = $('#isibody-unregistered').children().first().clone();
-                newRow.find('label').each(function(){
-                    const oldFor = $(this).attr('for');
-                    $(this).attr('for', oldFor + Date.now().toString());
-                });
-                newRow.find('input').val('');
-                newRow.find('.price, .markup, .discount').val(0);
-                newRow.find('.qty-input').val(1);
-                newRow.find('.type1').attr({'name': `type[${Date.now().toString()}]`, 'id': `type${Date.now().toString()}`});
-                newRow.find('.type1').next().attr({'for': `type${Date.now().toString()}`});
-                newRow.find('.type2').attr({'name': `type[${Date.now().toString()}]`, 'id': `type${Date.now().toString()}2`});
-                newRow.find('.type2').next().attr({'for': `type${Date.now().toString()}2`});
-                $('#isibody-unregistered').append(newRow);
+                let idnum = Date.now().toString();
+                $('#isibody-unregistered').append(
+                    $('<tr>')
+                        .append(
+                            $('<td>').append($('<div>').addClass('d-flex flex-column gap-2')
+                                .append($('<div>')
+                                    .append(
+                                        $('<label>').attr('for', `product_name${idnum}`).text('Nama Produk')
+                                    )
+                                    .append(
+                                        $('<input>').attr({'type': 'text', 'name': 'product_name[]', 'id': `product_name${idnum}`, 'placeholder': 'Nama Barang'}).addClass('form-control productName')
+                                    )
+                                    .append(
+                                        $('<p>').addClass('invalid-feedback errProductName').text('Harap masukkan nama barang')
+                                    )
+                                )
+                                .append(
+                                    $('<button>').addClass('btn btn-secondary newprod-detail-btn').attr('type', 'button').text('Sembunyikan detail')
+                                )
+                                .append($('<div>').addClass('collapse.show gap-2 newprod-detail-area')
+                                    .append($('<div>')
+                                        .append(
+                                            $('<label>').attr('for', `variant${idnum}`).text('Variant')
+                                        )
+                                        .append(
+                                            $('<input>').attr({'type': 'text', 'name': 'variant[]', 'id': `variant${idnum}`, 'placeholder': 'Variant'}).addClass('form-control variant')
+                                        )
+                                        .append(
+                                            $('<p>').addClass('invalid-feedback errVariant').text('Harap masukkan varian')
+                                        )
+                                    )
+                                    .append($('<div>').addClass('mt-2')
+                                        .append(
+                                            $('<label>').attr('for', `product_code${idnum}`).text('SKU')
+                                        )
+                                        .append(
+                                            $('<input>').attr({'type': 'text', 'name': 'fake_product_code[]', 'id': `product_code${idnum}`, 'placeholder': '(Dibuat otomatis oleh sistem)'}).addClass('form-control fakeCode').prop('disabled', true)
+                                        )
+                                        .append(
+                                            $('<input>').attr({'type': 'hidden', 'name': 'product_code[]'}).addClass('productCode')
+                                        )
+                                    )
+                                    .append($('<div>').addClass('mt-2')
+                                        .append(
+                                            $('<label>').attr('for', `unit${idnum}`).text('Satuan')
+                                        )
+                                        .append(
+                                            $('<input>').attr({'type': 'text', 'name': 'unit[]', 'id': `unit${idnum}`, 'placeholder': 'Unit'}).addClass('form-control')
+                                        )
+                                        .append(
+                                            $('<p>').addClass('invalid-feedback errUnit').text('Harap masukkan satuan')
+                                        )
+                                    )
+                                    .append($('<div>').addClass('mt-2')
+                                        .append(
+                                            $('<label>').attr('for', `price${idnum}`).text('Harga')
+                                        )
+                                        .append(
+                                            $('<input>').attr({'type': 'number', 'name': 'price[]', 'id': `price${idnum}`, 'placeholder': 'Harga'}).addClass('form-control').val(0)
+                                        )
+                                        .append(
+                                            $('<p>').addClass('invalid-feedback errPrice').text('Harap masukkan nilai minimal 1')
+                                        )
+                                    )
+                                    .append($('<div>').addClass('mt-2')
+                                        .append(
+                                            $('<label>').attr('for', `markup${idnum}`).text('Markup')
+                                        )
+                                        .append(
+                                            $('<input>').attr({'type': 'text', 'name': 'markup[]', 'id': `markup${idnum}`, 'placeholder': 'Markup'}).addClass('form-control').val(0)
+                                        )
+                                        .append(
+                                            $('<p>').addClass('invalid-feedback errMarkup').text('Harap masukkan nilai minimal 0')
+                                        )
+                                    )
+                                    .append($('<div>').addClass('mt-2')
+                                        .append(
+                                            $('<label>').attr('for', `discount${idnum}`).text('Diskon')
+                                        )
+                                        .append(
+                                            $('<input>').attr({'type': 'text', 'name': 'discount[]', 'id': `discount${idnum}`, 'placeholder': 'Diskon'}).addClass('form-control').val(0)
+                                        )
+                                        .append(
+                                            $('<p>').addClass('invalid-feedback errDiscount').text('Harap masukkan nilai minimal 0')
+                                        )
+                                    )
+                                    .append($('<div>').addClass('mt-2')
+                                        .append(
+                                            $('<label>').text('Jenis Barang')
+                                        )
+                                        .append(
+                                            $('<div>').addClass('d-flex gap-3')
+                                                .append(
+                                                    $('<div>').addClass('d-flex gap-2 rounded-3 py-2')
+                                                        .append(
+                                                            $('<input>').addClass('form-check-input').attr({'type': 'radio', 'name': `type[${idnum}]`, 'id': `type${idnum}_fm`}).val('fast moving').prop('checked', true)
+                                                        )
+                                                        .append(
+                                                            $('<label>').attr('for', `type${idnum}_fm`).text('Fast Moving')
+                                                        )
+                                                )
+                                                .append(
+                                                    $('<div>').addClass('d-flex gap-2 rounded-3 py-2')
+                                                        .append(
+                                                            $('<input>').addClass('form-check-input').attr({'type': 'radio', 'name': `type[${idnum}]`, 'id': `type${idnum}_sm`}).val('slow moving')
+                                                        )
+                                                        .append(
+                                                            $('<label>').attr('for', `type${idnum}_sm`).text('Slow Moving')
+                                                        )
+                                                )
+                                                .append(
+                                                    $('<div>').addClass('d-flex gap-2 rounded-3 py-2')
+                                                        .append(
+                                                            $('<input>').addClass('form-check-input').attr({'type': 'radio', 'name': `type[${idnum}]`, 'id': `type${idnum}_as`}).val('asset')
+                                                        )
+                                                        .append(
+                                                            $('<label>').attr('for', `type${idnum}_as`).text('Aset')
+                                                        )
+                                                )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                        .append(
+                            $('<td>').append(
+                                $('<div>').addClass('d-flex h-100 align-items-start').append(
+                                    $('<input>').attr({'type': 'number', 'name': 'stock[]', 'min': 1}).addClass('form-control qty-input').val(1)
+                                )
+                            )
+                        )
+                        .append(
+                            $('<td>').append(
+                                $('<div>').addClass('d-flex h-100 align-items-start').append(
+                                    $('<button>').attr('type', 'button').addClass('btn btn-danger remove-row-btn').html('<i class="bi bi-trash3"></i>')
+                                )
+                            )
+                        )
+                );
             });
 
             $('#purchase_date').on('change', function(){
@@ -359,7 +487,7 @@
                 const formattedDate = `${day}${month}${year}`;
 
                 // Generate SKU dan masukin hasilnya langsung ke input fakeregister (yang tampil di user)
-                const generatedsku = "DO/"+ formattedDate +"/"+ (n + 1);
+                const generatedsku = "PU/"+ formattedDate +"/"+ (n + 1);
                 $('#_register').val(generatedsku);
                 $('#register').val(generatedsku);
             });
@@ -368,14 +496,69 @@
                 $('input, select').removeClass('is-invalid');
 
                 // Validations
-                const inpPurchaseDate = $('#purchase_date');
+                const inpNewProductName = $('input[name="product_name[]"]');
+                const inpNewVariant = $('input[name="variant[]"]');
+                const inpNewUnit = $('input[name="unit[]"]');
+                const inpNewPrice = $('input[name="price[]"]');
+                const inpNewMarkup = $('input[name="markup[]"]');
+                const inpNewDiscount = $('input[name="discount[]"]');
+
+                const inpPDate = $('#purchase_date');
+                const inpPDeadline = $('#purchase_deadline');
 
                 let inputError = false;
 
-                if(!inpPurchaseDate.val()){
-                    inpPurchaseDate.addClass('is-invalid');
+                if(!inpPDate.val()){
+                    inpPDate.addClass('is-invalid');
                     inputError = true;
                 }
+
+                if(!inpPDeadline.val()){
+                    inpPDeadline.addClass('is-invalid');
+                    inputError = true;
+                }
+
+                inpNewProductName.each(function(){
+                    if(!$(this).val()){
+                        $(this).addClass('is-invalid');
+                        inputError = true;
+                    }
+                });
+
+                inpNewVariant.each(function(){
+                    if(!$(this).val()){
+                        $(this).addClass('is-invalid');
+                        inputError = true;
+                    }
+                });
+
+                inpNewUnit.each(function(){
+                    if(!$(this).val()){
+                        $(this).addClass('is-invalid');
+                        inputError = true;
+                    }
+                });
+
+                inpNewPrice.each(function(){
+                    if(!$(this).val()){
+                        $(this).addClass('is-invalid');
+                        inputError = true;
+                    }
+                });
+
+                inpNewMarkup.each(function(){
+                    if(!$(this).val()){
+                        $(this).addClass('is-invalid');
+                        inputError = true;
+                    }
+                });
+
+                inpNewDiscount.each(function(){
+                    if(!$(this).val()){
+                        $(this).addClass('is-invalid');
+                        inputError = true;
+                    }
+                });
 
                 if(!inputError){
                     $('form').submit();

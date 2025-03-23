@@ -69,7 +69,7 @@
                 cursor: not-allowed;
             }
 
-            .form-control, .form-select {
+            input:not(.is-invalid), select:not(.is-invalid) {
                 border-width: 2px !important;
                 border-color: rgb(169, 169, 169) !important;
             }

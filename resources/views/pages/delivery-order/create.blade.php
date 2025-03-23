@@ -135,7 +135,7 @@
         const allproducts = @json($products);
 
         $(document).on('click', '.remove-row-btn', function(){
-            if($('#isibody').find('tr').length > 1){
+            if($('#isibody').find('tr').length > 1 && confirm('Apakah anda yakin ingin menghapus item ini?')){
                 $(this).closest('tr').remove();
             }
         });

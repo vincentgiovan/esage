@@ -37,13 +37,13 @@
         <p class="text-success fw-bold">{{ session("successDeleteProduct") }}</p>
     @endif
 
-    <a href="{{ route('purchaseproduct-create1', $purchase->id) }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
+    {{-- <a href="{{ route('purchaseproduct-create1', $purchase->id) }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
         <i class="bi bi-plus-square"></i> Tambah Barang ke Pembelian
     </a>
     <a href="{{ route('purchaseproduct-create2', $purchase->id) }}" class="btn btn-success text-white mb-3" style="font-size: 10pt">
         <i class="bi bi-plus-square"></i> Tambah dan Buat Data Barang Baru
     </a>
-    <br>
+    <br> --}}
     {{-- tabel list data--}}
 
     <div class="overflow-x-auto">
@@ -57,7 +57,7 @@
                 <th>Diskon</th>
                 <th>Harga Setelah Diskon</th>
                 <th>Variant</th>
-                <th>Aksi</th>
+                {{-- <th>Aksi</th> --}}
             </tr>
 
             @foreach ($pp as $purchase_product)
@@ -74,7 +74,7 @@
                     <td>{{ $purchase_product->product->variant }}</td>
 
                     {{-- <td>{{ $p->user->name }}</td> --}}
-                    <td>
+                    {{-- <td>
                         <div class="d-flex gap-5 w-100">
                             <form action="{{ route("purchaseproduct-destroy", [$purchase->id, $purchase_product->id] ) }}" method="POST">
                                 @csrf
@@ -83,7 +83,7 @@
                                 </button>
                             </form>
                         </div>
-                    </td>
+                    </td> --}}
                 </tr>
 
             @endforeach
