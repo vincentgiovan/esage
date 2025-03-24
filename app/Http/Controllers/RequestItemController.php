@@ -13,8 +13,8 @@ class RequestItemController extends Controller
 {
     public function index(){
         return view("pages.request-item.index", [
-            "awaiting_requests" => RequestItem::where('status', 'awaiting')->orderBy('request_date', 'desc')->get(),
-            "unawaiting_requests" => RequestItem::whereNot('status', 'awaiting')->orderBy('request_date', 'desc')->get()
+            "awaiting_requests" => RequestItem::where('status', 'awaiting')->orderBy('request_date', 'desc')->paginate(30),
+            "unawaiting_requests" => RequestItem::whereNot('status', 'awaiting')->orderBy('request_date', 'desc')->paginate(30)
         ]);
     }
 

@@ -31,24 +31,24 @@
         {{-- tabel list data--}}
         <table style="width: 100%; border: 1px solid black;">
             <tr>
-                <th>Nomor</th>
-                <th>Supplier</th>
-                <th>Purchase Deadline</th>
-                <th>Register</th>
-                <th>Purchase Date</th>
-                <th>Note</th>
-                <th>Status</th>
+                <th class="border border-1 border-secondary">Nomor</th>
+                <th class="border border-1 border-secondary">Supplier</th>
+                <th class="border border-1 border-secondary">Purchase Deadline</th>
+                <th class="border border-1 border-secondary">Register</th>
+                <th class="border border-1 border-secondary">Purchase Date</th>
+                <th class="border border-1 border-secondary">Note</th>
+                <th class="border border-1 border-secondary">Status</th>
             </tr>
 
             @foreach ($purchases as $i => $p)
                 <tr>
-                    <td>{{ $i + 1 }}</td>
-                    <td>{{ $p->partner->partner_name }}</td>
-                    <td>{{ $p->purchase_deadline }}</td>
-                    <td>{{ $p->register }}</td>
-                    <td>{{ $p->purchase_date }}</td>
-                    <td>{{ $p->note }}</td>
-                    <td>{{ $p->purchase_status }}</td>
+                    <td class="border border-1 border-secondary">{{ $i + 1 }}</td>
+                    <td class="border border-1 border-secondary">{{ $p->partner->partner_name }}</td>
+                    <td class="border border-1 border-secondary">{{ $p->purchase_deadline }}</td>
+                    <td class="border border-1 border-secondary">{{ $p->register }}</td>
+                    <td class="border border-1 border-secondary">{{ $p->purchase_date }}</td>
+                    <td class="border border-1 border-secondary">{{ $p->note }}</td>
+                    <td class="border border-1 border-secondary">{{ $p->purchase_status }}</td>
                 </tr>
             @endforeach
         </table>

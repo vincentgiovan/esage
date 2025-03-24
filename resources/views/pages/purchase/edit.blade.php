@@ -67,14 +67,14 @@
                 <div class="overflow-x-auto mt-4">
                     <table class="w-100">
                         <thead>
-                            <th>Barang</th>
-                            <th>Jumlah</th>
-                            <th>Aksi</th>
+                            <th class="border border-1 border-secondary">Barang</th>
+                            <th class="border border-1 border-secondary">Jumlah</th>
+                            <th class="border border-1 border-secondary">Aksi</th>
                         </thead>
                         <tbody id="isibody-registered">
                             @foreach($purchase->purchase_products as $purprod)
                                 <tr>
-                                    <td>
+                                    <td class="border border-1 border-secondary">
                                         <select name="products[]" class="form-select select2">
                                         @foreach ($products as $product)
                                             <option value="{{ $product->id }}" @if($purprod->product->id == $product->id) selected @endif>
@@ -83,10 +83,10 @@
                                         @endforeach
                                         </select>
                                     </td>
-                                    <td>
+                                    <td class="border border-1 border-secondary">
                                         <input type="number" class="form-control qty-input" name="quantities[]" min="1" value="{{ $purprod->quantity }}">
                                     </td>
-                                    <td><button type="button" class="btn btn-danger remove-row-btn"><i class="bi bi-trash3"></i></button></td>
+                                    <td class="border border-1 border-secondary"><button type="button" class="btn btn-danger remove-row-btn"><i class="bi bi-trash3"></i></button></td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -216,15 +216,15 @@
                 $('#isibody-registered').append(
                     $('<tr>')
                         .append(
-                            $('<td>').append(newProdSel)
+                            $('<td class="border border-1 border-secondary">').append(newProdSel)
                         )
                         .append(
-                            $('<td>').append(
+                            $('<td class="border border-1 border-secondary">').append(
                                 $('<input>').attr({'type': 'number', 'name': 'quantities[]', 'min': 1}).addClass('form-control qty-input').val(1)
                             )
                         )
                         .append(
-                            $('<td>').append(
+                            $('<td class="border border-1 border-secondary">').append(
                                 $('<button>').attr('type', 'button').addClass('btn btn-danger remove-row-btn').html('<i class="bi bi-trash3"></i>')
                             )
                         )

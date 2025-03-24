@@ -55,26 +55,29 @@
                     Tambah Proyek Baru</a>
             @endif
         </div>
-        <br>
+
+        <div class="d-flex w-100 justify-content-end">
+            Memperlihatkan {{ $projects->firstItem() }} - {{ $projects->lastItem()  }} dari {{ $projects->total() }} item
+        </div>
 
         {{-- tabel list data--}}
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto mt-3">
             <table class="w-100">
                 <tr>
-                    <th>No</th>
-                    <th>Nama Proyek</th>
-                    <th>Lokasi</th>
-                    <th>PIC</th>
-                    <th>Alamat</th>
+                    <th class="border border-1 border-secondary">No</th>
+                    <th class="border border-1 border-secondary">Nama Proyek</th>
+                    <th class="border border-1 border-secondary">Lokasi</th>
+                    <th class="border border-1 border-secondary">PIC</th>
+                    <th class="border border-1 border-secondary">Alamat</th>
                     @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang']))
-                        <th>Aksi</th>
+                        <th class="border border-1 border-secondary">Aksi</th>
                     @endif
                 </tr>
 
                 @foreach ($projects as $p)
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
-                        <td>{{ $loop->iteration }}</td>
-                        <td>
+                        <td class="border border-1 border-secondary">{{ ($loop->index + 1) + ((request('page') ?? 1) - 1) * 30 }}</td>
+                        <td class="border border-1 border-secondary">
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 {{ $p->project_name }}
                                 <div class="">
@@ -83,12 +86,12 @@
                                 </div>
                             </div>
                         </td>
-                        <td>{{ $p->location }}</td>
-                        <td>{{ $p->PIC }}</td>
-                        <td>{{ $p->address }}</td>
-                        {{-- <td >{{ $p->user->name }}</td> --}}
+                        <td class="border border-1 border-secondary">{{ $p->location }}</td>
+                        <td class="border border-1 border-secondary">{{ $p->PIC }}</td>
+                        <td class="border border-1 border-secondary">{{ $p->address }}</td>
+                        {{-- <td class="border border-1 border-secondary" >{{ $p->user->name }}</td> --}}
                         @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang']))
-                            <td>
+                            <td class="border border-1 border-secondary">
                                 <div class="d-flex gap-2 w-100">
                                     <a href="{{ route('project-manageemployee-index', $p->id) }}" class="btn btn-success text-white"
                                         style="font-size: 10pt;">
@@ -111,6 +114,10 @@
                     </tr>
                 @endforeach
             </table>
+        </div>
+
+        <div class="mt-4">
+            {{ $projects->links() }}
         </div>
     </x-container>
 @endsection

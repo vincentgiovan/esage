@@ -20,7 +20,7 @@ class AttendanceController extends Controller
             ->orderBy(Project::select('project_name')
                 ->whereColumn('id', 'attendances.project_id')
                 ->limit(1), 'asc')
-            ->get();
+            ->paginate(30);
 
         return view("pages.attendance.index", [
             "attendances" => $attendances,

@@ -51,29 +51,31 @@
                 <i class="bi bi-plus-square"></i>
                 Tambah Partner Baru</a>
         </div>
-        <br>
+
+        <div class="d-flex w-100 justify-content-end">
+            Memperlihatkan {{ $partners->firstItem() }} - {{ $partners->lastItem()  }} dari {{ $partners->total() }} item
+        </div>
 
         {{-- tabel list data--}}
-
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto mt-3">
             <table class="w-100">
                 <tr>
-                    <th>No</th>
-                    <th>Nama Partner</th>
-                    <th>Role</th>
-                    <th>Alamat</th>
-                    <th>Kontak</th>
-                    <th>Catatan</th>
-                    <th>Tempo</th>
+                    <th class="border border-1 border-secondary">No</th>
+                    <th class="border border-1 border-secondary">Nama Partner</th>
+                    <th class="border border-1 border-secondary">Role</th>
+                    <th class="border border-1 border-secondary">Alamat</th>
+                    <th class="border border-1 border-secondary">Kontak</th>
+                    <th class="border border-1 border-secondary">Catatan</th>
+                    <th class="border border-1 border-secondary">Tempo</th>
 
-                        <th>Aksi</th>
+                        <th class="border border-1 border-secondary">Aksi</th>
 
                 </tr>
 
                 @foreach ($partners as $p)
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
-                        <td>{{ $loop->iteration }}</td>
-                        <td>
+                        <td class="border border-1 border-secondary">{{ ($loop->index + 1) + ((request('page') ?? 1) - 1) * 30 }}</td>
+                        <td class="border border-1 border-secondary">
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 {{ $p->partner_name }}
 
@@ -81,20 +83,20 @@
 
                             </div>
                         </td>
-                        <td>{{ $p->role }}</td>
-                        <td>{{ $p->address }}</td>
-                        <td>
+                        <td class="border border-1 border-secondary">{{ $p->role }}</td>
+                        <td class="border border-1 border-secondary">{{ $p->address }}</td>
+                        <td class="border border-1 border-secondary">
                             <ul>
                                 <li>Email: {{ $p->email ?? "N/A" }}</li>
                                 <li>Fax: {{ $p->fax ?? "N/A" }}</li>
                                 <li>Mobile/Telephone: {{ $p->phone ?? "N/A" }}/{{ $p->contact ?? "N/A" }}</li>
                             </ul>
                         </td>
-                        <td>{{ $p->remark }}</td>
-                        <td>{{ $p->tempo }}</td>
-                        {{-- <td >{{ $p->user->name }}</td> --}}
+                        <td class="border border-1 border-secondary">{{ $p->remark }}</td>
+                        <td class="border border-1 border-secondary">{{ $p->tempo }}</td>
+                        {{-- <td class="border border-1 border-secondary" >{{ $p->user->name }}</td> --}}
 
-                            <td>
+                            <td class="border border-1 border-secondary">
                                 <div class="d-flex gap-2 w-100">
                                     <a href="{{ route('partner-edit', $p->id) }}" class="btn btn-warning text-white"
                                         style="font-size: 10pt; background-color: rgb(197, 167, 0);">
@@ -112,6 +114,10 @@
                     </tr>
                 @endforeach
             </table>
+        </div>
+
+        <div class="mt-4">
+            {{ $partners->links() }}
         </div>
     </x-container>
 @endsection

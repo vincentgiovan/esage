@@ -60,33 +60,39 @@
             @endif
         </div>
 
-        <br>
-
-        <div class="d-flex" style="gap: 1px;">
-            <a href="{{ route('product-index', ['condition' => 'good']) }}" class="btn" style="border-radius: 0; width: 100px; @if(!request('condition') || request('condition') == 'good') border-bottom: 3px solid rgb(59, 59, 59); @else border-bottom: none; @endif">Bagus</a>
-            <a href="{{ route('product-index', ['condition' => 'degraded']) }}" class="btn" style="border-radius: 0; width: 100px; @if(request('condition') == 'degraded') border-bottom: 3px solid rgb(59, 59, 59); @else border-bottom: none; @endif">Rusak</a>
-            <a href="{{ route('product-index', ['condition' => 'refurbish']) }}" class="btn" style="border-radius: 0; width: 100px; @if(request('condition') == 'refurbish') border-bottom: 3px solid rgb(59, 59, 59); @else border-bottom: none; @endif">Rekondisi</a>
+        <div class="d-flex w-100 justify-content-between align-items-center">
+            <div class="d-flex" style="gap: 1px;">
+                <a href="{{ route('product-index', ['condition' => 'good']) }}" class="btn" style="border-radius: 0; width: 100px; @if(!request('condition') || request('condition') == 'good') border-bottom: 3px solid rgb(59, 59, 59); @else border-bottom: none; @endif">Bagus</a>
+                <a href="{{ route('product-index', ['condition' => 'degraded']) }}" class="btn" style="border-radius: 0; width: 100px; @if(request('condition') == 'degraded') border-bottom: 3px solid rgb(59, 59, 59); @else border-bottom: none; @endif">Rusak</a>
+                <a href="{{ route('product-index', ['condition' => 'refurbish']) }}" class="btn" style="border-radius: 0; width: 100px; @if(request('condition') == 'refurbish') border-bottom: 3px solid rgb(59, 59, 59); @else border-bottom: none; @endif">Rekondisi</a>
+            </div>
+            <div>
+                @php
+                    $page = request('page') ?? 1;
+                @endphp
+                Memperlihatkan {{ $page * 30 - 29 }} - {{ $page * 30 <= $products->total() ? $page * 30 : $products->total()  }} dari {{ $products->total() }} item
+            </div>
         </div>
 
         <div class="overflow-x-auto mt-3">
             <table class="w-100">
                 <tr>
-                    <th>No</th>
-                    <th>SKU</th>
-                    <th>Nama Produk</th>
-                    <th>Varian</th>
-                    <th>Total Stok</th>
-                    <th>Satuan</th>
-                    <th>Status</th>
+                    <th class="border border-1 border-secondary">No</th>
+                    <th class="border border-1 border-secondary">SKU</th>
+                    <th class="border border-1 border-secondary">Nama Produk</th>
+                    <th class="border border-1 border-secondary">Varian</th>
+                    <th class="border border-1 border-secondary">Total Stok</th>
+                    <th class="border border-1 border-secondary">Satuan</th>
+                    <th class="border border-1 border-secondary">Status</th>
                     @if(in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
-                        <th>Harga Terakhir</th>
+                        <th class="border border-1 border-secondary">Harga Terakhir</th>
                     @endif
                     @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
-                        <th>Harga Dasar</th>
-                        <th>Markup</th>
-                        <th class="text-center">Kondisi</th>
+                        <th class="border border-1 border-secondary">Harga Dasar</th>
+                        <th class="border border-1 border-secondary">Markup</th>
+                        <th class="border border-1 border-secondary" class="text-center">Kondisi</th>
                     @endif
-                    <th>Aksi</th>
+                    <th class="border border-1 border-secondary">Aksi</th>
                 </tr>
 
                 @php
@@ -99,38 +105,42 @@
                             $status = $p->stock == 0? 'Out of Stock' : 'Ready'
                         @endphp
                         <tr style="background: @if($i % 2 == 1) #E0E0E0 @else white @endif;">
-                            <td>{{ ++$i }}</td>
-                            <td></td>
-                            <td>{{ $p->product_name }}</td>
-                            <td>{{ $p->variant }}</td>
-                            <td>{{ $p->stock }}</td>
-                            <td>{{ $p->unit }}</td>
-                            <td class="fw-semibold @if($status == 'Ready') text-primary @else text-danger @endif">
+                            <td class="border border-1 border-secondary">{{ ($i + 1) + ($page - 1) * 30 }}</td>
+                            <td class="border border-1 border-secondary"></td>
+                            <td class="border border-1 border-secondary">{{ $p->product_name }}</td>
+                            <td class="border border-1 border-secondary">{{ $p->variant }}</td>
+                            <td class="border border-1 border-secondary">{{ $p->stock }}</td>
+                            <td class="border border-1 border-secondary">{{ $p->unit }}</td>
+                            <td class="border border-1 border-secondary" class="fw-semibold @if($status == 'Ready') text-primary @else text-danger @endif">
                                 {{ $status }}
                             </td>
 
                             {{-- Harga dasar dan markup tidak ditampilkan kepada project manager dan subgudang --}}
                             @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
-                                <td>Rp {{ number_format($p->price, 2, ',', '.') }}</td>
-                                <td></td>
-                                <td></td>
+                                <td class="border border-1 border-secondary">Rp {{ number_format($p->price, 2, ',', '.') }}</td>
+                                <td class="border border-1 border-secondary"></td>
+                                <td class="border border-1 border-secondary"></td>
                             @endif
 
                             {{-- Harga sudah dikalikan markup khusus project manager dan gudang --}}
                             @if(in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
-                                <td>Rp {{ number_format($p->price * (1 + ($p->markup / 100)), 2, ',', '.') }}</td>
+                                <td class="border border-1 border-secondary">Rp {{ number_format($p->price * (1 + ($p->markup / 100)), 2, ',', '.') }}</td>
                             @endif
 
-                            <td>
+                            <td class="border border-1 border-secondary">
                                 {{-- Toggler button untuk memperlihatkan detail varian data produk --}}
                                 <button class="btn btn-success view-all-btn" data-prodgroup="{{ __(preg_replace('/[^a-zA-Z0-9-]/', '',  $p->product_name) . '-' . preg_replace('/[^a-zA-Z0-9-]/', '', $p->variant)) }}">Lihat Semua</button>
                             </td>
                         </tr>
+
+                        @php
+                            $i++;
+                        @endphp
                     @else
                         <tr class="{{ __(preg_replace('/[^a-zA-Z0-9-]/', '',  $p->product_name) . '-' . preg_replace('/[^a-zA-Z0-9-]/', '',  $p->variant)) }}" style="display: none; background: @if($i % 2 == 0) #E0E0E0 @else white @endif;">
-                            <td></td>
-                            <td>{{ $p->product_code }}</td>
-                            <td>
+                            <td class="border border-1 border-secondary"></td>
+                            <td class="border border-1 border-secondary">{{ $p->product_code }}</td>
+                            <td class="border border-1 border-secondary">
                                 <div class="w-100 d-flex justify-content-between align-items-center">
                                     <div>{{ $p->product_name }}</div>
 
@@ -140,24 +150,24 @@
                                     @endif
                                 </div>
                             </td>
-                            <td>{{ $p->variant }}</td>
-                            <td>{{ $p->stock }}</td>
-                            <td>{{ $p->unit }}</td>
-                            <td class="fw-semibold @if($p->status == 'Ready') text-primary @else text-danger @endif">{{ $p->status }}</td>
+                            <td class="border border-1 border-secondary">{{ $p->variant }}</td>
+                            <td class="border border-1 border-secondary">{{ $p->stock }}</td>
+                            <td class="border border-1 border-secondary">{{ $p->unit }}</td>
+                            <td class="border border-1 border-secondary" class="fw-semibold @if($p->status == 'Ready') text-primary @else text-danger @endif">{{ $p->status }}</td>
 
                             {{-- Harga dasar dan markup tidak ditampilkan kepada project manager, gudang, dan subgudang --}}
                             @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
-                                <td>Rp {{ number_format($p->price, 2, ',', '.') }}</td>
-                                <td>{{ $p->markup }}</td>
-                                <td>{{ ucwords($p->condition) }}</td>
+                                <td class="border border-1 border-secondary">Rp {{ number_format($p->price, 2, ',', '.') }}</td>
+                                <td class="border border-1 border-secondary">{{ $p->markup }}</td>
+                                <td class="border border-1 border-secondary">{{ ucwords($p->condition) }}</td>
                             @endif
 
                             {{-- Harga sudah dikalikan markup khusus project manager, gudang, dan subgudang --}}
                             @if(in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
-                                <td>Rp {{ number_format($p->price * (1 + ($p->markup / 100)), 2, ',', '.') }}</td>
+                                <td class="border border-1 border-secondary">Rp {{ number_format($p->price * (1 + ($p->markup / 100)), 2, ',', '.') }}</td>
                             @endif
 
-                            <td>
+                            <td class="border border-1 border-secondary">
                                 {{-- Subgudang dan gudang tidak bisa CRUD --}}
                                 @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
                                     <div class="d-flex gap-2 w-100">

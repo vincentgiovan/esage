@@ -28,20 +28,20 @@
     <h3>Data Transaksi</h3>
     <table>
         <tr>
-            <th style="width: 25%">SKU</th>
-            <td>{{ $deliveryorder->register }}</td>
+            <th class="border border-1 border-secondary" style="width: 25%">SKU</th>
+            <td class="border border-1 border-secondary">{{ $deliveryorder->register }}</td>
         </tr>
         <tr>
-            <th style="width: 25%">Tanggal Pengantaran</th>
-            <td>{{ $deliveryorder->delivery_date }}</td>
+            <th class="border border-1 border-secondary" style="width: 25%">Tanggal Pengantaran</th>
+            <td class="border border-1 border-secondary">{{ $deliveryorder->delivery_date }}</td>
         </tr>
         <tr>
-            <th style="width: 25%">Tanggal Modifikasi</th>
-            <td>{{ $deliveryorder->updated_at }}</td>
+            <th class="border border-1 border-secondary" style="width: 25%">Tanggal Modifikasi</th>
+            <td class="border border-1 border-secondary">{{ $deliveryorder->updated_at }}</td>
         </tr>
         <tr>
-            <th style="width: 25%">Projek</th>
-            <td>{{ $deliveryorder->project->project_name }}</td>
+            <th class="border border-1 border-secondary" style="width: 25%">Projek</th>
+            <td class="border border-1 border-secondary">{{ $deliveryorder->project->project_name }}</td>
         </tr>
 
     </table>
@@ -51,20 +51,20 @@
     <h3 style="margin-top: 40px;">List Barang</h3>
     <table>
         <tr>
-            <th>Nomor</th>
-            <th>Nama Produk</th>
-            <th>SKU Produk</th>
-            <th>Quantity</th>
-            <th>Variant</th>
+            <th class="border border-1 border-secondary">Nomor</th>
+            <th class="border border-1 border-secondary">Nama Produk</th>
+            <th class="border border-1 border-secondary">SKU Produk</th>
+            <th class="border border-1 border-secondary">Quantity</th>
+            <th class="border border-1 border-secondary">Variant</th>
         </tr>
 
         @foreach ($do as $deliveryorder_product)
             <tr>
-                <td >{{ $loop->iteration }}</td>
-                <td >{{ $deliveryorder_product->product->product_name }}</td>
-                <td >{{ $deliveryorder_product->product->product_code }}</td>
-                <td >{{ $deliveryorder_product->quantity }}</td>
-                <td >{{ $deliveryorder_product->product->variant }}</td>
+                <td class="border border-1 border-secondary" >{{ $loop->iteration }}</td>
+                <td class="border border-1 border-secondary" >{{ $deliveryorder_product->product->product_name }}</td>
+                <td class="border border-1 border-secondary" >{{ $deliveryorder_product->product->product_code }}</td>
+                <td class="border border-1 border-secondary" >{{ $deliveryorder_product->quantity }}</td>
+                <td class="border border-1 border-secondary" >{{ $deliveryorder_product->product->variant }}</td>
             </tr>
 
         @endforeach

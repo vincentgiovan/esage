@@ -30,7 +30,7 @@
 
         @if(Gate::allows('user-role', ['master', 'accounting_admin', 'purchasing_admin', 'gudang', 'subgudang', 'project_manager']))
             <li class="nav-item">
-                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("product*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("product-index") }}"><i class="bi bi-box-seam me-2"></i> Data Barang</a>
+                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("product*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("product-index", ['condition' => 'good']) }}"><i class="bi bi-box-seam me-2"></i> Data Barang</a>
             </li>
         @endif
 

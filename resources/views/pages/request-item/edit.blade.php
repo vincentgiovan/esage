@@ -5,7 +5,7 @@
     <x-container-middle>
         <div class="container bg-white rounded-4 mt-4">
 
-            <h3>Edit Request Items</h3>
+            <h3>Edit Request Barang</h3>
 
             <div>
                 <div class="p-3 border border-2 rounded-4 mt-4">
@@ -69,16 +69,16 @@
                     <div class="overflow-x-auto">
                         <table class="w-100 mt-4">
                             <thead>
-                                <th>Nama Barang & Varian</th>
-                                <th>Jumlah</th>
-                                <th>Aksi</th>
+                                <th class="border border-1 border-secondary">Nama Barang & Varian</th>
+                                <th class="border border-1 border-secondary">Jumlah</th>
+                                <th class="border border-1 border-secondary">Aksi</th>
                             </thead>
                             <tbody id="isibody">
                                 @foreach($rip as $r)
                                     <tr>
-                                        <td>{{ $r->product->product_name }}</td>
-                                        <td>{{ $r->quantity }}</td>
-                                        <td><button class="btn btn-danger remove-row" data-target="{{ $r->id }}"><i class="bi bi-trash3"></i></button></td>
+                                        <td class="border border-1 border-secondary">{{ $r->product->product_name }}</td>
+                                        <td class="border border-1 border-secondary">{{ $r->quantity }}</td>
+                                        <td class="border border-1 border-secondary"><button class="btn btn-danger remove-row" data-target="{{ $r->id }}"><i class="bi bi-trash3"></i></button></td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -162,7 +162,7 @@
                     return;
                 }
 
-                // Generate elemen <tr> dan <td> untuk membuat row tabel display
+                // Generate elemen <tr> dan <td class="border border-1 border-secondary"> untuk membuat row tabel display
                 const newRow = document.createElement("tr");
                 const column1 = document.createElement("td");
                 const column2 = document.createElement("td");

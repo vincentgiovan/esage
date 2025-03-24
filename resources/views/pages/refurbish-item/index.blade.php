@@ -19,27 +19,31 @@
             <i class="bi bi-plus-square"></i>
             Buat Rekondisi Baru</a>
 
+        <div class="d-flex w-100 justify-content-end">
+            Memperlihatkan {{ $refurbish_items->firstItem() }} - {{ $refurbish_items->lastItem()  }} dari {{ $refurbish_items->total() }} item
+        </div>
+
         <div class="overflow-x-auto mt-3">
             <table class="w-100">
                 <tr>
-                    <th>No</th>
-                    <th>Tanggal Rekondisi</th>
-                    <th>Nama Barang</th>
-                    <th>Varian</th>
-                    <th>Jumlah</th>
-                    <th>Catatan</th>
-                    <th>Aksi</th>
+                    <th class="border border-1 border-secondary">No</th>
+                    <th class="border border-1 border-secondary">Tanggal Rekondisi</th>
+                    <th class="border border-1 border-secondary">Nama Barang</th>
+                    <th class="border border-1 border-secondary">Varian</th>
+                    <th class="border border-1 border-secondary">Jumlah</th>
+                    <th class="border border-1 border-secondary">Catatan</th>
+                    <th class="border border-1 border-secondary">Aksi</th>
                 </tr>
 
                 @foreach ($refurbish_items as $r)
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ Carbon\Carbon::parse($r->refurbish_date)->translatedFormat("d M Y") }}</td>
-                        <td>{{ $r->product->product_name }}</td>
-                        <td>{{ $r->product->variant }}</td>
-                        <td>{{ $r->qty }}</td>
-                        <td>{{ $r->notes }}</td>
-                        <td>
+                        <td class="border border-1 border-secondary">{{ ($loop->index + 1) + ((request('page') ?? 1) - 1) * 30 }}</td>
+                        <td class="border border-1 border-secondary">{{ Carbon\Carbon::parse($r->refurbish_date)->translatedFormat("d M Y") }}</td>
+                        <td class="border border-1 border-secondary">{{ $r->product->product_name }}</td>
+                        <td class="border border-1 border-secondary">{{ $r->product->variant }}</td>
+                        <td class="border border-1 border-secondary">{{ $r->qty }}</td>
+                        <td class="border border-1 border-secondary">{{ $r->notes }}</td>
+                        <td class="border border-1 border-secondary">
                             <div class="d-flex gap-2 w-100">
                                 {{-- <a href="{{ route('requestitem-show', $r->id) }}" class="btn btn-success text-white"
                                     style="font-size: 10pt;">
@@ -59,6 +63,10 @@
                     </tr>
                 @endforeach
             </table>
+        </div>
+
+        <div class="mt-4">
+            {{ $refurbish_items->links() }}
         </div>
     </x-container>
 

@@ -16,7 +16,7 @@ class ProjectController extends Controller{
     {
         // Tampilkan halaman pages/project/index.blade.php beserta data yang diperlukan:
         return view("pages.project.index", [
-            "projects" => Project::filter(request(['search']))->get() // semua data project buat ditampilin satu-satu
+            "projects" => Project::filter(request(['search']))->paginate(30) // semua data project buat ditampilin satu-satu
         ]);
     }
 

@@ -20,7 +20,7 @@ class PurchaseController extends Controller
     {
         // Tampilkan halaman pages/purchase/index.blade.php beserta data yang diperlukan di blade-nya:
         return view("pages.purchase.index", [
-            "purchases" => Purchase::filter(request(['search']))->orderBy('purchase_date', 'desc')->get() // semua data purchases buat ditampilin satu-satu
+            "purchases" => Purchase::filter(request(['search']))->orderBy('purchase_date', 'desc')->paginate(30) // semua data purchases buat ditampilin satu-satu
         ]);
     }
 

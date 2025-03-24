@@ -64,28 +64,28 @@
                     <table class="w-100">
                         <thead>
                             <tr>
-                                <th rowspan="2">Pegawai</th>
-                                <th colspan="7" class="text-center">Jam Kerja</th>
-                                <th rowspan="2" class="text-center"></th>
+                                <th class="border border-1 border-secondary" rowspan="2">Pegawai</th>
+                                <th class="border border-1 border-secondary" colspan="7" class="text-center">Jam Kerja</th>
+                                <th class="border border-1 border-secondary" rowspan="2" class="text-center"></th>
                             </tr>
                             <tr>
-                                <th class="text-center">Sabtu</th>
-                                <th class="text-center">Minggu</th>
-                                <th class="text-center">Senin</th>
-                                <th class="text-center">Selasa</th>
-                                <th class="text-center">Rabu</th>
-                                <th class="text-center">Kamis</th>
-                                <th class="text-center">Jumat</th>
+                                <th class="border border-1 border-secondary" class="text-center">Sabtu</th>
+                                <th class="border border-1 border-secondary" class="text-center">Minggu</th>
+                                <th class="border border-1 border-secondary" class="text-center">Senin</th>
+                                <th class="border border-1 border-secondary" class="text-center">Selasa</th>
+                                <th class="border border-1 border-secondary" class="text-center">Rabu</th>
+                                <th class="border border-1 border-secondary" class="text-center">Kamis</th>
+                                <th class="border border-1 border-secondary" class="text-center">Jumat</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($project->employees as $e)
                                 <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
-                                    <td>
+                                    <td class="border border-1 border-secondary">
                                         {{ $e->nama }}<br>({{ $e->jabatan }})
                                         <input type="hidden" name="employee[]" value="{{ $e->id }}">
                                     </td>
-                                    <td style="width: 125px;">
+                                    <td class="border border-1 border-secondary" style="width: 125px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
                                             <input type="time" name="start_time[{{ $e->id }}][]" class="w-100" value="08:00">
                                             <input type="time" name="end_time[{{ $e->id }}][]" class="endtime-weekend w-100" value="16:00">
@@ -98,7 +98,7 @@
                                             </label>
                                         </div>
                                     </td>
-                                    <td style="width: 125px;">
+                                    <td class="border border-1 border-secondary" style="width: 125px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
                                             <input type="time" name="start_time[{{ $e->id }}][]" class="w-100" value="08:00">
                                             <input type="time" name="end_time[{{ $e->id }}][]" class="endtime-weekend w-100" value="16:00">
@@ -111,7 +111,7 @@
                                             </label>
                                         </div>
                                     </td>
-                                    <td style="width: 125px;">
+                                    <td class="border border-1 border-secondary" style="width: 125px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
                                             <input type="time" name="start_time[{{ $e->id }}][]" class="w-100" value="08:00">
                                             <input type="time" name="end_time[{{ $e->id }}][]" class="w-100" value="17:00">
@@ -124,7 +124,7 @@
                                             </label>
                                         </div>
                                     </td>
-                                    <td style="width: 125px;">
+                                    <td class="border border-1 border-secondary" style="width: 125px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
                                             <input type="time" name="start_time[{{ $e->id }}][]" class="w-100" value="08:00">
                                             <input type="time" name="end_time[{{ $e->id }}][]" class="w-100" value="17:00">
@@ -137,7 +137,7 @@
                                             </label>
                                         </div>
                                     </td>
-                                    <td style="width: 125px;">
+                                    <td class="border border-1 border-secondary" style="width: 125px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
                                             <input type="time" name="start_time[{{ $e->id }}][]" class="w-100" value="08:00">
                                             <input type="time" name="end_time[{{ $e->id }}][]" class="w-100" value="17:00">
@@ -150,7 +150,7 @@
                                             </label>
                                         </div>
                                     </td>
-                                    <td style="width: 125px;">
+                                    <td class="border border-1 border-secondary" style="width: 125px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
                                             <input type="time" name="start_time[{{ $e->id }}][]" class="w-100" value="08:00">
                                             <input type="time" name="end_time[{{ $e->id }}][]" class="w-100" value="17:00">
@@ -163,7 +163,7 @@
                                             </label>
                                         </div>
                                     </td>
-                                    <td style="width: 125px;">
+                                    <td class="border border-1 border-secondary" style="width: 125px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
                                             <input type="time" name="start_time[{{ $e->id }}][]" class="w-100" value="08:00">
                                             <input type="time" name="end_time[{{ $e->id }}][]" class="w-100" value="17:00">
@@ -176,7 +176,7 @@
                                             </label>
                                         </div>
                                     </td>
-                                    <td style="width: 50px;">
+                                    <td class="border border-1 border-secondary" style="width: 50px;">
                                         <div class="d-flex gap-2 w-100 justify-content-center">
                                             <button type="button" class="exclude-btn btn btn-danger" onclick="return confirm('Apakah anda yakin ingin menghapus pegawai ini dari daftar presensi?')"><i class="bi bi-trash3"></i></button>
                                         </div>

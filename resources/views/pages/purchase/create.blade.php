@@ -68,13 +68,13 @@
                 <div class="overflow-x-auto">
                     <table class="w-100">
                         <thead>
-                            <th>Barang</th>
-                            <th>Jumlah</th>
-                            <th>Aksi</th>
+                            <th class="border border-1 border-secondary">Barang</th>
+                            <th class="border border-1 border-secondary">Jumlah</th>
+                            <th class="border border-1 border-secondary">Aksi</th>
                         </thead>
                         <tbody id="isibody-registered">
                             <tr>
-                                <td>
+                                <td class="border border-1 border-secondary">
                                     <select name="products[]" class="form-select select2">
                                     @foreach ($products as $product)
                                         <option value="{{ $product->id }}">
@@ -83,10 +83,10 @@
                                     @endforeach
                                     </select>
                                 </td>
-                                <td>
+                                <td class="border border-1 border-secondary">
                                     <input type="number" class="form-control qty-input" name="quantities[]" min="1" value="1">
                                 </td>
-                                <td><button type="button" class="btn btn-danger remove-row-btn"><i class="bi bi-trash3"></i></button></td>
+                                <td class="border border-1 border-secondary"><button type="button" class="btn btn-danger remove-row-btn"><i class="bi bi-trash3"></i></button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -101,13 +101,13 @@
                     <div class="d-flex flex-column">
                         <table class="w-100">
                             <thead>
-                                <th>Barang</th>
-                                <th>Jumlah</th>
-                                <th>Aksi</th>
+                                <th class="border border-1 border-secondary">Barang</th>
+                                <th class="border border-1 border-secondary">Jumlah</th>
+                                <th class="border border-1 border-secondary">Aksi</th>
                             </thead>
                             <tbody id="isibody-unregistered">
                                 <tr>
-                                    <td>
+                                    <td class="border border-1 border-secondary">
                                         <div class="d-flex flex-column gap-2">
                                             <div>
                                                 <label for="product_name">Nama Produk</label>
@@ -175,12 +175,12 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td class="border border-1 border-secondary">
                                         <div class="d-flex h-100 align-items-start">
                                             <input type="number" class="form-control qty-input" name="stock[]" min="1" value="1">
                                         </div>
                                     </td>
-                                    <td>
+                                    <td class="border border-1 border-secondary">
                                         <div class="d-flex h-100 align-items-start">
                                             <button type="button" class="btn btn-danger remove-row-btn"><i class="bi bi-trash3"></i></button>
                                         </div>
@@ -314,15 +314,15 @@
                 $('#isibody-registered').append(
                     $('<tr>')
                         .append(
-                            $('<td>').append(newProdSel)
+                            $('<td class="border border-1 border-secondary">').append(newProdSel)
                         )
                         .append(
-                            $('<td>').append(
+                            $('<td class="border border-1 border-secondary">').append(
                                 $('<input>').attr({'type': 'number', 'name': 'quantities[]', 'min': 1}).addClass('form-control qty-input').val(1)
                             )
                         )
                         .append(
-                            $('<td>').append(
+                            $('<td class="border border-1 border-secondary">').append(
                                 $('<button>').attr('type', 'button').addClass('btn btn-danger remove-row-btn').html('<i class="bi bi-trash3"></i>')
                             )
                         )
@@ -336,7 +336,7 @@
                 $('#isibody-unregistered').append(
                     $('<tr>')
                         .append(
-                            $('<td>').append($('<div>').addClass('d-flex flex-column gap-2')
+                            $('<td class="border border-1 border-secondary">').append($('<div>').addClass('d-flex flex-column gap-2')
                                 .append($('<div>')
                                     .append(
                                         $('<label>').attr('for', `product_name${idnum}`).text('Nama Produk')
@@ -457,14 +457,14 @@
                             )
                         )
                         .append(
-                            $('<td>').append(
+                            $('<td class="border border-1 border-secondary">').append(
                                 $('<div>').addClass('d-flex h-100 align-items-start').append(
                                     $('<input>').attr({'type': 'number', 'name': 'stock[]', 'min': 1}).addClass('form-control qty-input').val(1)
                                 )
                             )
                         )
                         .append(
-                            $('<td>').append(
+                            $('<td class="border border-1 border-secondary">').append(
                                 $('<div>').addClass('d-flex h-100 align-items-start').append(
                                     $('<button>').attr('type', 'button').addClass('btn btn-danger remove-row-btn').html('<i class="bi bi-trash3"></i>')
                                 )

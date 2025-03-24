@@ -29,34 +29,40 @@
             });
         </script> --}}
         <hr>
-        <br>
+
+        <div class="d-flex w-100 justify-content-end">
+            Memperlihatkan {{ $visit_logs->firstItem() }} - {{ $visit_logs->lastItem()  }} dari {{ $visit_logs->total() }} item
+        </div>
 
         {{-- tabel list data--}}
-
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto mt-3">
             <table class="w-100">
                 <tr>
-                    <th>No</th>
-                    <th>Waktu</th>
-                    <th>User</th>
-                    <th>IP Address</th>
-                    <th>Lokasi</th>
-                    <th>Device</th>
-                    <th>OS</th>
+                    <th class="border border-1 border-secondary">No</th>
+                    <th class="border border-1 border-secondary">Waktu</th>
+                    <th class="border border-1 border-secondary">User</th>
+                    <th class="border border-1 border-secondary">IP Address</th>
+                    <th class="border border-1 border-secondary">Lokasi</th>
+                    <th class="border border-1 border-secondary">Device</th>
+                    <th class="border border-1 border-secondary">OS</th>
                 </tr>
 
                 @foreach ($visit_logs as $vl)
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $vl->created_at->format("d M Y, H:i") }} WIB</td>
-                        <td>{{ $vl->user->name }}</td>
-                        <td>{{ $vl->IP }}</td>
-                        <td>{{ $vl->location }}</td>
-                        <td>{{ $vl->device }}</td>
-                        <td>{{ $vl->OS }}</td>
+                        <td class="border border-1 border-secondary">{{ ($loop->index + 1) + ((request('page') ?? 1) - 1) * 30 }}</td>
+                        <td class="border border-1 border-secondary">{{ $vl->created_at->format("d M Y, H:i") }} WIB</td>
+                        <td class="border border-1 border-secondary">{{ $vl->user->name }}</td>
+                        <td class="border border-1 border-secondary">{{ $vl->IP }}</td>
+                        <td class="border border-1 border-secondary">{{ $vl->location }}</td>
+                        <td class="border border-1 border-secondary">{{ $vl->device }}</td>
+                        <td class="border border-1 border-secondary">{{ $vl->OS }}</td>
                     </tr>
                 @endforeach
             </table>
+        </div>
+
+        <div class="mt-4">
+            {{ $visit_logs->links() }}
         </div>
     </x-container>
 @endsection

@@ -27,8 +27,6 @@
         </script>
         <hr>
 
-
-
         @if (session()->has('successAddReturnItem'))
             <p class="text-success fw-bold">{{ session('successAddReturnItem') }}</p>
         @elseif (session()->has('successEditReturnItem'))
@@ -58,25 +56,28 @@
                 @endif
             </div>
         </div>
-        <br>
-        {{-- tabel list data--}}
 
-        <div class="overflow-x-auto">
+        <div class="d-flex w-100 justify-content-end">
+            Memperlihatkan {{ $return_items->firstItem() }} - {{ $return_items->lastItem()  }} dari {{ $return_items->total() }} item
+        </div>
+
+        {{-- tabel list data--}}
+        <div class="overflow-x-auto mt-3">
             <table class="w-100">
                 <tr>
-                    <th>No</th>
-                    <th>Tanggal</th>
-                    <th>Proyek Asal</th>
-                    <th>PIC Return</th>
-                    <th>Supir</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
+                    <th class="border border-1 border-secondary">No</th>
+                    <th class="border border-1 border-secondary">Tanggal</th>
+                    <th class="border border-1 border-secondary">Proyek Asal</th>
+                    <th class="border border-1 border-secondary">PIC Return</th>
+                    <th class="border border-1 border-secondary">Supir</th>
+                    <th class="border border-1 border-secondary">Status</th>
+                    <th class="border border-1 border-secondary">Aksi</th>
                 </tr>
 
                 @foreach ($return_items as $ri)
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
-                        <td>{{ $loop->iteration }}</td>
-                        <td>
+                        <td class="border border-1 border-secondary">{{ ($loop->index + 1) + ((request('page') ?? 1) - 1) * 30 }}</td>
+                        <td class="border border-1 border-secondary">
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 {{ Carbon\Carbon::parse($ri->return_date)->translatedFormat('d M Y') }}
                                 <a href="{{ route('returnitem-list-view', $ri->id) }}" class="btn btn-success">Lihat Item</a>
@@ -86,7 +87,7 @@
                                 <li>Tanggal: {{ Carbon\Carbon::parse($ri->created_at)->translatedFormat("d M Y") }}</li>
                             </ul> --}}
                         </td>
-                        <td>
+                        <td class="border border-1 border-secondary">
                             {{ $ri->project->project_name }}
                             {{-- <ul>
                                 <li>Nama: {{ $ri->product->product_name }}</li>
@@ -98,7 +99,7 @@
                                 <li>Jumlah: {{ $ri->quantity }}</li>
                             </ul> --}}
                         </td>
-                        <td>
+                        <td class="border border-1 border-secondary">
                             {{ $ri->PIC }}
                             {{-- @if($ri->foto)
                                 <img class="w-100" src="{{ Storage::url("app/public/" . $ri->foto) }}">
@@ -106,8 +107,8 @@
                                 N/A
                             @endif --}}
                         </td>
-                        <td>{{ $ri->driver }}</td>
-                        <td>
+                        <td class="border border-1 border-secondary">{{ $ri->driver }}</td>
+                        <td class="border border-1 border-secondary">
                             @if($ri->status == 'Ready to pickup')
                                 <i class="bi bi-check-circle-fill fs-4" style="color: green"></i>
                             @else
@@ -115,7 +116,7 @@
                             @endif
                         </td>
 
-                        <td>
+                        <td class="border border-1 border-secondary">
                             <div class="d-flex gap-2 w-100">
                                 <a href="{{ route('returnitem-edit', $ri->id) }}" class="btn text-white"
                                     style="font-size: 10pt; background-color: rgb(197, 167, 0);">
@@ -134,6 +135,10 @@
                     </tr>
                 @endforeach
             </table>
+        </div>
+
+        <div class="mt-4">
+            {{ $return_items->links() }}
         </div>
     </x-container>
 @endsection

@@ -59,14 +59,14 @@
         <div class="overflow-x-auto mt-5">
             <table class="w-100">
                 <tr>
-                    <th>No</th>
-                    <th>SKU Pembelian</th>
-                    <th>SKU Produk</th>
-                    <th>Harga</th>
-                    <th>Diskon</th>
-                    <th>Harga Diskon</th>
-                    <th>Stok</th>
-                    <th>Subtotal</th>
+                    <th class="border border-1 border-secondary">No</th>
+                    <th class="border border-1 border-secondary">SKU Pembelian</th>
+                    <th class="border border-1 border-secondary">SKU Produk</th>
+                    <th class="border border-1 border-secondary">Harga</th>
+                    <th class="border border-1 border-secondary">Diskon</th>
+                    <th class="border border-1 border-secondary">Harga Diskon</th>
+                    <th class="border border-1 border-secondary">Stok</th>
+                    <th class="border border-1 border-secondary">Subtotal</th>
                 </tr>
 
                 @foreach ($purchaseproducts as $pp)
@@ -76,7 +76,7 @@
                         $total += $subtotal;
                     @endphp
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
-                        <td>
+                        <td class="border border-1 border-secondary">
                             @php
                                 if(request("page")){
                                     echo $loop->iteration + ((request("page") - 1) * $n_pagination);
@@ -86,13 +86,13 @@
 
                             @endphp
                         </td>
-                        <td>{{ $pp->purchase->register }}</td>
-                        <td>{{ $pp->product->product_code }}</td>
-                        <td>Rp {{ number_format($pp->product->price, 2, ',', '.') }}</td>
-                        <td>{{ $pp->product->discount }}%</td>
-                        <td>Rp {{ number_format($disc_price, 2, ',', '.') }}</td>
-                        <td>{{ $pp->quantity }}</td>
-                        <td>Rp {{ number_format($subtotal, 2, ',', '.') }}</td>
+                        <td class="border border-1 border-secondary">{{ $pp->purchase->register }}</td>
+                        <td class="border border-1 border-secondary">{{ $pp->product->product_code }}</td>
+                        <td class="border border-1 border-secondary">Rp {{ number_format($pp->product->price, 2, ',', '.') }}</td>
+                        <td class="border border-1 border-secondary">{{ $pp->product->discount }}%</td>
+                        <td class="border border-1 border-secondary">Rp {{ number_format($disc_price, 2, ',', '.') }}</td>
+                        <td class="border border-1 border-secondary">{{ $pp->quantity }}</td>
+                        <td class="border border-1 border-secondary">Rp {{ number_format($subtotal, 2, ',', '.') }}</td>
                     </tr>
                 @endforeach
             </table>

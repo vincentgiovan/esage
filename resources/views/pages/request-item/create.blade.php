@@ -69,9 +69,9 @@
                     <div class="overflow-x-auto">
                         <table class="w-100 mt-4">
                             <thead>
-                                <th>Nama Barang & Variant</th>
-                                <th>Jumlah</th>
-                                <th>Aksi</th>
+                                <th class="border border-1 border-secondary">Nama Barang & Variant</th>
+                                <th class="border border-1 border-secondary">Jumlah</th>
+                                <th class="border border-1 border-secondary">Aksi</th>
                             </thead>
                             <tbody id="isibody">
 
@@ -150,7 +150,7 @@
                 return;
             }
 
-            // Generate elemen <tr> dan <td> untuk membuat row tabel display
+            // Generate elemen <tr> dan <td class="border border-1 border-secondary"> untuk membuat row tabel display
             const newRow = document.createElement("tr");
             const column1 = document.createElement("td");
             const column2 = document.createElement("td");

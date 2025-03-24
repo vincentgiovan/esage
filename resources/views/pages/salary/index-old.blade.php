@@ -60,24 +60,24 @@
         <div class="overflow-x-auto mt-3">
             <table class="w-100">
                 <tr>
-                    <th>No</th>
-                    <th>Periode</th>
-                    <th>Nama</th>
-                    <th>Jabatan</th>
-                    <th>Subtotal</th>
-                    <th>Kasbon</th>
-                    <th>Keterangan</th>
-                    <th>Aksi</th>
+                    <th class="border border-1 border-secondary">No</th>
+                    <th class="border border-1 border-secondary">Periode</th>
+                    <th class="border border-1 border-secondary">Nama</th>
+                    <th class="border border-1 border-secondary">Jabatan</th>
+                    <th class="border border-1 border-secondary">Subtotal</th>
+                    <th class="border border-1 border-secondary">Kasbon</th>
+                    <th class="border border-1 border-secondary">Keterangan</th>
+                    <th class="border border-1 border-secondary">Aksi</th>
                 </tr>
 
                 @foreach ($salaries as $s)
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $s->start_period ? Carbon\Carbon::parse($s->start_period)->translatedFormat("d M Y") : "N/A" }} - {{ $s->end_period ? Carbon\Carbon::parse($s->end_period)->translatedFormat("d M Y") : "N/A" }}</td>
-                        <td>{{ $s->employee->nama }}</td>
-                        <td>{{ $s->employee->jabatan }}</td>
-                        <td>Rp {{ number_format($s->total, 2, ",", ".") }}</td>
-                        <td>
+                        <td class="border border-1 border-secondary">{{ $loop->iteration }}</td>
+                        <td class="border border-1 border-secondary">{{ $s->start_period ? Carbon\Carbon::parse($s->start_period)->translatedFormat("d M Y") : "N/A" }} - {{ $s->end_period ? Carbon\Carbon::parse($s->end_period)->translatedFormat("d M Y") : "N/A" }}</td>
+                        <td class="border border-1 border-secondary">{{ $s->employee->nama }}</td>
+                        <td class="border border-1 border-secondary">{{ $s->employee->jabatan }}</td>
+                        <td class="border border-1 border-secondary">Rp {{ number_format($s->total, 2, ",", ".") }}</td>
+                        <td class="border border-1 border-secondary">
                             @php
                                 $total_kasbon = 0;
                                 foreach($s->employee->prepays->where('start_period', '>=', $s->start_period)->where('end_period', '<=', $s->end_period) as $ppay){
@@ -87,8 +87,8 @@
                                 echo number_format($total_kasbon, 2, ',', '.');
                             @endphp
                         </td>
-                        <td>{{ $s->keterangan ?? "N/A" }}</td>
-                        <td>
+                        <td class="border border-1 border-secondary">{{ $s->keterangan ?? "N/A" }}</td>
+                        <td class="border border-1 border-secondary">
                             <div class="d-flex gap-2 w-100">
                                 <a href="{{ route('salary-edit', $s->id) }}" class="btn btn-warning text-white"
                                     style="font-size: 10pt; background-color: rgb(197, 167, 0);">

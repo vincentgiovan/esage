@@ -10,7 +10,7 @@ class LeaveController extends Controller
 {
     public function admin_index(){
         return view("pages.leave.index-admin", [
-            "leaves" => Leave::orderByRaw("CASE WHEN approved = 'awaiting' THEN 0 ELSE 1 END")->orderBy('start_period', 'asc')->get()
+            "leaves" => Leave::orderByRaw("CASE WHEN approved = 'awaiting' THEN 0 ELSE 1 END")->orderBy('start_period', 'asc')->paginate(30)
         ]);
     }
 
@@ -18,7 +18,7 @@ class LeaveController extends Controller
         if(Auth::user()->employee_data){
             return view("pages.leave.index-user", [
                 'no_employee' => false,
-                "leaves" => Leave::where('employee_id', Auth::user()->employee_data->id)->get()
+                "leaves" => Leave::where('employee_id', Auth::user()->employee_data->id)->paginate(30)
             ]);
         }
         else {

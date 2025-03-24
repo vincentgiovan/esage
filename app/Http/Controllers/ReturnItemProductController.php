@@ -104,11 +104,11 @@ class ReturnItemProductController extends Controller
         return view('pages.return-item.condition-validation', [
             'unvalidated_return_item_products' => ReturnItemProduct::where('status', 'awaiting')->with('return_item', function($query){
                 return $query->orderBy('return_date');
-            })->orderBy('return_item_id')->get(),
+            })->orderBy('return_item_id')->paginate(30),
 
             'validated_return_item_products' => ReturnItemProduct::whereNot('status', 'awaiting')->filter(request(['project']))->with('return_item', function($query){
                 return $query->orderBy('return_date');
-            })->orderBy('return_item_id')->get()
+            })->orderBy('return_item_id')->paginate(30)
         ]);
     }
 

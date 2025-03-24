@@ -10,13 +10,13 @@ class RefurbishItemController extends Controller
 {
     public function index(){
         return view('pages.refurbish-item.index', [
-            'refurbish_items' => RefurbishItem::all()
+            'refurbish_items' => RefurbishItem::orderBy('refurbish_date', 'desc')->paginate(30)
         ]);
     }
 
     public function create(){
         return view('pages.refurbish-item.create', [
-            'products' => Product::where('condition', 'degraded')->where('stock', '>', 0)->orderBy('refurbish_date', 'desc')->get()
+            'products' => Product::where('condition', 'degraded')->where('stock', '>', 0)->get()
         ]);
     }
 

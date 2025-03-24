@@ -16,7 +16,7 @@ class AccountController extends Controller
     public function index()
     {
         // Ambil semua data akun dari tabel user
-        $users = User::all();
+        $users = User::filter(request(['search']))->paginate(30);
 
         // Tampilkan halaman account/index.blade.php dan kirimkan data semua akun ke blade-nya
         return view('accounts.index', compact('users'));
@@ -148,7 +148,7 @@ class AccountController extends Controller
 
     public function visit_log(){
         return view("pages.visit-log.index", [
-            "visit_logs" => VisitLog::all()
+            "visit_logs" => VisitLog::latest()->paginate(30)
         ]);
     }
 }

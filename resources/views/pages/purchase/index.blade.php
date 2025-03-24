@@ -66,32 +66,34 @@
                 <i class="bi bi-plus-square"></i>
                 Tambah Pembelian Baru</a>
         </div>
-        <br>
+
+        <div class="d-flex w-100 justify-content-end">
+            Memperlihatkan {{ $purchases->firstItem() }} - {{ $purchases->lastItem()  }} dari {{ $purchases->total() }} item
+        </div>
 
         {{-- tabel list data--}}
-
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto mt-3">
             <table class="w-100">
                 <tr>
-                    <th>No</th>
-                    <th>Supplier</th>
-                    <th>Tanggal Pembelian</th>
-                    <th>Tenggat Pembelian</th>
-                    <th>SKU</th>
-                    <th>Total</th>
-                    <th>Status</th>
+                    <th class="border border-1 border-secondary">No</th>
+                    <th class="border border-1 border-secondary">Supplier</th>
+                    <th class="border border-1 border-secondary">Tanggal Pembelian</th>
+                    <th class="border border-1 border-secondary">Tenggat Pembelian</th>
+                    <th class="border border-1 border-secondary">SKU</th>
+                    <th class="border border-1 border-secondary">Total</th>
+                    <th class="border border-1 border-secondary">Status</th>
 
-                        <th>Aksi</th>
+                        <th class="border border-1 border-secondary">Aksi</th>
 
                 </tr>
 
                 @foreach ($purchases as $p)
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $p->partner->partner_name }}</td>
-                        <td>{{ Carbon\Carbon::parse($p->purchase_date)->translatedFormat("d M Y") }}</td>
-                        <td>{{ Carbon\Carbon::parse($p->purchase_deadline)->translatedFormat("d M Y") }}</td>
-                        <td>
+                        <td class="border border-1 border-secondary">{{ ($loop->index + 1) + ((request('page') ?? 1) - 1) * 30 }}</td>
+                        <td class="border border-1 border-secondary">{{ $p->partner->partner_name }}</td>
+                        <td class="border border-1 border-secondary">{{ Carbon\Carbon::parse($p->purchase_date)->translatedFormat("d M Y") }}</td>
+                        <td class="border border-1 border-secondary">{{ Carbon\Carbon::parse($p->purchase_deadline)->translatedFormat("d M Y") }}</td>
+                        <td class="border border-1 border-secondary">
                             <div class="d-flex gap-5 w-100 justify-content-between align-items-center">
                                 {{ $p->register }}
 
@@ -100,7 +102,7 @@
 
                             </div>
                         </td>
-                        <td>
+                        <td class="border border-1 border-secondary">
                             @php
                                 $total = 0;
                                 foreach ($p->products as $product){
@@ -110,17 +112,17 @@
                                 echo "Rp " . number_format($total, 2, ',' , '.');
                             @endphp
                         </td>
-                        <td class="fw-semibold @if($p->purchase_status == 'Ordered') text-primary @else text-success @endif">
+                        <td class="border border-1 border-secondary" class="fw-semibold @if($p->purchase_status == 'Ordered') text-primary @else text-success @endif">
                             @if($p->purchase_status == 'Ordered')
                                 Telah dipesan
                             @else
                                 Diterima
                             @endif
                         </td>
-                        {{-- <td >{{ $p->user->name }}</td> --}}
+                        {{-- <td class="border border-1 border-secondary" >{{ $p->user->name }}</td> --}}
 
 
-                            <td>
+                            <td class="border border-1 border-secondary">
                                 <div class="d-flex gap-2 w-100">
 
                                     <a href="{{ route('purchase-edit', $p->id) }}" class="btn text-white"
@@ -141,6 +143,10 @@
                     </tr>
                 @endforeach
             </table>
+        </div>
+
+        <div class="mt-4">
+            {{ $purchases->links() }}
         </div>
     </x-container>
 @endsection
