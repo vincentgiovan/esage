@@ -6,6 +6,7 @@
         <div class="w-100 d-flex align-items-center justify-content-between">
             <h3>Pembelian Barang</h3>
 
+            @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
                 <div class="d-flex gap-3">
                     {{-- <a class="btn btn-secondary" href="{{ route('purchase-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a> --}}
                     <div class="position-relative d-flex flex-column align-items-end">
@@ -27,7 +28,7 @@
                         </div>
                     </div>
                 </div>
-
+            @endif
         </div>
         <script>
             $(document).ready(() => {

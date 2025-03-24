@@ -63,7 +63,7 @@
                     <button class="btn btn-primary"><i class="bi bi-search"></i></button>
                 </form>
             </div>
-            @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
+            @if(!in_array(Auth::user()->role->role_name, ['subgudang', 'project_manager']))
                 <a href="{{ route('deliveryorder-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
                     <i class="bi bi-plus-square"></i>
                     Tambah Pengiriman Baru</a>
@@ -84,7 +84,7 @@
                     <th class="border border-1 border-secondary">SKU</th>
                     <th class="border border-1 border-secondary" class="text-center">Status Pengiriman</th>
                     <th class="border border-1 border-secondary">Catatan</th>
-                    @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
+                    @if(!in_array(Auth::user()->role->role_name, ['subgudang', 'project_manager']))
                         <th class="border border-1 border-secondary">Aksi</th>
                     @endif
                 </tr>
@@ -113,7 +113,7 @@
                         </td>
                         <td class="border border-1 border-secondary">{{ $p->note }}</td>
                         {{-- <td class="border border-1 border-secondary" >{{ $p->user->name }}</td> --}}
-                        @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
+                        @if(!in_array(Auth::user()->role->role_name, ['subgudang', 'project_manager']))
                             <td class="border border-1 border-secondary" >
                                 <div class="d-flex gap-2 w-100">
                                     <a href="{{ route('deliveryorder-edit', $p->id) }}" class="btn text-white"

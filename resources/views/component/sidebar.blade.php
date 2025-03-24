@@ -4,7 +4,7 @@
             <a class="nav-link text-decoration-none px-4" href="{{ route("dashboard") }}" style="color: white; font-weight: bold; @if (Request::is("dashboard*")) background-color: green; @else rgb(69, 69, 69); @endif"><i class="bi bi-grid-1x2 me-2"></i> Dashboard</a>
         </li>
 
-        @if(Gate::allows('user-role', ['master', 'accounting_admin', 'purchasing_admin']))
+        @if(Gate::allows('user-role', ['master', 'accounting_admin', 'purchasing_admin', 'gudang']))
             <li class="nav-item">
                 <a class="nav-link text-decoration-none px-4" href="{{ route("purchase-index") }}" style="color: white; font-weight: bold; @if (Request::is("purchase*")) background-color: green; @else rgb(69, 69, 69); @endif"><i class="bi bi-card-checklist me-2"></i> Pembelian Barang</a>
             </li>

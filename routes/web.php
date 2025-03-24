@@ -92,7 +92,7 @@ Route::middleware(["auth", "verified"])->group(function(){
     });
 
     // ===== PURCHASES ===== //
-    Route::middleware('allow:master,accounting_admin,purchasing_admin')->group(function(){
+    Route::middleware('allow:master,accounting_admin,purchasing_admin,gudang')->group(function(){
         // Purchase
         Route::get('/purchase', [PurchaseController::class, "index"] )->name("purchase-index");
         Route::get('/purchase/create', [PurchaseController::class, "create"] )->name("purchase-create");

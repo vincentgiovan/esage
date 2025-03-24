@@ -169,7 +169,7 @@
 
                             <td class="border border-1 border-secondary">
                                 {{-- Subgudang dan gudang tidak bisa CRUD --}}
-                                @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
+                                @if(!in_array(Auth::user()->role->role_name, ['subgudang', 'project_manager']))
                                     <div class="d-flex gap-2 w-100">
                                         <a href="{{ route('product-edit', $p->id) }}" class="btn btn-warning text-white"
                                             style="font-size: 10pt; background-color: rgb(197, 167, 0);">
