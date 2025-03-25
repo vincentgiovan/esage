@@ -22,39 +22,39 @@
     </style>
 </head>
 <body>
-        <h2>Partners</h2>
+        <h3>Partners</h3>
         <hr>
 
         <br>
 
 
-        <!-- tabel list data-->
+        {{-- tabel list data--}}
         <table style="width: 100%; border: 1px solid black;">
             <tr>
-                <th>Nomor</th>
-                <th>Nama Partner</th>
-                <th>Partner Role</th>
-                <th>Remark</th>
-                <th>Address</th>
-                <th>Contact</th>
-                <th>Phone</th>
-                <th>Fax</th>
-                <th>Email</th>
-                <th>Tempo</th>
+                <th class="border border-1 border-secondary">Nomor</th>
+                <th class="border border-1 border-secondary">Nama Partner</th>
+                <th class="border border-1 border-secondary">Partner Role</th>
+                <th class="border border-1 border-secondary">Remark</th>
+                <th class="border border-1 border-secondary">Address</th>
+                <th class="border border-1 border-secondary">Contact</th>
+                <th class="border border-1 border-secondary">Phone</th>
+                <th class="border border-1 border-secondary">Fax</th>
+                <th class="border border-1 border-secondary">Email</th>
+                <th class="border border-1 border-secondary">Tempo</th>
             </tr>
 
             @foreach ($partners as $i => $p)
                 <tr>
-                    <td>{{ $i + 1 }}</td>
-                    <td>{{ $p->partner_name }}</td>
-                    <td>{{ $p->role }}</td>
-                    <td>{{ $p->remark }}</td>
-                    <td>{{ $p->address }}</td>
-                    <td>{{ $p->contact }}</td>
-                    <td>{{ $p->phone }}</td>
-                    <td>{{ $p->fax }}</td>
-                    <td>{{ $p->email }}</td>
-                    <td>{{ $p->tempo }}</td>
+                    <td class="border border-1 border-secondary">{{ $i + 1 }}</td>
+                    <td class="border border-1 border-secondary">{{ $p->partner_name }}</td>
+                    <td class="border border-1 border-secondary">{{ $p->role }}</td>
+                    <td class="border border-1 border-secondary">{{ $p->remark }}</td>
+                    <td class="border border-1 border-secondary">{{ $p->address }}</td>
+                    <td class="border border-1 border-secondary">{{ $p->contact }}</td>
+                    <td class="border border-1 border-secondary">{{ $p->phone }}</td>
+                    <td class="border border-1 border-secondary">{{ $p->fax }}</td>
+                    <td class="border border-1 border-secondary">{{ $p->email }}</td>
+                    <td class="border border-1 border-secondary">{{ $p->tempo }}</td>
                 </tr>
             @endforeach
         </table>

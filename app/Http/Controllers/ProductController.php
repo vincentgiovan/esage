@@ -21,7 +21,7 @@ class ProductController extends Controller{
     // Tabel list semua product
     public function index(Request $request)
     {
-        $products = Product::filter(request(["condition", "search"]))->orderByRaw('CASE WHEN status = "Out of Stock" THEN 0 ELSE 1 END')->orderBy("product_name")->where('archived', 0)->get();
+        $products = Product::filter(request(["condition", "search"]))->orderByRaw('CASE WHEN status = "Out of Stock" THEN 0 ELSE 1 END')->orderBy("product_name")->get();
 
         $grouped_products = $products->groupBy(function ($product) {
             return "{$product->product_name}|{$product->variant}";
@@ -96,7 +96,7 @@ class ProductController extends Controller{
     {
         // Tampilkan halaman pages/product/create.blade.php
         return view("pages.product.create", [
-            "products" => Product::where('archived', 0)->get()
+            "products" => Product::all()
         ]);
     }
 
@@ -197,7 +197,7 @@ class ProductController extends Controller{
     public function destroy($id)
     {
         // Hapus data product yang ditargetkan dari tabel products
-        Product::find($id)->update(["archived" => 1]);
+        Product::find($id)->delete();
 
         // Arahkan user kembali ke halaman pages/product/index.blade.php
         return redirect(route("product-index"))->with("successDeleteProduct", "Berhasil menghapus data barang.");

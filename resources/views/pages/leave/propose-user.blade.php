@@ -3,7 +3,7 @@
 @section('content')
     <x-container-middle>
         <div class="container bg-white rounded-4 px-5 py-4 mt-4 border border-1 card">
-            <h2>Pengajuan Cuti Baru</h2>
+            <h3>Pengajuan Cuti Baru</h3>
             <form method="POST" action="{{ route('leave-user-propose-store') }}" id="folm">
                 @csrf
 

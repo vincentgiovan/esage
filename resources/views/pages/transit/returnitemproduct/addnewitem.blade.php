@@ -6,7 +6,7 @@
     <x-container-middle>
         <div class="container bg-white py-4 px-5 rounded-4 border border-1 card mt-4">
 
-            <h2>Tambah Barang ke Pengembalian</h2>
+            <h3>Tambah Barang ke Pengembalian</h3>
                 <div>
                     <div class="mt-3">
                         <label for="product_id">Nama Produk</label>
@@ -32,9 +32,9 @@
                 <div class="overflow-x-auto">
                     <table class="w-100 mt-4">
                         <thead>
-                            <th>Nama Barang</th>
-                            <th>Jumlah</th>
-                            <th>Aksi</th>
+                            <th class="border border-1 border-secondary">Nama Barang</th>
+                            <th class="border border-1 border-secondary">Jumlah</th>
+                            <th class="border border-1 border-secondary">Aksi</th>
                         </thead>
                         <tbody id="isibody">
 
@@ -43,7 +43,7 @@
                 </div>
 
                 <form method="POST" action="{{ route('returnitem-list-store', $return_item->id ) }}" class="mt-5" id="peon">
-                {{-- @csrf kepake untuk token ,wajib --}}
+
                     @csrf
 
                     <div class="mt-3">
@@ -111,13 +111,13 @@
                 return;
             }
 
-            // Generate elemen <tr> dan <td> untuk membuat row tabel display
+            // Generate elemen <tr> dan <td class="border border-1 border-secondary"> untuk membuat row tabel display
             const product = JSON.parse(inpProdName.val());
 
-            const newRow = $("<tr>");
-            const colProdName = $("<td>").text(product.product_name);
-            const colQty = $("<td>").text(inpQty.val());
-            const colAction = $("<td>");
+            const newRow = $('<tr>');
+            const colProdName = $('<td class="border border-1 border-secondary">').text(product.product_name);
+            const colQty = $('<td class="border border-1 border-secondary">').text(inpQty.val());
+            const colAction = $('<td class="border border-1 border-secondary">');
 
             // Buat tombol merah tong sampah buat nanti dipake buat hapus 1 row data
             const deleteButton = $("<button>").addClass("btn btn-danger").attr("type", "button").html('<i class="bi bi-trash3"></i>');

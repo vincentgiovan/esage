@@ -4,7 +4,7 @@
     <x-container>
         <br>
         <div class="w-100 d-flex align-items-center justify-content-between">
-            <h2>Pengiriman Barang</h2>
+            <h3>Pengiriman Barang</h3>
 
             @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
                 <div class="d-flex gap-3">
@@ -43,8 +43,6 @@
         </script>
         <hr>
 
-
-
         @if (session()->has('successAddOrder'))
             <p class="text-success fw-bold">{{ session('successAddOrder') }}</p>
         @elseif (session()->has('successEditOrder'))
@@ -55,35 +53,48 @@
             <p class="text-success fw-bold">{{ session('successImportDevor') }}</p>
         @endif
 
-        @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
-            <a href="{{ route('deliveryorder-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
-                <i class="bi bi-plus-square"></i>
-                Tambah Pengiriman Baru</a>
-            <br>
-        @endif
+        <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-2">
+            <div class="d-flex gap-2 ">
+                <form action="{{ route('deliveryorder-index') }}" class="d-flex gap-2">
+                    <div class="position-relative">
+                    <input type="text" name="search" placeholder="Cari pengiriman..." value="{{ request('search') }}" class="form-control border border-1 border-secondary pe-5" style="width: 300px;">
+                        <a href="{{ route('deliveryorder-index') }}" class="btn position-absolute top-0 end-0"><i class="bi bi-x-lg"></i></a>
+                    </div>
+                    <button class="btn btn-primary"><i class="bi bi-search"></i></button>
+                </form>
+            </div>
+            @if(!in_array(Auth::user()->role->role_name, ['subgudang', 'project_manager']))
+                <a href="{{ route('deliveryorder-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
+                    <i class="bi bi-plus-square"></i>
+                    Tambah Pengiriman Baru</a>
+            @endif
+        </div>
 
-        <!-- tabel list data-->
+        <div class="d-flex w-100 justify-content-end">
+            Memperlihatkan {{ $deliveryorders->firstItem() }} - {{ $deliveryorders->lastItem()  }} dari {{ $deliveryorders->total() }} item
+        </div>
 
-        <div class="overflow-x-auto">
+        {{-- tabel list data--}}
+        <div class="overflow-x-auto mt-3">
             <table class="w-100">
                 <tr>
-                    <th>No</th>
-                    <th>Tanggal Pengiriman</th>
-                    <th>Proyek</th>
-                    <th>SKU</th>
-                    <th class="text-center">Status Pengiriman</th>
-                    <th>Catatan</th>
-                    @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
-                        <th>Aksi</th>
+                    <th class="border border-1 border-secondary">No</th>
+                    <th class="border border-1 border-secondary">Tanggal Pengiriman</th>
+                    <th class="border border-1 border-secondary">Proyek</th>
+                    <th class="border border-1 border-secondary">SKU</th>
+                    <th class="border border-1 border-secondary" class="text-center">Status Pengiriman</th>
+                    <th class="border border-1 border-secondary">Catatan</th>
+                    @if(!in_array(Auth::user()->role->role_name, ['subgudang', 'project_manager']))
+                        <th class="border border-1 border-secondary">Aksi</th>
                     @endif
                 </tr>
 
                 @foreach ($deliveryorders as $p)
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ Carbon\Carbon::parse($p->delivery_date)->translatedFormat("d M Y") }}</td>
-                        <td>{{ $p->project->project_name }}</td>
-                        <td>
+                        <td class="border border-1 border-secondary">{{ ($loop->index + 1) + ((request('page') ?? 1) - 1) * 30 }}</td>
+                        <td class="border border-1 border-secondary">{{ Carbon\Carbon::parse($p->delivery_date)->translatedFormat("d M Y") }}</td>
+                        <td class="border border-1 border-secondary">{{ $p->project->project_name }}</td>
+                        <td class="border border-1 border-secondary">
                             <div class="d-flex gap-5 w-100 justify-content-between align-items-center">
                                 {{ $p->register }}
                                 <a href="{{ route('deliveryorderproduct-viewitem', $p->id) }}" class="btn btn-success text-white"
@@ -91,7 +102,7 @@
                             </div>
                         </td>
 
-                        <td>
+                        <td class="border border-1 border-secondary">
                             <div class="w-100 d-flex justify-content-center">
                                 @if($p->delivery_status == "Complete")
                                     <i class="bi bi-check-circle-fill fs-4" style="color: green"></i>
@@ -100,10 +111,10 @@
                                 @endif
                             </div>
                         </td>
-                        <td>{{ $p->note }}</td>
-                        {{-- <td >{{ $p->user->name }}</td> --}}
-                        @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
-                            <td >
+                        <td class="border border-1 border-secondary">{{ $p->note }}</td>
+                        {{-- <td class="border border-1 border-secondary" >{{ $p->user->name }}</td> --}}
+                        @if(!in_array(Auth::user()->role->role_name, ['subgudang', 'project_manager']))
+                            <td class="border border-1 border-secondary" >
                                 <div class="d-flex gap-2 w-100">
                                     <a href="{{ route('deliveryorder-edit', $p->id) }}" class="btn text-white"
                                         style="font-size: 10pt; background-color: rgb(197, 167, 0);">
@@ -122,6 +133,10 @@
                     </tr>
                 @endforeach
             </table>
+        </div>
+
+        <div class="mt-4">
+            {{ $deliveryorders->links() }}
         </div>
     </x-container>
 @endsection

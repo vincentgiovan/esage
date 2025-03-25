@@ -3,7 +3,7 @@
 @section("content")
     <x-container-middle>
         <div class="container bg-white rounded-4 py-4 px-5 border border-1 card mt-4">
-            <h2>My Profile</h2>
+            <h3>My Profile</h3>
 
             @if (session()->has('successEditProfile'))
                 <p class="text-success fw-bold">{{ session('successEditProfile') }}</p>

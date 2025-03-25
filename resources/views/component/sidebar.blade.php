@@ -4,7 +4,7 @@
             <a class="nav-link text-decoration-none px-4" href="{{ route("dashboard") }}" style="color: white; font-weight: bold; @if (Request::is("dashboard*")) background-color: green; @else rgb(69, 69, 69); @endif"><i class="bi bi-grid-1x2 me-2"></i> Dashboard</a>
         </li>
 
-        @if(Gate::allows('user-role', ['master', 'accounting_admin', 'purchasing_admin']))
+        @if(Gate::allows('user-role', ['master', 'accounting_admin', 'purchasing_admin', 'gudang']))
             <li class="nav-item">
                 <a class="nav-link text-decoration-none px-4" href="{{ route("purchase-index") }}" style="color: white; font-weight: bold; @if (Request::is("purchase*")) background-color: green; @else rgb(69, 69, 69); @endif"><i class="bi bi-card-checklist me-2"></i> Pembelian Barang</a>
             </li>
@@ -30,7 +30,7 @@
 
         @if(Gate::allows('user-role', ['master', 'accounting_admin', 'purchasing_admin', 'gudang', 'subgudang', 'project_manager']))
             <li class="nav-item">
-                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("product*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("product-index") }}"><i class="bi bi-box-seam me-2"></i> Data Barang</a>
+                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("product*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("product-index", ['condition' => 'good']) }}"><i class="bi bi-box-seam me-2"></i> Data Barang</a>
             </li>
         @endif
 
@@ -63,8 +63,12 @@
         @endif
 
         @if(Gate::allows('user-role', ['master', 'accounting_admin']))
+            @php
+                $lastFriday = Carbon\Carbon::now()->previous(Carbon\Carbon::FRIDAY);
+                $lastSaturday = $lastFriday->copy()->previous(Carbon\Carbon::SATURDAY);
+            @endphp
             <li class="nav-item">
-                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("salary*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("salary-index") }}" ><i class="bi bi-currency-dollar me-2"></i> Gaji Pegawai</a>
+                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("salary*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("salary-index", ['from' => $lastSaturday->toDateString(), 'until' => $lastFriday->toDateString()]) }}" ><i class="bi bi-currency-dollar me-2"></i> Gaji Pegawai</a>
             </li>
         @endif
 

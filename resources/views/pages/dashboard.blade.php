@@ -6,12 +6,12 @@
         <i class="bi bi-arrow-up-circle" style="font-size: 40px; z-index: 10;"></i>
     </a> --}}
 
-    <div class="">
+    <div class="p-3">
         @if (session()->has('successfulLogin'))
             <p class="text-success fs-5">{{ session('successfulLogin') }}</p>
         @endif
 
-        <!-- Title -->
+        {{-- Title --}}
         <div class="row">
             <div class="col-md-12 grid-margin">
                 <div class="d-flex justify-content-between align-items-center gap-3">
@@ -50,10 +50,10 @@
             </div>
         </div>
 
-        <!-- Summary -->
+        {{-- Summary --}}
         {{-- Gaboleh muncul di project manager --}}
         @if(!in_array(Auth::user()->role->role_name, ['project_manager']))
-            <div class="d-flex align-items-stretch justify-content-between w-100 mb-4">
+            <div class="d-flex align-items-stretch justify-content-between w-100 mb-4 mt-4">
                 <div style="width: 18%;">
                     <div class="card">
                         <div class="card-body">
@@ -201,48 +201,48 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th>User</th>
-                                        <th>Product</th>
-                                        <th>Sale</th>
-                                        <th>Status</th>
+                                        <th class="border border-1 border-secondary">User</th>
+                                        <th class="border border-1 border-secondary">Product</th>
+                                        <th class="border border-1 border-secondary">Sale</th>
+                                        <th class="border border-1 border-secondary">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>Jacob</td>
-                                        <td>Photoshop</td>
-                                        <td class="text-danger"> 28.76% <i class="ti-arrow-down"></i></td>
-                                        <td><label class="badge badge-danger">Pending</label></td>
+                                        <td class="border border-1 border-secondary">Jacob</td>
+                                        <td class="border border-1 border-secondary">Photoshop</td>
+                                        <td class="border border-1 border-secondary" class="text-danger"> 28.76% <i class="ti-arrow-down"></i></td>
+                                        <td class="border border-1 border-secondary"><label class="badge badge-danger">Pending</label></td>
                                     </tr>
                                     <tr>
-                                        <td>Messsy</td>
-                                        <td>Flash</td>
-                                        <td class="text-danger"> 21.06% <i class="ti-arrow-down"></i></td>
-                                        <td><label class="badge badge-warning">In progress</label></td>
+                                        <td class="border border-1 border-secondary">Messsy</td>
+                                        <td class="border border-1 border-secondary">Flash</td>
+                                        <td class="border border-1 border-secondary" class="text-danger"> 21.06% <i class="ti-arrow-down"></i></td>
+                                        <td class="border border-1 border-secondary"><label class="badge badge-warning">In progress</label></td>
                                     </tr>
                                     <tr>
-                                        <td>John</td>
-                                        <td>Premier</td>
-                                        <td class="text-danger"> 35.00% <i class="ti-arrow-down"></i></td>
-                                        <td><label class="badge badge-info">Fixed</label></td>
+                                        <td class="border border-1 border-secondary">John</td>
+                                        <td class="border border-1 border-secondary">Premier</td>
+                                        <td class="border border-1 border-secondary" class="text-danger"> 35.00% <i class="ti-arrow-down"></i></td>
+                                        <td class="border border-1 border-secondary"><label class="badge badge-info">Fixed</label></td>
                                     </tr>
                                     <tr>
-                                        <td>Peter</td>
-                                        <td>After effects</td>
-                                        <td class="text-success"> 82.00% <i class="ti-arrow-up"></i></td>
-                                        <td><label class="badge badge-success">Completed</label></td>
+                                        <td class="border border-1 border-secondary">Peter</td>
+                                        <td class="border border-1 border-secondary">After effects</td>
+                                        <td class="border border-1 border-secondary" class="text-success"> 82.00% <i class="ti-arrow-up"></i></td>
+                                        <td class="border border-1 border-secondary"><label class="badge badge-success">Completed</label></td>
                                     </tr>
                                     <tr>
-                                        <td>Dave</td>
-                                        <td>53275535</td>
-                                        <td class="text-success"> 98.05% <i class="ti-arrow-up"></i></td>
-                                        <td><label class="badge badge-warning">In progress</label></td>
+                                        <td class="border border-1 border-secondary">Dave</td>
+                                        <td class="border border-1 border-secondary">53275535</td>
+                                        <td class="border border-1 border-secondary" class="text-success"> 98.05% <i class="ti-arrow-up"></i></td>
+                                        <td class="border border-1 border-secondary"><label class="badge badge-warning">In progress</label></td>
                                     </tr>
                                     <tr>
-                                        <td>Messsy</td>
-                                        <td>Flash</td>
-                                        <td class="text-danger"> 21.06% <i class="ti-arrow-down"></i></td>
-                                        <td><label class="badge badge-info">Fixed</label></td>
+                                        <td class="border border-1 border-secondary">Messsy</td>
+                                        <td class="border border-1 border-secondary">Flash</td>
+                                        <td class="border border-1 border-secondary" class="text-danger"> 21.06% <i class="ti-arrow-down"></i></td>
+                                        <td class="border border-1 border-secondary"><label class="badge badge-info">Fixed</label></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -250,9 +250,9 @@
                     </div>
                 </div>
             </div> --}}
-            <!-- nanti ubah jadi col-md-5 kalo top product mau dimunculin -->
+            {{-- nanti ubah jadi col-md-5 kalo top product mau dimunculin --}}
 
-            <!-- Todo list -->
+            {{-- Todo list --}}
             <div class="col-md-12 grid-margin stretch-card mt-4">
                 <div class="card">
                     <form action="{{ route('todo-update') }}" method="post" class="card-body" id="porm">
@@ -349,7 +349,7 @@
                         <div class="row">
                             <div class="col-md-12 col-xl-3 d-flex flex-column justify-content-center">
                                 <div class="ml-xl-4">
-                                    <h2>33500</h2>
+                                    <h3>33500</h3>
                                     <h3 class="font-weight-light mb-xl-4">Sales</h3>
                                     <p class="text-muted mb-2 mb-xl-0">The total number of sessions within the date range.
                                         It is the period time a user is actively engaged with your website, page or app, etc
@@ -366,80 +366,80 @@
                                         <div class="table-responsive mb-3 mb-md-0">
                                             <table class="table table-borderless report-table">
                                                 <tr>
-                                                    <td class="text-muted">Illinois</td>
-                                                    <td class="w-100 px-0">
+                                                    <td class="border border-1 border-secondary" class="text-muted">Illinois</td>
+                                                    <td class="border border-1 border-secondary" class="w-100 px-0">
                                                         <div class="progress progress-md mx-4">
                                                             <div class="progress-bar bg-primary" role="progressbar"
                                                                 style="width: 70%" aria-valuenow="70" aria-valuemin="0"
                                                                 aria-valuemax="100"></div>
                                                         </div>
                                                     </td>
-                                                    <td>
+                                                    <td class="border border-1 border-secondary">
                                                         <h5 class="font-weight-bold mb-0">524</h5>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="text-muted">Washington</td>
-                                                    <td class="w-100 px-0">
+                                                    <td class="border border-1 border-secondary" class="text-muted">Washington</td>
+                                                    <td class="border border-1 border-secondary" class="w-100 px-0">
                                                         <div class="progress progress-md mx-4">
                                                             <div class="progress-bar bg-primary" role="progressbar"
                                                                 style="width: 30%" aria-valuenow="30" aria-valuemin="0"
                                                                 aria-valuemax="100"></div>
                                                         </div>
                                                     </td>
-                                                    <td>
+                                                    <td class="border border-1 border-secondary">
                                                         <h5 class="font-weight-bold mb-0">722</h5>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="text-muted">Mississippi</td>
-                                                    <td class="w-100 px-0">
+                                                    <td class="border border-1 border-secondary" class="text-muted">Mississippi</td>
+                                                    <td class="border border-1 border-secondary" class="w-100 px-0">
                                                         <div class="progress progress-md mx-4">
                                                             <div class="progress-bar bg-primary" role="progressbar"
                                                                 style="width: 95%" aria-valuenow="95" aria-valuemin="0"
                                                                 aria-valuemax="100"></div>
                                                         </div>
                                                     </td>
-                                                    <td>
+                                                    <td class="border border-1 border-secondary">
                                                         <h5 class="font-weight-bold mb-0">173</h5>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="text-muted">California</td>
-                                                    <td class="w-100 px-0">
+                                                    <td class="border border-1 border-secondary" class="text-muted">California</td>
+                                                    <td class="border border-1 border-secondary" class="w-100 px-0">
                                                         <div class="progress progress-md mx-4">
                                                             <div class="progress-bar bg-primary" role="progressbar"
                                                                 style="width: 60%" aria-valuenow="60" aria-valuemin="0"
                                                                 aria-valuemax="100"></div>
                                                         </div>
                                                     </td>
-                                                    <td>
+                                                    <td class="border border-1 border-secondary">
                                                         <h5 class="font-weight-bold mb-0">945</h5>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="text-muted">Maryland</td>
-                                                    <td class="w-100 px-0">
+                                                    <td class="border border-1 border-secondary" class="text-muted">Maryland</td>
+                                                    <td class="border border-1 border-secondary" class="w-100 px-0">
                                                         <div class="progress progress-md mx-4">
                                                             <div class="progress-bar bg-primary" role="progressbar"
                                                                 style="width: 40%" aria-valuenow="40" aria-valuemin="0"
                                                                 aria-valuemax="100"></div>
                                                         </div>
                                                     </td>
-                                                    <td>
+                                                    <td class="border border-1 border-secondary">
                                                         <h5 class="font-weight-bold mb-0">553</h5>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="text-muted">Alaska</td>
-                                                    <td class="w-100 px-0">
+                                                    <td class="border border-1 border-secondary" class="text-muted">Alaska</td>
+                                                    <td class="border border-1 border-secondary" class="w-100 px-0">
                                                         <div class="progress progress-md mx-4">
                                                             <div class="progress-bar bg-primary" role="progressbar"
                                                                 style="width: 75%" aria-valuenow="75" aria-valuemin="0"
                                                                 aria-valuemax="100"></div>
                                                         </div>
                                                     </td>
-                                                    <td>
+                                                    <td class="border border-1 border-secondary">
                                                         <h5 class="font-weight-bold mb-0">912</h5>
                                                     </td>
                                                 </tr>
@@ -454,8 +454,8 @@
             </div>
         </div> --}}
     </div>
-    <!-- content-wrapper ends -->
-    <!-- partial:partials/_footer.html -->
+    {{-- content-wrapper ends --}}
+    {{-- partial:partials/_footer.html --}}
 
-    <!-- partial -->
+    {{-- partial --}}
 @endsection

@@ -3,7 +3,7 @@
 @section('content')
     <x-container-middle>
         <div class="container bg-white rounded-4 py-4 px-5 border border-1 card mt-4">
-            <h2>Edit Attendance Data</h2>
+            <h3>Edit Attendance Data</h3>
             <form method="POST" action="{{ route('attendance-update', $attendance->id) }}">
                 @csrf
 

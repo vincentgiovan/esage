@@ -22,31 +22,31 @@
     </style>
 </head>
 <body>
-        <h2>Delivery Orders</h2>
+        <h3>Delivery Orders</h3>
         <hr>
 
         <br>
 
 
-        <!-- tabel list data-->
+        {{-- tabel list data--}}
         <table style="width: 100%; border: 1px solid black;">
             <tr>
-                <th>Nomor</th>
-                <th>Delivery Date</th>
-                <th>Project</th>
-                <th>Register</th>
-                <th>Delivery Status</th>
-                <th>Note</th>
+                <th class="border border-1 border-secondary">Nomor</th>
+                <th class="border border-1 border-secondary">Delivery Date</th>
+                <th class="border border-1 border-secondary">Project</th>
+                <th class="border border-1 border-secondary">Register</th>
+                <th class="border border-1 border-secondary">Delivery Status</th>
+                <th class="border border-1 border-secondary">Note</th>
             </tr>
 
             @foreach ($deliveryorders as $i => $do)
                 <tr>
-                    <td>{{ $i + 1 }}</td>
-                    <td>{{ $do->delivery_date }}</td>
-                    <td>{{ $do->project->project_name }}</td>
-                    <td>{{ $do->register }}</td>
-                    <td>{{ $do->delivery_status }}</td>
-                    <td>{{ $do->note }}</td>
+                    <td class="border border-1 border-secondary">{{ $i + 1 }}</td>
+                    <td class="border border-1 border-secondary">{{ $do->delivery_date }}</td>
+                    <td class="border border-1 border-secondary">{{ $do->project->project_name }}</td>
+                    <td class="border border-1 border-secondary">{{ $do->register }}</td>
+                    <td class="border border-1 border-secondary">{{ $do->delivery_status }}</td>
+                    <td class="border border-1 border-secondary">{{ $do->note }}</td>
                 </tr>
             @endforeach
         </table>

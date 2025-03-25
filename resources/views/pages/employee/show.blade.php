@@ -3,7 +3,7 @@
 @section("content")
     <x-container>
         <br>
-        <h2>Data Pegawai</h2>
+        <h3>Data Pegawai</h3>
         <hr>
 
         @if (session()->has('successAddPrepay'))
@@ -73,10 +73,6 @@
                 <td class="border border-1 border-secondary">{{ __("Rp " . number_format($employee->performa, 2, ',', '.')) ?? "N/A" }}</td>
             </tr>
             {{-- <tr>
-                <th class="border border-1 border-secondary w-25">Kasbon</th>
-                <td class="border border-1 border-secondary">{{ __("Rp " . number_format($employee->kasbon, 2, ',', '.')) ?? "N/A" }}</td>
-            </tr>
-            <tr>
                 <th class="border border-1 border-secondary w-25">Payroll</th>
                 <td class="border border-1 border-secondary">{{ ($employee->payroll == "on")? "Ya" : "Tidak" }}</td>
             </tr> --}}
@@ -96,9 +92,13 @@
                 <th class="border border-1 border-secondary w-25">Status</th>
                 <td class="border border-1 border-secondary">{{ $employee->status ? ucwords($employee->status) : "N/A" }}</td>
             </tr>
+            <tr>
+                <th class="border border-1 border-secondary w-25">Kasbon</th>
+                <td class="border border-1 border-secondary">{{ __("Rp " . number_format($employee->kasbon, 2, ',', '.')) ?? "N/A" }}</td>
+            </tr>
         </table>
 
-        <h5 class="mt-4">Kasbon</h5>
+        <h5 class="mt-4">Potongan Kasbon</h5>
         <div class="card mb-4">
             <div class="card-header">
                 <button class="w-100 h-100 btn d-flex justify-content-between" type="button" id="add-new-prepay-btn">Tambah Kasbon Baru <i class="bi bi-chevron-down"></i></button>
@@ -150,24 +150,24 @@
             @csrf
             <table class="w-100">
                 <tr>
-                    <th>No</th>
-                    <th>Tanggal</th>
-                    <th>Jumlah</th>
-                    <th>Keterangan</th>
-                    <th>Aksi</th>
+                    <th class="border border-1 border-secondary">No</th>
+                    <th class="border border-1 border-secondary">Tanggal</th>
+                    <th class="border border-1 border-secondary">Jumlah</th>
+                    <th class="border border-1 border-secondary">Keterangan</th>
+                    <th class="border border-1 border-secondary">Aksi</th>
                 </tr>
 
                 @forelse ($employee->prepays()->orderBy('prepay_date')->get() as $kasbon)
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
-                        <td style="width: 50px;">{{ $loop->iteration }}</td>
-                        <td style="width: 500px;">
+                        <td class="border border-1 border-secondary" style="width: 50px;">{{ $loop->iteration }}</td>
+                        <td class="border border-1 border-secondary" style="width: 500px;">
                             <div class="w-100 d-flex gap-3 align-items-center">
                                 {{ Carbon\Carbon::parse($kasbon->prepay_date)->translatedFormat('d F Y') }}
                             </div>
                         </td>
-                        <td style="width: 300px;">Rp {{ number_format($kasbon->amount, 2, ",", ".") }}</td>
-                        <td>{{ $kasbon->remark ?? 'N/A' }}</td>
-                        <td>
+                        <td class="border border-1 border-secondary" style="width: 300px;">Rp {{ number_format($kasbon->amount, 2, ",", ".") }}</td>
+                        <td class="border border-1 border-secondary">{{ $kasbon->remark ?? 'N/A' }}</td>
+                        <td class="border border-1 border-secondary">
                             <div class="d-flex gap-2 w-100">
                                 <button type="button" class="btn edit-prepay-btn text-white"
                                     style="font-size: 10pt; background-color: rgb(197, 167, 0);">
@@ -182,7 +182,7 @@
                         </td>
                     </tr>
                     <tr style="display: none;">
-                        <td class="p-5" colspan="5">
+                        <td class="border border-1 border-secondary" class="p-5" colspan="5">
                             <form action="{{ route('prepay-update', [$employee->id, $kasbon->id]) }}" method="post" class="w-100 d-flex flex-column align-items-start" id="prepayedit-{{ $kasbon->id }}">
                                 @csrf
                                 <div class="w-100 d-flex gap-3">

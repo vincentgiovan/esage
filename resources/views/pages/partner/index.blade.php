@@ -4,7 +4,7 @@
     <x-container>
         <br>
         <div class="w-100 d-flex align-items-center justify-content-between">
-            <h2>Partner Sage</h2>
+            <h3>Partner Sage</h3>
 
                 <div class="d-flex gap-3">
                     <a class="btn btn-secondary" href="{{ route('partner-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
@@ -37,33 +37,45 @@
             <p class="text-success fw-bold">{{ session('successDeletePartner') }}</p>
         @endif
 
-
+        <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-2">
+            <div class="d-flex gap-2 ">
+                <form action="{{ route('partner-index') }}" class="d-flex gap-2">
+                    <div class="position-relative">
+                    <input type="text" name="search" placeholder="Cari partner..." value="{{ request('search') }}" class="form-control border border-1 border-secondary pe-5" style="width: 300px;">
+                        <a href="{{ route('partner-index') }}" class="btn position-absolute top-0 end-0"><i class="bi bi-x-lg"></i></a>
+                    </div>
+                    <button class="btn btn-primary"><i class="bi bi-search"></i></button>
+                </form>
+            </div>
             <a href="{{ route('partner-create') }}" class="btn btn-primary text-white mb-3" style="font-size: 10pt">
                 <i class="bi bi-plus-square"></i>
                 Tambah Partner Baru</a>
-            <br>
+        </div>
 
-        <!-- tabel list data-->
+        <div class="d-flex w-100 justify-content-end">
+            Memperlihatkan {{ $partners->firstItem() }} - {{ $partners->lastItem()  }} dari {{ $partners->total() }} item
+        </div>
 
-        <div class="overflow-x-auto">
+        {{-- tabel list data--}}
+        <div class="overflow-x-auto mt-3">
             <table class="w-100">
                 <tr>
-                    <th>No</th>
-                    <th>Nama Partner</th>
-                    <th>Role</th>
-                    <th>Alamat</th>
-                    <th>Kontak</th>
-                    <th>Catatan</th>
-                    <th>Tempo</th>
+                    <th class="border border-1 border-secondary">No</th>
+                    <th class="border border-1 border-secondary">Nama Partner</th>
+                    <th class="border border-1 border-secondary">Role</th>
+                    <th class="border border-1 border-secondary">Alamat</th>
+                    <th class="border border-1 border-secondary">Kontak</th>
+                    <th class="border border-1 border-secondary">Catatan</th>
+                    <th class="border border-1 border-secondary">Tempo</th>
 
-                        <th>Aksi</th>
+                        <th class="border border-1 border-secondary">Aksi</th>
 
                 </tr>
 
                 @foreach ($partners as $p)
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
-                        <td>{{ $loop->iteration }}</td>
-                        <td>
+                        <td class="border border-1 border-secondary">{{ ($loop->index + 1) + ((request('page') ?? 1) - 1) * 30 }}</td>
+                        <td class="border border-1 border-secondary">
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 {{ $p->partner_name }}
 
@@ -71,20 +83,20 @@
 
                             </div>
                         </td>
-                        <td>{{ $p->role }}</td>
-                        <td>{{ $p->address }}</td>
-                        <td>
+                        <td class="border border-1 border-secondary">{{ $p->role }}</td>
+                        <td class="border border-1 border-secondary">{{ $p->address }}</td>
+                        <td class="border border-1 border-secondary">
                             <ul>
                                 <li>Email: {{ $p->email ?? "N/A" }}</li>
                                 <li>Fax: {{ $p->fax ?? "N/A" }}</li>
                                 <li>Mobile/Telephone: {{ $p->phone ?? "N/A" }}/{{ $p->contact ?? "N/A" }}</li>
                             </ul>
                         </td>
-                        <td>{{ $p->remark }}</td>
-                        <td>{{ $p->tempo }}</td>
-                        {{-- <td >{{ $p->user->name }}</td> --}}
+                        <td class="border border-1 border-secondary">{{ $p->remark }}</td>
+                        <td class="border border-1 border-secondary">{{ $p->tempo }}</td>
+                        {{-- <td class="border border-1 border-secondary" >{{ $p->user->name }}</td> --}}
 
-                            <td>
+                            <td class="border border-1 border-secondary">
                                 <div class="d-flex gap-2 w-100">
                                     <a href="{{ route('partner-edit', $p->id) }}" class="btn btn-warning text-white"
                                         style="font-size: 10pt; background-color: rgb(197, 167, 0);">
@@ -102,6 +114,10 @@
                     </tr>
                 @endforeach
             </table>
+        </div>
+
+        <div class="mt-4">
+            {{ $partners->links() }}
         </div>
     </x-container>
 @endsection

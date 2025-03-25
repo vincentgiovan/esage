@@ -24,4 +24,16 @@ class DeliveryOrder extends Model
         return $this->hasMany(DeliveryOrderProduct::class);
     }
 
+    public function scopeFilter($query, array $filters)
+    {
+        $query->when($filters["search"] ?? false, function ($query, $search) {
+            return $query->where(function ($query) use ($search) {
+                $query->whereHas('project', function ($query) use ($search) {
+                    $query->where('project_name', 'like', '%' . $search . '%');
+                })->orWhere("register", "like", "%" . $search . "%");
+            });
+        });
+    }
+
+
 }

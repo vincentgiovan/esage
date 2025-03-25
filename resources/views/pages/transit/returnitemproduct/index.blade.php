@@ -4,7 +4,7 @@
 <x-container>
     <br>
     <div class="w-100 d-flex align-items-center justify-content-between">
-        <h2>Daftar Barang di Pengembalian {{ Carbon\Carbon::parse($return_item->return_date)->translatedFormat('d M Y') }} - {{ $return_item->project->project_name }}</h2>
+        <h3>Daftar Barang di Pengembalian {{ Carbon\Carbon::parse($return_item->return_date)->translatedFormat('d M Y') }} - {{ $return_item->project->project_name }}</h3>
 
         {{-- <div class="d-flex gap-3">
             <a class="btn btn-secondary" href="{{ route('purchaseproduct-import', $purchase->id) }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
@@ -46,26 +46,26 @@
     </a>
 
     <br>
-    <!-- tabel list data-->
+    {{-- tabel list data--}}
 
     <h5>Daftar Barang</h5>
     <div class="overflow-x-auto">
         <table class="w-100">
             <tr>
-                <th>No</th>
-                <th>Nama Barang</th>
-                <th>Variant</th>
-                <th>Jumlah</th>
-                <th>Aksi</th>
+                <th class="border border-1 border-secondary">No</th>
+                <th class="border border-1 border-secondary">Nama Barang</th>
+                <th class="border border-1 border-secondary">Variant</th>
+                <th class="border border-1 border-secondary">Jumlah</th>
+                <th class="border border-1 border-secondary">Aksi</th>
             </tr>
 
             @foreach ($return_item->return_item_products as $retprod)
                 <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $retprod->product->product_name }}</td>
-                    <td>{{ $retprod->product->variant }}</td>
-                    <td>{{ $retprod->qty }}</td>
-                    <td>
+                    <td class="border border-1 border-secondary">{{ $loop->iteration }}</td>
+                    <td class="border border-1 border-secondary">{{ $retprod->product->product_name }}</td>
+                    <td class="border border-1 border-secondary">{{ $retprod->product->variant }}</td>
+                    <td class="border border-1 border-secondary">{{ $retprod->qty }}</td>
+                    <td class="border border-1 border-secondary">
                         <div class="d-flex gap-5 w-100">
                             <form action="{{ route('returnitem-list-remove', $retprod->id) }}" method="POST">
                                 @csrf
@@ -78,13 +78,6 @@
                 </tr>
 
             @endforeach
-
-            <tr>
-                <td colspan="9" style="height: 50px;">
-                </td>
-            </tr>
-
-
         </table>
         {{-- <div class="d-flex h-100 w-100 justify-content-end gap-3 x-2" style="font-size: 14pt; background: linear-gradient(to right, rgb(113, 113, 113), rgb(213, 207, 207));">
             <div>
@@ -103,7 +96,7 @@
         </div> --}}
     </div>
 
-    <h5>Foto Barang</h5>
+    <h5 class="mt-4">Foto Barang</h5>
 
     <div class="d-flex flex-wrap">
         @forelse ($return_item->return_item_images as $retimg)

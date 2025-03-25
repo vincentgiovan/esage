@@ -16,7 +16,7 @@ class ProjectController extends Controller{
     {
         // Tampilkan halaman pages/project/index.blade.php beserta data yang diperlukan:
         return view("pages.project.index", [
-            "projects" => Project::where('archived', 0)->get() // semua data project buat ditampilin satu-satu
+            "projects" => Project::filter(request(['search']))->paginate(30) // semua data project buat ditampilin satu-satu
         ]);
     }
 
@@ -78,7 +78,7 @@ class ProjectController extends Controller{
     public function destroy($id)
     {
         // Hapus data project yang mau dihapus dari tabel projects
-        Project::find($id)->update(["archived" => 1]);
+        Project::find($id)->delete();
 
         // Arahkan user kembali ke halaman pages/project/index.blade.php
         return redirect(route("project-index"))->with("successDeleteProject", "Berhasil menghapus data proyek.");

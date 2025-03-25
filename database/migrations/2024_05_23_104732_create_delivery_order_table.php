@@ -23,7 +23,7 @@ return new class extends Migration
                 $table->longText("note")->nullable();
                 $table->foreign("project_id")->references("id")->on("projects")->onDelete('cascade');
 
-                $table->unsignedInteger('archived')->default(0);
+
             });
 
     }

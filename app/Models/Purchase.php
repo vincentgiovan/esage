@@ -22,4 +22,14 @@ class Purchase extends Model
     public function purchase_products(){
         return $this->hasMany(PurchaseProduct::class);
     }
+
+    public function scopeFilter($query, array $filters){
+        $query->when($filters["search"] ?? false, function ($query, $search) {
+            return $query->where(function ($query) use ($search) {
+                $query->whereHas('partner', function ($query) use ($search) {
+                    $query->where('partner_name', 'like', '%' . $search . '%');
+                })->orWhere("register", "like", "%" . $search . "%");
+            });
+        });
+    }
 }

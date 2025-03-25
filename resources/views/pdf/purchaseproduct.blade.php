@@ -22,63 +22,63 @@
     </style>
 </head>
 <body>
-    <h2>NOTA PEMBELIAN</h2>
+    <h3>NOTA PEMBELIAN</h3>
     <hr>
 
     <h3>Data Transaksi</h3>
     <table>
         <tr>
-            <th style="width: 25%">SKU</th>
-            <td>{{ $purchase->register }}</td>
+            <th class="border border-1 border-secondary" style="width: 25%">SKU</th>
+            <td class="border border-1 border-secondary">{{ $purchase->register }}</td>
         </tr>
         <tr>
-            <th style="width: 25%">Tanggal Pembelian</th>
-            <td>{{ $purchase->purchase_date }}</td>
+            <th class="border border-1 border-secondary" style="width: 25%">Tanggal Pembelian</th>
+            <td class="border border-1 border-secondary">{{ $purchase->purchase_date }}</td>
         </tr>
         <tr>
-            <th style="width: 25%">Deadline Pembelian</th>
-            <td>{{ $purchase->purchase_deadline }}</td>
+            <th class="border border-1 border-secondary" style="width: 25%">Deadline Pembelian</th>
+            <td class="border border-1 border-secondary">{{ $purchase->purchase_deadline }}</td>
         </tr>
         <tr>
-            <th style="width: 25%">Tanggal Modifikasi</th>
-            <td>{{ $purchase->updated_at }}</td>
+            <th class="border border-1 border-secondary" style="width: 25%">Tanggal Modifikasi</th>
+            <td class="border border-1 border-secondary">{{ $purchase->updated_at }}</td>
         </tr>
         <tr>
-            <th style="width: 25%">Partner</th>
-            <td>{{ $purchase->partner->partner_name }}</td>
+            <th class="border border-1 border-secondary" style="width: 25%">Partner</th>
+            <td class="border border-1 border-secondary">{{ $purchase->partner->partner_name }}</td>
         </tr>
 
     </table>
 
-    <!-- tabel list data-->
+    {{-- tabel list data--}}
 
     <h3 style="margin-top: 40px;">List Barang</h3>
     <table>
         <tr>
-            <th>No</th>
-            <th>Nama Produk </th>
-            <th>SKU Produk </th>
-            <th>Harga Beli</th>
-            <th>Qty</th>
-            <th>Disc</th>
-            <th>Harga Setelah Diskon</th>
-            <th>Variant</th>
+            <th class="border border-1 border-secondary">No</th>
+            <th class="border border-1 border-secondary">Nama Produk </th>
+            <th class="border border-1 border-secondary">SKU Produk </th>
+            <th class="border border-1 border-secondary">Harga Beli</th>
+            <th class="border border-1 border-secondary">Qty</th>
+            <th class="border border-1 border-secondary">Disc</th>
+            <th class="border border-1 border-secondary">Harga Setelah Diskon</th>
+            <th class="border border-1 border-secondary">Variant</th>
         </tr>
 
         @foreach ($pp as $purchase_product)
             <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ $purchase_product->product->product_name }}</td>
-                <td>{{ $purchase_product->product->product_code }}</td>
-                <td>Rp {{ number_format($purchase_product->price, 2, ',' , '.') }}</td>
-                <td>{{ $purchase_product->quantity }}</td>
-                <td>{{ $purchase_product->discount }}%</td>
-                <td>Rp {{ number_format($purchase_product->price * (1 - ($purchase_product->discount / 100)), 2, ',' , '.') }}</td>
-                {{-- <td>{{ $purchase_product->product->markup }}%</td>
-                <td>Rp {{ $purchase_product->price * (1 + ($purchase_product->product->markup / 100)) }},00</td> --}}
-                <td>{{ $purchase_product->product->variant }}</td>
+                <td class="border border-1 border-secondary">{{ $loop->iteration }}</td>
+                <td class="border border-1 border-secondary">{{ $purchase_product->product->product_name }}</td>
+                <td class="border border-1 border-secondary">{{ $purchase_product->product->product_code }}</td>
+                <td class="border border-1 border-secondary">Rp {{ number_format($purchase_product->price, 2, ',' , '.') }}</td>
+                <td class="border border-1 border-secondary">{{ $purchase_product->quantity }}</td>
+                <td class="border border-1 border-secondary">{{ $purchase_product->discount }}%</td>
+                <td class="border border-1 border-secondary">Rp {{ number_format($purchase_product->price * (1 - ($purchase_product->discount / 100)), 2, ',' , '.') }}</td>
+                {{-- <td class="border border-1 border-secondary">{{ $purchase_product->product->markup }}%</td>
+                <td class="border border-1 border-secondary">Rp {{ $purchase_product->price * (1 + ($purchase_product->product->markup / 100)) }},00</td> --}}
+                <td class="border border-1 border-secondary">{{ $purchase_product->product->variant }}</td>
 
-                {{-- <td>{{ $p->user->name }}</td> --}}
+                {{-- <td class="border border-1 border-secondary">{{ $p->user->name }}</td> --}}
             </tr>
 
         @endforeach

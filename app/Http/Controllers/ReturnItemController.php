@@ -20,14 +20,14 @@ use PhpParser\Node\Stmt\Return_;
 class ReturnItemController extends Controller {
     public function index(){
         return view("pages.return-item.index", [
-            "return_items" => ReturnItem::where('archived', 0)->get()
+            "return_items" => ReturnItem::filter(request(['search']))->orderBy('return_date', 'desc')->paginate(30)
         ]);
     }
 
     public function create(){
         return view("pages.return-item.create", [
-            "projects" => Project::where('archived', 0)->get(),
-            "products" => Product::where('archived', 0)->get()
+            "projects" => Project::all(),
+            "products" => Product::all()
         ]);
     }
 
@@ -48,8 +48,8 @@ class ReturnItemController extends Controller {
     public function edit($id){
         return view("pages.return-item.edit", [
             "return_item" => ReturnItem::find($id),
-            "projects" => Project::where('archived', 0)->get(),
-            "products" => Product::where('archived', 0)->get()
+            "projects" => Project::all(),
+            "products" => Product::all()
         ]);
     }
 
@@ -95,17 +95,15 @@ class ReturnItemController extends Controller {
 
     public function destroy($id){
         $return_item = ReturnItem::find($id);
-        $existingReturnedProduct = Product::find($return_item->product->id);
 
-        if($return_item->quantity < $existingReturnedProduct->stock){
-            $prevStock = $existingReturnedProduct->stock;
-            $existingReturnedProduct->update(["stock" => $prevStock - $return_item->quantity]);
-            $return_item->update(["archived" => 1]);
+        foreach($return_item->return_item_products as $rip){
+            $product = Product::find($rip->product->id);
+            $product->stock -= $rip->qty;
+            $product->save();
         }
-        else {
-            $existingReturnedProduct->update(["archived" => 1]);
-            $return_item->update(["archived" => 1]);
-        }
+
+        $return_item->return_item_products()->delete();
+        $return_item->delete();
 
         return redirect(route("returnitem-index"))->with("successDeleteReturnItem", "Berhasil menghapus data pengembalian barang.");
     }

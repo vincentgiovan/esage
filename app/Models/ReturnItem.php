@@ -22,4 +22,15 @@ class ReturnItem extends Model
     public function project(){
         return $this->belongsTo(Project::class);
     }
+
+    public function scopeFilter($query, array $filters)
+    {
+        $query->when($filters["search"] ?? false, function ($query, $search) {
+            return $query->where(function ($query) use ($search) {
+                $query->whereHas('project', function ($query) use ($search) {
+                    $query->where('project_name', 'like', '%' . $search . '%');
+                })->orWhere("return_date", "like", "%" . $search . "%");
+            });
+        });
+    }
 }

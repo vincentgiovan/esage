@@ -27,160 +27,160 @@ class PurchaseProductController extends Controller
     }
 
     // Form penambahan produk yang sudah pernah didaftarkan ke cart purchase
-    public function add_existing_product($id)
-    {
-        // Targetkan purchase yang ingin cartnya ditambahkan product-product
-        $purchase = Purchase::find($id);
+    // public function add_existing_product($id)
+    // {
+    //     // Targetkan purchase yang ingin cartnya ditambahkan product-product
+    //     $purchase = Purchase::find($id);
 
-        // Tampilkan halaman pages/transit/purchaseproduct/addpurchase.blade.php
-        return view("pages.transit.purchaseproduct.addpurchase", [
-            "purchase" => $purchase, // data purchase yang mau ditambahkan cart-nya
-            "products" => Product::where('archived', 0)->get() // semua data produk untuk dropdown/select product
-        ]);
-    }
+    //     // Tampilkan halaman pages/transit/purchaseproduct/addpurchase.blade.php
+    //     return view("pages.transit.purchaseproduct.addpurchase", [
+    //         "purchase" => $purchase, // data purchase yang mau ditambahkan cart-nya
+    //         "products" => Product::all() // semua data produk untuk dropdown/select product
+    //     ]);
+    // }
 
     // Untuk menyimpan produk-produk ke cart purchase
-    public function store_existing_product(Request $request, $id)
-    {
-        // Validasi data untuk mastiin tabel penambahan data ga kosong
-        $request->validate([
-            "products" => "required",
-            "discounts" => "required",
-            "quantities" => "required",
-            "prices" => "required",
-        ]);
+    // public function store_existing_product(Request $request, $id)
+    // {
+    //     // Validasi data untuk mastiin tabel penambahan data ga kosong
+    //     $request->validate([
+    //         "products" => "required",
+    //         "discounts" => "required",
+    //         "quantities" => "required",
+    //         "prices" => "required",
+    //     ]);
 
-        // Targetkan purchase yang mau disimpan ke cart si product-product-nya
-        $purchase = Purchase::find($id);
+    //     // Targetkan purchase yang mau disimpan ke cart si product-product-nya
+    //     $purchase = Purchase::find($id);
 
-        // Untuk setiap input product yang diterima lakukan:
-        foreach($request->products as $index => $product_id){
-            $exprod = Product::find($product_id);
-            $clones = Product::where("product_name", $exprod->product_name)->where("variant", $exprod->variant)->orderBy("product_code")->get();
-            $lastprod = $clones[$clones->count() - 1];
+    //     // Untuk setiap input product yang diterima lakukan:
+    //     foreach($request->products as $index => $product_id){
+    //         $exprod = Product::find($product_id);
+    //         $clones = Product::where("product_name", $exprod->product_name)->where("variant", $exprod->variant)->orderBy("product_code")->get();
+    //         $lastprod = $clones[$clones->count() - 1];
 
-            // Update stok dan harga product:
-            $old_price = $lastprod->price;
-            $old_discount = $lastprod->discount;
+    //         // Update stok dan harga product:
+    //         $old_price = $lastprod->price;
+    //         $old_discount = $lastprod->discount;
 
-            if($request->prices[$index] != $old_price || $request->discounts[$index] != $old_discount){
-                $lastSlashPosition = strrpos($lastprod->product_code, '/');
+    //         if($request->prices[$index] != $old_price || $request->discounts[$index] != $old_discount){
+    //             $lastSlashPosition = strrpos($lastprod->product_code, '/');
 
-                // Extract the part after the last '/'
-                $lastPart = substr($lastprod->product_code, $lastSlashPosition + 1);
+    //             // Extract the part after the last '/'
+    //             $lastPart = substr($lastprod->product_code, $lastSlashPosition + 1);
 
-                // Extract the part before the last '/'
-                $firstPart = substr($lastprod->product_code, 0, $lastSlashPosition + 1);
+    //             // Extract the part before the last '/'
+    //             $firstPart = substr($lastprod->product_code, 0, $lastSlashPosition + 1);
 
-                $newseparatedprod = Product::create([
-                    "product_name" => $lastprod->product_name,
-                    "price" => $request->prices[$index],
-                    "variant" => $lastprod->variant,
-                    "stock" => $request->quantities[$index],
-                    "markup" => $lastprod->markup,
-                    "status" => $lastprod->status,
-                    "product_code" => $firstPart . (intval($lastPart) + 1),
-                    "unit" => $lastprod->unit,
-                    "discount" => $request->discounts[$index],
-                    'condition' => 'good',
-                    'type' => $lastprod->type,
-                ]);
+    //             $newseparatedprod = Product::create([
+    //                 "product_name" => $lastprod->product_name,
+    //                 "price" => $request->prices[$index],
+    //                 "variant" => $lastprod->variant,
+    //                 "stock" => $request->quantities[$index],
+    //                 "markup" => $lastprod->markup,
+    //                 "status" => $lastprod->status,
+    //                 "product_code" => $firstPart . (intval($lastPart) + 1),
+    //                 "unit" => $lastprod->unit,
+    //                 "discount" => $request->discounts[$index],
+    //                 'condition' => 'good',
+    //                 'type' => $lastprod->type,
+    //             ]);
 
-                PurchaseProduct::create([
-                    "purchase_id" => $purchase->id,
-                    "product_id" => $newseparatedprod->id,
-                    "discount" => $request->discounts[$index],
-                    "quantity" => $request->quantities[$index],
-                    "price" => $request->prices[$index]
-                ]);
-            }
-            else {
-                // Buat data purchase product baru di mana id purchase-nya sama kayak purchase yang mau ditambahin cart-nya dan product id sama kayak product yang mau ditambahin ke cart
-                PurchaseProduct::create([
-                    "purchase_id" => $purchase->id,
-                    "product_id" => $product_id,
-                    "discount" => $request->discounts[$index],
-                    "quantity" => $request->quantities[$index],
-                    "price" => $request->prices[$index]
-                ]);
+    //             PurchaseProduct::create([
+    //                 "purchase_id" => $purchase->id,
+    //                 "product_id" => $newseparatedprod->id,
+    //                 "discount" => $request->discounts[$index],
+    //                 "quantity" => $request->quantities[$index],
+    //                 "price" => $request->prices[$index]
+    //             ]);
+    //         }
+    //         else {
+    //             // Buat data purchase product baru di mana id purchase-nya sama kayak purchase yang mau ditambahin cart-nya dan product id sama kayak product yang mau ditambahin ke cart
+    //             PurchaseProduct::create([
+    //                 "purchase_id" => $purchase->id,
+    //                 "product_id" => $product_id,
+    //                 "discount" => $request->discounts[$index],
+    //                 "quantity" => $request->quantities[$index],
+    //                 "price" => $request->prices[$index]
+    //             ]);
 
-                $oldstock = $exprod->stock; // ambil stok product yang saat ini sedang ditambahkan ke cart purchase
-                $newstock = $oldstock + $request->quantities[$index];
-                $toUpdate = ["stock" => $newstock];
-                if($newstock > 0 && $exprod->status == "Out of Stock"){
-                    $toUpdate["status"] = "Ready";
-                }
+    //             $oldstock = $exprod->stock; // ambil stok product yang saat ini sedang ditambahkan ke cart purchase
+    //             $newstock = $oldstock + $request->quantities[$index];
+    //             $toUpdate = ["stock" => $newstock];
+    //             if($newstock > 0 && $exprod->status == "Out of Stock"){
+    //                 $toUpdate["status"] = "Ready";
+    //             }
 
-                Product::find($product_id)->update($toUpdate); // then update stok dan status-nya
-            }
-        };
+    //             Product::find($product_id)->update($toUpdate); // then update stok dan status-nya
+    //         }
+    //     };
 
-        // Arahkan user kembali ke pages/transit/purchaseproduct/index.blade.php
-        return redirect(route("purchaseproduct-viewitem", $purchase->id))->with("successAddProduct", "Berhasil menambahkan barang ke pembelian.");
-    }
+    //     // Arahkan user kembali ke pages/transit/purchaseproduct/index.blade.php
+    //     return redirect(route("purchaseproduct-viewitem", $purchase->id))->with("successAddProduct", "Berhasil menambahkan barang ke pembelian.");
+    // }
 
     // Form penambahan produk ke cart purchase tapi produk belum terdaftar sama sekali sebelumnya
-    public function add_new_product($id)
-    {
-        // Targetkan purchase yang cart-nya ingin ditambahkan
-        $purchase = Purchase::find($id);
+    // public function add_new_product($id)
+    // {
+    //     // Targetkan purchase yang cart-nya ingin ditambahkan
+    //     $purchase = Purchase::find($id);
 
-        // Tampilkan halaman pages/transit/purchaseproduct/addnewitem.blade.php beserta data yang diperlukan di blade-nya:
-        return view("pages.transit.purchaseproduct.addnewitem", [
-            "purchase" => $purchase, // data purchase yang ingin ditambahkan cart-nya
-            "products" => Product::where('archived', 0)->get()
-        ]);
-    }
+    //     // Tampilkan halaman pages/transit/purchaseproduct/addnewitem.blade.php beserta data yang diperlukan di blade-nya:
+    //     return view("pages.transit.purchaseproduct.addnewitem", [
+    //         "purchase" => $purchase, // data purchase yang ingin ditambahkan cart-nya
+    //         "products" => Product::all()
+    //     ]);
+    // }
 
     // Simpan data produk (unregistered) baru ke database
-    public function store_new_product(Request $request, $id)
-    {
-        // Validasi data, pastiin ga dikirim data kosong
-        $request->validate([
-            "product_name.*" => "required",
-            "unit.*" => "required",
-            "status.*" => "required",
-            "variant.*" => "required",
-            "product_code.*" => "required",
-            "price.*" => "required",
-            "markup.*" => "required",
-            "stock.*" => "required",
-            "discount.*" => "required",
-            "type.*" => "required"
-        ]);
+    // public function store_new_product(Request $request, $id)
+    // {
+    //     // Validasi data, pastiin ga dikirim data kosong
+    //     $request->validate([
+    //         "product_name.*" => "required",
+    //         "unit.*" => "required",
+    //         "status.*" => "required",
+    //         "variant.*" => "required",
+    //         "product_code.*" => "required",
+    //         "price.*" => "required",
+    //         "markup.*" => "required",
+    //         "stock.*" => "required",
+    //         "discount.*" => "required",
+    //         "type.*" => "required"
+    //     ]);
 
-        // Targetkan purchase yang cart-nya mau ditambahin
-        $purchase = Purchase::find($id);
+    //     // Targetkan purchase yang cart-nya mau ditambahin
+    //     $purchase = Purchase::find($id);
 
-        // Untuk setiap data produk yang dikirimkan lakukan:
-        foreach($request->product_name as $index => $product){
-            // Bikin dan tambahkan data produk ke tabel products
-            $new_product = Product::create([
-                "product_name" => $product,
-                "unit" => $request->unit[$index],
-                "status" => $request->status[$index],
-                "variant" => $request->variant[$index],
-                "product_code" => $request->product_code[$index],
-                "price" => $request->price[$index],
-                "markup" => $request->markup[$index],
-                "stock" => $request->stock[$index],
-                "type" => $request->type[$index],
-                "condition" => "good",
-            ]);
+    //     // Untuk setiap data produk yang dikirimkan lakukan:
+    //     foreach($request->product_name as $index => $product){
+    //         // Bikin dan tambahkan data produk ke tabel products
+    //         $new_product = Product::create([
+    //             "product_name" => $product,
+    //             "unit" => $request->unit[$index],
+    //             "status" => $request->status[$index],
+    //             "variant" => $request->variant[$index],
+    //             "product_code" => $request->product_code[$index],
+    //             "price" => $request->price[$index],
+    //             "markup" => $request->markup[$index],
+    //             "stock" => $request->stock[$index],
+    //             "type" => $request->type[$index],
+    //             "condition" => "good",
+    //         ]);
 
-            // Tambahkan data ke tabel purchase_product di mana id product sama dengan yang dibuat dan purchase sama dengan target cart purchase
-            PurchaseProduct::create([
-                "purchase_id" => $purchase->id,
-                "product_id" => $new_product->id,
-                "discount" => $request->discount[$index],
-                "quantity" => $request->stock[$index],
-                "price" => $request->price[$index]
-            ]);
-        };
+    //         // Tambahkan data ke tabel purchase_product di mana id product sama dengan yang dibuat dan purchase sama dengan target cart purchase
+    //         PurchaseProduct::create([
+    //             "purchase_id" => $purchase->id,
+    //             "product_id" => $new_product->id,
+    //             "discount" => $request->discount[$index],
+    //             "quantity" => $request->stock[$index],
+    //             "price" => $request->price[$index]
+    //         ]);
+    //     };
 
-        // Arahkan user kembali ke halaman pages/transit/purchaseproduct/index.blade.php
-        return redirect(route("purchaseproduct-viewitem", $purchase->id))->with("successAddProduct", "Berhasil menambahkan barang ke pembelian dan menambahkannya ke data barang.");
-    }
+    //     // Arahkan user kembali ke halaman pages/transit/purchaseproduct/index.blade.php
+    //     return redirect(route("purchaseproduct-viewitem", $purchase->id))->with("successAddProduct", "Berhasil menambahkan barang ke pembelian dan menambahkannya ke data barang.");
+    // }
 
     // Hapus produk dari cart
     public function destroy($id, $pid)

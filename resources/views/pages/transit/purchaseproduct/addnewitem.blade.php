@@ -6,7 +6,7 @@
     <x-container-middle>
         <div class="container bg-white py-4 px-5 rounded-4 border border-1 card mt-4">
 
-            <h2>Tambah Barang ke Pembelian dan Data Barang</h2>
+            <h3>Tambah Barang ke Pembelian dan Data Barang</h3>
                 <div>
                     <div class="mt-3">
                         <label for="product_name">Nama Produk</label>
@@ -115,17 +115,17 @@
                 <div class="overflow-x-auto">
                     <table class="w-100 mt-4">
                         <thead>
-                            <th>Nama Barang</th>
-                            <th>Unit</th>
-                            <th>Status</th>
-                            <th>Variant</th>
-                            <th>Kode Produk</th>
-                            <th>Harga</th>
-                            <th>Mark Up</th>
-                            <th>Stok</th>
-                            <th>Diskon</th>
-                            <th>Jenis</th>
-                            <th>Aksi</th>
+                            <th class="border border-1 border-secondary">Nama Barang</th>
+                            <th class="border border-1 border-secondary">Unit</th>
+                            <th class="border border-1 border-secondary">Status</th>
+                            <th class="border border-1 border-secondary">Variant</th>
+                            <th class="border border-1 border-secondary">Kode Produk</th>
+                            <th class="border border-1 border-secondary">Harga</th>
+                            <th class="border border-1 border-secondary">Mark Up</th>
+                            <th class="border border-1 border-secondary">Stok</th>
+                            <th class="border border-1 border-secondary">Diskon</th>
+                            <th class="border border-1 border-secondary">Jenis</th>
+                            <th class="border border-1 border-secondary">Aksi</th>
                         </thead>
                         <tbody id="isibody">
 
@@ -302,7 +302,7 @@
                 return;
             }
 
-            // Generate elemen <tr> dan <td> untuk membuat row tabel display
+            // Generate elemen <tr> dan <td class="border border-1 border-secondary"> untuk membuat row tabel display
             const newRow = document.createElement("tr");
             const column1 = document.createElement("td");
             const column2 = document.createElement("td");

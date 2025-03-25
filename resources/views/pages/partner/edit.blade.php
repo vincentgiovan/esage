@@ -4,12 +4,12 @@
     <x-container-middle>
         <div class="container bg-white py-4 px-5 rounded-4 mt-4 border border-1 card">
 
-            <h2>Edit Data Partner</h2>
+            <h3>Edit Data Partner</h3>
 
-            {{-- @csrf kepake untuk token ,wajib --}}
+
 
             <form method="POST" action="{{ route('partner-update', $partner->id) }}">
-                {{-- @csrf kepake untuk token ,wajib --}}
+
                 @csrf
                 <div class="mt-3">
                     <label for="partner_name">Nama Partner</label>

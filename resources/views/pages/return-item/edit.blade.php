@@ -4,7 +4,7 @@
 
     <x-container-middle>
         <div class="container rounded-4 p-5 bg-white border border-1 card mt-4">
-            <h2>Edit Data Return Item</h2>
+            <h3>Edit Data Return Item</h3>
 
             <form method="POST" action="{{ route('returnitem-update', $return_item->id) }}" enctype="multipart/form-data">
                 @csrf

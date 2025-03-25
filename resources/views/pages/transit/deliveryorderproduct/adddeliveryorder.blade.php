@@ -5,7 +5,7 @@
 
     <x-container-middle>
         <div class="container bg-white rounded-4 py-4 px-5 border border-1 card mt-4">
-            <h2>Tambah Barang ke Pengiriman</h2>
+            <h3>Tambah Barang ke Pengiriman</h3>
             <div>
                 <div class="mt-3">
                     <label for="select-product-dropdown">Nama Produk</label>
@@ -31,9 +31,9 @@
             <div class="overflow-x-auto">
                 <table class="w-100 mt-4">
                     <thead>
-                        <th>Nama Barang & Varian</th>
-                        <th>Jumlah</th>
-                        <th>Aksi</th>
+                        <th class="border border-1 border-secondary">Nama Barang & Varian</th>
+                        <th class="border border-1 border-secondary">Jumlah</th>
+                        <th class="border border-1 border-secondary">Aksi</th>
                     </thead>
                     <tbody id="isibody">
 
@@ -42,7 +42,7 @@
             </div>
 
             <form method="POST" action="{{ route("deliveryorderproduct-store1", $deliveryorder->id ) }}" class="mt-5" id="peon">
-                {{-- @csrf kepake untuk token ,wajib --}}
+
                 @csrf
 
                 <div class="mt-3">
@@ -100,7 +100,7 @@
                 return;
             }
 
-            // Generate elemen <tr> dan <td> untuk membuat row tabel display
+            // Generate elemen <tr> dan <td class="border border-1 border-secondary"> untuk membuat row tabel display
             const newRow = document.createElement("tr");
             const column1 = document.createElement("td");
             const column4 = document.createElement("td");

@@ -3,9 +3,9 @@
 @section('content')
     <x-container-middle>
         <div class="container bg-white rounded-4 p-5 mt-4 border border-1 card">
-            <h2>Tambah Partner Baru</h2>
+            <h3>Tambah Partner Baru</h3>
             <form method="POST" action="{{ route('partner-store') }}">
-                {{-- @csrf kepake untuk token ,wajib --}}
+
                 @csrf
                 <div class="mt-3">
                     <label for="partner_name">Nama Partner</label>

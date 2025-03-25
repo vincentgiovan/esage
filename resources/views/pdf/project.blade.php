@@ -22,29 +22,29 @@
     </style>
 </head>
 <body>
-        <h2>Projects</h2>
+        <h3>Projects</h3>
         <hr>
 
         <br>
 
 
-        <!-- tabel list data-->
+        {{-- tabel list data--}}
         <table style="width: 100%; border: 1px solid black;">
             <tr>
-                <th>Nomor</th>
-                <th>Nama Project</th>
-                <th>Location</th>
-                <th>PIC Name</th>
-                <th>Address</th>
+                <th class="border border-1 border-secondary">Nomor</th>
+                <th class="border border-1 border-secondary">Nama Project</th>
+                <th class="border border-1 border-secondary">Location</th>
+                <th class="border border-1 border-secondary">PIC Name</th>
+                <th class="border border-1 border-secondary">Address</th>
             </tr>
 
             @foreach ($projects as $i => $p)
                 <tr>
-                    <td>{{ $i + 1 }}</td>
-                    <td>{{ $p->project_name }}</td>
-                    <td>{{ $p->location }}</td>
-                    <td>{{ $p->PIC }}</td>
-                    <td>{{ $p->address }}</td>
+                    <td class="border border-1 border-secondary">{{ $i + 1 }}</td>
+                    <td class="border border-1 border-secondary">{{ $p->project_name }}</td>
+                    <td class="border border-1 border-secondary">{{ $p->location }}</td>
+                    <td class="border border-1 border-secondary">{{ $p->PIC }}</td>
+                    <td class="border border-1 border-secondary">{{ $p->address }}</td>
                 </tr>
             @endforeach
         </table>

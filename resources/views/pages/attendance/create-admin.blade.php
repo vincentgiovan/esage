@@ -3,7 +3,7 @@
 @section('content')
     <x-container-middle>
         <div class="container bg-white rounded-4 py-4 px-5 border border-1 card mt-4">
-            <h2>Laporan Presensi Baru</h2>
+            <h3>Laporan Presensi Baru</h3>
             <h6 class="fw-normal">Untuk proyek: {{ $project->project_name }}</h6>
 
             <form method="POST" action="{{ route('attendance-store-admin') }}">
@@ -64,32 +64,28 @@
                     <table class="w-100">
                         <thead>
                             <tr>
-                                <th rowspan="2">Pegawai</th>
-                                <th rowspan="2">Kasbon</th>
-                                <th colspan="7" class="text-center">Jam Kerja</th>
-                                <th rowspan="2" class="text-center"></th>
+                                <th class="border border-1 border-secondary" rowspan="2">Pegawai</th>
+                                <th class="border border-1 border-secondary" colspan="7" class="text-center">Jam Kerja</th>
+                                <th class="border border-1 border-secondary" rowspan="2" class="text-center"></th>
                             </tr>
                             <tr>
-                                <th class="text-center">Sabtu</th>
-                                <th class="text-center">Minggu</th>
-                                <th class="text-center">Senin</th>
-                                <th class="text-center">Selasa</th>
-                                <th class="text-center">Rabu</th>
-                                <th class="text-center">Kamis</th>
-                                <th class="text-center">Jumat</th>
+                                <th class="border border-1 border-secondary" class="text-center">Sabtu</th>
+                                <th class="border border-1 border-secondary" class="text-center">Minggu</th>
+                                <th class="border border-1 border-secondary" class="text-center">Senin</th>
+                                <th class="border border-1 border-secondary" class="text-center">Selasa</th>
+                                <th class="border border-1 border-secondary" class="text-center">Rabu</th>
+                                <th class="border border-1 border-secondary" class="text-center">Kamis</th>
+                                <th class="border border-1 border-secondary" class="text-center">Jumat</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($project->employees as $e)
                                 <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
-                                    <td>
+                                    <td class="border border-1 border-secondary">
                                         {{ $e->nama }}<br>({{ $e->jabatan }})
                                         <input type="hidden" name="employee[]" value="{{ $e->id }}">
                                     </td>
-                                    <td style="width: 110px;">
-                                        <input type="text" name="kasbon[{{ $e->id }}]" placeholder="Kasbon" class="w-100">
-                                    </td>
-                                    <td style="width: 110px;">
+                                    <td class="border border-1 border-secondary" style="width: 125px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
                                             <input type="time" name="start_time[{{ $e->id }}][]" class="w-100" value="08:00">
                                             <input type="time" name="end_time[{{ $e->id }}][]" class="endtime-weekend w-100" value="16:00">
@@ -97,9 +93,12 @@
                                             <label for="offcb{{ $e->id }}sat" class="d-flex gap-2 align-items-center w-100">
                                                 <input type="checkbox" class="off-checkbox off-sat" id="offcb{{ $e->id }}sat"> Off
                                             </label>
+                                            <label for="anoprojcb{{ $e->id }}sat" class="d-flex gap-2 align-items-center w-100">
+                                                <input type="checkbox" class="otherproj-checkbox" id="anoprojcb{{ $e->id }}sat"> Proyek lain
+                                            </label>
                                         </div>
                                     </td>
-                                    <td style="width: 110px;">
+                                    <td class="border border-1 border-secondary" style="width: 125px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
                                             <input type="time" name="start_time[{{ $e->id }}][]" class="w-100" value="08:00">
                                             <input type="time" name="end_time[{{ $e->id }}][]" class="endtime-weekend w-100" value="16:00">
@@ -107,9 +106,12 @@
                                             <label for="offcb{{ $e->id }}sun" class="d-flex gap-2 align-items-center w-100">
                                                 <input type="checkbox" class="off-checkbox off-sun" id="offcb{{ $e->id }}sun"> Off
                                             </label>
+                                            <label for="anoprojcb{{ $e->id }}sun" class="d-flex gap-2 align-items-center w-100">
+                                                <input type="checkbox" class="otherproj-checkbox" id="anoprojcb{{ $e->id }}sun"> Proyek lain
+                                            </label>
                                         </div>
                                     </td>
-                                    <td style="width: 110px;">
+                                    <td class="border border-1 border-secondary" style="width: 125px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
                                             <input type="time" name="start_time[{{ $e->id }}][]" class="w-100" value="08:00">
                                             <input type="time" name="end_time[{{ $e->id }}][]" class="w-100" value="17:00">
@@ -117,9 +119,12 @@
                                             <label for="offcb{{ $e->id }}mon" class="d-flex gap-2 align-items-center w-100">
                                                 <input type="checkbox" class="off-checkbox off-mon" id="offcb{{ $e->id }}mon"> Off
                                             </label>
+                                            <label for="anoprojcb{{ $e->id }}mon" class="d-flex gap-2 align-items-center w-100">
+                                                <input type="checkbox" class="otherproj-checkbox" id="anoprojcb{{ $e->id }}mon"> Proyek lain
+                                            </label>
                                         </div>
                                     </td>
-                                    <td style="width: 110px;">
+                                    <td class="border border-1 border-secondary" style="width: 125px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
                                             <input type="time" name="start_time[{{ $e->id }}][]" class="w-100" value="08:00">
                                             <input type="time" name="end_time[{{ $e->id }}][]" class="w-100" value="17:00">
@@ -127,9 +132,12 @@
                                             <label for="offcb{{ $e->id }}tue" class="d-flex gap-2 align-items-center w-100">
                                                 <input type="checkbox" class="off-checkbox off-tue" id="offcb{{ $e->id }}tue"> Off
                                             </label>
+                                            <label for="anoprojcb{{ $e->id }}tue" class="d-flex gap-2 align-items-center w-100">
+                                                <input type="checkbox" class="otherproj-checkbox" id="anoprojcb{{ $e->id }}tue"> Proyek lain
+                                            </label>
                                         </div>
                                     </td>
-                                    <td style="width: 110px;">
+                                    <td class="border border-1 border-secondary" style="width: 125px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
                                             <input type="time" name="start_time[{{ $e->id }}][]" class="w-100" value="08:00">
                                             <input type="time" name="end_time[{{ $e->id }}][]" class="w-100" value="17:00">
@@ -137,9 +145,12 @@
                                             <label for="offcb{{ $e->id }}wed" class="d-flex gap-2 align-items-center w-100">
                                                 <input type="checkbox" class="off-checkbox off-wed" id="offcb{{ $e->id }}wed"> Off
                                             </label>
+                                            <label for="anoprojcb{{ $e->id }}wed" class="d-flex gap-2 align-items-center w-100">
+                                                <input type="checkbox" class="otherproj-checkbox" id="anoprojcb{{ $e->id }}wed"> Proyek lain
+                                            </label>
                                         </div>
                                     </td>
-                                    <td style="width: 110px;">
+                                    <td class="border border-1 border-secondary" style="width: 125px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
                                             <input type="time" name="start_time[{{ $e->id }}][]" class="w-100" value="08:00">
                                             <input type="time" name="end_time[{{ $e->id }}][]" class="w-100" value="17:00">
@@ -147,9 +158,12 @@
                                             <label for="offcb{{ $e->id }}thu" class="d-flex gap-2 align-items-center w-100">
                                                 <input type="checkbox" class="off-checkbox off-thu" id="offcb{{ $e->id }}thu"> Off
                                             </label>
+                                            <label for="anoprojcb{{ $e->id }}thu" class="d-flex gap-2 align-items-center w-100">
+                                                <input type="checkbox" class="otherproj-checkbox" id="anoprojcb{{ $e->id }}thu"> Proyek lain
+                                            </label>
                                         </div>
                                     </td>
-                                    <td style="width: 110px;">
+                                    <td class="border border-1 border-secondary" style="width: 125px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
                                             <input type="time" name="start_time[{{ $e->id }}][]" class="w-100" value="08:00">
                                             <input type="time" name="end_time[{{ $e->id }}][]" class="w-100" value="17:00">
@@ -157,9 +171,12 @@
                                             <label for="offcb{{ $e->id }}fri" class="d-flex gap-2 align-items-center w-100">
                                                 <input type="checkbox" class="off-checkbox off-fri" id="offcb{{ $e->id }}fri"> Off
                                             </label>
+                                            <label for="anoprojcb{{ $e->id }}fri" class="d-flex gap-2 align-items-center w-100">
+                                                <input type="checkbox" class="otherproj-checkbox" id="anoprojcb{{ $e->id }}fri"> Proyek lain
+                                            </label>
                                         </div>
                                     </td>
-                                    <td style="width: 50px;">
+                                    <td class="border border-1 border-secondary" style="width: 50px;">
                                         <div class="d-flex gap-2 w-100 justify-content-center">
                                             <button type="button" class="exclude-btn btn btn-danger" onclick="return confirm('Apakah anda yakin ingin menghapus pegawai ini dari daftar presensi?')"><i class="bi bi-trash3"></i></button>
                                         </div>
@@ -203,6 +220,9 @@
             // Toggling the target .off-checkbox when .setdayoffcb changes
             $('.setdayoffcb').on('change', function() {
                 const target = $(`.${$(this).data('target')}`);
+                if(target.closest('div').find('.otherproj-checkbox').is(':checked')){
+                    target.closest('div').find('.otherproj-checkbox').prop('checked', false);
+                }
 
                 if ($(this).is(':checked')) {
                     target.each(function(){
@@ -219,7 +239,16 @@
             });
 
             // Directly applying the toggleInputTime logic on .off-checkbox changes
-            $('.off-checkbox').on('change', function() {
+            $('.off-checkbox, .otherproj-checkbox').on('change', function() {
+                if($(this).is(':checked')){
+                    if($(this).hasClass('off-checkbox')){
+                        $(this).closest('div').find('.otherproj-checkbox').prop('checked', false);
+                    }
+                    else {
+                        $(this).closest('div').find('.off-checkbox').prop('checked', false);
+                    }
+                }
+
                 toggleInputTime($(this));
             });
 
