@@ -48,6 +48,7 @@
                     <input type="text" name="search" placeholder="Cari barang..." value="{{ request('search') }}" class="form-control border border-1 border-secondary pe-5" style="width: 300px;">
                         <a href="{{ route('product-index') }}" class="btn position-absolute top-0 end-0"><i class="bi bi-x-lg"></i></a>
                     </div>
+                    <input type="hidden" name="condition" value="{{ request('condition') }}">
                     <button class="btn btn-primary"><i class="bi bi-search"></i></button>
                 </form>
             </div>

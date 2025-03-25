@@ -95,17 +95,15 @@ class ReturnItemController extends Controller {
 
     public function destroy($id){
         $return_item = ReturnItem::find($id);
-        $existingReturnedProduct = Product::find($return_item->product->id);
 
-        if($return_item->quantity < $existingReturnedProduct->stock){
-            $prevStock = $existingReturnedProduct->stock;
-            $existingReturnedProduct->update(["stock" => $prevStock - $return_item->quantity]);
-            $return_item->delete();
+        foreach($return_item->return_item_products as $rip){
+            $product = Product::find($rip->product->id);
+            $product->stock -= $rip->qty;
+            $product->save();
         }
-        else {
-            $existingReturnedProduct->delete();
-            $return_item->delete();
-        }
+
+        $return_item->return_item_products()->delete();
+        $return_item->delete();
 
         return redirect(route("returnitem-index"))->with("successDeleteReturnItem", "Berhasil menghapus data pengembalian barang.");
     }

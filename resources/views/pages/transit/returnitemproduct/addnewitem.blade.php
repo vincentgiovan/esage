@@ -114,10 +114,10 @@
             // Generate elemen <tr> dan <td class="border border-1 border-secondary"> untuk membuat row tabel display
             const product = JSON.parse(inpProdName.val());
 
-            const newRow = $("<tr>");
-            const colProdName = $("<td class="border border-1 border-secondary">").text(product.product_name);
-            const colQty = $("<td class="border border-1 border-secondary">").text(inpQty.val());
-            const colAction = $("<td class="border border-1 border-secondary">");
+            const newRow = $('<tr>');
+            const colProdName = $('<td class="border border-1 border-secondary">').text(product.product_name);
+            const colQty = $('<td class="border border-1 border-secondary">').text(inpQty.val());
+            const colAction = $('<td class="border border-1 border-secondary">');
 
             // Buat tombol merah tong sampah buat nanti dipake buat hapus 1 row data
             const deleteButton = $("<button>").addClass("btn btn-danger").attr("type", "button").html('<i class="bi bi-trash3"></i>');
