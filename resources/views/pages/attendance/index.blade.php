@@ -42,6 +42,10 @@
             <div>Memperlihatkan {{ $attendances->firstItem() }} - {{ $attendances->lastItem()  }} dari {{ $attendances->total() }} item</div>
         </div>
 
+        @php
+            $total_this_page = 0;
+        @endphp
+
         <div class="overflow-x-auto mt-4">
             <table class="w-100">
                 <tr>
@@ -88,7 +92,10 @@
                                 $total_lembur = $a->jam_lembur * $a->employee->lembur;
                                 $total_lembur_panjang = $a->index_lembur_panjang * $a->employee->lembur_panjang;
 
-                                echo 'Rp ' . number_format($total_normal + $total_lembur + $total_lembur_panjang + $a->performa, 2, ',', '.');
+                                $total_this_row = $total_normal + $total_lembur + $total_lembur_panjang + $a->performa;
+                                $total_this_page += $total_this_row;
+
+                                echo 'Rp ' . number_format($total_this_row, 2, ',', '.');
                             @endphp
                         </td>
                         <td class="border border-1 border-secondary">
@@ -114,6 +121,11 @@
 
         <div class="mt-4">
             {{ $attendances->links() }}
+        </div>
+
+        <div class="mt-4 fs-4 d-flex flex-column w-100 align-items-end">
+            <span>Total di halaman ini: <b>Rp {{ number_format($total_this_page, 2, ',', '.') }}</b></span>
+            <span>Total seluruh data: <b>Rp {{ number_format($total_all, 2, ',', '.') }}</b></span>
         </div>
     </x-container>
 

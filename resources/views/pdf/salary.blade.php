@@ -23,21 +23,22 @@
     </head>
 
     {{-- tabel list data--}}
-    @foreach($grouped_attendances as $emp_id => $attendances)
-        <body>
-            <h3>Gaji Pegawai</h3>
-            <hr>
-            <br>
+    <body>
+        <h3>Gaji Pegawai</h3>
+        <hr>
+        <br>
 
-            <table style="width: 100%; border: 1px solid black;">
-                <tr>
-                    <th class="border border-1 border-secondary">No</th>
-                    <th class="border border-1 border-secondary">Periode</th>
-                    <th class="border border-1 border-secondary">Nama</th>
-                    <th class="border border-1 border-secondary">Jabatan</th>
-                    <th class="border border-1 border-secondary">Total</th>
-                    <th class="border border-1 border-secondary">Ket.</th>
-                </tr>
+        <table style="width: 100%; border: 1px solid black;">
+            <tr>
+                <th class="border border-1 border-secondary">No</th>
+                <th class="border border-1 border-secondary">Periode</th>
+                <th class="border border-1 border-secondary">Nama</th>
+                <th class="border border-1 border-secondary">Jabatan</th>
+                <th class="border border-1 border-secondary">Total</th>
+                <th class="border border-1 border-secondary">Ket.</th>
+            </tr>
+    @foreach($grouped_attendances as $emp_id => $attendances)
+
 
                 @php
                     $employee = App\Models\Employee::find(intval($emp_id));
@@ -119,8 +120,8 @@
                         <td class="border border-1 border-secondary">-{{ number_format($ppay->amount, 2, ',', '.') }}</td>
                     </tr>
                 @endforeach
-            </table>
+
+    @endforeach</table>
         </body>
-    @endforeach
 </html>
 

@@ -26,7 +26,7 @@
                     <input type="text" class="form-control @error('NIK') is-invalid @enderror" name="NIK" id="NIK" placeholder="NIK"
                         value="{{ old('NIK') }}">
                     @error('NIK')
-                        <p class="text-danger">Harap masukkan NIK karyawan.</p>
+                        <p class="text-danger">NIK harus berjumlah 16 digit dan tidak boleh sama.</p>
                     @enderror
                 </div>
 

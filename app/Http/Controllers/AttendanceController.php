@@ -23,7 +23,19 @@ class AttendanceController extends Controller
                 ->limit(1), 'asc')
             ->paginate(30);
 
+        $attendance_all = Attendance::filter(request(['from', 'until', 'employee', 'project']))->get();
+
+        $total_all = 0;
+        foreach($attendance_all as $atdall){
+            $total_normal = $atdall->normal * $atdall->employee->pokok;
+            $total_lembur = $atdall->jam_lembur * $atdall->employee->lembur;
+            $total_lembur_panjang = $atdall->index_lembur_panjang * $atdall->employee->lembur_panjang;
+
+            $total_all += ($total_normal + $total_lembur + $total_lembur_panjang + $atdall->performa);
+        }
+
         return view("pages.attendance.index", [
+            'total_all' => $total_all,
             "attendances" => $attendances,
             "projects" => Project::all()
         ]);
