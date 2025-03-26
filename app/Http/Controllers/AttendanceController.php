@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Auth;
 class AttendanceController extends Controller
 {
     public function index(){
-        $attendances = Attendance::with('project')
+        $attendances = Attendance::filter(request(['from', 'until', 'employee', 'project']))
+        ->with('project')
             ->orderBy('attendance_date', 'desc')
             ->orderBy(Project::select('project_name')
                 ->whereColumn('id', 'attendances.project_id')
@@ -34,11 +35,24 @@ class AttendanceController extends Controller
         ]);
     }
 
-    public function create_admin(Request $request){
-        return view("pages.attendance.create-admin", [
-            "project" => Project::find($request->query('project'))
+    public function pre_create(){
+        return view('pages.attendance.select-employee', [
+            'projects' => Project::with('employees')->get()
         ]);
     }
+
+    public function pre_create_continue(Request $request){
+        return view("pages.attendance.create-admin", [
+            "project" => Project::find($request->project),
+            'employees' => Employee::whereIn('id', $request->employee)->get()
+        ]);
+    }
+
+    // public function create_admin(Request $request){
+    //     return view("pages.attendance.create-admin", [
+    //         "project" => Project::find($request->query('project'))
+    //     ]);
+    // }
 
     public function store_admin(Request $request){
         $request->validate([
@@ -52,93 +66,22 @@ class AttendanceController extends Controller
 
             foreach($request->employee as $remp){
                 $employee = Employee::find($remp);
+                $project = Project::find($request->project);
 
-                // if($request->kasbon[$remp]){
-                //     Prepay::create([
-                //         "employee_id" => $employee->id,
-                //         "start_period" => Carbon::parse($request->start_date)->format("Y-m-d"),
-                //         "end_period" => Carbon::parse($request->start_date)->addDays(7)->format("Y-m-d"),
-                //         "amount" => intval($request->kasbon[$remp])
-                //     ]);
-                // }
-
-                for($j = 0; $j < 7; $j++){
-                    $atd_start_date = Carbon::parse($request->start_date);
-
-                    $start_work = $request->start_time[$remp][$j] ? $request->start_time[$remp][$j] . ':00' : 'Off';
-                    $end_work = $request->end_time[$remp][$j] ? $request->end_time[$remp][$j] . ':00' : 'Off';
-                    $performa = $request->performa[$remp][$j] ?? 0;
-
-                    if($end_work != 'Off'){
-                        $status = 'Normal';
-                        $jamnormal = 0;
-                        $jamlembur = 0;
-
-                        // Weekends
-                        if($j == 0 || $j == 1){
-                            if($end_work > '16:29:00' && $end_work <= '23:59:00'){
-                                $status = 'Lembur';
-                            }
-                            else if($end_work >= '00:00:00' && $end_work < '08:00:00'){
-                                $status = 'Lembur Panjang';
-                            }
-                        }
-                        // Weekdays
-                        else {
-                            if($end_work > '17:29:00' && $end_work <= '23:59:00'){
-                                $status = 'Lembur';
-                            }
-                            else if($end_work >= '00:00:00' && $end_work <= '00:59:00'){
-                                $status = 'Lembur';
-                            }
-                            else if($end_work >= '01:00:00' && $end_work < '08:00:00'){
-                                $status = 'Lembur Panjang';
-                            }
-                        }
-
-                        // COUNTING NORMAL WORK HOUR
-                        $carbonStartN = Carbon::createFromFormat('H:i:s', $start_work);
-                        $carbonEndN = Carbon::createFromFormat('H:i:s', $end_work);
-
-                        if ($carbonEndN->lessThan($carbonStartN)) {
-                            $carbonEndN->addDay();
-                        }
-
-                        $minutesDifferenceN = $carbonStartN->diffInMinutes($carbonEndN);
-                        $roundedMinutesN = floor($minutesDifferenceN / 60) * 60;
-                        $jamnormal = min($roundedMinutesN / 60, ($j == 0 || $j == 1)? 8 : 9);
-
-                        if($status != 'Normal'){
-                            // COUNTING OVERTIME WORK HOUR
-                            $carbonStartOT = Carbon::createFromFormat('H:i:s', ($j == 0 || $j == 1)? '16:00:00' : '17:00:00');
-                            $carbonEndOT = Carbon::createFromFormat('H:i:s', $end_work);
-
-                            if ($carbonEndOT->lessThan($carbonStartOT)) {
-                                $carbonEndOT->addDay();
-                            }
-
-                            $minutesDifferenceOT = $carbonStartOT->diffInMinutes($carbonEndOT);
-                            $roundedMinutesOT = round($minutesDifferenceOT / 30) * 30;
-                            $jamlembur = $roundedMinutesOT / 60;
-
-                            if($status == 'Lembur Panjang'){
-                                $jamlembur -= 8;
-                            }
-                        }
-
-                        Attendance::create([
-                            "attendance_date" => $atd_start_date->addDays($j),
-                            "employee_id" => $employee->id,
-                            "project_id" => Project::find($request->project)->id,
-                            "jam_masuk" => $start_work,
-                            "jam_keluar" => $end_work,
-                            "normal" => $jamnormal,
-                            "jam_lembur" => $jamlembur,
-                            "index_lembur_panjang" => ($status == 'Lembur Panjang')? 1 : 0,
-                            "performa" => $performa,
-                            "remark" => $request->remark
-                        ]);
+                for($i = 0; $i < 7; $i++){
+                    if(!$request->normal[$remp][$i]){
+                        continue;
                     }
+
+                    Attendance::create([
+                        'attendance_date' => Carbon::parse($request->start_date)->addDays($i),
+                        'employee_id' => $employee->id,
+                        'project_id' => $project->id,
+                        'normal' => $request->normal[$remp][$i],
+                        'jam_lembur' => $request->lembur[$remp][$i] ?? 0,
+                        'index_lembur_panjang' => $request->lembur_panjang[$remp][$i] ?? 0,
+                        'performa' => $request->performa[$remp][$i] ?? 0
+                    ]);
                 }
             }
 

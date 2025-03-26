@@ -3,7 +3,12 @@
 @section("content")
     <x-container>
         <br>
-        <h3>Presensi Pegawai</h3>
+        <div class="d-flex w-100 justify-content-between align-items-center">
+            <h3>Presensi Pegawai</h3>
+            <a class="btn btn-primary" href="{{ route('attendance-precreate') }}">
+                <i class="bi bi-plus-square"></i> Buat Presensi Baru
+            </a>
+        </div>
         <hr>
 
         @if (session()->has('successEditAttendance'))
@@ -12,30 +17,29 @@
             <p class="text-success fw-bold">{{ session('successCreateAttendance') }}</p>
         @endif
 
-        {{-- Add Attendance Preform --}}
-        <div class="card mb-4">
-            <div class="card-header">
-                <button class="w-100 h-100 btn d-flex justify-content-between" type="button" id="add-new-attendance-btn">Buat Presensi Baru <i class="bi bi-chevron-down"></i></button>
-            </div>
-
-            <div class="card-body" id="add-new-attendance-form" style="display: none;">
-                <form action="{{ route('attendance-create-admin') }}" method="GET">
-                    <div class="form-group mb-3">
-                        <label for="project">Pilih Proyek</label>
-                        <select class="form-select" id="project" name="project">
-                            @foreach ($projects as $project)
-                                <option value="{{ $project->id }}">{{ $project->project_name }}</option>
-                            @endforeach
-                        </select>
+        <div class="d-flex w-100 justify-content-between align-items-center mt-3">
+            <div class="d-flex gap-3 align-items-center">
+                <form action="{{ route('attendance-index') }}" class="d-flex align-items-end gap-2">
+                    <div class="d-flex flex-column">
+                        <label for="">Filter Tanggal</label>
+                        <div class="d-flex align-items-center gap-2">
+                            <input type="date" class="form-control" name="from" value="{{ request('from') }}">
+                            <div class="">s/d</div>
+                            <input type="date" class="form-control" name="until" value="{{ request('until') }}">
+                        </div>
                     </div>
-
-                    <button type="submit" class="btn btn-primary">Konfirmasi dan Lanjut</button>
+                    <div class="d-flex flex-column ms-3">
+                        <label for="">Filter Karyawan</label>
+                        <input type="text" class="form-control" name="employee" placeholder="Nama karyawan" value="{{ request('employee') }}">
+                    </div>
+                    <div class="d-flex flex-column ms-2">
+                        <label for="">Filter Proyek</label>
+                        <input type="text" class="form-control" name="project" placeholder="Nama proyek" value="{{ request('project') }}">
+                    </div>
+                    <button type="submit" class="btn btn-primary ms-2"><i class="bi bi-search"></i></button>
                 </form>
             </div>
-        </div>
-
-        <div class="d-flex w-100 justify-content-end">
-            Memperlihatkan {{ $attendances->firstItem() }} - {{ $attendances->lastItem()  }} dari {{ $attendances->total() }} item
+            <div>Memperlihatkan {{ $attendances->firstItem() }} - {{ $attendances->lastItem()  }} dari {{ $attendances->total() }} item</div>
         </div>
 
         <div class="overflow-x-auto mt-4">
@@ -45,8 +49,8 @@
                     <th class="border border-1 border-secondary">Tanggal</th>
                     <th class="border border-1 border-secondary">Proyek</th>
                     <th class="border border-1 border-secondary">Pegawai</th>
-                    <th class="border border-1 border-secondary">Jam Masuk</th>
-                    <th class="border border-1 border-secondary">Jam Keluar</th>
+                    <th class="border border-1 border-secondary">Rincian</th>
+                    <th class="border border-1 border-secondary">Subtotal</th>
                     <th class="border border-1 border-secondary">Aksi</th>
                 </tr>
 
@@ -56,8 +60,37 @@
                         <td class="border border-1 border-secondary">{{ Carbon\Carbon::parse($a->attendance_date)->translatedFormat("d M Y") }}</td>
                         <td class="border border-1 border-secondary">{{ $a->project->project_name }}</td>
                         <td class="border border-1 border-secondary">{{ $a->employee->nama }}</td>
-                        <td class="border border-1 border-secondary">{{ Carbon\Carbon::parse($a->jam_masuk)->format("H:i") }}</td>
-                        <td class="border border-1 border-secondary">{{ Carbon\Carbon::parse($a->jam_keluar)->format("H:i") }}</td>
+                        <td class="border border-1 border-secondary">
+                            <table class="w-100">
+                                <tbody>
+                                    <tr>
+                                        <th class="border border-1 border-secondary">Normal</th>
+                                        <td class="border border-1 border-secondary">{{ $a->normal }} hari</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="border border-1 border-secondary">Lembur</th>
+                                        <td class="border border-1 border-secondary">{{ $a->jam_lembur }} jam</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="border border-1 border-secondary">L. Panjang</th>
+                                        <td class="border border-1 border-secondary">{{ $a->index_lembur_panjang }} kali</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="border border-1 border-secondary">Performa</th>
+                                        <td class="border border-1 border-secondary">{{ $a->performa }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td class="border border-1 border-secondary">
+                            @php
+                                $total_normal = $a->normal * $a->employee->pokok;
+                                $total_lembur = $a->jam_lembur * $a->employee->lembur;
+                                $total_lembur_panjang = $a->index_lembur_panjang * $a->employee->lembur_panjang;
+
+                                echo 'Rp ' . number_format($total_normal + $total_lembur + $total_lembur_panjang + $a->performa, 2, ',', '.');
+                            @endphp
+                        </td>
                         <td class="border border-1 border-secondary">
                             <div class="d-flex gap-2 w-100">
                                 <a href="{{ route('attendance-show', $a->id) }}" class="btn btn-success text-white">

@@ -33,5 +33,17 @@ class Attendance extends Model
         $query->when($filters['until'] ?? false, function ($query, $until) {
             return $query->where('attendance_date', '<=', $until);
         });
+
+        $query->when($filters['employee'] ?? false, function($query, $employee){
+            return $query->whereHas('employee', function($query) use ($employee){
+                return $query->where('nama', 'like', '%' . $employee . '%');
+            });
+        });
+
+        $query->when($filters['project'] ?? false, function($query, $project){
+            return $query->whereHas('project', function($query) use ($project){
+                return $query->where('project_name', 'like', '%' . $project . '%');
+            });
+        });
     }
 }

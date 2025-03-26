@@ -37,5 +37,11 @@ class Employee extends Model
                 $query->where("status", $status);
             });
         });
+
+        $query->when($filters["search"]?? false, function($query, $search) {
+            return $query->where(function($query) use($search) {
+                $query->where("nama", 'like', '%' . $search . '%');
+            });
+        });
     }
 }

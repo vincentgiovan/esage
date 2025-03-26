@@ -34,18 +34,22 @@
         @endif
 
         <div class="d-flex justify-content-between align-items-end w-100">
-            <div class="d-flex flex-column">
-                <label for="">Tampilkan Data untuk Periode Tanggal:</label>
-                <div class="d-flex gap-3 align-items-center mt-1">
-                    <input type="date" class="form-control" id="filter-start-date" value="{{ request('from') }}">
-                    <div class="">-</div>
-                    <input type="date" class="form-control" id="filter-end-date" value="{{ request('until') }}">
-                    <form action="{{ route('salary-index') }}">
-                        <button type="submit" class="btn btn-primary px-4">Konfirmasi</button>
-                    </form>
+            <form action="{{ route('salary-index') }}" class="d-flex align-items-end gap-2">
+                <div class="d-flex flex-column">
+                    <label for="">Filter Tanggal</label>
+                    <div class="d-flex align-items-center gap-2">
+                        <input type="date" class="form-control" name="from" value="{{ request('from') }}">
+                        <div class="">s/d</div>
+                        <input type="date" class="form-control" name="until" value="{{ request('until') }}">
+                    </div>
                 </div>
-            </div>
-            <div class="d-flex w-100 justify-content-end">
+                <div class="d-flex flex-column ms-3">
+                    <label for="">Filter Karyawan</label>
+                    <input type="text" class="form-control" name="employee" placeholder="Nama karyawan" value="{{ request('employee') }}">
+                </div>
+                <button type="submit" class="btn btn-primary ms-2"><i class="bi bi-search"></i></button>
+            </form>
+            <div class="d-flex justify-content-end">
                 Memperlihatkan {{ $grouped_attendances->firstItem() }} - {{ $grouped_attendances->lastItem()  }} dari {{ $grouped_attendances->total() }} item
             </div>
         </div>

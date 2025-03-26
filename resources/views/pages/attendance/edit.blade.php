@@ -41,7 +41,7 @@
                         <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
-
+{{-- 
                 <div class="d-flex w-100 gap-4 mt-3">
                     <div class="w-50">
                         <label for="jam_masuk">Jam Masuk</label>
@@ -59,7 +59,7 @@
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="d-flex w-100 gap-4 mt-3">
                     <div class="w-50">

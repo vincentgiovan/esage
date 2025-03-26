@@ -246,7 +246,9 @@ Route::middleware(["auth", "verified"])->group(function(){
     Route::middleware('allow:master,accounting_admin')->group(function(){
         Route::get("/attendance", [AttendanceController::class, "index"])->name("attendance-index");
         Route::get("/attendance/{id}", [AttendanceController::class, "show"])->name('attendance-show')->whereNumber("id");
-        Route::get("/attendance/create/admin", [AttendanceController::class, "create_admin"])->name("attendance-create-admin");
+        Route::get('/attendance/pre-create', [AttendanceController::class, 'pre_create'])->name('attendance-precreate');
+        Route::post('/attendance/pre-create', [AttendanceController::class, 'pre_create_continue'])->name('attendance-precreate-continue');
+        // Route::get("/attendance/create/admin", [AttendanceController::class, "create_admin"])->name("attendance-create-admin");
         Route::post("/attendance/create/admin", [AttendanceController::class, "store_admin"])->name("attendance-store-admin");
         Route::get("/attendance/{id}/edit", [AttendanceController::class, "edit"])->name("attendance-edit")->whereNumber("id");
         Route::post("/attendance/{id}/edit", [AttendanceController::class, "update"])->name("attendance-update")->whereNumber("id");

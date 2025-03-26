@@ -151,6 +151,15 @@
                 </div> --}}
 
                 <div class="mt-3">
+                    <label for="kasbon">Kasbon</label>
+                    <input type="text" class="form-control @error('kasbon') is-invalid @enderror" name="kasbon" id="kasbon" placeholder="Kasbon"
+                        value="{{ old('kasbon', $employee->kasbon) }}">
+                    @error('kasbon')
+                        <p class="text-danger">Harap masukkan nilai minimal 0.</p>
+                    @enderror
+                </div>
+
+                <div class="mt-3">
                     <label for="masuk">Masuk</label>
                     <input type="date" class="form-control" name="masuk" id="masuk"
                         value="{{ old('masuk', $employee->masuk) }}">

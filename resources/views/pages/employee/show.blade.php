@@ -98,7 +98,7 @@
             </tr>
         </table>
 
-        <h5 class="mt-4">Potongan Kasbon</h5>
+        <h5 class="mt-4">Kasbon</h5>
         <div class="card mb-4">
             <div class="card-header">
                 <button class="w-100 h-100 btn d-flex justify-content-between" type="button" id="add-new-prepay-btn">Tambah Kasbon Baru <i class="bi bi-chevron-down"></i></button>
@@ -109,29 +109,29 @@
                     @csrf
                     <div class="w-100 d-flex gap-3">
                         <div class="form-group mb-3 w-100" >
-                            <label for="c_start_period">Periode Kasbon</label>
-                            <input type="date" name="c_start_period" class="form-control">
+                            <label for="c_prepay_date">Tanggal Kasbon</label>
+                            <input type="date" name="c_prepay_date" class="form-control">
 
-                            @error('c_start_period')
+                            @error('c_prepay_date')
                                 <p class="text-danger">Harap masukkan tanggal awal periode kasbon.</p>
                             @enderror
                         </div>
 
                         <div class="form-group mb-3 w-100" >
-                            <label for="c_end_period">Periode Kasbon</label>
-                            <input type="date" name="c_end_period" class="form-control">
+                            <label for="c_amount_tambah">Penambahan Kasbon</label>
+                            <input type="text" name="c_amount_tambah" class="form-control" placeholder="Masukkan nominal">
 
-                            @error('c_end_period')
-                                <p class="text-danger">Harap masukkan tanggal akhir periode kasbon.</p>
+                            @error('c_amount_tambah')
+                                <p class="text-danger">Harap masukkan jumlah nominal penambahan kasbon.</p>
                             @enderror
                         </div>
 
                         <div class="form-group mb-3 w-100" >
-                            <label for="c_amount">Jumlah</label>
-                            <input type="text" name="c_amount" class="form-control" placeholder="Masukkan nominal">
+                            <label for="c_amount_potong">Potongan Kasbon</label>
+                            <input type="text" name="c_amount_potong" class="form-control" placeholder="Masukkan nominal">
 
-                            @error('c_amount')
-                                <p class="text-danger">Harap masukkan jumlah nominal kasbon.</p>
+                            @error('c_amount_potong')
+                                <p class="text-danger">Harap masukkan jumlah nominal potongan kasbon.</p>
                             @enderror
                         </div>
                     </div>
@@ -152,7 +152,7 @@
                 <tr>
                     <th class="border border-1 border-secondary">No</th>
                     <th class="border border-1 border-secondary">Tanggal</th>
-                    <th class="border border-1 border-secondary">Jumlah</th>
+                    <th class="border border-1 border-secondary">Jumlah Potongan</th>
                     <th class="border border-1 border-secondary">Keterangan</th>
                     <th class="border border-1 border-secondary">Aksi</th>
                 </tr>
@@ -187,25 +187,16 @@
                                 @csrf
                                 <div class="w-100 d-flex gap-3">
                                     <div class="form-group mb-3 w-100">
-                                        <label for="e_start_period">Periode Awal Kasbon</label>
-                                        <input type="date" name="e_start_period" class="form-control" value="{{ old("e_start_period", $kasbon->start_period) }}">
+                                        <label for="e_prepay_date">Tanggal Kasbon</label>
+                                        <input type="date" name="e_prepay_date" class="form-control" value="{{ old("e_prepay_date", $kasbon->prepay_date) }}">
 
-                                        @error('e_start_period')
+                                        @error('e_prepay_date')
                                             <p class="text-danger">Harap masukkan tanggal awal periode kasbon.</p>
                                         @enderror
                                     </div>
 
                                     <div class="form-group mb-3 w-100">
-                                        <label for="e_end_period">Periode Akhir Kasbon</label>
-                                        <input type="date" name="e_end_period" class="form-control" value="{{ old("e_end_period", $kasbon->end_period) }}">
-
-                                        @error('e_end_period')
-                                            <p class="text-danger">Harap masukkan tanggal akhir periode kasbon.</p>
-                                        @enderror
-                                    </div>
-
-                                    <div class="form-group mb-3 w-100">
-                                        <label for="e_amount">Jumlah</label>
+                                        <label for="e_amount">Jumlah Potongan</label>
                                         <input type="text" name="e_amount" class="form-control" placeholder="Masukkan nominal" value="{{ old("e_amount", $kasbon->amount) }}">
 
                                         @error('e_amount')

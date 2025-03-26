@@ -14,7 +14,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class SalaryController extends Controller
 {
     public function index(){
-        $groupedAttendances = Attendance::filter(request(['from', 'until']))->with('project')
+        $groupedAttendances = Attendance::filter(request(['from', 'until', 'employee']))->with('project')
             ->orderBy('attendance_date', 'asc')
             ->orderBy(Employee::select('nama')
                 ->whereColumn('id', 'attendances.employee_id')

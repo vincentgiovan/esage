@@ -14,7 +14,7 @@ class EmployeeController extends Controller
 {
     public function index(){
         return view("pages.employee.index", [
-            "employees" => Employee::filter(request(['status']))->orderByRaw('CASE WHEN status = "active" THEN 0 ELSE 1 END')->paginate(30)
+            "employees" => Employee::filter(request(['status', 'search']))->orderByRaw('CASE WHEN status = "active" THEN 0 ELSE 1 END')->paginate(30)
         ]);
     }
 
@@ -34,14 +34,13 @@ class EmployeeController extends Controller
     public function store(Request $request){
         $validated_data = $request->validate([
             "nama" => "required|min:3",
-            "NIK" => "required|min:16",
+            "NIK" => "unique:employees|required|min:16",
             "image" => "required|file|image|max:4096",
             "kalkulasi_gaji" => "required",
             "jabatan" => "required",
             "pokok" => "required|numeric|min:0",
             "lembur" => "required|numeric|min:0",
             "lembur_panjang" => "required|numeric|min:0",
-            // "kasbon" => "nullable|numeric|min:0",
             // "payroll" => "required",
             "masuk" => "nullable|date",
             "keluar" => "nullable|date",
@@ -79,14 +78,14 @@ class EmployeeController extends Controller
     public function update(Request $request, $id){
         $validated_data = $request->validate([
             "nama" => "required|min:3",
-            "NIK" => "required|min:16",
+            "NIK" => "unique:employees|required|min:16",
             "image" => "nullable|file|image|max:4096",
             "kalkulasi_gaji" => "required",
             "jabatan" => "required",
             "pokok" => "required|numeric|min:0",
             "lembur" => "required|numeric|min:0",
             "lembur_panjang" => "required|numeric|min:0",
-            // "kasbon" => "nullable|numeric|min:0",
+            "kasbon" => "nullable|numeric|min:0",
             // "payroll" => "required",
             "masuk" => "nullable|date",
             "keluar" => "nullable|date",

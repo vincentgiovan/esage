@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Prepay;
 use App\Models\Employee;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class PrepayController extends Controller
@@ -14,9 +16,9 @@ class PrepayController extends Controller
 
         // Use Validator to handle manual validation checks
         $validator = Validator::make($request->all(), [
-            "c_start_period" => "required",
-            "c_end_period" => "required",
-            "c_amount" => "required|numeric|min:0|not_in:0",
+            "c_prepay_date" => "required",
+            "c_amount_tambah" => "required|numeric|min:0",
+            "c_amount_potong" => "required|numeric|min:0",
             "c_remark" => "nullable|string"
         ]);
 
@@ -30,22 +32,34 @@ class PrepayController extends Controller
 
         $validated_data = $validator->validated();
 
-        Prepay::create([
-            "start_period" => $validated_data["c_start_period"],
-            "end_period" => $validated_data["c_end_period"],
-            "amount" => $validated_data["c_amount"],
-            "remark" => $validated_data["c_remark"],
-            "employee_id" => $employee->id
-        ]);
+        try {
+            DB::beginTransaction();
+
+            Prepay::create([
+                "prepay_date" => $validated_data["c_prepay_date"],
+                "amount" => $validated_data["c_amount_potong"],
+                "remark" => $validated_data["c_remark"],
+                "employee_id" => $employee->id
+            ]);
+
+            $employee->kasbon = $employee->kasbon + $validated_data['c_amount_tambah'] - $validated_data["c_amount_potong"];
+            $employee->save();
+
+            DB::commit();
+        }
+        catch(Exception $e){
+            DB::rollback();
+
+            throw $e;
+        }
 
         return back()->with('successAddPrepay', 'Berhasil menambahkan data kasbon baru untuk pegawai ini.');
     }
 
     public function update(Request $request, $emp_id, $ppay_id){
         $validator = Validator::make($request->all(), [
-            "e_start_period" => "required",
-            "e_end_period" => "required",
-            "e_amount" => "required|numeric|min:0|not_in:0",
+            "e_prepay_date" => "required",
+            "e_amount" => "required|numeric|min:0",
             "e_remark" => "nullable"
         ]);
 
@@ -60,18 +74,52 @@ class PrepayController extends Controller
 
         $validated_data = $validator->validated();
 
-        Prepay::find($ppay_id)->update([
-            "start_period" => $validated_data["e_start_period"],
-            "end_period" => $validated_data["e_end_period"],
-            "amount" => $validated_data["e_amount"],
-            "remark" => $validated_data["e_remark"]
-        ]);
+        try {
+            DB::beginTransaction();
+
+            $employee = Employee::find($emp_id);
+            $prepay = Prepay::find($ppay_id);
+
+            $employee->kasbon += $prepay->amount;
+            $employee->kasbon -= $validated_data["e_amount"];
+            $employee->save();
+
+            $prepay->update([
+                "prepay_date" => $validated_data["e_prepay_date"],
+                "amount" => $validated_data["e_amount"],
+                "remark" => $validated_data["e_remark"]
+            ]);
+
+            DB::commit();
+        }
+        catch(Exception $e){
+            DB::rollback();
+
+            throw $e;
+        }
 
         return back()->with('successEditPrepay', 'Berhasil memperbaharui data kasbon untuk pegawai ini.');
     }
 
     public function destroy($emp_id, $ppay_id){
-        Prepay::find($ppay_id)->delete();
+        try {
+            DB::beginTransaction();
+
+            $employee = Employee::find($emp_id);
+            $prepay = Prepay::find($ppay_id);
+
+            $employee->kasbon += $prepay->amount;
+            $employee->save();
+
+            $prepay->delete();
+
+            DB::commit();
+        }
+        catch(Exception $e){
+            DB::rollback();
+
+            throw $e;
+        }
 
         return back()->with('successDeletePrepay', 'Berhasil menghapus data kasbon dari pegawai ini.');
 
