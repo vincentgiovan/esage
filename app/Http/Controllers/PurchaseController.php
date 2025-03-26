@@ -49,21 +49,21 @@ class PurchaseController extends Controller
             "purchase_status" => "required",
         ]);
 
-        $request->validate([
-            "products" => "required",
-            "quantities" => "required",
+        // $request->validate([
+        //     "products" => "required",
+        //     "quantities" => "required",
 
-            "product_name.*" => "required",
-            "unit.*" => "required",
-            "status.*" => "required",
-            "variant.*" => "required",
-            "product_code.*" => "required",
-            "price.*" => "required",
-            "markup.*" => "required",
-            "stock.*" => "required",
-            "discount.*" => "required",
-            "type.*" => "required"
-        ]);
+        //     "product_name.*" => "required",
+        //     "unit.*" => "required",
+        //     "status.*" => "required",
+        //     "variant.*" => "required",
+        //     "product_code.*" => "required",
+        //     "price.*" => "required",
+        //     "markup.*" => "required",
+        //     "stock.*" => "required",
+        //     "discount.*" => "required",
+        //     "type.*" => "required"
+        // ]);
 
         try {
             DB::beginTransaction();

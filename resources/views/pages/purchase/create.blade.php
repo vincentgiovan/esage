@@ -560,6 +560,11 @@
                     }
                 });
 
+                if($('#isibody-unregistered').find('tr').length + $('#isibody-registered').find('tr').length < 1){
+                    alert('Harap masukkan minimal 1 item ke cart!');
+                    inputError = true;
+                }
+
                 if(!inputError){
                     $('form').submit();
                 }
