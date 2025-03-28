@@ -81,7 +81,7 @@
                         $iterasus = $loop->index;
                     @endphp
 
-                    <tr style="background-color: @if($iterasus % 2 == 0) #E0E0E0 @else white @endif;">
+                    <tr style="background-color: @if($iterasus % 2 == 1) #E0E0E0 @else white @endif;">
                         <td class="border border-1 border-secondary">{{ ($loop->index + 1) + ((request('page') ?? 1) - 1) * 30 }}</td>
                         <td class="border border-1 border-secondary">{{ Carbon\Carbon::parse($start_period)->translatedFormat("d/m/Y") }} - {{ Carbon\Carbon::parse($end_period)->translatedFormat("d/m/Y") }}</td>
                         <td class="border border-1 border-secondary">{{ $employee->nama }}</td>

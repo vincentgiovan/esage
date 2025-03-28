@@ -20,17 +20,16 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
 
             $table->string("nama");
-            $table->string("NIK")->nullable();
+            $table->string("NIK");
             $table->string("foto_ktp")->nullable();
             $table->string("kalkulasi_gaji")->default("off");
             $table->string("jabatan")->nullable();
             $table->string("keahlian")->nullable();
-            $table->unsignedBigInteger("pokok")->nullable();
-            $table->unsignedBigInteger("lembur")->nullable();
-            $table->unsignedBigInteger("lembur_panjang")->nullable();
-            $table->date("masuk")->nullable();
+            $table->unsignedBigInteger("pokok");
+            $table->unsignedBigInteger("lembur");
+            $table->unsignedBigInteger("lembur_panjang");
+            $table->date("masuk");
             $table->date("keluar")->nullable();
-            $table->unsignedBigInteger("kasbon")->default(0);
             $table->longText("keterangan")->nullable();
             $table->string('status')->default('active');
 

@@ -58,7 +58,7 @@
 
                     <div class="mt-3">
                         <label for="quantity">Jumlah</label>
-                        <input type="number" class="form-control" name="quantity" id="quantity"  placeholder="Quantity" value = "{{ old("quantity")}}">
+                        <input type="number" class="form-control" name="quantity" id="quantity"  placeholder="Quantity" value="{{ old("quantity")}}">
                         <p class="text-danger" id="errQuantity"></p>
                     </div>
 

@@ -17,6 +17,7 @@
 
         <div class="mt-4 d-flex w-100 justify-content-between">
             <a href="{{ route('employee-create') }}" class="btn btn-primary"><i class="bi bi-plus-square"></i> Data Pegawai Baru</a>
+            <a href="{{ route('prepay-generate') }}" class="btn btn-primary">Simulasi Potongan Kasbon</a>
 
             <form action="{{ route('employee-index') }}" class="d-flex gap-3 items-center">
                 <div class="position-relative">
@@ -47,7 +48,7 @@
                     <th class="border border-1 border-secondary">Jabatan</th>
                     <th class="border border-1 border-secondary">Pokok</th>
                     <th class="border border-1 border-secondary">Lembur</th>
-                    <th class="border border-1 border-secondary">Lembur Panjang</th>
+                    <th class="border border-1 border-secondary">L. Panjang</th>
                     <th class="border border-1 border-secondary">Kasbon</th>
                     <th class="border border-1 border-secondary">Status</th>
                     <th class="border border-1 border-secondary">Akun</th>
@@ -63,7 +64,18 @@
                         <td class="border border-1 border-secondary">{{ __("Rp " . number_format($e->pokok, 2, ',', '.')) }}</td>
                         <td class="border border-1 border-secondary">{{ __("Rp " . number_format($e->lembur, 2, ',', '.')) }}</td>
                         <td class="border border-1 border-secondary">{{ __("Rp " . number_format($e->lembur_panjang, 2, ',', '.')) }}</td>
-                        <td class="border border-1 border-secondary">{{ __("Rp " . number_format($e->kasbon, 2, ',', '.')) }}</td>
+                        <td class="border border-1 border-secondary">
+                            @php
+                                $total_kasbon = 0;
+                                foreach($e->prepays as $ppay){
+                                    $total_kasbon += $ppay->curr_amount;
+                                }
+                            @endphp
+                            <div class="d-flex gap-3 justify-content-between w-100 align-items-center">
+                                <span>{{ __("Rp " . number_format($total_kasbon, 2, ',', '.')) }}</span>
+                                <a href="{{ route('prepay-index', $e->id) }}" class="btn btn-success">Detail</a>
+                            </div>
+                        </td>
                         {{-- <td class="border border-1 border-secondary">{{ ($e->payroll == "on")? "Ya" : "Tidak" }}</td> --}}
                         <td class="border border-1 border-secondary" class="fw-semibold {{ $e->status == 'active'? 'text-primary' : 'text-danger' }}">{{ ucwords($e->status) }}</td>
                         <td class="border border-1 border-secondary">

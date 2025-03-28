@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <title>eSage</title>
+        <title>WMS Sage</title>
 
         {{-- Bootstrap CSS & icon --}}
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -39,6 +39,14 @@
 				margin-top: 5px !important;
 				margin-right: 10px !important;
 			}
+
+            button.btn {
+                font-size: 10pt !important;
+            }
+
+            a.btn {
+                font-size: 10pt !important;
+            }
 
             button#sidebarToggler {
                 background-color: rgb(95, 95, 95);

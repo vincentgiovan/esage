@@ -204,8 +204,8 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::post('/account/{id}', [AccountController::class, 'destroy'])->name('account.destroy')->whereNumber("id");
     });
 
-    // ===== EMPLOYEES, PREPAYS, AND LEAVES ===== //
-    Route::middleware('allow:master')->group(function(){
+    // ===== EMPLOYEES, POSITIONS, AND SPECIALITIES ===== //
+    Route::middleware('allow:master,accounting_admin')->group(function(){
         // Employees
         Route::get("/employee", [EmployeeController::class, "index"])->name("employee-index");
         Route::get("/employee/{id}", [EmployeeController::class, "show"])->name("employee-show")->whereNumber("id");
@@ -221,16 +221,26 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::post("/employee/manage-form/{id}/edit-speciality", [EmployeeController::class, "manage_form_edit_speciality"])->name("employee-manageform-editspeciality")->whereNumber("id");
         Route::post("/employee/manage-form/{id}/delete-position", [EmployeeController::class, "manage_form_delete_position"])->name("employee-manageform-deleteposition")->whereNumber("id");
         Route::post("/employee/manage-form/{id}/delete-speciality", [EmployeeController::class, "manage_form_delete_speciality"])->name("employee-manageform-deletespeciality")->whereNumber("id");
+    });
 
+    // ===== PREPAYS ===== //
+    Route::middleware('allow:master,accounting_admin')->group(function(){
         // Prepays
-        Route::post("/employee/{id}/prepay/add", [PrepayController::class, "store"])->name("prepay-store")->whereNumber('id');
-        Route::post("/employee/{emp_id}/prepay/{ppay_id}/edit", [PrepayController::class, "update"])->name("prepay-update")->whereNumber('emp_id')->whereNumber('ppay_id');
-        Route::post("/employee/{emp_id}/prepay/{ppay_id}/delete", [PrepayController::class, "destroy"])->name("prepay-destroy")->whereNumber('emp_id')->whereNumber('ppay_id');
+        Route::get('/prepays/{emp_id}', [PrepayController::class, 'index'])->name('prepay-index')->whereNumber('emp_id');
+        Route::get("/prepays/{emp_id}/add", [PrepayController::class, "create"])->name("prepay-create")->whereNumber('emp_id');
+        Route::post("/prepays/{emp_id}/add", [PrepayController::class, "store"])->name("prepay-store")->whereNumber('emp_id');
+        Route::get("/prepays/{emp_id}/{ppay_id}/edit", [PrepayController::class, "edit"])->name("prepay-edit")->whereNumber('emp_id')->whereNumber('ppay_id');
+        Route::post("/prepays/{emp_id}/{ppay_id}/edit", [PrepayController::class, "update"])->name("prepay-update")->whereNumber('emp_id')->whereNumber('ppay_id');
+        Route::post("/prepays/{emp_id}/{ppay_id}/delete", [PrepayController::class, "destroy"])->name("prepay-destroy")->whereNumber('emp_id')->whereNumber('ppay_id');
 
-        // Leaves
-        Route::get("/employee/leaves", [LeaveController::class, "admin_index"])->name('leave-admin-index');
-        Route::post("/employee/leaves/{id}/approve", [LeaveController::class, "admin_approve"])->name('leave-admin-approve')->whereNumber('id');
-        Route::post("/employee/leaves/{id}/reject", [LeaveController::class, "admin_reject"])->name('leave-admin-reject')->whereNumber('id');
+        Route::get('/prepays/generate', [PrepayController::class, 'generate'])->name('prepay-generate');
+    });
+
+    // ===== LEAVES ===== //
+    Route::middleware('allow:master,accounting_admin')->group(function(){
+        Route::get("/leaves", [LeaveController::class, "admin_index"])->name('leave-admin-index');
+        Route::post("/leaves/{id}/approve", [LeaveController::class, "admin_approve"])->name('leave-admin-approve')->whereNumber('id');
+        Route::post("/leaves/{id}/reject", [LeaveController::class, "admin_reject"])->name('leave-admin-reject')->whereNumber('id');
     });
 
     // ===== SALARIES ===== //
@@ -262,9 +272,9 @@ Route::middleware(["auth", "verified"])->group(function(){
 
     // ===== PROPOSE LEAVES ===== //
     Route::middleware('allow:master,accounting_admin')->group(function(){
-        Route::get("/employee/leaves/mine", [LeaveController::class, "user_index"])->name("leave-user-index");
-        Route::get("/employee/leaves/mine/propose", [LeaveController::class, "user_propose"])->name("leave-user-propose");
-        Route::post("/employee/leaves/mine/propose", [LeaveController::class, "user_propose_store"])->name("leave-user-propose-store");
+        Route::get("/leaves/mine", [LeaveController::class, "user_index"])->name("leave-user-index");
+        Route::get("/leaves/mine/propose", [LeaveController::class, "user_propose"])->name("leave-user-propose");
+        Route::post("/leaves/mine/propose", [LeaveController::class, "user_propose_store"])->name("leave-user-propose-store");
     });
 
     // ===== SELF ATTENDANCES ===== //

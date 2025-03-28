@@ -65,7 +65,7 @@
 
                 <div class="mt-3">
                     <label for="driver">Supir</label>
-                    <input type="text" class="form-control @error('driver') is-invalid @enderror" name="driver" id="driver" placeholder="Nama supir" value = "{{ old("driver")}}">
+                    <input type="text" class="form-control @error('driver') is-invalid @enderror" name="driver" id="driver" placeholder="Nama supir" value="{{ old("driver")}}">
                     @error("driver")
                     <p class="text-danger">Harap masukkan nama driver.</p>
                     @enderror

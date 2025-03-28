@@ -57,7 +57,7 @@
 
                 <div class="mt-3">
                     <label for="PIC">PIC</label>
-                    <input type="text" class="form-control @error('PIC') is-invalid @enderror" name="PIC" id="PIC" placeholder="PIC" value = "{{ old('PIC', $return_item->PIC)}}">
+                    <input type="text" class="form-control @error('PIC') is-invalid @enderror" name="PIC" id="PIC" placeholder="PIC" value="{{ old('PIC', $return_item->PIC)}}">
                     @error("PIC")
                     <p class="text-danger">Harap masukkan nama PIC.</p>
                     @enderror
@@ -65,7 +65,7 @@
 
                 <div class="mt-3">
                     <label for="driver">Supir</label>
-                    <input type="text" class="form-control @error('driver') is-invalid @enderror" name="driver" id="driver" placeholder="Nama supir" value = "{{ old("driver", $return_item->driver)}}">
+                    <input type="text" class="form-control @error('driver') is-invalid @enderror" name="driver" id="driver" placeholder="Nama supir" value="{{ old("driver", $return_item->driver)}}">
                     @error("driver")
                     <p class="text-danger">Harap masukkan nama driver.</p>
                     @enderror

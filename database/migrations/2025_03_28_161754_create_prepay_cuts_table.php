@@ -13,18 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('salaries', function (Blueprint $table) {
+        Schema::create('prepay_cuts', function (Blueprint $table) {
             $table->id();
-
-            $table->unsignedBigInteger("employee_id");
-            $table->foreign("employee_id")->references("id")->on("employees")->onDelete('cascade');
 
             $table->date('start_period');
             $table->date('end_period');
 
-            $table->unsignedBigInteger("total");
-
-            $table->longText("keterangan")->nullable();
+            $table->unsignedBigInteger('prepay_id');
+            $table->foreign('prepay_id')->references('id')->on('prepays');
 
             $table->timestamps();
         });
@@ -37,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('salaries');
+        Schema::dropIfExists('prepay_cuts');
     }
 };

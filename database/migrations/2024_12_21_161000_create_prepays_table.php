@@ -20,9 +20,12 @@ return new class extends Migration
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
 
             $table->date('prepay_date');
+            $table->string('remark');
 
-            $table->unsignedBigInteger('amount');
-            $table->string('remark')->nullable;
+            $table->unsignedBigInteger('init_amount');
+            $table->unsignedBigInteger('curr_amount');
+            $table->unsignedBigInteger('cut_amount')->default(0);
+            $table->string('enable_auto_cut')->default('yes');
 
             $table->timestamps();
         });

@@ -91,7 +91,7 @@
                     @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
                         <th class="border border-1 border-secondary">Harga Dasar</th>
                         <th class="border border-1 border-secondary">Markup</th>
-                        <th class="border border-1 border-secondary" class="text-center">Kondisi</th>
+                        {{-- <th class="border border-1 border-secondary" class="text-center">Kondisi</th> --}}
                     @endif
                     <th class="border border-1 border-secondary">Aksi</th>
                 </tr>
@@ -120,7 +120,7 @@
                             @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
                                 <td class="border border-1 border-secondary">Rp {{ number_format($p->price, 2, ',', '.') }}</td>
                                 <td class="border border-1 border-secondary"></td>
-                                <td class="border border-1 border-secondary"></td>
+                                {{-- <td class="border border-1 border-secondary"></td> --}}
                             @endif
 
                             {{-- Harga sudah dikalikan markup khusus project manager dan gudang --}}
@@ -160,7 +160,7 @@
                             @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
                                 <td class="border border-1 border-secondary">Rp {{ number_format($p->price, 2, ',', '.') }}</td>
                                 <td class="border border-1 border-secondary">{{ $p->markup }}</td>
-                                <td class="border border-1 border-secondary">{{ ucwords($p->condition) }}</td>
+                                {{-- <td class="border border-1 border-secondary">{{ ucwords($p->condition) }}</td> --}}
                             @endif
 
                             {{-- Harga sudah dikalikan markup khusus project manager, gudang, dan subgudang --}}

@@ -31,7 +31,7 @@
                 <div class="mt-3">
                     <label for="qty">Jumlah</label>
                     <input type="text" class="form-control" name="qty" id="qty" placeholder="Jumlah"
-                        value = "{{ old('qty', $refurbish_item->qty) }}">
+                        value="{{ old('qty', $refurbish_item->qty) }}">
                     @error('qty')
                         <p class="text-danger">Harap masukkan nilai minimal 0.</p>
                     @enderror
