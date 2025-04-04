@@ -76,7 +76,7 @@ class SalaryController extends Controller
             "subtotals" => $paginatedSubtotals,
             "start_period" => request('from'),
             "end_period" => request('until'),
-            "projects" => Project::all()
+            "projects" => Project::all(),
         ]);
     }
 }

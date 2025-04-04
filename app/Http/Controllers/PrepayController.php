@@ -15,8 +15,14 @@ use Illuminate\Support\Facades\Validator;
 class PrepayController extends Controller
 {
     public function index($emp_id){
+        $raw_prepays = Prepay::where('employee_id', $emp_id)->orderBy('prepay_date', 'desc');
+        $prepay_ids = $raw_prepays->clone()->pluck('id')->toArray();
+        $prepays_paginated = $raw_prepays->paginate(30);
+        $prepay_cuts = PrepayCut::whereIn('prepay_id', $prepay_ids)->orderBy('start_period')->paginate(30);
+
         return view('pages.prepay.index', [
-            'prepays' => Prepay::where('employee_id', $emp_id)->orderBy('prepay_date', 'desc')->paginate(30),
+            'prepays' => $prepays_paginated,
+            'prepay_cuts' => $prepay_cuts,
             'employee' => Employee::find($emp_id),
         ]);
     }
@@ -84,22 +90,45 @@ class PrepayController extends Controller
             ->get();
 
         foreach ($prepays as $ppay) {
-            $last_generated_ppay_cut = PrepayCut::where('prepay_id', $ppay->id)
-                ->latest()
-                ->first();
+            if($ppay->enable_auto_cut == 'no'){
+                continue;
+            }
+
+            $last_generated_ppay_cut = PrepayCut::where('prepay_id', $ppay->id)->latest()->first();
 
             if ($last_generated_ppay_cut) {
-                $prev_end_period = Carbon::parse($last_generated_ppay_cut->end_period);
+                $today = Carbon::today();
+                $prev_end_period = Carbon::parse($last_generated_ppay_cut->end_period)->startOfDay();
+
+                if($today->diffInDays($prev_end_period) <= 7) {
+                    continue;
+                }
+
+                $remaining_amount = 0;
+                $cut_amount = $ppay->curr_amount;
+
+                if(($ppay->curr_amount - $ppay->cut_amount) > 0){
+                    $remaining_amount = $ppay->curr_amount - $ppay->cut_amount;
+                    $cut_amount = $ppay->cut_amount;
+                }
+                else {
+                    $ppay->enable_auto_cut = 'no';
+                }
 
                 PrepayCut::create([
                     'prepay_id' => $last_generated_ppay_cut->prepay_id,
                     'start_period' => $prev_end_period->copy()->addDay(),
-                    'end_period' => $prev_end_period->copy()->addDays(6),
-                    'amount' => $ppay->cut_amount,
+                    'end_period' => $prev_end_period->copy()->addDays(7),
+                    'init_amount' => $ppay->curr_amount,
+                    'cut_amount' => $cut_amount,
+                    'remaining_amount' => $remaining_amount,
                 ]);
+
+                $ppay->curr_amount -= $cut_amount;
+                $ppay->save();
             } else {
                 // Generate missing periods from the prepay's created date to today
-                $prepay_init_date = Carbon::parse($ppay->prepay_date);
+                $prepay_init_date = Carbon::parse($ppay->prepay_date)->startOfDay();
                 $today = Carbon::today();
 
                 // ✅ Ensure the first start_period is **always a future Saturday**
@@ -112,6 +141,10 @@ class PrepayController extends Controller
                 $end_period = $start_period->copy()->addDays(6); // Ends on Friday
 
                 while ($end_period->lte($today)) {
+                    if($ppay->enable_auto_cut == 'no'){
+                        break;
+                    }
+
                     $attendances = Attendance::where('employee_id', $ppay->employee_id)
                         ->whereBetween('attendance_date', [$start_period, $end_period])
                         ->get();
@@ -125,10 +158,6 @@ class PrepayController extends Controller
                             $atd->performa;
                     }
 
-                    if ($ppay->curr_amount < $ppay->cut_amount) {
-                        break; // Stop generating if there's not enough balance
-                    }
-
                     if ($salary_in_the_period < $ppay->cut_amount) {
                         // Skip this period, but correctly advance to the next week
                         $start_period = $end_period->copy()->addDay();
@@ -136,14 +165,27 @@ class PrepayController extends Controller
                         continue;
                     }
 
+                    $remaining_amount = 0;
+                    $cut_amount = $ppay->curr_amount;
+
+                    if(($ppay->curr_amount - $ppay->cut_amount) > 0){
+                        $remaining_amount = $ppay->curr_amount - $ppay->cut_amount;
+                        $cut_amount = $ppay->cut_amount;
+                    }
+                    else {
+                        $ppay->enable_auto_cut = 'no';
+                    }
+
                     PrepayCut::create([
                         'prepay_id' => $ppay->id,
                         'start_period' => $start_period,
                         'end_period' => $end_period,
-                        'amount' => $ppay->cut_amount,
+                        'init_amount' => $ppay->curr_amount,
+                        'cut_amount' => $cut_amount,
+                        'remaining_amount' => $remaining_amount,
                     ]);
 
-                    $ppay->curr_amount -= $ppay->cut_amount;
+                    $ppay->curr_amount -= $cut_amount;
                     $ppay->save();
 
                     // ✅ Correctly advance to the next week

@@ -13,6 +13,9 @@
                 <div class="bg-white rounded-lg position-absolute z-2 border border-1" id="dd-menu" style="display: none; top: 40px;">
                     <form action="{{ route('salary-export') }}" method="post" target="_blank">
                         @csrf
+                        <input type="hidden" name="from" value="{{ request('from') }}">
+                        <input type="hidden" name="until" value="{{ request('until') }}">
+                        <input type="hidden" name="employee" value="{{ request('employee') }}">
                         <button type="submit" class="dropdown-item border border-1 py-2 px-3">Export (PDF)</button>
                     </form>
                 </div>
@@ -66,19 +69,22 @@
                     <th class="border border-1 border-secondary">Aksi</th>
                 </tr>
 
+                @php
+                    $iterasus = 0;
+                @endphp
+
                 @foreach($grouped_attendances as $emp_id => $attendances)
                     @php
                         $employee = App\Models\Employee::find(intval($emp_id));
-                        $kasubon = $employee->prepays->where('prepay_date', '>=', $start_period)->where('prepay_date', '<=', $end_period);
+                        $kasubon = $employee->prepays()->pluck('id')->toArray();
+                        $prepay_cuts = App\Models\PrepayCut::whereIn('prepay_id', $kasubon)->where('start_period', '>=', request('from'))->where('end_period', '<=', request('until'))->get();
 
                         $total_kasbon = 0;
-                        foreach($kasubon as $k){
-                            $total_kasbon += $k->amount;
+                        foreach($prepay_cuts as $ppay_cut){
+                            $total_kasbon += $ppay_cut->cut_amount;
                         }
 
                         $subtotals[$emp_id] -= $total_kasbon;
-
-                        $iterasus = $loop->index;
                     @endphp
 
                     <tr style="background-color: @if($iterasus % 2 == 1) #E0E0E0 @else white @endif;">
@@ -115,37 +121,40 @@
 
                                 $total_gaji_normal += $atd->normal * $atd->employee->pokok;
                                 $total_gaji_lembur += $atd->jam_lembur * $atd->employee->lembur;
-                                $total_gaji_lembur_panjang += $atd->index_lembur_panjang * $atd->lembur_panjang;
+                                $total_gaji_lembur_panjang += $atd->index_lembur_panjang * $atd->employee->lembur_panjang;
                                 $total_performa += $atd->performa;
                             @endphp
                         @endforeach
 
                         @if($total_jam_normal != 0)
-                            <tr class="detail-area{{ $emp_id }}" style="display: none; background-color: @if($iterasus % 2 == 0) #E0E0E0 @else white @endif;">
+                            <tr class="detail-area{{ $emp_id }}" style="display: none; background-color: @if($iterasus % 2 == 1) #E0E0E0 @else white @endif;">
                                 <td class="border border-1 border-secondary" class="py-2"></td>
                                 <td class="border border-1 border-secondary" class="py-2" colspan="4">Normal: {{ $total_jam_normal }} jam ({{ $project_name }})</td>
                                 <td class="border border-1 border-secondary" class="py-2">Rp {{ number_format($total_gaji_normal, 2, ',', '.') }}</td>
                                 <td class="border border-1 border-secondary" class="py-2"></td>
                             </tr>
                         @endif
+
                         @if($total_jam_lembur > 0)
-                            <tr class="detail-area{{ $emp_id }}" style="display: none; background-color: @if($iterasus % 2 == 0) #E0E0E0 @else white @endif;">
+                            <tr class="detail-area{{ $emp_id }}" style="display: none; background-color: @if($iterasus % 2 == 1) #E0E0E0 @else white @endif;">
                                 <td class="border border-1 border-secondary" class="py-2"></td>
                                 <td class="border border-1 border-secondary" class="py-2" colspan="4">Lembur: {{ $total_jam_lembur }} jam ({{ $project_name }})</td>
                                 <td class="border border-1 border-secondary" class="py-2">Rp {{ number_format($total_gaji_lembur, 2, ',', '.') }}</td>
                                 <td class="border border-1 border-secondary" class="py-2"></td>
                             </tr>
                         @endif
+
                         @if($total_kali_lembur_panjang > 0)
-                            <tr class="detail-area{{ $emp_id }}" style="display: none; background-color: @if($iterasus % 2 == 0) #E0E0E0 @else white @endif;">
+                            <tr class="detail-area{{ $emp_id }}" style="display: none; background-color: @if($iterasus % 2 == 1) #E0E0E0 @else white @endif;">
                                 <td class="border border-1 border-secondary" class="py-2"></td>
                                 <td class="border border-1 border-secondary" class="py-2" colspan="4">Lembur Panjang: {{ $total_kali_lembur_panjang }} hari ({{ $project_name }})</td>
                                 <td class="border border-1 border-secondary" class="py-2">Rp {{ number_format($total_gaji_lembur_panjang, 2, ',', '.') }}</td>
                                 <td class="border border-1 border-secondary" class="py-2"></td>
                             </tr>
                         @endif
+
                         @if($total_performa > 0)
-                            <tr class="detail-area{{ $emp_id }}" style="display: none; background-color: @if($iterasus % 2 == 0) #E0E0E0 @else white @endif;">
+                            <tr class="detail-area{{ $emp_id }}" style="display: none; background-color: @if($iterasus % 2 == 1) #E0E0E0 @else white @endif;">
                                 <td class="border border-1 border-secondary" class="py-2"></td>
                                 <td class="border border-1 border-secondary" class="py-2" colspan="4">Performa ({{ $project_name }})</td>
                                 <td class="border border-1 border-secondary" class="py-2">Rp {{ number_format($total_performa, 2, ',', '.') }}</td>
@@ -154,14 +163,18 @@
                         @endif
                     @endforeach
 
-                    @foreach($kasubon as $ppay)
-                        <tr class="detail-area{{ $emp_id }}" style="display: none; background-color: @if($iterasus % 2 == 0) #E0E0E0 @else white @endif;">
+                    @foreach($prepay_cuts as $ppc)
+                        <tr class="detail-area{{ $emp_id }}" style="display: none; background-color: @if($iterasus % 2 == 1) #E0E0E0 @else white @endif;">
                             <td class="border border-1 border-secondary" class="py-2"></td>
-                            <td class="border border-1 border-secondary" class="py-2" colspan="4">Potongan kasbon @if($ppay->remark)({{ $ppay->remark }})@endif</td>
-                            <td class="border border-1 border-secondary" class="py-2">- Rp {{ number_format($ppay->amount, 2, ',', '.') }}</td>
+                            <td class="border border-1 border-secondary" class="py-2" colspan="4">Potongan kasbon untuk {{ $ppc->prepay->remark }} (Sisa saldo: Rp {{ number_format($ppc->remaining_amount, 2, ',', '.') }})</td>
+                            <td class="border border-1 border-secondary" class="py-2">- Rp {{ number_format($ppc->cut_amount, 2, ',', '.') }}</td>
                             <td class="border border-1 border-secondary" class="py-2"></td>
                         </tr>
                     @endforeach
+
+                    @php
+                        $iterasus++;
+                    @endphp
                 @endforeach
             </table>
         </div>
@@ -175,15 +188,6 @@
         $(document).ready(() => {
             $('.see-detail-btn').on('click', function(){
                 $(this).closest('tbody').find(`.detail-area${$(this).data('empid')}`).toggle();
-            });
-
-            $("form").on("submit", function(e){
-                e.preventDefault();
-
-                $(this).append($("<input>").attr({"type": "hidden", "name": "from", "value": $("#filter-start-date").val()}));
-                $(this).append($("<input>").attr({"type": "hidden", "name": "until", "value": $("#filter-end-date").val()}));
-
-                this.submit();
             });
         });
 

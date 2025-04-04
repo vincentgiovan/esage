@@ -24,7 +24,7 @@ return new class extends Migration
 
             $table->unsignedBigInteger('init_amount');
             $table->unsignedBigInteger('curr_amount');
-            $table->unsignedBigInteger('cut_amount')->default(0);
+            $table->unsignedBigInteger('cut_amount');
             $table->string('enable_auto_cut')->default('yes');
 
             $table->timestamps();

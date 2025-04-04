@@ -15,6 +15,10 @@ class Prepay extends Model
         return $this->belongsTo(Employee::class);
     }
 
+    public function prepay_cuts(){
+        return $this->hasMany(PrepayCut::class);
+    }
+
     public function scopeFilter($query, array $filters)
     {
         $query->when(isset($filters['from']) && isset($filters['until']), function ($query) use ($filters) {

@@ -290,8 +290,8 @@ class AttendanceController extends Controller
             "index_lembur_panjang" => "required|numeric|min:0",
             "performa" => "required|numeric|min:0",
             "remark" => "nullable",
-            "jam_masuk" => "required",
-            "jam_keluar" => "required"
+            // "jam_masuk" => "required",
+            // "jam_keluar" => "required"
         ]);
 
         Attendance::find($id)->update($validatedData);

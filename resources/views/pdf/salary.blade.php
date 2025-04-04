@@ -37,16 +37,16 @@
                 <th class="border border-1 border-secondary">Total</th>
                 <th class="border border-1 border-secondary">Ket.</th>
             </tr>
-    @foreach($grouped_attendances as $emp_id => $attendances)
 
-
+            @foreach($grouped_attendances as $emp_id => $attendances)
                 @php
                     $employee = App\Models\Employee::find(intval($emp_id));
-                    $kasubon = $employee->prepays->where('prepay_date', '>=', $start_period)->where('prepay_date', '<=', $end_period);
+                    $kasubon = $employee->prepays()->pluck('id')->toArray();
+                    $prepay_cuts = App\Models\PrepayCut::whereIn('prepay_id', $kasubon)->where('start_period', '>=', request('from'))->where('end_period', '<=', request('until'))->get();
 
                     $total_kasbon = 0;
-                    foreach($kasubon as $k){
-                        $total_kasbon += $k->amount;
+                    foreach($prepay_cuts as $ppay_cut){
+                        $total_kasbon += $ppay_cut->cut_amount;
                     }
 
                     $subtotals[$emp_id] -= $total_kasbon;
@@ -83,7 +83,7 @@
 
                             $total_gaji_normal += $atd->normal * $atd->employee->pokok;
                             $total_gaji_lembur += $atd->jam_lembur * $atd->employee->lembur;
-                            $total_gaji_lembur_panjang += $atd->index_lembur_panjang * $atd->lembur_panjang;
+                            $total_gaji_lembur_panjang += $atd->index_lembur_panjang * $atd->employee->lembur_panjang;
                             $total_performa += $atd->performa;
                         @endphp
                     @endforeach
@@ -114,14 +114,14 @@
                     @endif
                 @endforeach
 
-                @foreach($kasubon as $ppay)
+                @foreach($prepay_cuts as $ppc)
                     <tr>
-                        <td class="border border-1 border-secondary" colspan="5">Potongan kasbon @if($ppay->remark)({{ $ppay->remark }})@endif</td>
-                        <td class="border border-1 border-secondary">-{{ number_format($ppay->amount, 2, ',', '.') }}</td>
+                        <td class="border border-1 border-secondary" class="py-2" colspan="5">Potongan kasbon untuk {{ $ppc->prepay->remark }} (Sisa saldo: {{ number_format($ppc->remaining_amount, 2, ',', '.') }})</td>
+                        <td class="border border-1 border-secondary" class="py-2">- {{ number_format($ppc->cut_amount, 2, ',', '.') }}</td>
                     </tr>
                 @endforeach
-
-    @endforeach</table>
-        </body>
+            @endforeach
+        </table>
+    </body>
 </html>
 

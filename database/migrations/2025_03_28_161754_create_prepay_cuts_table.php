@@ -22,6 +22,10 @@ return new class extends Migration
             $table->unsignedBigInteger('prepay_id');
             $table->foreign('prepay_id')->references('id')->on('prepays');
 
+            $table->unsignedBigInteger('init_amount');
+            $table->unsignedBigInteger('cut_amount');
+            $table->unsignedBigInteger('remaining_amount');
+
             $table->timestamps();
         });
     }

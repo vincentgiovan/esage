@@ -123,6 +123,30 @@
                 {{ $prepays->links() }}
             </div>
         @endif
+
+        @if(request('content') == 'log')
+            <table class="w-100 mt-4">
+                <tr>
+                    <th class="border border-1 border-secondary">No</th>
+                    <th class="border border-1 border-secondary">Periode</th>
+                    <th class="border border-1 border-secondary">Saldo Awal</th>
+                    <th class="border border-1 border-secondary">Pemotongan</th>
+                    <th class="border border-1 border-secondary">Sisa Saldo</th>
+                    <th class="border border-1 border-secondary">Keperluan Kasbon</th>
+                </tr>
+
+                @foreach($prepay_cuts as $ppc)
+                    <tr style="background-color: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
+                        <td class="border border-1 border-secondary">{{ $loop->iteration }}</td>
+                        <td class="border border-1 border-secondary">{{ Carbon\Carbon::parse($ppc->start_period)->format('d/m/Y') }} - {{ Carbon\Carbon::parse($ppc->end_period)->format('d/m/Y') }}</td>
+                        <td class="border border-1 border-secondary">Rp {{ number_format($ppc->init_amount, 2, ',', '.') }}</td>
+                        <td class="border border-1 border-secondary">Rp {{ number_format($ppc->cut_amount, 2, ',', '.') }}</td>
+                        <td class="border border-1 border-secondary">Rp {{ number_format($ppc->remaining_amount, 2, ',', '.') }}</td>
+                        <td class="border border-1 border-secondary">{{ $ppc->prepay->remark }}</td>
+                    </tr>
+                @endforeach
+            </table>
+        @endif
     </x-container>
 
     <script>
