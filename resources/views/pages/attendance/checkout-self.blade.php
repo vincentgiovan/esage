@@ -9,27 +9,27 @@
                 @csrf
 
                 <div class="mt-3">
-                    <label>Tanggal</label>
+                    <label>Tanggal<span class="text-danger">*</span></label>
                     <input type="text" class="form-control" value="{{ Carbon\Carbon::parse(Carbon\Carbon::now())->format('Y-m-d') }}" disabled>
                 </div>
 
                 <div class="mt-3">
-                    <label>Nama Pegawai</label>
+                    <label>Nama Pegawai<span class="text-danger">*</span></label>
                     <input type="text" class="form-control" value="{{ Auth::user()->name }}" disabled>
                 </div>
 
                 <div class="mt-3">
-                    <label>Proyek</label>
+                    <label>Proyek<span class="text-danger">*</span></label>
                     <input type="text" class="form-control" value="{{ $project->project_name }}" disabled>
                 </div>
 
                 <div class="mt-3">
-                    <label>Jam Keluar</label>
+                    <label>Jam Keluar<span class="text-danger">*</span></label>
                     <input type="text" id="start-server-time" class="form-control" disabled>
                 </div>
 
                 <div class="mt-3 d-flex w-100 flex-column">
-                    <label>Dokumentasi Presensi</label>
+                    <label>Dokumentasi Presensi<span class="text-danger">*</span></label>
 
                     <div class="d-flex">
                         <video id="video" autoplay class="w-50"></video>

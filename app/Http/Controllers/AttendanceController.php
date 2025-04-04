@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Carbon\Carbon;
+use App\Models\Prepay;
 use App\Models\Project;
 use App\Models\Employee;
 use App\Models\Attendance;
-use App\Models\Prepay;
 use Illuminate\Http\Request;
+use App\Exports\ProductsExport;
+use App\Exports\AttendancesExport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AttendanceController extends Controller
 {
@@ -54,6 +57,10 @@ class AttendanceController extends Controller
     }
 
     public function pre_create_continue(Request $request){
+        if(!$request->employee){
+            return back()->with('noSelectedEmployee', 'Harap pilih minimal 1 karyawan untuk dimasukkan ke laporan presensi!');
+        }
+
         return view("pages.attendance.create-admin", [
             "project" => Project::find($request->project),
             'employees' => Employee::whereIn('id', $request->employee)->get()
@@ -303,5 +310,11 @@ class AttendanceController extends Controller
         Attendance::find($id)->delete();
 
         return redirect(route("attendance-index"))->with("successDeleteAttendance", "Berhasil menghapus data presensi.");
+    }
+
+    // EXPORT EXCEL
+    public function export_excel()
+    {
+        return Excel::download(new AttendancesExport, 'data-presensi.xlsx');
     }
 }

@@ -22,7 +22,7 @@
             <form action="{{ route('employee-index') }}" class="d-flex gap-3 items-center">
                 <div class="position-relative">
                     <input type="text" name="search" placeholder="Cari pegawai..." value="{{ request('search') }}" class="form-control border border-1 border-secondary pe-5" style="width: 300px;">
-                    <a href="{{ route('deliveryorder-index') }}" class="btn position-absolute top-0 end-0"><i class="bi bi-x-lg"></i></a>
+                    <a href="{{ route('employee-index') }}" class="btn position-absolute top-0 end-0"><i class="bi bi-x-lg"></i></a>
                 </div>
                 <select type="text" class="form-select" name="status">
                     <option value="">Semua</option>

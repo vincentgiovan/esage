@@ -11,8 +11,8 @@
             <form action="{{ route('account.store') }}" method="POST">
                 @csrf
                 <div class="form-group mb-3">
-                    <label for="name">Nama</label>
-                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old("name") }}">
+                    <label for="name">Nama<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old("name") }}" placeholder="Masukkan nama">
                     @error("name")
                         <p class="text-danger" role="alert">
                             Harap masukkan nama.
@@ -20,8 +20,8 @@
                     @enderror
                 </div>
                 <div class="form-group mb-3">
-                    <label for="email">Email</label>
-                    <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old("email") }}">
+                    <label for="email">Email<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old("email") }}" placeholder="Masukkan email">
                     @error("email")
                         <p class="text-danger" role="alert">
                             Harap masukkan email dengan format yang benar.
@@ -29,7 +29,7 @@
                     @enderror
                 </div>
                 <div class="form-group mb-3">
-                    <label for="role_id">Pilih Role</label>
+                    <label for="role_id">Pilih Role<span class="text-danger">*</span></label>
                     <select class="form-control text-black" id="role_id" name="role_id">
                         @foreach(App\Models\Role::all() as $role)
                             <option value="{{ $role->id }}" @if(old('role_id') == $role->id) selected @endif>{{ ucwords(str_replace('_', ' ', $role->role_name)) }}</option>
@@ -38,10 +38,10 @@
                 </div>
 
                 <div class="form-group mb-3 row">
-                    <label for="password">Password</label>
+                    <label for="password">Password<span class="text-danger">*</span></label>
 
                     <div class="input-group w-100">
-                        <input id="password" type="password" name="password" class="form-control @error('password') is-invalid @enderror" aria-describedby="togglePassword">
+                        <input id="password" type="password" name="password" class="form-control @error('password') is-invalid @enderror" aria-describedby="togglePassword" placeholder="Masukkan password">
                         <button class="btn border border-2" type="button" id="togglePassword">
                             <i class="bi bi-eye-fill" id="toggleIcon"></i>
                         </button>
@@ -55,10 +55,10 @@
                 </div>
 
                 <div class="form-group mb-4 row">
-                    <label for="password_confirmation">Konfirmasi Password</label>
+                    <label for="password_confirmation">Konfirmasi Password<span class="text-danger">*</span></label>
 
                     <div class="input-group w-100">
-                        <input id="password_confirmation" type="password" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" aria-describedby="togglePassword">
+                        <input id="password_confirmation" type="password" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" aria-describedby="togglePassword" placeholder="Konfirmasi password">
                         <button class="btn border border-2" type="button" id="togglePassword2">
                             <i class="bi bi-eye-fill" id="toggleIcon2"></i>
                         </button>

@@ -17,7 +17,7 @@
                 @csrf
 
                 <div class="mt-3">
-                    <label for="nama">Nama</label>
+                    <label for="nama">Nama<span class="text-danger">*</span></label>
                     <input type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" id="nama" placeholder="Nama Pegawai"
                         value="{{ old('nama', $employee->nama) }}">
                     @error('nama')
@@ -26,16 +26,16 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="NIK">NIK</label>
+                    <label for="NIK">NIK<span class="text-danger">*</span></label>
                     <input type="text" class="form-control @error('NIK') is-invalid @enderror" name="NIK" id="NIK" placeholder="NIK"
                         value="{{ old('NIK', $employee->NIK) }}">
                     @error('NIK')
-                        <p class="text-danger">Harap masukkan NIK karyawan.</p>
+                        <p class="text-danger">Harap masukkan NIK karyawan (16 digit) dan pastikan NIK unik.</p>
                     @enderror
                 </div>
 
                 <div class="mt-3">
-                    <label for="foto_ktp">Foto KTP</label>
+                    <label for="foto_ktp">Foto KTP<span class="text-danger">*</span></label>
                     <input type="file" class="form-control @error('image') is-invalid @enderror" name="image" id="image">
                     @error('image')
                         <p class="text-danger">Harap upload foto KTP karyawan.</p>
@@ -46,7 +46,7 @@
                 {{-- <p>http://localhost/esage/public/storage/images/sPH95rX9pSEUT2QBjDUPO0vJoyCqu25UKRSfiFcH.png</p> --}}
 
                 <div class="mt-3">
-                    <label>Kalkulasi Gaji</label>
+                    <label>Kalkulasi Gaji<span class="text-danger">*</span></label>
 
                     <div class="d-flex gap-3">
                         <div class="d-flex gap-2 rounded-3 py-2">
@@ -65,7 +65,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="jabatan">Jabatan</label>
+                    <label for="jabatan">Jabatan<span class="text-danger">*</span></label>
                     <select class="form-select text-black" name="jabatan" id="jabatan">
                         @foreach($positions as $p)
                             @php
@@ -105,7 +105,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="pokok">Pokok</label>
+                    <label for="pokok">Pokok<span class="text-danger">*</span></label>
                     <input type="text" class="form-control @error('pokok') is-invalid @enderror" name="pokok" id="pokok" placeholder="Pokok"
                         value="{{ old('pokok', $employee->pokok) }}">
                     @error('pokok')
@@ -114,7 +114,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="lembur">Lembur</label>
+                    <label for="lembur">Lembur<span class="text-danger">*</span></label>
                     <input type="text" class="form-control @error('lembur') is-invalid @enderror" name="lembur" id="lembur" placeholder="Lembur"
                         value="{{ old('lembur', $employee->lembur) }}">
                     @error('lembur')
@@ -123,7 +123,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="lembur_panjang">Lembur Panjang</label>
+                    <label for="lembur_panjang">Lembur Panjang<span class="text-danger">*</span></label>
                     <input type="text" class="form-control @error('lembur_panjang') is-invalid @enderror" name="lembur_panjang" id="lembur_panjang" placeholder="Lembur Panjang"
                         value="{{ old('lembur_panjang', $employee->lembur_panjang) }}">
                     @error('lembur_panjang')
@@ -151,16 +151,7 @@
                 </div> --}}
 
                 <div class="mt-3">
-                    <label for="kasbon">Kasbon</label>
-                    <input type="text" class="form-control @error('kasbon') is-invalid @enderror" name="kasbon" id="kasbon" placeholder="Kasbon"
-                        value="{{ old('kasbon', $employee->kasbon) }}">
-                    @error('kasbon')
-                        <p class="text-danger">Harap masukkan nilai minimal 0.</p>
-                    @enderror
-                </div>
-
-                <div class="mt-3">
-                    <label for="masuk">Masuk</label>
+                    <label for="masuk">Masuk<span class="text-danger">*</span></label>
                     <input type="date" class="form-control" name="masuk" id="masuk"
                         value="{{ old('masuk', $employee->masuk) }}">
                 </div>
@@ -178,11 +169,22 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="status">Status</label>
-                    <select type="text" class="form-select" name="status" id="status" placeholder="status">
-                        <option value="active" @if(old('status') == 'active') selected @endif>Aktif</option>
-                        <option value="passive" @if(old('status') == 'passive') selected @endif>Tidak Aktif</option>
-                    </select>
+                    <label>Status<span class="text-danger">*</span></label>
+
+                    <div class="d-flex gap-3">
+                        <div class="d-flex gap-2 rounded-3 py-2">
+                            <input class="form-check-input" type="radio" name="status" id="flexRadioDefault3" value="active" @if($employee->status == "active") checked @endif>
+                            <label class="form-check-label" for="flexRadioDefault3">
+                                Aktif
+                            </label>
+                        </div>
+                        <div class="d-flex gap-2 rounded-3 py-2">
+                            <input class="form-check-input" type="radio" name="status" id="flexRadioDefault4" value="passive" @if($employee->status == "passive") checked @endif>
+                            <label class="form-check-label" for="flexRadioDefault4">
+                                Pasif
+                            </label>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="mt-4">

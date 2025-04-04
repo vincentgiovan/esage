@@ -238,7 +238,7 @@ class ProductController extends Controller{
     // EXPORT EXCEL
     public function export_excel()
     {
-        return Excel::download(new ProductsExport, 'testus.xlsx');
+        return Excel::download(new ProductsExport, 'data-produk.xlsx');
     }
 
     public function view_log($id){

@@ -5,16 +5,38 @@
         <br>
         <div class="d-flex w-100 justify-content-between align-items-center">
             <h3>Presensi Pegawai</h3>
-            <a class="btn btn-primary" href="{{ route('attendance-precreate') }}">
-                <i class="bi bi-plus-square"></i> Buat Presensi Baru
-            </a>
+            <div class="position-relative d-flex flex-column align-items-end">
+                <button class="btn btn-secondary" type="button" id="dd-toggler">
+                    <i class="bi bi-file-earmark-arrow-up"></i> Export
+                </button>
+                <div class="bg-white rounded-lg position-absolute z-2 border border-1" id="dd-menu" style="display: none; top: 40px;">
+                    <form action="{{ route('attendance-export-excel') }}" method="post" target="_blank">
+                        @csrf
+                        <input type="hidden" name="from" value="{{ request('from') }}">
+                        <input type="hidden" name="until" value="{{ request('until') }}">
+                        <input type="hidden" name="employee" value="{{ request('employee') }}">
+                        <input type="hidden" name="project" value="{{ request('project') }}">
+                        <button type="submit" class="dropdown-item border border-1 py-2 px-3">Export (Excel)</button>
+                    </form>
+                </div>
+            </div>
         </div>
         <hr>
+
+        <script>
+            $(document).ready(() => {
+                $("#dd-toggler").click(function(){
+                    $("#dd-menu").toggle();
+                });
+            });
+        </script>
 
         @if (session()->has('successEditAttendance'))
             <p class="text-success fw-bold">{{ session('successEditAttendance') }}</p>
         @elseif (session()->has('successCreateAttendance'))
             <p class="text-success fw-bold">{{ session('successCreateAttendance') }}</p>
+        @elseif (session()->has('successDeleteAttendance'))
+            <p class="text-success fw-bold">{{ session('successDeleteAttendance') }}</p>
         @endif
 
         <div class="d-flex w-100 justify-content-between align-items-center mt-3">
@@ -45,6 +67,10 @@
         @php
             $total_this_page = 0;
         @endphp
+
+        <a class="btn btn-primary mt-4" href="{{ route('attendance-precreate') }}">
+            <i class="bi bi-plus-square"></i> Buat Presensi Baru
+        </a>
 
         <div class="overflow-x-auto mt-4">
             <table class="w-100">

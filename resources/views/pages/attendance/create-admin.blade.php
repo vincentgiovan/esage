@@ -43,19 +43,15 @@
 
                 <div class="d-flex gap-3 mt-4">
                     <div class="w-50 d-flex flex-column">
-                        <label for="start_date">Tanggal Awal Absensi</label>
+                        <label for="start_date">Tanggal Awal Absensi<span class="text-danger">*</span></label>
                         <input type="date" class="form-control w-100 mt-1 @error('start_date') is-invalid @enderror" name="start_date" id="start_date" value="{{ old('start_date', $previousSaturday) }}">
-                        @error('start_date')
-                            <p class="text-danger">Harap pilih tanggal awal absensi.</p>
-                        @enderror
+                        <p class="text-danger invalid-feedback">Harap pilih tanggal awal absensi, pastikan tanggal awal kurang dari tanggal akhir.</p>
                     </div>
 
                     <div class="w-50 d-flex flex-column">
-                        <label for="end_date">Tanggal Akhir Absensi</label>
+                        <label for="end_date">Tanggal Akhir Absensi<span class="text-danger">*</span></label>
                         <input type="date" class="form-control w-100 mt-1 @error('end_date') is-invalid @enderror" name="end_date" id="end_date" value="{{ old('end_date', $previousFriday) }}">
-                        @error('end_date')
-                            <p class="text-danger">Harap pilih tanggal awal absensi.</p>
-                        @enderror
+                        <p class="text-danger invalid-feedback">Harap pilih tanggal akhir absensi.</p>
                     </div>
                 </div>
 
@@ -88,13 +84,13 @@
                                     <td class="border border-1 border-secondary" style="width: 125px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
                                             <div class="input_area">
-                                                <label for="">Normal:</label>
+                                                <label for="">Normal<span class="text-danger">*</span></label>
                                                 <input type="text" name="normal[{{ $e->id }}][]" class="w-100 normal" value="1">
 
-                                                <label for="">Lembur:</label>
+                                                <label for="">Lembur<span class="text-danger">*</span></label>
                                                 <input type="text" name="lembur[{{ $e->id }}][]" class="w-100 lembur" value="0">
 
-                                                <label for="">L. Panjang</label>
+                                                <label for="">L. Panjang<span class="text-danger">*</span></label>
                                                 <input type="text" name="lembur_panjang[{{ $e->id }}][]" class="w-100 lembur_panjang" value="0">
 
                                                 <label for="">Performa</label>
@@ -112,13 +108,13 @@
                                     <td class="border border-1 border-secondary" style="width: 125px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
                                             <div class="input_area">
-                                                <label for="">Normal:</label>
+                                                <label for="">Normal<span class="text-danger">*</span></label>
                                                 <input type="text" name="normal[{{ $e->id }}][]" class="w-100 normal" value="1">
 
-                                                <label for="">Lembur:</label>
+                                                <label for="">Lembur<span class="text-danger">*</span></label>
                                                 <input type="text" name="lembur[{{ $e->id }}][]" class="w-100 lembur" value="0">
 
-                                                <label for="">L. Panjang</label>
+                                                <label for="">L. Panjang<span class="text-danger">*</span></label>
                                                 <input type="text" name="lembur_panjang[{{ $e->id }}][]" class="w-100 lembur_panjang" value="0">
 
                                                 <label for="">Performa</label>
@@ -136,13 +132,13 @@
                                     <td class="border border-1 border-secondary" style="width: 125px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
                                             <div class="input_area">
-                                                <label for="">Normal:</label>
+                                                <label for="">Normal<span class="text-danger">*</span></label>
                                                 <input type="text" name="normal[{{ $e->id }}][]" class="w-100 normal" value="1">
 
-                                                <label for="">Lembur:</label>
+                                                <label for="">Lembur<span class="text-danger">*</span></label>
                                                 <input type="text" name="lembur[{{ $e->id }}][]" class="w-100 lembur" value="0">
 
-                                                <label for="">L. Panjang</label>
+                                                <label for="">L. Panjang<span class="text-danger">*</span></label>
                                                 <input type="text" name="lembur_panjang[{{ $e->id }}][]" class="w-100 lembur_panjang" value="0">
 
                                                 <label for="">Performa</label>
@@ -160,13 +156,13 @@
                                     <td class="border border-1 border-secondary" style="width: 125px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
                                             <div class="input_area">
-                                                <label for="">Normal:</label>
+                                                <label for="">Normal<span class="text-danger">*</span></label>
                                                 <input type="text" name="normal[{{ $e->id }}][]" class="w-100 normal" value="1">
 
-                                                <label for="">Lembur:</label>
+                                                <label for="">Lembur<span class="text-danger">*</span></label>
                                                 <input type="text" name="lembur[{{ $e->id }}][]" class="w-100 lembur" value="0">
 
-                                                <label for="">L. Panjang</label>
+                                                <label for="">L. Panjang<span class="text-danger">*</span></label>
                                                 <input type="text" name="lembur_panjang[{{ $e->id }}][]" class="w-100 lembur_panjang" value="0">
 
                                                 <label for="">Performa</label>
@@ -184,13 +180,13 @@
                                     <td class="border border-1 border-secondary" style="width: 125px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
                                             <div class="input_area">
-                                                <label for="">Normal:</label>
+                                                <label for="">Normal<span class="text-danger">*</span></label>
                                                 <input type="text" name="normal[{{ $e->id }}][]" class="w-100 normal" value="1">
 
-                                                <label for="">Lembur:</label>
+                                                <label for="">Lembur<span class="text-danger">*</span></label>
                                                 <input type="text" name="lembur[{{ $e->id }}][]" class="w-100 lembur" value="0">
 
-                                                <label for="">L. Panjang</label>
+                                                <label for="">L. Panjang<span class="text-danger">*</span></label>
                                                 <input type="text" name="lembur_panjang[{{ $e->id }}][]" class="w-100 lembur_panjang" value="0">
 
                                                 <label for="">Performa</label>
@@ -208,13 +204,13 @@
                                     <td class="border border-1 border-secondary" style="width: 125px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
                                             <div class="input_area">
-                                                <label for="">Normal:</label>
+                                                <label for="">Normal<span class="text-danger">*</span></label>
                                                 <input type="text" name="normal[{{ $e->id }}][]" class="w-100 normal" value="1">
 
-                                                <label for="">Lembur:</label>
+                                                <label for="">Lembur<span class="text-danger">*</span></label>
                                                 <input type="text" name="lembur[{{ $e->id }}][]" class="w-100 lembur" value="0">
 
-                                                <label for="">L. Panjang</label>
+                                                <label for="">L. Panjang<span class="text-danger">*</span></label>
                                                 <input type="text" name="lembur_panjang[{{ $e->id }}][]" class="w-100 lembur_panjang" value="0">
 
                                                 <label for="">Performa</label>
@@ -232,13 +228,13 @@
                                     <td class="border border-1 border-secondary" style="width: 125px;">
                                         <div class="d-flex flex-column gap-2 py-2 w-100">
                                             <div class="input_area">
-                                                <label for="">Normal:</label>
+                                                <label for="">Normal<span class="text-danger">*</span></label>
                                                 <input type="text" name="normal[{{ $e->id }}][]" class="w-100 normal" value="1">
 
-                                                <label for="">Lembur:</label>
+                                                <label for="">Lembur<span class="text-danger">*</span></label>
                                                 <input type="text" name="lembur[{{ $e->id }}][]" class="w-100 lembur" value="0">
 
-                                                <label for="">L. Panjang</label>
+                                                <label for="">L. Panjang<span class="text-danger">*</span></label>
                                                 <input type="text" name="lembur_panjang[{{ $e->id }}][]" class="w-100 lembur_panjang" value="0">
 
                                                 <label for="">Performa</label>
@@ -266,10 +262,10 @@
 
                 <div class="w-100 d-flex flex-column mt-4">
                     <label for="remark">Remark</label>
-                    <input type="text" class="form-control w-100 mt-1" name="remark" id="remark">
+                    <input type="text" class="form-control w-100 mt-1" name="remark" id="remark" placeholder="Masukkan keterangan">
                 </div>
 
-                <button type="submit" class="btn btn-success mt-4">Unggah Data Presensi</button>
+                <button type="button" class="btn btn-success mt-4" id="submit-attendance-btn">Unggah Data Presensi</button>
             </form>
         </div>
     </x-container-middle>
@@ -326,6 +322,32 @@
 
             $('.exclude-btn').click(function(){
                 $(this).closest("tr").remove();
+            });
+
+            $('#submit-attendance-btn').on('click', function(){
+                let invalid = false;
+
+                $('#start_date, #end_date').removeClass('is-invalid')
+
+                if(!$('#start_date').val()){
+                    $('#start_date').addClass('is-invalid');
+                    invalid = true;
+                }
+
+                if(!$('#end_date').val()){
+                    $('#end_date').addClass('is-invalid');
+                    invalid = true;
+                }
+
+                if($('#start_date').val() > $('#end_date').val()){
+                    $('#start_date').addClass('is-invalid');
+                    $('#end_date').addClass('is-invalid');
+                    invalid = true;
+                }
+
+                if(!invalid){
+                    $('form').submit();
+                }
             });
         });
 

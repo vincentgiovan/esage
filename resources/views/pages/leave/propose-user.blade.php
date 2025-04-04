@@ -8,7 +8,7 @@
                 @csrf
 
                 <div class="mt-3">
-                    <label for="start_period">Tanggal Awal</label>
+                    <label for="start_period">Tanggal Awal<span class="text-danger">*</span></label>
                     <input type="date" class="form-control @error('start_period') is-invalid @enderror" name="start_period" id="start_period" placeholder="Nama Barang"
                         value="{{ old('start_period') }}">
                     @error('start_period')
@@ -17,7 +17,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="end_period">Tanggal Akhir</label>
+                    <label for="end_period">Tanggal Akhir<span class="text-danger">*</span></label>
                     <input type="date" class="form-control @error('end_period') is-invalid @enderror" name="end_period" id="end_period" placeholder="Nama Barang"
                         value="{{ old('end_period') }}">
                     @error('end_period')
@@ -26,7 +26,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="remark">Alasan Cuti</label>
+                    <label for="remark">Alasan Cuti<span class="text-danger">*</span></label>
                     <textarea type="text" class="form-control @error('remark') is-invalid @enderror" name="remark" id="remark" placeholder="Alasan cuti" rows="4">{{ old('remark') }}</textarea>
                     @error('remark')
                         <p class="text-danger">Harap tuliskan alasan cuti anda.</p>

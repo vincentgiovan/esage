@@ -12,7 +12,7 @@
 
                 @csrf
                 <div class="mt-3">
-                    <label for="partner_name">Nama Partner</label>
+                    <label for="partner_name">Nama Partner<span class="text-danger">*</span></label>
                     <input type="text" class="form-control @error("partner_name") is-invalid @enderror" name="partner_name" placeholder="Nama Partner"
                         value="{{ old('partner_name', $partner->partner_name) }}">
                     @error('partner_name')
@@ -20,7 +20,7 @@
                     @enderror
                 </div>
                 <div class="mt-3">
-                    <label for="role">Role Partner</label>
+                    <label for="role">Role Partner<span class="text-danger">*</span></label>
                     <input type="text" class="form-control @error("role") is-invalid @enderror" name="role" placeholder="Role"
                         value="{{ old('role', $partner->role) }}">
                     @error('role')

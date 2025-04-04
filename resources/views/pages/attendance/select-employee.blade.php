@@ -7,8 +7,12 @@
                 @csrf
                 <h3>Laporan Presensi Baru</h3>
 
+                @if(session()->has('noSelectedEmployee'))
+                    <p class="text-danger fw-bold">{{ session('noSelectedEmployee') }}</p>
+                @endif
+
                 <div class="form-group mt-3">
-                    <label for="project">Absensi dibuat untuk proyek</label>
+                    <label for="project">Absensi dibuat untuk proyek<span class="text-danger">*</span></label>
                     <select class="form-select select2" id="project" name="project">
                         <option disabled selected>Pilih Proyek</option>
                         @foreach ($projects as $project)
@@ -17,7 +21,7 @@
                     </select>
                 </div>
 
-                <label class="mt-4">Silakan pilih karyawan yang ingin dimasukkan ke dalam presensi:</label>
+                <label class="mt-4">Silakan pilih karyawan yang ingin dimasukkan ke dalam presensi<span class="text-danger">*</span></label>
                 <div id="employee-selection" class="d-flex w-100 flex-column align-items-start mt-2">
                     <i>- Belum ada proyek yang dipilih -</i>
                 </div>

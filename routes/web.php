@@ -263,6 +263,8 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::get("/attendance/{id}/edit", [AttendanceController::class, "edit"])->name("attendance-edit")->whereNumber("id");
         Route::post("/attendance/{id}/edit", [AttendanceController::class, "update"])->name("attendance-update")->whereNumber("id");
         Route::post("/attendance/{id}/delete", [AttendanceController::class, "destroy"])->name("attendance-destroy")->whereNumber("id");
+
+        Route::post('/attendance/export-excel', [AttendanceController::class, 'export_excel'])->name("attendance-export-excel");
     });
 
     // ===== VISIT LOGS ===== //

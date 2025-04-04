@@ -42,7 +42,7 @@ class EmployeeController extends Controller
             "lembur" => "required|numeric|min:0",
             "lembur_panjang" => "required|numeric|min:0",
             // "payroll" => "required",
-            "masuk" => "nullable|date",
+            "masuk" => "required|date",
             "keluar" => "nullable|date",
             "keterangan" => "nullable",
         ]);
@@ -87,7 +87,7 @@ class EmployeeController extends Controller
             "lembur_panjang" => "required|numeric|min:0",
             "kasbon" => "nullable|numeric|min:0",
             // "payroll" => "required",
-            "masuk" => "nullable|date",
+            "masuk" => "required|date",
             "keluar" => "nullable|date",
             "keterangan" => "nullable",
             "status" => "required"
