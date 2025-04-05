@@ -5,7 +5,9 @@
         <br>
         <div class="w-100 d-flex justify-content-between align-items-center">
             <h3>Data Pegawai</h3>
-            <a href="{{ route('employee-manageform') }}" class="btn btn-primary">Atur Jabatan dan Keahlian</a>
+            <div class="d-flex gap-3">
+                <a class="btn btn-secondary" href="{{ route('employee-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
+            </div>
         </div>
         <hr>
 
@@ -13,13 +15,18 @@
             <p class="text-success fw-bold">{{ session('success-add-employee-data') }}</p>
         @elseif (session()->has('success-edit-employee-data'))
             <p class="text-success fw-bold">{{ session('success-edit-employee-data') }}</p>
+        @elseif (session()->has('successImportExcel'))
+            <p class="text-success fw-bold">{{ session('successImportExcel') }}</p>
         @endif
 
-        <div class="mt-4 d-flex w-100 justify-content-between">
-            <a href="{{ route('employee-create') }}" class="btn btn-primary"><i class="bi bi-plus-square"></i> Data Pegawai Baru</a>
-            <a href="{{ route('prepay-generate') }}" class="btn btn-primary">Simulasi Potongan Kasbon</a>
+        <div class="mt-4 d-flex w-100 justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+                <a href="{{ route('employee-create') }}" class="btn btn-primary"><i class="bi bi-plus-square"></i> Data Pegawai Baru</a>
+                <a href="{{ route('employee-manageform') }}" class="btn btn-primary">Atur Jabatan dan Keahlian</a>
+                <a href="{{ route('prepay-generate') }}" onclick="return confirm('Apakah anda yakin ingin meng-generate pemotongan kasbon?')" class="btn btn-primary">Simulasi Pemotongan Kasbon</a>
+            </div>
 
-            <form action="{{ route('employee-index') }}" class="d-flex gap-3 items-center">
+            <form action="{{ route('employee-index') }}" class="d-flex gap-3">
                 <div class="position-relative">
                     <input type="text" name="search" placeholder="Cari pegawai..." value="{{ request('search') }}" class="form-control border border-1 border-secondary pe-5" style="width: 300px;">
                     <a href="{{ route('employee-index') }}" class="btn position-absolute top-0 end-0"><i class="bi bi-x-lg"></i></a>

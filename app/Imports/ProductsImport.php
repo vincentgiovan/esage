@@ -29,6 +29,7 @@ class ProductsImport implements ToModel, WithHeadingRow
 
             switch($jenis_barang){
                 case 'Fast Moving': $product_type = 'fast moving'; break;
+                case 'Slow Moving': $product_type = 'slow_moving'; break;
                 case 'Aset': $product_type = 'asset'; break;
             }
 
@@ -36,9 +37,9 @@ class ProductsImport implements ToModel, WithHeadingRow
                 "product_code" => $row['sku'],
                 'product_name' => $row['nama_barang'],
                 "variant" => $row['varian'],
-                "stock" => intval($row['stok']),
                 'unit' => $row['satuan'],
                 "price" => intval($row['harga']),
+                "stock" => intval($row['stok']),
                 "status" => $row['status'],
                 "discount" => floatval(str_replace(',', '.', $row['diskon'])),
                 "markup" => floatval(str_replace(',', '.', $row['markup'])),

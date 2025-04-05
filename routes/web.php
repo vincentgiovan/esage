@@ -221,6 +221,9 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::post("/employee/manage-form/{id}/edit-speciality", [EmployeeController::class, "manage_form_edit_speciality"])->name("employee-manageform-editspeciality")->whereNumber("id");
         Route::post("/employee/manage-form/{id}/delete-position", [EmployeeController::class, "manage_form_delete_position"])->name("employee-manageform-deleteposition")->whereNumber("id");
         Route::post("/employee/manage-form/{id}/delete-speciality", [EmployeeController::class, "manage_form_delete_speciality"])->name("employee-manageform-deletespeciality")->whereNumber("id");
+
+        Route::get("/employee/import", [EmployeeController::class, "import_employee_form"])->name("employee-import");
+        Route::post("/employee/import", [EmployeeController::class, "import_employee_store"])->name("employee-import-store");
     });
 
     // ===== PREPAYS ===== //

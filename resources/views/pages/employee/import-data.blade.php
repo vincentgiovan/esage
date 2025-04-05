@@ -7,18 +7,18 @@
 @section('content')
     <x-container-middle>
         <div class="container bg-white rounded-4 p-5 mt-4 border border-1 card">
-            <h3>Import Excel Data Partner</h3>
+            <h3>Import Excel Data Pegawai</h3>
 
             @if(session()->has('failedImportExcel'))
                 <p class="text-danger">{{ session('failedImportExcel') }}</p>
             @endif
 
             <p class="mt-4">Pastikan posisi kolom telah sesuai seperti yang ditunjukkan pada gambar di bawah ini:</p>
-            <img src="{{ asset('res/guide-importcsv-partner.png') }}" alt="guide-uploadcsv">
+            <img src="{{ asset('res/guide-importcsv-employee.png') }}" alt="guide-uploadcsv">
 
             <p class="mt-4">Pilih dan upload file dalam format .xlsx:</p>
 
-            <form action="{{ route('partner-import-store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('employee-import-store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="file" class="form-control @error("file_to_upload") is-invalid @enderror" name="file_to_upload" accept=".xlsx, .xls, .csv" />
                 @error("file_to_upload")
