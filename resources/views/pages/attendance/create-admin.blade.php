@@ -12,8 +12,8 @@
                 <input type="hidden" name="project" value="{{ $project->id }}">
 
                 @php
-                    $previousSaturday = Carbon\Carbon::now()->subWeeks(1)->previous(Carbon\Carbon::SATURDAY)->toDateString();
-                    $previousFriday = Carbon\Carbon::now()->previous(Carbon\Carbon::FRIDAY)->toDateString();
+                    $previousFriday = Carbon\Carbon::now()->previous(Carbon\Carbon::FRIDAY);
+                    $previousSaturday = $previousFriday->copy()->previous(Carbon\Carbon::SATURDAY);
                 @endphp
 
                 <div class="mt-4">Hari Masuk Kerja di Minggu Ini</div>
@@ -44,13 +44,13 @@
                 <div class="d-flex gap-3 mt-4">
                     <div class="w-50 d-flex flex-column">
                         <label for="start_date">Tanggal Awal Absensi<span class="text-danger">*</span></label>
-                        <input type="date" class="form-control w-100 mt-1 @error('start_date') is-invalid @enderror" name="start_date" id="start_date" value="{{ old('start_date', $previousSaturday) }}">
+                        <input type="date" class="form-control w-100 mt-1 @error('start_date') is-invalid @enderror" name="start_date" id="start_date" value="{{ old('start_date', $previousSaturday->format('Y-m-d')) }}">
                         <p class="text-danger invalid-feedback">Harap pilih tanggal awal absensi, pastikan tanggal awal kurang dari tanggal akhir.</p>
                     </div>
 
                     <div class="w-50 d-flex flex-column">
                         <label for="end_date">Tanggal Akhir Absensi<span class="text-danger">*</span></label>
-                        <input type="date" class="form-control w-100 mt-1 @error('end_date') is-invalid @enderror" name="end_date" id="end_date" value="{{ old('end_date', $previousFriday) }}">
+                        <input type="date" class="form-control w-100 mt-1 @error('end_date') is-invalid @enderror" name="end_date" id="end_date" value="{{ old('end_date', $previousFriday->format('Y-m-d')) }}">
                         <p class="text-danger invalid-feedback">Harap pilih tanggal akhir absensi.</p>
                     </div>
                 </div>

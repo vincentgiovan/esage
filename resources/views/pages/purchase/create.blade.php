@@ -13,7 +13,7 @@
                 <div class="d-flex gap-3">
                     <div class="mt-3 w-50">
                         <label for="partner_id">Supplier<span class="text-danger">*</span></label>
-                        <select name="partner_id" id="partner_id" class="form-select">
+                        <select name="partner_id" id="partner_id" class="form-select select2">
                             @foreach ($supplier as $s)
                                 <option value="{{ $s->id }}">
                                     {{ $s->partner_name }}
