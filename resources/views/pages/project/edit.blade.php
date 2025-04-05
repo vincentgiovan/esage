@@ -6,14 +6,12 @@
 
             <h3>Edit Data Proyek</h3>
 
-
-
             <form method="POST" action="{{ route('project-update', $project->id) }}">
 
                 @csrf
 
                 <div class="mt-3">
-                    <label for="project_name">Nama Proyek</label>
+                    <label for="project_name">Nama Proyek<span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="project_name" name="project_name" placeholder="Nama Project"
                         value="{{ old('project_name', $project->project_name) }}">
                     @error('project_name')
@@ -22,7 +20,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="location">Lokasi</label>
+                    <label for="location">Lokasi<span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="location" name="location" placeholder="Location"
                         value="{{ old('location', $project->location) }}">
                     @error('location')
@@ -31,7 +29,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="PIC">PIC</label>
+                    <label for="PIC">PIC<span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="PIC" name="PIC" placeholder="PIC Name"
                         value="{{ old('PIC', $project->PIC) }}">
                     @error('PIC')
@@ -40,7 +38,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="address">Alamat</label>
+                    <label for="address">Alamat<span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="address" name="address" placeholder="Alamat"
                         value="{{ old('address', $project->address) }}">
                     @error('address')
@@ -49,7 +47,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="RAB">Nomor RAB</label>
+                    <label for="RAB">Nomor RAB<span class="text-danger">*</span></label>
                     <input type="text" class="form-control @error('RAB') is-invalid @enderror" id="RAB" name="RAB" placeholder="Nomor RAB"
                         value="{{ old('RAB', $project->RAB) }}">
                     @error('RAB')

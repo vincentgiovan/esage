@@ -13,13 +13,13 @@
                 <div>
                     <div class="d-flex gap-3">
                         <div class="mt-3 w-50">
-                            <label for="delivery_date">Tanggal Pengiriman</label>
+                            <label for="delivery_date">Tanggal Pengiriman<span class="text-danger">*</span></label>
                             <input type="date" class="form-control @error("delivery_date") is-invalid @enderror" id="delivery_date" name="delivery_date" placeholder="delivery_date"  value="{{ Carbon\Carbon::today()->format('Y-m-d') }}">
                             <p class="invalid-feedback">Harap masukkan tanggal pengiriman</p>
                         </div>
 
                         <div class="mt-3 w-50">
-                            <label for="project_id">Proyek</label>
+                            <label for="project_id">Proyek<span class="text-danger">*</span></label>
                             <select name="project_id" class="form-select select2" id="project_id">
                                 @foreach ($projects as $pn)
                                     <option value="{{ $pn->id}}">{{ $pn->project_name }}</option>
@@ -30,7 +30,7 @@
 
                     <div class="d-flex gap-3">
                         <div class="mt-3 w-50">
-                            <label for="_register">SKU</label>
+                            <label for="_register">SKU<span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="_register" name="_register" placeholder="(Dibuat otomatis oleh sistem)"  value="{{ __('DO/' . Carbon\Carbon::today()->format('dmY') . '/' . $delivery_orders->where('delivery_date', Carbon\Carbon::today()->format('Y-m-d'))->count() + 1) }}" disabled>
                             <input type="hidden" name="register" id="register" value="{{ __('DO/' . Carbon\Carbon::today()->format('dmY') . '/' . $delivery_orders->where('delivery_date', Carbon\Carbon::today()->format('Y-m-d'))->count() + 1) }}">
                         </div>
@@ -38,7 +38,7 @@
                     </div>
 
                     <div class="mt-3">
-                        <label>Status Pengiriman</label>
+                        <label>Status Pengiriman<span class="text-danger">*</span></label>
 
                         <div class="d-flex gap-3">
                             <div class="d-flex gap-2 rounded-3 py-2">
@@ -61,7 +61,7 @@
 
             {{-- Cart pengiriman --}}
             <div class="container bg-white rounded-4 p-4 border border-1 card mt-4">
-                <h4>Daftar Barang</h4>
+                <h4>Daftar Barang<span class="text-danger">*</span></h4>
 
                 <div class="overflow-x-auto">
                     <table class="w-100 mt-4">

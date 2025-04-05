@@ -17,7 +17,7 @@
 
         <div class="d-flex align-items-center justify-content-between">
             <button class="btn btn-primary" onclick="history.back();"><i class="bi bi-arrow-left"></i> Return</button>
-            @if(in_array(Auth::user()->role->role_name, ['master', 'accounting_admin']))
+            @if(in_array(Auth::user()->role->role_name, ['master', 'accounting_admin']) && $request_item->status == 'awaiting')
                 <form action="{{ route('requestitem-update-status', $request_item->id) }}" method="post" class="d-flex align-items-center gap-2">
                     @csrf
                     <input type="submit" class="btn btn-success" name="status" value="Setujui">

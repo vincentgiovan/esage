@@ -70,9 +70,9 @@
                 <td class="border border-1 border-secondary">{{ $loop->iteration }}</td>
                 <td class="border border-1 border-secondary">{{ $purchase_product->product->product_name }}</td>
                 <td class="border border-1 border-secondary">{{ $purchase_product->product->product_code }}</td>
-                <td class="border border-1 border-secondary">Rp {{ number_format($purchase_product->price, 2, ',' , '.') }}</td>
+                <td class="border border-1 border-secondary">Rp {{ number_format($purchase_product->product->price, 2, ',' , '.') }}</td>
                 <td class="border border-1 border-secondary">{{ $purchase_product->quantity }}</td>
-                <td class="border border-1 border-secondary">{{ $purchase_product->discount }}%</td>
+                <td class="border border-1 border-secondary">{{ $purchase_product->product->discount }}%</td>
                 <td class="border border-1 border-secondary">Rp {{ number_format($purchase_product->price * (1 - ($purchase_product->discount / 100)), 2, ',' , '.') }}</td>
                 {{-- <td class="border border-1 border-secondary">{{ $purchase_product->product->markup }}%</td>
                 <td class="border border-1 border-secondary">Rp {{ $purchase_product->price * (1 + ($purchase_product->product->markup / 100)) }},00</td> --}}
@@ -93,7 +93,7 @@
             @php
                 $total = 0;
                 foreach ($pp as $purchase_product){
-                    $total += $purchase_product->price * (1 - ($purchase_product->discount / 100));
+                    $total += $purchase_product->product->price * (1 - ($purchase_product->product->discount / 100));
                 }
 
                 echo "Rp " . number_format($total, 2, ',' , '.');

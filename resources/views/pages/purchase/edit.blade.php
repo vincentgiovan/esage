@@ -12,7 +12,7 @@
 
                 <div class="d-flex gap-3">
                     <div class="mt-3 w-50">
-                        <label for="partner_id">Supplier</label>
+                        <label for="partner_id">Supplier<span class="text-danger">*</span></label>
                         <select name="partner_id" id="partner_id" class="form-select">
                             @foreach ($supplier as $s)
                                 <option value="{{ $s->id }}">
@@ -23,7 +23,7 @@
                     </div>
 
                     <div class="mt-3 w-50">
-                        <label for="purchase_date">Tanggal Pembelian</label>
+                        <label for="purchase_date">Tanggal Pembelian<span class="text-danger">*</span></label>
                         <input type="date" class="form-control @error("purchase_date") is-invalid @enderror" name="purchase_date" id="purchase_date"
                             value="{{ Carbon\Carbon::today()->format('Y-m-d') }}">
                         <p class="invalid-feedback">Harap masukkan tanggal pembelian</p>
@@ -32,21 +32,21 @@
 
                 <div class="d-flex gap-3">
                     <div class="mt-3 w-50">
-                        <label for="purchase_deadline">Deadline/Tenggat Pembelian</label>
+                        <label for="purchase_deadline">Deadline/Tenggat Pembelian<span class="text-danger">*</span></label>
                         <input type="date" class="form-control @error("purchase_deadline") is-invalid @enderror" name="purchase_deadline" id="purchase_deadline"
                             value="{{ Carbon\Carbon::today()->format('Y-m-d') }}">
                         <p class="invalid-feedback">Harap masukkan deadline/tenggat pembelian.</p>
                     </div>
 
                     <div class="mt-3 w-50">
-                        <label for="fakeregister">SKU</label>
+                        <label for="fakeregister">SKU<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="_register" name="_register" placeholder="(Dibuat otomatis oleh sistem)"  value="{{ $purchase->register }}" disabled>
                             <input type="hidden" name="register" id="register" value="{{ $purchase->register }}">
                     </div>
                 </div>
 
                 <div class="mt-3">
-                    <label>Status Pembelian</label>
+                    <label>Status Pembelian<span class="text-danger">*</span></label>
 
                     <div class="d-flex gap-3">
                         <div class="d-flex gap-2 rounded-3 py-2">
@@ -62,7 +62,7 @@
             </div>
 
             <div class="container bg-white rounded-4 p-4 border border-1 card mt-4">
-                <h4>Daftar Barang</h4>
+                <h4>Daftar Barang<span class="text-danger">*</span></h4>
 
                 <div class="overflow-x-auto mt-4">
                     <table class="w-100">

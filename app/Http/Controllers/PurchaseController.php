@@ -101,6 +101,7 @@ class PurchaseController extends Controller
                         "variant" => $request->variant[$index],
                         "product_code" => $request->product_code[$index],
                         "price" => $request->price[$index],
+                        "discount" => $request->discount[$index],
                         "markup" => $request->markup[$index],
                         "stock" => $request->stock[$index],
                         "type" => $request_types[$index],
@@ -111,9 +112,7 @@ class PurchaseController extends Controller
                     PurchaseProduct::create([
                         "purchase_id" => $newPurchase->id,
                         "product_id" => $new_product->id,
-                        "discount" => $request->discount[$index],
                         "quantity" => $request->stock[$index],
-                        "price" => $request->price[$index]
                     ]);
                 }
             }
@@ -183,9 +182,7 @@ class PurchaseController extends Controller
                 PurchaseProduct::create([
                     'purchase_id' => $purchase->id,
                     'product_id' => $reqprod,
-                    "discount" => $prev_data_list[$i]['discount'],
                     "quantity" => $request->quantities[$i],
-                    "price" => $prev_data_list[$i]['price'],
                 ]);
 
                 // Karena purchase sifatnya menambah stok produk, maka update stok product di tabel aslinya:
