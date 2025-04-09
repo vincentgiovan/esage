@@ -19,29 +19,41 @@ class ProductsExport implements FromArray, WithHeadings, WithStyles, WithEvents
      */
     public function array(): array
     {
-        $products = Product::with(['purchase_products' => function ($query) {
-            $query->with(['purchase' => function ($query) {
-                $query->latest('purchase_date'); // Get latest purchase
-            }]);
-        }])
-        ->orderBy('product_name')
-        ->orderBy('variant')
-        ->get();
+        // $products = Product::with(['purchase_products' => function ($query) {
+        //     $query->with(['purchase' => function ($query) {
+        //         $query->latest('purchase_date'); // Get latest purchase
+        //     }]);
+        // }])
+        // ->orderBy('product_name')
+        // ->orderBy('variant')
+        // ->get();
+
+        $products = Product::with(['latest_purchase_product.purchase'])
+            ->orderBy('product_name')
+            ->orderBy('variant')
+            ->get();
 
         // Convert collection to array while ensuring correct data formatting
-        return $products->map(function ($product) {
+        $i = 0;
+
+        return $products->map(function ($product) use (&$i) {
+            $i++;
+
+            $firstPurchaseDate = $product->latest_purchase_product?->purchase?->purchase_date ?? '';
+
             return [
+                $i,
                 $product->product_code ?? '',
                 $product->product_name ?? '',
                 $product->variant ?? '',
                 $product->stock !== null ? (int) $product->stock : 0, // Ensures 0 is included for stock (integer)
                 $product->unit ?? '',
-                $product->purchase_products->first() ? $product->purchase_products->first()->purchase->purchase_date : '',
+                $firstPurchaseDate,
                 $product->price !== null ? (int) $product->price : 0, // Ensures 0 is included for price (integer)
                 $product->discount !== null ? number_format((float) $product->discount, 2, '.', '') : 0, // Keeps 2 decimal places for discount
                 $product->markup !== null ? number_format((float) $product->markup, 2, '.', '') : 0, // Keeps 2 decimal places for markup
                 $product->type ? ucwords($product->type) : '',
-                $product->condition == 'good' ? 'Bagus' : 'Bekas',
+                $product->condition == 'good' ? 'Bagus' : ($product->condition == 'degraded' ? 'Bekas' : 'Rekondisi'),
             ];
         })->toArray();
     }
@@ -51,7 +63,7 @@ class ProductsExport implements FromArray, WithHeadings, WithStyles, WithEvents
      */
     public function headings(): array
     {
-        return ['SKU', 'Nama Produk', 'Varian', 'Stok', 'Satuan', 'Tanggal Beli', 'Harga', 'Diskon', 'Markup', 'Jenis', 'Kondisi'];
+        return ['No', 'SKU', 'Nama Produk', 'Varian', 'Stok', 'Satuan', 'Tanggal Beli', 'Harga', 'Diskon', 'Markup', 'Jenis', 'Kondisi'];
     }
 
     /**
@@ -60,11 +72,11 @@ class ProductsExport implements FromArray, WithHeadings, WithStyles, WithEvents
     public function styles(Worksheet $sheet)
     {
         // Style for header row (bold, white text, green background, centered)
-        $sheet->getStyle('A1:K1')->applyFromArray([
+        $sheet->getStyle('A1:L1')->applyFromArray([
             'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']], // White text
             'fill' => [
                 'fillType' => Fill::FILL_SOLID,
-                'startColor' => ['rgb' => '4CAF50'] // Green background
+                'startColor' => ['rgb' => '696969'] // Green background
             ],
             'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER] // Center align headers
         ]);

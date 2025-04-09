@@ -12,8 +12,8 @@
 
                 <div class="d-flex gap-3">
                     <div class="mt-3 w-50">
-                        <label for="partner_id">Supplier</label>
-                        <select name="partner_id" id="partner_id" class="form-select">
+                        <label for="partner_id">Supplier<span class="text-danger">*</span></label>
+                        <select name="partner_id" id="partner_id" class="form-select select2">
                             @foreach ($supplier as $s)
                                 <option value="{{ $s->id }}">
                                     {{ $s->partner_name }}
@@ -23,7 +23,7 @@
                     </div>
 
                     <div class="mt-3 w-50">
-                        <label for="purchase_date">Tanggal Pembelian</label>
+                        <label for="purchase_date">Tanggal Pembelian<span class="text-danger">*</span></label>
                         <input type="date" class="form-control @error("purchase_date") is-invalid @enderror" name="purchase_date" id="purchase_date"
                             value="{{ Carbon\Carbon::today()->format('Y-m-d') }}">
                         <p class="invalid-feedback">Harap masukkan tanggal pembelian</p>
@@ -32,21 +32,21 @@
 
                 <div class="d-flex gap-3">
                     <div class="mt-3 w-50">
-                        <label for="purchase_deadline">Deadline/Tenggat Pembelian</label>
+                        <label for="purchase_deadline">Deadline/Tenggat Pembelian<span class="text-danger">*</span></label>
                         <input type="date" class="form-control @error("purchase_deadline") is-invalid @enderror" name="purchase_deadline" id="purchase_deadline"
                             value="{{ Carbon\Carbon::today()->format('Y-m-d') }}">
                         <p class="invalid-feedback">Harap masukkan deadline/tenggat pembelian.</p>
                     </div>
 
                     <div class="mt-3 w-50">
-                        <label for="fakeregister">SKU</label>
+                        <label for="fakeregister">SKU<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="_register" name="_register" placeholder="(Dibuat otomatis oleh sistem)"  value="{{ __('PU/' . Carbon\Carbon::today()->format('dmY') . '/' . $purchases->where('purchase_date', Carbon\Carbon::today()->format('Y-m-d'))->count() + 1) }}" disabled>
                             <input type="hidden" name="register" id="register" value="{{ __('PU/' . Carbon\Carbon::today()->format('dmY') . '/' . $purchases->where('purchase_date', Carbon\Carbon::today()->format('Y-m-d'))->count() + 1) }}">
                     </div>
                 </div>
 
                 <div class="mt-3">
-                    <label>Status Pembelian</label>
+                    <label>Status Pembelian<span class="text-danger">*</span></label>
 
                     <div class="d-flex gap-3">
                         <div class="d-flex gap-2 rounded-3 py-2">
@@ -62,7 +62,7 @@
             </div>
 
             <div class="container bg-white rounded-4 p-4 border border-1 card mt-4">
-                <h4>Daftar Barang</h4>
+                <h4>Daftar Barang<span class="text-danger">*</span></h4>
 
                 <p class="fst-italic fw-semibold mt-3">Barang yang sudah teregistrasi di gudang</p>
                 <div class="overflow-x-auto">
@@ -78,7 +78,7 @@
                                     <select name="products[]" class="form-select select2">
                                     @foreach ($products as $product)
                                         <option value="{{ $product->id }}">
-                                            {{ $product->product_name }} - {{ $product->variant }} (Harga: Rp {{ number_format($product->price, 2, ',', '.') }}, Stok:  {{ $product->stock }}, Diskon: {{ $product->discount }}%)
+                                            {{ $product->product_name }} - {{ $product->variant }} (Harga: {{ number_format($product->price, 0, ',', '.') }}, Stok:  {{ $product->stock }}, Diskon: {{ $product->discount }}%)
                                         </option>
                                     @endforeach
                                     </select>
@@ -110,7 +110,7 @@
                                     <td class="border border-1 border-secondary">
                                         <div class="d-flex flex-column gap-2">
                                             <div>
-                                                <label for="product_name">Nama Produk</label>
+                                                <label for="product_name">Nama Produk<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control productName" name="product_name[]" placeholder="Nama Barang">
                                                 <p class="invalid-feedback errProductName">Harap masukkan nama produk</p>
                                             </div>
@@ -119,13 +119,13 @@
 
                                             <div class="collapse.show gap-2 newprod-detail-area">
                                                 <div>
-                                                    <label for="variant">Variant</label>
+                                                    <label for="variant">Variant<span class="text-danger">*</span></label>
                                                     <input type="text" class="form-control variant" name="variant[]" placeholder="Variant">
                                                     <p class="invalid-feedback errVariant">Harap masukkan varian</p>
                                                 </div>
 
                                                 <div class="mt-2">
-                                                    <label for="product_code">SKU</label>
+                                                    <label for="product_code">SKU<span class="text-danger">*</span></label>
                                                     <input type="text" class="form-control fakeCode" name="fake_product_code[]" placeholder="(Dibuat otomatis oleh sistem)" disabled>
                                                     <input type="hidden" name="product_code[]" class="productCode">
                                                 </div>
@@ -137,25 +137,25 @@
                                                 </div>
 
                                                 <div class="mt-2">
-                                                    <label for="price">Harga</label>
+                                                    <label for="price">Harga<span class="text-danger">*</span></label>
                                                     <input type="number" class="form-control" name="price[]" placeholder="Harga" value="0">
                                                     <p class="invalid-feedback errPrice">Harap masukkan nilai minimal 1</p>
                                                 </div>
 
                                                 <div class="mt-2">
-                                                    <label for="markup">Markup</label>
+                                                    <label for="markup">Markup<span class="text-danger">*</span></label>
                                                     <input type="text" class="form-control" name="markup[]" placeholder="Markup"  value="0">
                                                     <p class="invalid-feedback errMarkup">Harap masukkan nilai minimal 0</p>
                                                 </div>
 
                                                 <div class="mt-2">
-                                                    <label for="discount">Diskon</label>
+                                                    <label for="discount">Diskon<span class="text-danger">*</span></label>
                                                     <input type="text" class="form-control" name="discount[]" placeholder="Diskon"  value="0">
                                                     <p class="invalid-feedback errDiscount">Harap masukkan nilai minimal 0</p>
                                                 </div>
 
                                                 <div class="mt-2">
-                                                    <label>Jenis Barang</label>
+                                                    <label>Jenis Barang<span class="text-danger">*</span></label>
 
                                                     <div class="d-flex gap-3">
                                                         <div class="d-flex gap-2 rounded-3 py-2">
@@ -308,7 +308,7 @@
             $('#add-row-btn-registered').on('click', function(){
                 const newProdSel = $('<select>').attr('name', 'products[]').addClass('form-select select2');
                 allproducts.forEach(prod => {
-                    newProdSel.append($('<option>').attr('value', prod.id).text(`${prod.product_name} - ${prod.variant} (Harga: Rp ${formatCurrency(prod.price)}, Stok: ${[prod.stock]}, Diskon: ${prod.discount}%)`));
+                    newProdSel.append($('<option>').attr('value', prod.id).text(`${prod.product_name} - ${prod.variant} (Harga: ${formatCurrency(prod.price)}, Stok: ${[prod.stock]}, Diskon: ${prod.discount}%)`));
                 });
 
                 $('#isibody-registered').append(
@@ -559,6 +559,11 @@
                         inputError = true;
                     }
                 });
+
+                if($('#isibody-unregistered').find('tr').length + $('#isibody-registered').find('tr').length < 1){
+                    alert('Harap masukkan minimal 1 item ke cart!');
+                    inputError = true;
+                }
 
                 if(!inputError){
                     $('form').submit();

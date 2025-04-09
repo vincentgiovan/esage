@@ -23,29 +23,30 @@
     </head>
 
     {{-- tabel list data--}}
-    @foreach($grouped_attendances as $emp_id => $attendances)
-        <body>
-            <h3>Gaji Pegawai</h3>
-            <hr>
-            <br>
+    <body>
+        <h3>Gaji Pegawai</h3>
+        <hr>
+        <br>
 
-            <table style="width: 100%; border: 1px solid black;">
-                <tr>
-                    <th class="border border-1 border-secondary">No</th>
-                    <th class="border border-1 border-secondary">Periode</th>
-                    <th class="border border-1 border-secondary">Nama</th>
-                    <th class="border border-1 border-secondary">Jabatan</th>
-                    <th class="border border-1 border-secondary">Total</th>
-                    <th class="border border-1 border-secondary">Ket.</th>
-                </tr>
+        <table style="width: 100%; border: 1px solid black;">
+            <tr>
+                <th class="border border-1 border-secondary">No</th>
+                <th class="border border-1 border-secondary">Periode</th>
+                <th class="border border-1 border-secondary">Nama</th>
+                <th class="border border-1 border-secondary">Jabatan</th>
+                <th class="border border-1 border-secondary">Total</th>
+                <th class="border border-1 border-secondary">Ket.</th>
+            </tr>
 
+            @foreach($grouped_attendances as $emp_id => $attendances)
                 @php
                     $employee = App\Models\Employee::find(intval($emp_id));
-                    $kasubon = $employee->prepays->where('prepay_date', '>=', $start_period)->where('prepay_date', '<=', $end_period);
+                    $kasubon = $employee->prepays()->pluck('id')->toArray();
+                    $prepay_cuts = App\Models\PrepayCut::whereIn('prepay_id', $kasubon)->where('start_period', '>=', request('from'))->where('end_period', '<=', request('until'))->get();
 
                     $total_kasbon = 0;
-                    foreach($kasubon as $k){
-                        $total_kasbon += $k->amount;
+                    foreach($prepay_cuts as $ppay_cut){
+                        $total_kasbon += $ppay_cut->cut_amount;
                     }
 
                     $subtotals[$emp_id] -= $total_kasbon;
@@ -56,7 +57,7 @@
                     <td class="border border-1 border-secondary">{{ Carbon\Carbon::parse($start_period)->translatedFormat("d/m/Y") }} - {{ Carbon\Carbon::parse($end_period)->translatedFormat("d/m/Y") }}</td>
                     <td class="border border-1 border-secondary">{{ $employee->nama }}</td>
                     <td class="border border-1 border-secondary">{{ $employee->jabatan }}</td>
-                    <td class="border border-1 border-secondary" style="background-color: yellow;">{{ number_format($subtotals[$emp_id], 2, ',', '.') }}</td>
+                    <td class="border border-1 border-secondary" style="background-color: yellow;">{{ number_format($subtotals[$emp_id], 0, ',', '.') }}</td>
                     <td class="border border-1 border-secondary"></td>
                 </tr>
 
@@ -82,7 +83,7 @@
 
                             $total_gaji_normal += $atd->normal * $atd->employee->pokok;
                             $total_gaji_lembur += $atd->jam_lembur * $atd->employee->lembur;
-                            $total_gaji_lembur_panjang += $atd->index_lembur_panjang * $atd->lembur_panjang;
+                            $total_gaji_lembur_panjang += $atd->index_lembur_panjang * $atd->employee->lembur_panjang;
                             $total_performa += $atd->performa;
                         @endphp
                     @endforeach
@@ -90,37 +91,37 @@
                     @if($total_jam_normal != 0)
                         <tr>
                             <td class="border border-1 border-secondary" colspan="5">Normal: {{ $total_jam_normal }} jam ({{ $project_name }})</td>
-                            <td class="border border-1 border-secondary">{{ number_format($total_gaji_normal, 2, ',', '.') }}</td>
+                            <td class="border border-1 border-secondary">{{ number_format($total_gaji_normal, 0, ',', '.') }}</td>
                         </tr>
                     @endif
                     @if($total_jam_lembur > 0)
                         <tr>
                             <td class="border border-1 border-secondary" colspan="5">Lembur: {{ $total_jam_lembur }} jam ({{ $project_name }})</td>
-                            <td class="border border-1 border-secondary">{{ number_format($total_gaji_lembur, 2, ',', '.') }}</td>
+                            <td class="border border-1 border-secondary">{{ number_format($total_gaji_lembur, 0, ',', '.') }}</td>
                         </tr>
                     @endif
                     @if($total_kali_lembur_panjang > 0)
                         <tr>
                             <td class="border border-1 border-secondary" colspan="5">Lembur Panjang: {{ $total_kali_lembur_panjang }} hari ({{ $project_name }})</td>
-                            <td class="border border-1 border-secondary">{{ number_format($total_gaji_lembur_panjang, 2, ',', '.') }}</td>
+                            <td class="border border-1 border-secondary">{{ number_format($total_gaji_lembur_panjang, 0, ',', '.') }}</td>
                         </tr>
                     @endif
                     @if($total_performa > 0)
                         <tr>
                             <td class="border border-1 border-secondary" colspan="5">Performa ({{ $project_name }})</td>
-                            <td class="border border-1 border-secondary">{{ number_format($total_performa, 2, ',', '.') }}</td>
+                            <td class="border border-1 border-secondary">{{ number_format($total_performa, 0, ',', '.') }}</td>
                         </tr>
                     @endif
                 @endforeach
 
-                @foreach($kasubon as $ppay)
+                @foreach($prepay_cuts as $ppc)
                     <tr>
-                        <td class="border border-1 border-secondary" colspan="5">Potongan kasbon @if($ppay->remark)({{ $ppay->remark }})@endif</td>
-                        <td class="border border-1 border-secondary">-{{ number_format($ppay->amount, 2, ',', '.') }}</td>
+                        <td class="border border-1 border-secondary" class="py-2" colspan="5">Potongan kasbon untuk {{ $ppc->prepay->remark }} (Sisa saldo: {{ number_format($ppc->remaining_amount, 0, ',', '.') }})</td>
+                        <td class="border border-1 border-secondary" class="py-2">- {{ number_format($ppc->cut_amount, 0, ',', '.') }}</td>
                     </tr>
                 @endforeach
-            </table>
-        </body>
-    @endforeach
+            @endforeach
+        </table>
+    </body>
 </html>
 

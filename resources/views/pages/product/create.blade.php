@@ -14,7 +14,7 @@
 
                 <div class="d-flex gap-3">
                     <div class="mt-3 w-50">
-                        <label for="product_name">Nama Barang</label>
+                        <label for="product_name">Nama Barang<span class="text-danger">*</span></label>
                         <input type="text" class="form-control @error('product_name') is-invalid @enderror" name="product_name" id="product_name" placeholder="Nama Barang"
                             value="{{ old('product_name') }}">
                         @error('product_name')
@@ -23,7 +23,7 @@
                     </div>
 
                     <div class="mt-3 w-50">
-                        <label for="variant">Varian</label>
+                        <label for="variant">Varian<span class="text-danger">*</span></label>
                         <input type="text" class="form-control @error('variant') is-invalid @enderror" name="variant" id="variant" placeholder="Variant"
                             value="{{ old('variant') }}">
                         @error('variant')
@@ -34,12 +34,12 @@
 
                 <div class="d-flex gap-3">
                     <div class="mt-3 w-50">
-                        <label for="fake_product_code">SKU</label>
+                        <label for="fake_product_code">SKU<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" name="fake_product_code" id="fake_product_code" placeholder="(Dibuat otomatis oleh sistem)" value="{{ old('fake_product_code') }}" disabled>
                     </div>
 
                     <div class="mt-3 w-50">
-                        <label for="stock">Stok</label>
+                        <label for="stock">Stok<span class="text-danger">*</span></label>
                         <input type="number" class="form-control @error('stock') is-invalid @enderror" name="stock" id="stock" placeholder="Stok"
                             value="{{ old('stock') }}">
                         @error('stock')
@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <label>Status</label>
+                    <label>Status<span class="text-danger">*</span></label>
 
                     <div class="d-flex gap-3">
                         <div class="d-flex gap-2 rounded-3 py-2">
@@ -65,7 +65,7 @@
 
                 <div class="d-flex gap-3">
                     <div class="mt-3 w-50">
-                        <label for="unit">Satuan</label>
+                        <label for="unit">Satuan<span class="text-danger">*</span></label>
                         <input type="text" class="form-control @error('unit') is-invalid @enderror" name="unit" id="unit" placeholder="Unit"
                             value="{{ old('unit') }}">
                         @error('unit')
@@ -74,7 +74,7 @@
                     </div>
 
                     <div class="mt-3 w-50">
-                        <label for="price">Harga</label>
+                        <label for="price">Harga<span class="text-danger">*</span></label>
                         <input type="number" class="form-control @error('price') is-invalid @enderror" name="price" id="price" placeholder="Harga"
                             value="0">
                         @error('price')
@@ -86,7 +86,7 @@
                 @if(in_array(Auth::user()->role->role_name, ['master', 'accounting_admin']))
                     <div class="d-flex gap-3">
                         <div class="mt-3 w-50">
-                            <label for="discount">Diskon</label>
+                            <label for="discount">Diskon<span class="text-danger">*</span></label>
                             <input type="text" class="form-control @error('discount') is-invalid @enderror" name="discount" id="discount" placeholder="Diskon"
                                 value="0">
                             @error('discount')
@@ -95,7 +95,7 @@
                         </div>
 
                         <div class="mt-3 w-50">
-                            <label for="markup">Markup</label>
+                            <label for="markup">Markup<span class="text-danger">*</span></label>
                             <input type="text" class="form-control @error('markup') is-invalid @enderror" name="markup" id="markup" placeholder="Markup"
                                 value="0">
                             @error('markup')
@@ -106,7 +106,7 @@
                 @endif
 
                 {{-- <div class="mt-3">
-                    <label for="type">Jenis Barang</label>
+                    <label for="type">Jenis Barang<span class="text-danger">*</span></label>
                     <select class="form-select @error('type') is-invalid @enderror" name="type" id="type">
                         <option value="fast moving" @if(old('type') == 'fast moving') selected @endif>Fast Moving</option>
                         <option value="asset" @if(old('type') == 'asset') selected @endif>Aset</option>
@@ -117,7 +117,7 @@
                 </div> --}}
 
                 <div class="mt-3">
-                    <label>Jenis Barang</label>
+                    <label>Jenis Barang<span class="text-danger">*</span></label>
 
                     <div class="d-flex gap-3">
                         <div class="d-flex gap-2 rounded-3 py-2">
@@ -136,7 +136,7 @@
                 </div>
 
                 {{-- <div class="mt-3">
-                    <label for="condition">Kondisi Barang</label>
+                    <label for="condition">Kondisi Barang<span class="text-danger">*</span></label>
                     <select class="form-select @error('condition') is-invalid @enderror" name="condition" id="condition">
                         <option value="good">Bagus</option>
                         <option value="degraded">Rusak</option>
@@ -148,7 +148,7 @@
                 </div> --}}
 
                 <div class="mt-3">
-                    <label>Kondisi</label>
+                    <label>Kondisi<span class="text-danger">*</span></label>
 
                     <div class="d-flex gap-3">
                         <div class="d-flex gap-2 rounded-3 py-2">

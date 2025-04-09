@@ -10,7 +10,7 @@
                 @csrf
 
                 <div class="mt-3">
-                    <label for="return_date">Tanggal Pengembalian</label>
+                    <label for="return_date">Tanggal Pengembalian<span class="text-danger">*</span></label>
                     <input type="date" class="form-control @error('return_date') is-invalid @enderror" name="return_date" id="return_date"  value="{{ old("return_date", Carbon\Carbon::today()->format('Y-m-d'))}}">
                     @error("return_date")
                     <p class="text-danger">Harap masukkan nama tanggal pengembalian.</p>
@@ -18,7 +18,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="project_id">Pilih Asal Proyek</label>
+                    <label for="project_id">Pilih Asal Proyek<span class="text-danger">*</span></label>
                     <select name="project_id" class="form-select @error('project_id') is-invalid @enderror" id="project_id">
                         <option disabled selected>Pilih proyek</option>
                         @forelse (Auth::user()->employee_data->projects ?? [] as $proj)
@@ -41,7 +41,7 @@
                 </div> --}}
 
                 <div class="mt-3">
-                    <label>Status</label>
+                    <label>Status<span class="text-danger">*</span></label>
 
                     <div class="d-flex gap-3">
                         <div class="d-flex gap-2 rounded-3 py-2">
@@ -56,7 +56,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="PIC">PIC</label>
+                    <label for="PIC">PIC<span class="text-danger">*</span></label>
                     <input type="text" class="form-control @error('PIC') is-invalid @enderror" name="PIC" id="PIC" placeholder="Nama PIC" value="{{ old('PIC', Auth::user()->name)}}">
                     @error("PIC")
                     <p class="text-danger">Harap masukkan nama PIC.</p>
@@ -64,8 +64,8 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="driver">Supir</label>
-                    <input type="text" class="form-control @error('driver') is-invalid @enderror" name="driver" id="driver" placeholder="Nama supir" value = "{{ old("driver")}}">
+                    <label for="driver">Supir<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control @error('driver') is-invalid @enderror" name="driver" id="driver" placeholder="Nama supir" value="{{ old("driver")}}">
                     @error("driver")
                     <p class="text-danger">Harap masukkan nama driver.</p>
                     @enderror

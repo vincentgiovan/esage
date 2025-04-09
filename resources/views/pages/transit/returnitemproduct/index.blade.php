@@ -90,7 +90,7 @@
                         $total += $purchase_product->product->price * (1 - ($purchase_product->product->discount / 100));
                     }
 
-                    echo "Rp " . number_format($total, 2, ',' , '.');
+                    echo  number_format($total, 0, ',', '.');
                 @endphp
             </div>
         </div> --}}

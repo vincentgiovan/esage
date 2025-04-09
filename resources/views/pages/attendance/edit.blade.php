@@ -8,7 +8,7 @@
                 @csrf
 
                 <div class="mt-3">
-                    <label for="attendance_date">Tanggal</label>
+                    <label for="attendance_date">Tanggal<span class="text-danger">*</span></label>
                     <input type="date" class="form-control @error('attendance_date') is-invalid @enderror" id="attendance_date" name="attendance_date" placeholder="attendance_date"
                         value="{{ old('attendance_date', $attendance->attendance_date) }}">
                     @error('attendance_date')
@@ -17,8 +17,8 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="employee_id">Pegawai</label>
-                    <select type="text" class="form-select text-black @error('employee_id') is-invalid @enderror" id="employee_id" name="employee_id">
+                    <label for="employee_id">Nama Karyawan<span class="text-danger">*</span></label>
+                    <select type="text" class="form-select text-black select2 @error('employee_id') is-invalid @enderror" id="employee_id" name="employee_id">
                         <option selected disabled>Select an employee</option>
                         @foreach ($employees as $e)
                             <option value="{{ $e->id }}" @if(old("employee_id", $attendance->employee_id) == $e->id) selected @endif>{{ $e->nama }}</option>
@@ -30,8 +30,8 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="project_id">Proyek</label>
-                    <select type="text" class="form-select text-black @error('project_id') is-invalid @enderror" id="project_id" name="project_id">
+                    <label for="project_id">Proyek<span class="text-danger">*</span></label>
+                    <select type="text" class="form-select text-black select2 @error('project_id') is-invalid @enderror" id="project_id" name="project_id">
                         <option selected disabled>Select a project</option>
                         @foreach ($projects as $p)
                             <option value="{{ $p->id }}" @if(old("project_id", $attendance->project_id) == $p->id) selected @endif>{{ $p->project_name }}</option>
@@ -41,7 +41,7 @@
                         <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
-
+{{--
                 <div class="d-flex w-100 gap-4 mt-3">
                     <div class="w-50">
                         <label for="jam_masuk">Jam Masuk</label>
@@ -59,11 +59,11 @@
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="d-flex w-100 gap-4 mt-3">
                     <div class="w-50">
-                        <label for="normal">Jam Normal</label>
+                        <label for="normal">Jam Normal<span class="text-danger">*</span></label>
                         <input type="text" class="form-control @error('normal') is-invalid @enderror" id="normal" name="normal" placeholder="Input normal"
                             value="{{ old('normal', $attendance->normal) }}">
                         @error('normal')
@@ -72,7 +72,7 @@
                     </div>
 
                     <div class="w-50">
-                        <label for="performa">Performa</label>
+                        <label for="performa">Performa<span class="text-danger">*</span></label>
                         <input type="text" class="form-control @error('performa') is-invalid @enderror" id="performa" name="performa" placeholder="Input performa"
                             value="{{ old('performa', $attendance->performa) }}">
                         @error('performa')
@@ -83,7 +83,7 @@
 
                 <div class="d-flex w-100 gap-4 mt-3">
                     <div class="w-50">
-                        <label for="jam_lembur">Jam Lembur</label>
+                        <label for="jam_lembur">Jam Lembur<span class="text-danger">*</span></label>
                         <input type="text" class="form-control @error('jam_lembur') is-invalid @enderror" id="jam_lembur" name="jam_lembur" placeholder="Input jam lembur"
                             value="{{ old('jam_lembur', $attendance->jam_lembur) }}">
                         @error('jam_lembur')
@@ -92,7 +92,7 @@
                     </div>
 
                     <div class="w-50">
-                        <label for="index_lembur_panjang">Index Lembur Panjang</label>
+                        <label for="index_lembur_panjang">Index Lembur Panjang<span class="text-danger">*</span></label>
                         <input type="text" class="form-control @error('index_lembur_panjang') is-invalid @enderror" id="index_lembur_panjang" name="index_lembur_panjang" placeholder="Input Index lembur panjang"
                             value="{{ old('index_lembur_panjang', $attendance->index_lembur_panjang) }}">
                         @error('index_lembur_panjang')

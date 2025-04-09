@@ -35,6 +35,8 @@
             <p class="text-success fw-bold">{{ session('successEditPartner') }}</p>
         @elseif (session()->has('successDeletePartner'))
             <p class="text-success fw-bold">{{ session('successDeletePartner') }}</p>
+        @elseif (session()->has('successImportExcel'))
+            <p class="text-success fw-bold">{{ session('successImportExcel') }}</p>
         @endif
 
         <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-2">

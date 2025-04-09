@@ -11,7 +11,7 @@
                     <label for="select-product-dropdown">Nama Produk</label>
                     <select name="product_name" class="form-select select2" >
                         @foreach ($products as $product)
-                            <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} - {{ $product->variant }} (Harga: Rp {{ number_format($product->price, 2, ',', '.') }}, Stok:  {{ $product->stock }}, Diskon: {{ $product->discount }}%) @if($product->is_returned == 'yes'){{__('- Returned')}}@endif [Tgl beli: {{ Carbon\Carbon::parse($product->ordering_date)->format('d/m/Y') }}]</option>
+                            <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} - {{ $product->variant }} (Harga: {{ number_format($product->price, 0, ',', '.') }}, Stok:  {{ $product->stock }}, Diskon: {{ $product->discount }}%) @if($product->is_returned == 'yes'){{__('- Returned')}}@endif [Tgl beli: {{ Carbon\Carbon::parse($product->ordering_date)->format('d/m/Y') }}]</option>
                         @endforeach
                     </select>
                     <p class="text-danger"></p>
@@ -19,7 +19,7 @@
 
                 <div class="mt-3">
                     <label for="quantity">Jumlah</label>
-                    <input type="number" class="form-control" name="quantity" id="quantity"  placeholder="Quantity" value = "{{ old("quantity")}}">
+                    <input type="number" class="form-control" name="quantity" id="quantity"  placeholder="Quantity" value="{{ old("quantity")}}">
                     <p class="text-danger" id="errQuantity"></p>
                 </div>
 

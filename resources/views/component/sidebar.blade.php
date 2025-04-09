@@ -56,9 +56,9 @@
             </li>
         @endif
 
-        @if(Gate::allows('user-role', ['master']))
+        @if(Gate::allows('user-role', ['master', 'accounting_admin']))
             <li class="nav-item">
-                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("employee*") && !Request::is("*employee*leaves*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("employee-index") }}" ><i class="bi bi-person-vcard me-2"></i> Data Pegawai</a>
+                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if ((Request::is("employee*") && !Request::is("*employee*leaves*")) || Request::is('prepays*')) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("employee-index") }}" ><i class="bi bi-person-vcard me-2"></i> Data Pegawai</a>
             </li>
         @endif
 
@@ -90,15 +90,15 @@
             </li>
         @endif
 
-        @if(Gate::allows('user-role', ['master']))
+        @if(Gate::allows('user-role', ['master', 'accounting_admin']))
             <li class="nav-item">
-                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("*employee*leaves*") && !Request::is("*employee*leaves*mine*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("leave-admin-index") }}" ><i class="bi bi-building-fill-x me-2"></i> Pengajuan Cuti Pegawai</a>
+                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("*leaves*") && !Request::is("*leaves*mine*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("leave-admin-index") }}" ><i class="bi bi-building-fill-x me-2"></i> Pengajuan Cuti Pegawai</a>
             </li>
         @endif
 
         @if(Gate::allows('user-role', ['master', 'accounting_admin']))
             <li class="nav-item">
-                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("*employee*leaves*mine*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("leave-user-index") }}" ><i class="bi bi-building-fill-x me-2"></i> Pengajuan Cuti Saya</a>
+                <a class="nav-link text-decoration-none px-4" style="color: white; font-weight: bold; @if (Request::is("*leaves*mine*")) background-color: green; @else rgb(69, 69, 69); @endif" href="{{ route("leave-user-index") }}" ><i class="bi bi-building-fill-x me-2"></i> Pengajuan Cuti Saya</a>
             </li>
         @endif
     </ul>

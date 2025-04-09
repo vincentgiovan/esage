@@ -22,8 +22,6 @@ return new class extends Migration
             $table->longText("address");
             $table->string("RAB");
 
-
-
             $table->timestamps();
         });
     }

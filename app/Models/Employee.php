@@ -15,10 +15,6 @@ class Employee extends Model
         return $this->hasMany(Attendance::class);
     }
 
-    public function salaries(){
-        return $this->hasMany(Salary::class);
-    }
-
     public function projects(){
         return $this->belongsToMany(Project::class, "employee_projects");
     }
@@ -35,6 +31,12 @@ class Employee extends Model
         $query->when($filters["status"]?? false, function($query, $status) {
             return $query->where(function($query) use($status) {
                 $query->where("status", $status);
+            });
+        });
+
+        $query->when($filters["search"]?? false, function($query, $search) {
+            return $query->where(function($query) use($search) {
+                $query->where("nama", 'like', '%' . $search . '%');
             });
         });
     }

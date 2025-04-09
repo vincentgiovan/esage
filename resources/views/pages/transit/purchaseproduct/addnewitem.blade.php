@@ -10,13 +10,13 @@
                 <div>
                     <div class="mt-3">
                         <label for="product_name">Nama Produk</label>
-                        <input type="text" class="form-control" name="product_name" id="product_name" placeholder="Nama Barang" value = "{{ old("product_name" ) }}">
+                        <input type="text" class="form-control" name="product_name" id="product_name" placeholder="Nama Barang" value="{{ old("product_name" ) }}">
                         <p class="text-danger" id="errProductName"></p>
                     </div>
 
                     <div class="mt-3">
                         <div class="unit">Satuan</div>
-                        <input type="text" class="form-control" name="unit" id="unit" placeholder="Unit"  value = "{{ old("unit") }}">
+                        <input type="text" class="form-control" name="unit" id="unit" placeholder="Unit"  value="{{ old("unit") }}">
                         <p class="text-danger" id="errUnit"></p>
                     </div>
 

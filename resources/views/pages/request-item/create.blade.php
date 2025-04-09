@@ -12,13 +12,13 @@
                     <h5>Proyek Target</h5>
                     <hr>
                     <div class="mt-3">
-                        <label for="request_date">Tanggal Request</label>
-                        <input type="date" id="request_date" class="form-control" placeholder="Input request_date"/>
+                        <label for="request_date">Tanggal Request<span class="text-danger">*</span></label>
+                        <input type="date" id="request_date" class="form-control" placeholder="Input request_date" value="{{ Carbon\Carbon::today()->format('Y-m-d') }}"/>
                         <p class="text-danger" id="err-request-date"></p>
                     </div>
 
                     <div class="mt-3">
-                        <label for="select-project-dropdown">Nama Proyek</label>
+                        <label for="select-project-dropdown">Nama Proyek<span class="text-danger">*</span></label>
                         <select name="project_id" class="form-select @error('project_id') is-invalid @enderror" id="select-project-dropdown">
                             <option disabled selected>Pilih proyek</option>
                             @forelse (Auth::user()->employee_data->projects ?? [] as $proj)
@@ -31,8 +31,8 @@
                     </div>
 
                     <div class="mt-3">
-                        <label for="PIC">PIC</label>
-                        <input type="text" id="PIC" class="form-control" placeholder="Input PIC"/>
+                        <label for="PIC">PIC<span class="text-danger">*</span></label>
+                        <input type="text" id="PIC" class="form-control" placeholder="Input PIC" value="{{ Auth::user()->name }}"/>
                         <p class="text-danger" id="err-pic"></p>
                     </div>
 
@@ -44,13 +44,13 @@
                 </div>
 
                 <div class="p-3 border border-2 rounded-4 mt-4" >
-                    <h5>Daftar Barang</h5>
+                    <h5>Daftar Barang<span class="text-danger">*</span></h5>
                     <hr>
                     <div class="mt-3">
                         <label for="select-product-dropdown">Nama Barang</label>
                         <select name="product_name" class="form-select select2" id="select-product-dropdown">
                             @foreach ($products as $product)
-                                <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} - {{ $product->variant }} (Harga: Rp {{ number_format($product->price, 2, ',', '.') }}, Stok:  {{ $product->stock }}, Diskon: {{ $product->discount }}%) @if($product->is_returned == 'yes'){{__('- Returned')}}@endif</option>
+                                <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} - {{ $product->variant }} (Harga: {{ number_format($product->price, 0, ',', '.') }}, Stok:  {{ $product->stock }})</option>
                             @endforeach
                         </select>
                         <p class="text-danger" id="err-product-name"></p>
@@ -58,7 +58,7 @@
 
                     <div class="mt-3">
                         <label for="quantity">Jumlah</label>
-                        <input type="number" class="form-control" name="quantity" id="quantity"  placeholder="Quantity" value = "{{ old("quantity")}}">
+                        <input type="number" class="form-control" name="quantity" id="quantity"  placeholder="Quantity" value="{{ old("quantity")}}">
                         <p class="text-danger" id="errQuantity"></p>
                     </div>
 

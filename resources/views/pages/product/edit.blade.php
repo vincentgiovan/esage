@@ -16,7 +16,7 @@
 
                 <div class="d-flex gap-3">
                     <div class="mt-3 w-50">
-                        <label for="product_name">Nama Barang</label>
+                        <label for="product_name">Nama Barang<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" name="product_name" id="product_name" placeholder="Nama Barang"
                             value="{{ old('product_name', $product->product_name) }}"
                             @if(in_array(Auth::user()->role->role_name, ['purchasing_admin', 'gudang'])) disabled @endif/>
@@ -27,7 +27,7 @@
                     </div>
 
                     <div class="mt-3 w-50">
-                        <label for="variant">Varian</label>
+                        <label for="variant">Varian<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" name="variant" id="variant" placeholder="Variant"
                             value="{{ old('variant', $product->variant) }}"
                             @if(in_array(Auth::user()->role->role_name, ['purchasing_admin', 'gudang'])) disabled @endif/>
@@ -40,12 +40,12 @@
 
                 <div class="d-flex gap-3">
                     <div class="mt-3 w-50">
-                        <label for="fake_product_code">SKU</label>
+                        <label for="fake_product_code">SKU<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" name="fake_product_code" id="fake_product_code" value="{{ old('product_code', $product->product_code) }}" placeholder="(Dibuat otomatis oleh sistem)" disabled>
                     </div>
 
                     <div class="mt-3 w-50">
-                        <label for="stock">Stok</label>
+                        <label for="stock">Stok<span class="text-danger">*</span></label>
                         <input type="number" class="form-control" name="stock" id="stock" placeholder="Stok"
                             value="{{ old('stock', $product->stock) }}"
                             @if(in_array(Auth::user()->role->role_name, ['purchasing_admin'])) disabled @endif/>
@@ -57,7 +57,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <label>Status</label>
+                    <label>Status<span class="text-danger">*</span></label>
 
                     <div class="d-flex gap-3">
                         <div class="d-flex gap-2 rounded-3 py-2">
@@ -73,7 +73,7 @@
 
                 <div class="d-flex gap-3">
                     <div class="mt-3 w-50">
-                        <label for="unit">Satuan</label>
+                        <label for="unit">Satuan<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" name="unit" id="unit" placeholder="Unit"
                             value="{{ old('unit', $product->unit) }}"
                             @if(in_array(Auth::user()->role->role_name, ['purchasing_admin', 'gudang'])) disabled @endif/>
@@ -84,7 +84,7 @@
                     </div>
 
                     <div class="mt-3 w-50">
-                        <label for="price">Harga</label>
+                        <label for="price">Harga<span class="text-danger">*</span></label>
                         <input type="number" class="form-control" name="price" id="price" placeholder="Harga"
                             value="{{ old('price', $product->price) }}"
                             @if(in_array(Auth::user()->role->role_name, ['purchasing_admin', 'gudang'])) disabled @endif/>
@@ -97,7 +97,7 @@
 
                 <div class="d-flex gap-3">
                     <div class="mt-3 w-50">
-                        <label for="markup">Markup</label>
+                        <label for="markup">Markup<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" name="markup" id="markup" placeholder="Markup"
                             value="{{ old('markup', $product->markup) }}"
                             @if(in_array(Auth::user()->role->role_name, ['gudang'])) disabled @endif/>
@@ -108,7 +108,7 @@
                     </div>
 
                     <div class="mt-3 w-50">
-                        <label for="discount">Diskon</label>
+                        <label for="discount">Diskon<span class="text-danger">*</span></label>
                         <input type="text" class="form-control @error('discount') is-invalid @enderror" name="discount" id="discount" placeholder="Diskon"
                             value="{{ old('discount', $product->discount) }}">
                         @error('discount')
@@ -118,7 +118,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <label>Jenis Barang</label>
+                    <label>Jenis Barang<span class="text-danger">*</span></label>
 
                     <div class="d-flex gap-3">
                         <div class="d-flex gap-2 rounded-3 py-2">

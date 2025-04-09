@@ -110,7 +110,7 @@
                                     $total += $product->price * (1 - ($product->discount / 100));
                                 }
 
-                                echo "Rp " . number_format($total, 2, ',' , '.');
+                                echo  number_format($total, 0, ',', '.');
                             @endphp
                         </td>
                         <td class="border border-1 border-secondary" class="fw-semibold @if($p->purchase_status == 'Ordered') text-primary @else text-success @endif">

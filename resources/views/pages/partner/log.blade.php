@@ -71,7 +71,7 @@
                             <td class="border border-1 border-secondary ">{{ $prd->product_code }}</td>
                             <td class="border border-1 border-secondary ">{{ $prd->product_name }}</td>
                             <td class="border border-1 border-secondary ">{{ $prd->variant }}</td>
-                            <td class="border border-1 border-secondary ">Rp {{ number_format($subtotal, 2, ',', '.') }}<br><i style="font-weight: 600;">(Price: {{ $prd->price }}, disc: {{ $prd->discount }}%, qty: {{ $pp->quantity }})</i></td>
+                            <td class="border border-1 border-secondary ">{{ number_format($subtotal, 0, ',', '.') }}<br><i style="font-weight: 600;">(Price: {{ $prd->price }}, disc: {{ $prd->discount }}%, qty: {{ $pp->quantity }})</i></td>
                             <td class="border border-1 border-secondary ">{{ $pp->quantity }}</td>
                         </tr>
                     @endforeach
@@ -84,7 +84,7 @@
 
         <div class="d-flex w-100 justify-content-end mt-4 gap-2 fs-4 fw-bold">
             <div class="">Total: </div>
-            <div class="">Rp {{ number_format($total, 2, ',', '.') }}</div>
+            <div class="">{{ number_format($total, 0, ',', '.') }}</div>
         </div>
 
     </x-container>

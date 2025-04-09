@@ -12,7 +12,7 @@
                     <label for="product_id">Nama Barang</label>
                     <select name="product_id" class="form-select select2" disabled>
                         @foreach ($products as $product)
-                            <option value="{{ $product->id }}" @if ($product->product_name == old("product_id")) selected @endif>{{ $product->product_name }} - {{ $product->variant }} (Harga: Rp {{ number_format($product->price, 2, ',', '.') }}, Stok:  {{ $product->stock }}, Diskon: {{ $product->discount }}%) @if($product->is_returned == 'yes'){{__('- Returned')}}@endif</option>
+                            <option value="{{ $product->id }}" @if ($product->product_name == old("product_id")) selected @endif>{{ $product->product_name }} - {{ $product->variant }} (Harga: {{ number_format($product->price, 0, ',', '.') }}, Stok:  {{ $product->stock }}, Diskon: {{ $product->discount }}%) @if($product->is_returned == 'yes'){{__('- Returned')}}@endif</option>
                         @endforeach
                     </select>
                     @error('product_id')
@@ -31,7 +31,7 @@
                 <div class="mt-3">
                     <label for="qty">Jumlah</label>
                     <input type="text" class="form-control" name="qty" id="qty" placeholder="Jumlah"
-                        value = "{{ old('qty', $refurbish_item->qty) }}">
+                        value="{{ old('qty', $refurbish_item->qty) }}">
                     @error('qty')
                         <p class="text-danger">Harap masukkan nilai minimal 0.</p>
                     @enderror

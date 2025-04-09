@@ -13,13 +13,13 @@
                 <div>
                     <div class="d-flex gap-3">
                         <div class="mt-3 w-50">
-                            <label for="delivery_date">Tanggal Pengiriman</label>
+                            <label for="delivery_date">Tanggal Pengiriman<span class="text-danger">*</span></label>
                             <input type="date" class="form-control @error("delivery_date") is-invalid @enderror" id="delivery_date" name="delivery_date" placeholder="delivery_date"  value="{{ Carbon\Carbon::today()->format('Y-m-d') }}">
                             <p class="invalid-feedback">Harap masukkan tanggal pengiriman</p>
                         </div>
 
                         <div class="mt-3 w-50">
-                            <label for="project_id">Proyek</label>
+                            <label for="project_id">Proyek<span class="text-danger">*</span></label>
                             <select name="project_id" class="form-select select2" id="project_id">
                                 @foreach ($projects as $pn)
                                     <option value="{{ $pn->id}}">{{ $pn->project_name }}</option>
@@ -30,7 +30,7 @@
 
                     <div class="d-flex gap-3">
                         <div class="mt-3 w-50">
-                            <label for="_register">SKU</label>
+                            <label for="_register">SKU<span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="_register" name="_register" placeholder="(Dibuat otomatis oleh sistem)"  value="{{ __('DO/' . Carbon\Carbon::today()->format('dmY') . '/' . $delivery_orders->where('delivery_date', Carbon\Carbon::today()->format('Y-m-d'))->count() + 1) }}" disabled>
                             <input type="hidden" name="register" id="register" value="{{ __('DO/' . Carbon\Carbon::today()->format('dmY') . '/' . $delivery_orders->where('delivery_date', Carbon\Carbon::today()->format('Y-m-d'))->count() + 1) }}">
                         </div>
@@ -38,7 +38,7 @@
                     </div>
 
                     <div class="mt-3">
-                        <label>Status Pengiriman</label>
+                        <label>Status Pengiriman<span class="text-danger">*</span></label>
 
                         <div class="d-flex gap-3">
                             <div class="d-flex gap-2 rounded-3 py-2">
@@ -61,7 +61,7 @@
 
             {{-- Cart pengiriman --}}
             <div class="container bg-white rounded-4 p-4 border border-1 card mt-4">
-                <h4>Daftar Barang</h4>
+                <h4>Daftar Barang<span class="text-danger">*</span></h4>
 
                 <div class="overflow-x-auto">
                     <table class="w-100 mt-4">
@@ -76,7 +76,7 @@
                                     <select name="products[]" class="form-select select2">
                                     @foreach ($products as $product)
                                         <option value="{{ $product->id }}">
-                                            {{ $product->product_name }} - {{ $product->variant }} (Harga: Rp {{ number_format($product->price, 2, ',', '.') }}, Stok:  {{ $product->stock }}, Diskon: {{ $product->discount }}%) [Tgl beli: {{ Carbon\Carbon::parse($product->ordering_date)->format('d/m/Y') }}]
+                                            {{ $product->product_name }} - {{ $product->variant }} (Harga: {{ number_format($product->price, 0, ',', '.') }}, Stok:  {{ $product->stock }}, Diskon: {{ $product->discount }}%) [Tgl beli: {{ Carbon\Carbon::parse($product->ordering_date)->format('d/m/Y') }}]
                                         </option>
                                     @endforeach
                                     </select>
@@ -150,7 +150,7 @@
             $('#add-row-btn').on('click', function(){
                 const newProdSel = $('<select>').attr('name', 'products[]').addClass('form-select select2');
                 allproducts.forEach(prod => {
-                    newProdSel.append($('<option>').attr('value', prod.id).text(`${prod.product_name} - ${prod.variant} (Harga: Rp ${formatCurrency(prod.price)}, Stok: ${[prod.stock]}, Diskon: ${prod.discount}%) [Tgl beli: ${formatDate(prod.ordering_date)}]`));
+                    newProdSel.append($('<option>').attr('value', prod.id).text(`${prod.product_name} - ${prod.variant} (Harga: ${formatCurrency(prod.price)}, Stok: ${[prod.stock]}, Diskon: ${prod.discount}%) [Tgl beli: ${formatDate(prod.ordering_date)}]`));
                 });
 
                 $('#isibody').append(

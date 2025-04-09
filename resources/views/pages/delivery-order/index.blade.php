@@ -89,38 +89,36 @@
                     @endif
                 </tr>
 
-                @foreach ($deliveryorders as $p)
+                @foreach ($deliveryorders as $do)
                     <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
                         <td class="border border-1 border-secondary">{{ ($loop->index + 1) + ((request('page') ?? 1) - 1) * 30 }}</td>
-                        <td class="border border-1 border-secondary">{{ Carbon\Carbon::parse($p->delivery_date)->translatedFormat("d M Y") }}</td>
-                        <td class="border border-1 border-secondary">{{ $p->project->project_name }}</td>
+                        <td class="border border-1 border-secondary">{{ Carbon\Carbon::parse($do->delivery_date)->translatedFormat("d M Y") }}</td>
+                        <td class="border border-1 border-secondary">{{ $do->project->project_name }}</td>
                         <td class="border border-1 border-secondary">
                             <div class="d-flex gap-5 w-100 justify-content-between align-items-center">
-                                {{ $p->register }}
-                                <a href="{{ route('deliveryorderproduct-viewitem', $p->id) }}" class="btn btn-success text-white"
+                                {{ $do->register }}
+                                <a href="{{ route('deliveryorderproduct-viewitem', $do->id) }}" class="btn btn-success text-white"
                                     style="font-size: 10pt"><i class="bi bi-cart"></i>Lihat Barang</a>
                             </div>
                         </td>
 
                         <td class="border border-1 border-secondary">
-                            <div class="w-100 d-flex justify-content-center">
-                                @if($p->delivery_status == "Complete")
-                                    <i class="bi bi-check-circle-fill fs-4" style="color: green"></i>
-                                @else
-                                    <i class="bi bi-x-circle-fill fs-4" style="color: red"></i>
-                                @endif
-                            </div>
+                            @if($do->delivery_status == 'Complete')
+                                Selesai
+                            @else
+                                Belum Selesai
+                            @endif
                         </td>
-                        <td class="border border-1 border-secondary">{{ $p->note }}</td>
-                        {{-- <td class="border border-1 border-secondary" >{{ $p->user->name }}</td> --}}
+                        <td class="border border-1 border-secondary">{{ $do->note }}</td>
+                        {{-- <td class="border border-1 border-secondary" >{{ $do->user->name }}</td> --}}
                         @if(!in_array(Auth::user()->role->role_name, ['subgudang', 'project_manager']))
                             <td class="border border-1 border-secondary" >
                                 <div class="d-flex gap-2 w-100">
-                                    <a href="{{ route('deliveryorder-edit', $p->id) }}" class="btn text-white"
+                                    <a href="{{ route('deliveryorder-edit', $do->id) }}" class="btn text-white"
                                         style="font-size: 10pt; background-color: rgb(197, 167, 0);">
                                         <i class="bi bi-pencil"></i>
                                     </a>
-                                    <form action="{{ route('deliveryorder-destroy', $p->id) }}" method="POST">
+                                    <form action="{{ route('deliveryorder-destroy', $do->id) }}" method="POST">
                                         @csrf
                                         <button class="btn btn-danger text-white" style="font-size: 10pt "
                                             onclick="return confirm('Do you want to delete this item?')">

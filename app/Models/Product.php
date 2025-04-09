@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Product extends Model
 {
@@ -12,6 +13,14 @@ class Product extends Model
 
     public function purchases(){
         return $this->belongsToMany(Purchase::class, "purchase_products");
+    }
+
+    public function latest_purchase_product(): HasOne
+    {
+        return $this->hasOne(PurchaseProduct::class)
+            ->join('purchases', 'purchase_products.purchase_id', '=', 'purchases.id')
+            ->orderByDesc('purchases.purchase_date')
+            ->select('purchase_products.*'); // important to avoid getting only joined fields
     }
 
     public function delivery_orders(){

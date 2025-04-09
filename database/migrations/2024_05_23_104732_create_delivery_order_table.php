@@ -13,19 +13,20 @@ return new class extends Migration
      */
     public function up()
     {
-            Schema::create('delivery_orders', function (Blueprint $table) {
-                $table->id();
-                $table->timestamps();
-                $table->date("delivery_date");
-                $table->string("delivery_status");
-                $table->unsignedBigInteger("project_id");
-                $table->string("register");
-                $table->longText("note")->nullable();
-                $table->foreign("project_id")->references("id")->on("projects")->onDelete('cascade');
+        Schema::create('delivery_orders', function (Blueprint $table) {
+            $table->id();
 
+            $table->unsignedBigInteger("project_id");
+            $table->foreign("project_id")->references("id")->on("projects")->onDelete('cascade');
 
-            });
+            $table->date("delivery_date");
+            $table->string("delivery_status");
 
+            $table->string("register");
+            $table->longText("note")->nullable();
+
+            $table->timestamps();
+        });
     }
 
     /**

@@ -48,7 +48,7 @@
                     <td class="border border-1 border-secondary">{{ $p->product_name }}</td>
                     <td class="border border-1 border-secondary">{{ $p->product_code }}</td>
                     <td class="border border-1 border-secondary">{{ $p->stock }}</td>
-                    <td class="border border-1 border-secondary">Rp {{ number_format($p->price, 2, ',', '.') }}</td>
+                    <td class="border border-1 border-secondary">{{ number_format($p->price, 0, ',', '.') }}</td>
                     <td class="border border-1 border-secondary">{{ $p->unit }}</td>
                     <td class="border border-1 border-secondary">{{ $p->variant }}</td>
                     <td class="border border-1 border-secondary">{{ $p->markup }}</td>

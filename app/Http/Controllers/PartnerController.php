@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\User;
 use App\Models\Partner;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\DeliveryOrder;
+use App\Imports\PartnersImport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 
 class PartnerController extends Controller{
@@ -100,20 +103,26 @@ class PartnerController extends Controller{
     {
         // Validate the uploaded file
         $request->validate([
-            'csv_file' => 'required|file|mimes:csv,txt',
+            'file_to_upload' => 'required|file|mimes:xlsx,xls,csv',
         ]);
 
-        // Store the file
-        $file = $request->file('csv_file');
-        $path = $file->store('csv_files');
+        $temp_path = $request->file('file_to_upload')->store('temp');
 
-        // Process the CSV file
-        $this->processpartnerDataCsv(storage_path('app/' . $path));
+        try {
+			Excel::import(new PartnersImport, $temp_path);
 
-        // Delete the stored file after processing
-        Storage::delete($path);
+            Storage::delete($temp_path);
 
-        return redirect(route("partner-index"))->with('success', 'Berhasil membaca file CSV dan menambahkan partner.');
+			return redirect(route("partner-index"))->with('successImportExcel', 'Berhasil membaca file Excel dan menambahkan data pegawai.');
+		}
+
+		catch (Exception $e){
+            Storage::delete($temp_path);
+
+            throw $e;
+
+			// return back()->with('failedImportExcel', "Gagal membaca dan menambahkan produk dari file Excel, harap perhatikan format yang telah ditentukan dan silakan coba kembali.");
+		}
     }
 
     private function processpartnerDataCsv($filePath)

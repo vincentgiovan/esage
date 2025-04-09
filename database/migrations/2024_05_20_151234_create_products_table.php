@@ -31,8 +31,6 @@ return new class extends Migration
             $table->unsignedFloat("discount")->default(0);
             $table->unsignedFloat("markup")->default(0);
 
-            $table->string("is_returned")->default('no');
-
             $table->timestamps();
 
 

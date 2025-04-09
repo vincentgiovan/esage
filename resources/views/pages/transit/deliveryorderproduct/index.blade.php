@@ -103,11 +103,11 @@
                         <td class="border border-1 border-secondary">{{ $prod->product_name }} @if($prod->is_returned == 'yes'){{ __('- Returned') }}@endif</td>
                         <td class="border border-1 border-secondary">{{ $prod->variant }}</td>
                         <td class="border border-1 border-secondary">{{ $prod->product_code }}</td>
-                        <td class="border border-1 border-secondary">Rp {{ number_format($prod->price, 2, ',', '.') }}</td>
+                        <td class="border border-1 border-secondary">{{ number_format($prod->price, 0, ',', '.') }}</td>
                         <td class="border border-1 border-secondary">{{ $prod->discount }}%</td>
-                        <td class="border border-1 border-secondary">Rp {{ number_format($disc_price, 2, ',', '.') }}</td>
+                        <td class="border border-1 border-secondary">{{ number_format($disc_price, 0, ',', '.') }}</td>
                         <td class="border border-1 border-secondary">{{ $deliveryorder_product->quantity }}</td>
-                        <td class="border border-1 border-secondary">Rp{{ number_format($subtotal, 2, ',', '.') }}</td>
+                        <td class="border border-1 border-secondary">{{ number_format($subtotal, 0, ',', '.') }}</td>
                         {{-- @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
                             <td class="border border-1 border-secondary">
                                 <div class="d-flex gap-5 w-100">
@@ -130,7 +130,7 @@
                     Total:
                 </div>
                 <div>
-                    Rp {{ number_format($total, 2, ',', '.') }}
+                    {{ number_format($total, 0, ',', '.') }}
                 </div>
             </div>
         </div>

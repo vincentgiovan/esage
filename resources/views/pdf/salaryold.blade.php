@@ -86,7 +86,7 @@
                     <td class="border border-1 border-secondary">{{ $s->start_period ? Carbon\Carbon::parse($s->start_period)->translatedFormat("d/m/Y") : "N/A" }} - {{ $s->end_period ? Carbon\Carbon::parse($s->end_period)->translatedFormat("d/m/Y") : "N/A" }}</td>
                     <td class="border border-1 border-secondary">{{ $s->employee->nama }}</td>
                     <td class="border border-1 border-secondary">{{ $s->employee->jabatan }}</td>
-                    <td class="border border-1 border-secondary" style="background-color: yellow;">{{ number_format($total_all_project, 2, ',', '.') }}</td>
+                    <td class="border border-1 border-secondary" style="background-color: yellow;">{{ number_format($total_all_project, 0, ',', '.') }}</td>
                     <td class="border border-1 border-secondary"></td>
                 </tr>
 
@@ -94,25 +94,25 @@
                     @if($grp['vals']['normal'] != 0)
                         <tr>
                             <td class="border border-1 border-secondary" colspan="5">Normal: {{ $grp['vals']['normal'] }} jam ({{ $project_name }})</td>
-                            <td class="border border-1 border-secondary">{{ number_format($grp['tots']['normal'], 2, ',', '.') }}</td>
+                            <td class="border border-1 border-secondary">{{ number_format($grp['tots']['normal'], 0, ',', '.') }}</td>
                         </tr>
                     @endif
                     @if($grp['vals']['lembur'] > 0)
                         <tr>
                             <td class="border border-1 border-secondary" colspan="5">Lembur: {{ $grp['vals']['lembur'] }} jam ({{ $project_name }})</td>
-                            <td class="border border-1 border-secondary">{{ number_format($grp['tots']['lembur'], 2, ',', '.') }}</td>
+                            <td class="border border-1 border-secondary">{{ number_format($grp['tots']['lembur'], 0, ',', '.') }}</td>
                         </tr>
                     @endif
                     @if($grp['vals']['lembur_panjang'] > 0)
                         <tr>
                             <td class="border border-1 border-secondary" colspan="5">Lembur Panjang: {{ $grp['vals']['lembur_panjang'] }} hari ({{ $project_name }})</td>
-                            <td class="border border-1 border-secondary">{{ number_format($grp['tots']['lembur_panjang'], 2, ',', '.') }}</td>
+                            <td class="border border-1 border-secondary">{{ number_format($grp['tots']['lembur_panjang'], 0, ',', '.') }}</td>
                         </tr>
                     @endif
                     @if($grp['vals']['performa'] > 0)
                         <tr>
                             <td class="border border-1 border-secondary" colspan="5">Performa ({{ $project_name }})</td>
-                            <td class="border border-1 border-secondary">{{ number_format($grp['vals']['performa'], 2, ',', '.') }}</td>
+                            <td class="border border-1 border-secondary">{{ number_format($grp['vals']['performa'], 0, ',', '.') }}</td>
                         </tr>
                     @endif
                 @endforeach
@@ -120,7 +120,7 @@
                 @foreach($kasubon as $ppay)
                     <tr>
                         <td class="border border-1 border-secondary" colspan="5">Potongan kasbon @if($ppay->remark)({{ $ppay->remark }})@endif</td>
-                        <td class="border border-1 border-secondary">-{{ number_format($ppay->amount, 2, ',', '.') }}</td>
+                        <td class="border border-1 border-secondary">-{{ number_format($ppay->amount, 0, ',', '.') }}</td>
                     </tr>
                 @endforeach
             @endforeach

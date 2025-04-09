@@ -2,14 +2,14 @@
 
 @section('content')
     <x-container-middle>
-        <div class="container bg-white rounded-4 py-4 px-5 border border-1 card mt-4 mt-4">
+        <div class="container bg-white rounded-4 py-4 px-5 border border-1 card mt-4">
             <h3>Tambah Proyek Baru</h3>
             <form method="POST" action="{{ route('project-store') }}">
 
                 @csrf
 
                 <div class="mt-3">
-                    <label for="project_name">Nama proyek</label>
+                    <label for="project_name">Nama proyek<span class="text-danger">*</span></label>
                     <input type="text" class="form-control @error('project_name') is-invalid @enderror" id="project_name" name="project_name" placeholder="Nama proyek"
                         value="{{ old('project_name') }}">
                     @error('project_name')
@@ -18,7 +18,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="location">Lokasi</label>
+                    <label for="location">Lokasi<span class="text-danger">*</span></label>
                     <input type="text" class="form-control @error('location') is-invalid @enderror" id="location" name="location" placeholder="Lokasi"
                         value="{{ old('location') }}">
                     @error('location')
@@ -27,7 +27,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="PIC">PIC</label>
+                    <label for="PIC">PIC<span class="text-danger">*</span></label>
                     <input type="text" class="form-control @error('PIC') is-invalid @enderror" id="PIC" name="PIC" placeholder="PIC"
                         value="{{ old('PIC') }}">
                     @error('PIC')
@@ -36,7 +36,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="address">Alamat</label>
+                    <label for="address">Alamat<span class="text-danger">*</span></label>
                     <input type="text" class="form-control @error('address') is-invalid @enderror" id="address" name="address" placeholder="Alamat proyek"
                         value="{{ old('address') }}">
                     @error('address')
@@ -45,7 +45,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <label for="RAB">Nomor RAB</label>
+                    <label for="RAB">Nomor RAB<span class="text-danger">*</span></label>
                     <input type="text" class="form-control @error('RAB') is-invalid @enderror" id="RAB" name="RAB" placeholder="Nomor RAB"
                         value="{{ old('RAB') }}">
                     @error('RAB')

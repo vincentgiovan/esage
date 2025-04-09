@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\User;
 use App\Models\Salary;
 use App\Models\Employee;
 use App\Models\Position;
 use App\Models\Speciality;
 use Illuminate\Http\Request;
+use App\Imports\EmployeesImport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 
 class EmployeeController extends Controller
 {
     public function index(){
         return view("pages.employee.index", [
-            "employees" => Employee::filter(request(['status']))->orderByRaw('CASE WHEN status = "active" THEN 0 ELSE 1 END')->paginate(30)
+            "employees" => Employee::filter(request(['status', 'search']))->orderByRaw('CASE WHEN status = "active" THEN 0 ELSE 1 END')->paginate(30)
         ]);
     }
 
@@ -34,16 +37,15 @@ class EmployeeController extends Controller
     public function store(Request $request){
         $validated_data = $request->validate([
             "nama" => "required|min:3",
-            "NIK" => "required|min:16",
+            "NIK" => "unique:employees|required|min:16",
             "image" => "required|file|image|max:4096",
             "kalkulasi_gaji" => "required",
             "jabatan" => "required",
             "pokok" => "required|numeric|min:0",
             "lembur" => "required|numeric|min:0",
             "lembur_panjang" => "required|numeric|min:0",
-            // "kasbon" => "nullable|numeric|min:0",
             // "payroll" => "required",
-            "masuk" => "nullable|date",
+            "masuk" => "required|date",
             "keluar" => "nullable|date",
             "keterangan" => "nullable",
         ]);
@@ -79,16 +81,16 @@ class EmployeeController extends Controller
     public function update(Request $request, $id){
         $validated_data = $request->validate([
             "nama" => "required|min:3",
-            "NIK" => "required|min:16",
+            "NIK" => "unique:employees|required|min:16",
             "image" => "nullable|file|image|max:4096",
             "kalkulasi_gaji" => "required",
             "jabatan" => "required",
             "pokok" => "required|numeric|min:0",
             "lembur" => "required|numeric|min:0",
             "lembur_panjang" => "required|numeric|min:0",
-            // "kasbon" => "nullable|numeric|min:0",
+            "kasbon" => "nullable|numeric|min:0",
             // "payroll" => "required",
-            "masuk" => "nullable|date",
+            "masuk" => "required|date",
             "keluar" => "nullable|date",
             "keterangan" => "nullable",
             "status" => "required"
@@ -166,6 +168,35 @@ class EmployeeController extends Controller
         Speciality::find($id)->delete();
 
         return back()->with("successDeletePosition", "Berhasil menghapus pilihan keahlian.");
+    }
+
+    public function import_employee_form(){
+        return view("pages.employee.import-data");
+    }
+
+    public function import_employee_store(Request $request){
+        // Validate the uploaded file
+        $request->validate([
+            'file_to_upload' => 'required|file|mimes:xlsx,xls,csv',
+        ]);
+
+        $temp_path = $request->file('file_to_upload')->store('temp');
+
+        try {
+			Excel::import(new EmployeesImport, $temp_path);
+
+            Storage::delete($temp_path);
+
+			return redirect(route("employee-index"))->with('successImportExcel', 'Berhasil membaca file Excel dan menambahkan data pegawai.');
+		}
+
+		catch (Exception $e){
+            Storage::delete($temp_path);
+
+            throw $e;
+
+			// return back()->with('failedImportExcel', "Gagal membaca dan menambahkan produk dari file Excel, harap perhatikan format yang telah ditentukan dan silakan coba kembali.");
+		}
     }
 
 }

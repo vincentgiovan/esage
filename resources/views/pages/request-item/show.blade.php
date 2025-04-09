@@ -17,7 +17,7 @@
 
         <div class="d-flex align-items-center justify-content-between">
             <button class="btn btn-primary" onclick="history.back();"><i class="bi bi-arrow-left"></i> Return</button>
-            @if(in_array(Auth::user()->role->role_name, ['master', 'accounting_admin']))
+            @if(in_array(Auth::user()->role->role_name, ['master', 'accounting_admin']) && $request_item->status == 'awaiting')
                 <form action="{{ route('requestitem-update-status', $request_item->id) }}" method="post" class="d-flex align-items-center gap-2">
                     @csrf
                     <input type="submit" class="btn btn-success" name="status" value="Setujui">
@@ -46,7 +46,7 @@
                         <td class="border border-1 border-secondary ">{{ $r->product->product_code }}</td>
                         <td class="border border-1 border-secondary ">{{ $r->product->product_name }}</td>
                         <td class="border border-1 border-secondary ">{{ $r->product->variant }}</td>
-                        <td class="border border-1 border-secondary ">Rp {{ number_format($r->product->price, 2, ',', '.') }}</td>
+                        <td class="border border-1 border-secondary ">{{ number_format($r->product->price, 0, ',', '.') }}</td>
                         <td class="border border-1 border-secondary ">{{ $r->product->discount }}%</td>
                         <td class="border border-1 border-secondary ">{{ $r->product->markup }}</td>
                         <td class="border border-1 border-secondary ">{{ $r->quantity }}</td>

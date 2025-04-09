@@ -15,7 +15,7 @@
                         <div class="bg-white rounded-lg position-absolute z-2 border border-1" id="dd-menu" style="display: none; top: 40px;">
                             <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export-pdf", 2) }}" target="blank">Export (PDF Portrait)</a></li>
                             <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export-pdf", 1) }}" target="blank">Export (PDF Landscape)</a></li>
-                            <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export-excel", 1) }}" target="blank">Export Excel</a></li>
+                            <a class="dropdown-item border border-1 py-2 px-3" href="{{ route("product-export-excel", 1) }}" target="blank">Export (Excel)</a></li>
                         </div>
                     </div>
                 </div>
@@ -85,14 +85,7 @@
                     <th class="border border-1 border-secondary">Total Stok</th>
                     <th class="border border-1 border-secondary">Satuan</th>
                     <th class="border border-1 border-secondary">Status</th>
-                    @if(in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
-                        <th class="border border-1 border-secondary">Harga Terakhir</th>
-                    @endif
-                    @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
-                        <th class="border border-1 border-secondary">Harga Dasar</th>
-                        <th class="border border-1 border-secondary">Markup</th>
-                        <th class="border border-1 border-secondary" class="text-center">Kondisi</th>
-                    @endif
+                    <th class="border border-1 border-secondary">Harga Total</th>
                     <th class="border border-1 border-secondary">Aksi</th>
                 </tr>
 
@@ -112,21 +105,8 @@
                             <td class="border border-1 border-secondary">{{ $p->variant }}</td>
                             <td class="border border-1 border-secondary">{{ $p->stock }}</td>
                             <td class="border border-1 border-secondary">{{ $p->unit }}</td>
-                            <td class="border border-1 border-secondary" class="fw-semibold @if($status == 'Ready') text-primary @else text-danger @endif">
-                                {{ $status }}
-                            </td>
-
-                            {{-- Harga dasar dan markup tidak ditampilkan kepada project manager dan subgudang --}}
-                            @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
-                                <td class="border border-1 border-secondary">Rp {{ number_format($p->price, 2, ',', '.') }}</td>
-                                <td class="border border-1 border-secondary"></td>
-                                <td class="border border-1 border-secondary"></td>
-                            @endif
-
-                            {{-- Harga sudah dikalikan markup khusus project manager dan gudang --}}
-                            @if(in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
-                                <td class="border border-1 border-secondary">Rp {{ number_format($p->price * (1 + ($p->markup / 100)), 2, ',', '.') }}</td>
-                            @endif
+                            <td class="border border-1 border-secondary" class="fw-semibold @if($status == 'Ready') text-primary @else text-danger @endif">{{ $status }}</td>
+                            <td class="border border-1 border-secondary"></td>
 
                             <td class="border border-1 border-secondary">
                                 {{-- Toggler button untuk memperlihatkan detail varian data produk --}}
@@ -156,17 +136,7 @@
                             <td class="border border-1 border-secondary">{{ $p->unit }}</td>
                             <td class="border border-1 border-secondary" class="fw-semibold @if($p->status == 'Ready') text-primary @else text-danger @endif">{{ $p->status }}</td>
 
-                            {{-- Harga dasar dan markup tidak ditampilkan kepada project manager, gudang, dan subgudang --}}
-                            @if(!in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
-                                <td class="border border-1 border-secondary">Rp {{ number_format($p->price, 2, ',', '.') }}</td>
-                                <td class="border border-1 border-secondary">{{ $p->markup }}</td>
-                                <td class="border border-1 border-secondary">{{ ucwords($p->condition) }}</td>
-                            @endif
-
-                            {{-- Harga sudah dikalikan markup khusus project manager, gudang, dan subgudang --}}
-                            @if(in_array(Auth::user()->role->role_name, ['gudang', 'subgudang', 'project_manager']))
-                                <td class="border border-1 border-secondary">Rp {{ number_format($p->price * (1 + ($p->markup / 100)), 2, ',', '.') }}</td>
-                            @endif
+                            <td class="border border-1 border-secondary">{{ number_format($p->price * $p->stock, 0, ',', '.') }}</td>
 
                             <td class="border border-1 border-secondary">
                                 {{-- Subgudang dan gudang tidak bisa CRUD --}}

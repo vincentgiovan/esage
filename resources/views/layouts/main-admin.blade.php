@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <title>eSage</title>
+        <title>WMS Sage</title>
 
         {{-- Bootstrap CSS & icon --}}
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -39,6 +39,14 @@
 				margin-top: 5px !important;
 				margin-right: 10px !important;
 			}
+
+            button.btn {
+                font-size: 10pt !important;
+            }
+
+            a.btn {
+                font-size: 10pt !important;
+            }
 
             button#sidebarToggler {
                 background-color: rgb(95, 95, 95);
@@ -116,7 +124,7 @@
 
                 {{-- Main --}}
                 <div class="d-flex flex-column justify-content-between" id="main-content-div" style="min-height: 100vh; padding-left: 0;">
-                    <div class="content-wrapper d-flex flex-column bg-light p-4" style="width: 100%;">
+                    <div class="content-wrapper d-flex flex-column bg-light p-4 flex-grow-1 " style="width: 100%;">
                         @if(!Request::is("dashboard"))
                             <div class="d-flex gap-2 flex-wrap align-items-start fs-6">
                                 <a href="{{ route('dashboard') }}" class="text-decoration-none fw-semibold">Dashboard</a>
@@ -141,7 +149,7 @@
                         @endif
 
                         {{-- Content --}}
-                        <div class="flex-grow-1 d-flex flex-column">
+                        <div class="d-flex flex-column">
                             @yield("content")
                         </div>
                     </div>
