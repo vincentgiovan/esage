@@ -92,7 +92,7 @@
                         <td class="border border-1 border-secondary">{{ Carbon\Carbon::parse($start_period)->translatedFormat("d/m/Y") }} - {{ Carbon\Carbon::parse($end_period)->translatedFormat("d/m/Y") }}</td>
                         <td class="border border-1 border-secondary">{{ $employee->nama }}</td>
                         <td class="border border-1 border-secondary">{{ $employee->jabatan }}</td>
-                        <td class="border border-1 border-secondary">Rp {{ number_format($subtotals[$emp_id], 2, ',', '.') }}</td>
+                        <td class="border border-1 border-secondary">{{ number_format($subtotals[$emp_id], 0, ',', '.') }}</td>
                         <td class="border border-1 border-secondary"></td>
                         <td class="border border-1 border-secondary">
                             <button class="btn btn-success see-detail-btn" data-empid="{{ $emp_id }}">Rincian</button>
@@ -130,7 +130,7 @@
                             <tr class="detail-area{{ $emp_id }}" style="display: none; background-color: @if($iterasus % 2 == 1) #E0E0E0 @else white @endif;">
                                 <td class="border border-1 border-secondary" class="py-2"></td>
                                 <td class="border border-1 border-secondary" class="py-2" colspan="4">Normal: {{ $total_jam_normal }} jam ({{ $project_name }})</td>
-                                <td class="border border-1 border-secondary" class="py-2">Rp {{ number_format($total_gaji_normal, 2, ',', '.') }}</td>
+                                <td class="border border-1 border-secondary" class="py-2">{{ number_format($total_gaji_normal, 0, ',', '.') }}</td>
                                 <td class="border border-1 border-secondary" class="py-2"></td>
                             </tr>
                         @endif
@@ -139,7 +139,7 @@
                             <tr class="detail-area{{ $emp_id }}" style="display: none; background-color: @if($iterasus % 2 == 1) #E0E0E0 @else white @endif;">
                                 <td class="border border-1 border-secondary" class="py-2"></td>
                                 <td class="border border-1 border-secondary" class="py-2" colspan="4">Lembur: {{ $total_jam_lembur }} jam ({{ $project_name }})</td>
-                                <td class="border border-1 border-secondary" class="py-2">Rp {{ number_format($total_gaji_lembur, 2, ',', '.') }}</td>
+                                <td class="border border-1 border-secondary" class="py-2">{{ number_format($total_gaji_lembur, 0, ',', '.') }}</td>
                                 <td class="border border-1 border-secondary" class="py-2"></td>
                             </tr>
                         @endif
@@ -148,7 +148,7 @@
                             <tr class="detail-area{{ $emp_id }}" style="display: none; background-color: @if($iterasus % 2 == 1) #E0E0E0 @else white @endif;">
                                 <td class="border border-1 border-secondary" class="py-2"></td>
                                 <td class="border border-1 border-secondary" class="py-2" colspan="4">Lembur Panjang: {{ $total_kali_lembur_panjang }} hari ({{ $project_name }})</td>
-                                <td class="border border-1 border-secondary" class="py-2">Rp {{ number_format($total_gaji_lembur_panjang, 2, ',', '.') }}</td>
+                                <td class="border border-1 border-secondary" class="py-2">{{ number_format($total_gaji_lembur_panjang, 0, ',', '.') }}</td>
                                 <td class="border border-1 border-secondary" class="py-2"></td>
                             </tr>
                         @endif
@@ -157,7 +157,7 @@
                             <tr class="detail-area{{ $emp_id }}" style="display: none; background-color: @if($iterasus % 2 == 1) #E0E0E0 @else white @endif;">
                                 <td class="border border-1 border-secondary" class="py-2"></td>
                                 <td class="border border-1 border-secondary" class="py-2" colspan="4">Performa ({{ $project_name }})</td>
-                                <td class="border border-1 border-secondary" class="py-2">Rp {{ number_format($total_performa, 2, ',', '.') }}</td>
+                                <td class="border border-1 border-secondary" class="py-2">{{ number_format($total_performa, 0, ',', '.') }}</td>
                                 <td class="border border-1 border-secondary" class="py-2"></td>
                             </tr>
                         @endif
@@ -166,8 +166,8 @@
                     @foreach($prepay_cuts as $ppc)
                         <tr class="detail-area{{ $emp_id }}" style="display: none; background-color: @if($iterasus % 2 == 1) #E0E0E0 @else white @endif;">
                             <td class="border border-1 border-secondary" class="py-2"></td>
-                            <td class="border border-1 border-secondary" class="py-2" colspan="4">Potongan kasbon untuk {{ $ppc->prepay->remark }} (Sisa saldo: Rp {{ number_format($ppc->remaining_amount, 2, ',', '.') }})</td>
-                            <td class="border border-1 border-secondary" class="py-2">- Rp {{ number_format($ppc->cut_amount, 2, ',', '.') }}</td>
+                            <td class="border border-1 border-secondary" class="py-2" colspan="4">Potongan kasbon untuk {{ $ppc->prepay->remark }} (Sisa saldo: {{ number_format($ppc->remaining_amount, 0, ',', '.') }})</td>
+                            <td class="border border-1 border-secondary" class="py-2">- {{ number_format($ppc->cut_amount, 0, ',', '.') }}</td>
                             <td class="border border-1 border-secondary" class="py-2"></td>
                         </tr>
                     @endforeach

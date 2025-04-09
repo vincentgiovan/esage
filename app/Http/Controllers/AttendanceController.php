@@ -50,58 +50,64 @@ class AttendanceController extends Controller
         ]);
     }
 
-    public function pre_create(){
-        return view('pages.attendance.select-employee', [
-            'projects' => Project::with('employees')->get()
-        ]);
-    }
-
-    public function pre_create_continue(Request $request){
-        if(!$request->employee){
-            return back()->with('noSelectedEmployee', 'Harap pilih minimal 1 karyawan untuk dimasukkan ke laporan presensi!');
-        }
-
-        return view("pages.attendance.create-admin", [
-            "project" => Project::find($request->project),
-            'employees' => Employee::whereIn('id', $request->employee)->get()
-        ]);
-    }
-
-    // public function create_admin(Request $request){
-    //     return view("pages.attendance.create-admin", [
-    //         "project" => Project::find($request->query('project'))
+    // public function pre_create(){
+    //     return view('pages.attendance.select-employee', [
+    //         'projects' => Project::with('employees')->get()
     //     ]);
     // }
 
+    // public function pre_create_continue(Request $request){
+    //     if(!$request->employee){
+    //         return back()->with('noSelectedEmployee', 'Harap pilih minimal 1 karyawan untuk dimasukkan ke laporan presensi!');
+    //     }
+
+    //     return view("pages.attendance.create-admin", [
+    //         "project" => Project::find($request->project),
+    //         'employees' => Employee::whereIn('id', $request->employee)->get()
+    //     ]);
+    // }
+
+    public function create_admin(Request $request){
+        return view("pages.attendance.create-admin", [
+            "project" => Project::find($request->query('project'))
+        ]);
+    }
+
     public function store_admin(Request $request){
+        // return $request;
+
         $request->validate([
             "start_date" => "required",
             "end_date" => "required",
             "remark" => "nullable",
+            'project_id' => 'required',
         ]);
 
         try {
             DB::beginTransaction();
 
-            foreach($request->employee as $remp){
-                $employee = Employee::find($remp);
-                $project = Project::find($request->project);
+            $k = 0;
+            foreach($request->normal as $i => $rn){
+                $employee = Employee::find($request->employee[$k]);
+                $project = Project::find($request->project_id);
 
-                for($i = 0; $i < 7; $i++){
-                    if(!$request->normal[$remp][$i]){
+                for($j = 0; $j < 7; $j++){
+                    if(!$request->normal[$i][$j]){
                         continue;
                     }
 
                     Attendance::create([
-                        'attendance_date' => Carbon::parse($request->start_date)->addDays($i),
+                        'attendance_date' => Carbon::parse($request->start_date)->addDays($j),
                         'employee_id' => $employee->id,
                         'project_id' => $project->id,
-                        'normal' => $request->normal[$remp][$i],
-                        'jam_lembur' => $request->lembur[$remp][$i] ?? 0,
-                        'index_lembur_panjang' => $request->lembur_panjang[$remp][$i] ?? 0,
-                        'performa' => $request->performa[$remp][$i] ?? 0
+                        'normal' => $request->normal[$i][$j],
+                        'jam_lembur' => $request->lembur[$i][$j] ?? 0,
+                        'index_lembur_panjang' => $request->lembur_panjang[$i][$j] ?? 0,
+                        'performa' => $request->performa[$i][$j] ?? 0
                     ]);
                 }
+
+                $k++;
             }
 
             DB::commit();

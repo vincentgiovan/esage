@@ -78,7 +78,7 @@
                                     <select name="products[]" class="form-select select2">
                                     @foreach ($products as $product)
                                         <option value="{{ $product->id }}">
-                                            {{ $product->product_name }} - {{ $product->variant }} (Harga: Rp {{ number_format($product->price, 2, ',', '.') }}, Stok:  {{ $product->stock }}, Diskon: {{ $product->discount }}%)
+                                            {{ $product->product_name }} - {{ $product->variant }} (Harga: {{ number_format($product->price, 0, ',', '.') }}, Stok:  {{ $product->stock }}, Diskon: {{ $product->discount }}%)
                                         </option>
                                     @endforeach
                                     </select>
@@ -308,7 +308,7 @@
             $('#add-row-btn-registered').on('click', function(){
                 const newProdSel = $('<select>').attr('name', 'products[]').addClass('form-select select2');
                 allproducts.forEach(prod => {
-                    newProdSel.append($('<option>').attr('value', prod.id).text(`${prod.product_name} - ${prod.variant} (Harga: Rp ${formatCurrency(prod.price)}, Stok: ${[prod.stock]}, Diskon: ${prod.discount}%)`));
+                    newProdSel.append($('<option>').attr('value', prod.id).text(`${prod.product_name} - ${prod.variant} (Harga: ${formatCurrency(prod.price)}, Stok: ${[prod.stock]}, Diskon: ${prod.discount}%)`));
                 });
 
                 $('#isibody-registered').append(

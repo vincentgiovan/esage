@@ -9,11 +9,17 @@
             <form method="POST" action="{{ route('attendance-store-admin') }}">
                 @csrf
 
-                <input type="hidden" name="project" value="{{ $project->id }}">
+                <input type="hidden" name="project_id" value="{{ $project->id }}">
 
                 @php
                     $previousFriday = Carbon\Carbon::now()->previous(Carbon\Carbon::FRIDAY);
                     $previousSaturday = $previousFriday->copy()->previous(Carbon\Carbon::SATURDAY);
+
+                    $sunday = $previousSaturday->copy()->addDay();
+                    $monday = $previousFriday->copy()->addDay();
+                    $tuesday = $monday->copy()->addDay();
+                    $wednesday = $tuesday->copy()->addDay();
+                    $thursday = $wednesday->copy()->addDay();
                 @endphp
 
                 <div class="mt-4">Hari Masuk Kerja di Minggu Ini</div>
@@ -56,208 +62,216 @@
                 </div>
 
                 <div class="mt-4">Data Absensi</div>
-                <div class="overflow-x-auto w-100 mt-2">
+                <div class="overflow-auto w-100 mt-2" style="max-height: 70vh;" id="table-container">
                     <table class="w-100">
-                        <thead>
+                        <thead class="position-sticky top-0 z-2">
                             <tr>
                                 <th class="border border-1 border-secondary" rowspan="2">Pegawai</th>
-                                <th class="border border-1 border-secondary" colspan="7" class="text-center">Jam Kerja</th>
-                                <th class="border border-1 border-secondary" rowspan="2" class="text-center"></th>
+                                <th class="border border-1 border-secondary" colspan="7">Jam Kerja</th>
+                                <th class="border border-1 border-secondary" rowspan="2"></th>
                             </tr>
                             <tr>
-                                <th class="border border-1 border-secondary" class="text-center">Sabtu</th>
-                                <th class="border border-1 border-secondary" class="text-center">Minggu</th>
-                                <th class="border border-1 border-secondary" class="text-center">Senin</th>
-                                <th class="border border-1 border-secondary" class="text-center">Selasa</th>
-                                <th class="border border-1 border-secondary" class="text-center">Rabu</th>
-                                <th class="border border-1 border-secondary" class="text-center">Kamis</th>
-                                <th class="border border-1 border-secondary" class="text-center">Jumat</th>
+                                <th class="border border-1 border-secondary">Sabtu<br><span id="date-sat">{{ $previousSaturday->format('d/m/Y') }}</span></th>
+                                <th class="border border-1 border-secondary">Minggu<br><span id="date-sun">{{ $sunday->format('d/m/Y') }}</span></th>
+                                <th class="border border-1 border-secondary">Senin<br><span id="date-mon">{{ $monday->format('d/m/Y') }}</span></th>
+                                <th class="border border-1 border-secondary">Selasa<br><span id="date-tue">{{ $tuesday->format('d/m/Y') }}</span></th>
+                                <th class="border border-1 border-secondary">Rabu<br><span id="date-wed">{{ $wednesday->format('d/m/Y') }}</span></th>
+                                <th class="border border-1 border-secondary">Kamis<br><span id="date-thu">{{ $thursday->format('d/m/Y') }}</span></th>
+                                <th class="border border-1 border-secondary">Jumat<br><span id="date-fri">{{ $previousFriday->format('d/m/Y') }}</span></th>
                             </tr>
                         </thead>
+
                         <tbody>
-                            @foreach($employees as $e)
-                                <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
-                                    <td class="border border-1 border-secondary">
-                                        {{ $e->nama }}<br>({{ $e->jabatan }})
-                                        <input type="hidden" name="employee[]" value="{{ $e->id }}">
-                                    </td>
-                                    <td class="border border-1 border-secondary" style="width: 125px;">
-                                        <div class="d-flex flex-column gap-2 py-2 w-100">
-                                            <div class="input_area">
-                                                <label for="">Normal<span class="text-danger">*</span></label>
-                                                <input type="text" name="normal[{{ $e->id }}][]" class="w-100 normal" value="1">
+                            <tr>
+                                <td class="border border-1 border-secondary select-employee">
+                                    <select name="employee[]" class="select2 form-select">
+                                        @forelse($project->employees as $e)
+                                            <option value="{{ $e->id }}">{{ $e->nama }} ({{ $e->jabatan }})</option>
+                                        @empty
+                                            <option disabled selected>Belum ada karyawan yang ditugaskan di proyek ini</option>
+                                        @endforelse
+                                    </select>
+                                </td>
+                                <td class="border border-1 border-secondary" style="width: 125px;">
+                                    <div class="d-flex flex-column gap-2 py-2 w-100">
+                                        <div class="input_area">
+                                            <label>Normal<span class="text-danger">*</span></label>
+                                            <input type="text" name="normal[0][]" class="w-100 normal" value="1">
 
-                                                <label for="">Lembur<span class="text-danger">*</span></label>
-                                                <input type="text" name="lembur[{{ $e->id }}][]" class="w-100 lembur" value="0">
+                                            <label>Lembur<span class="text-danger">*</span></label>
+                                            <input type="text" name="lembur[0][]" class="w-100 lembur" value="0">
 
-                                                <label for="">L. Panjang<span class="text-danger">*</span></label>
-                                                <input type="text" name="lembur_panjang[{{ $e->id }}][]" class="w-100 lembur_panjang" value="0">
+                                            <label>L. Panjang<span class="text-danger">*</span></label>
+                                            <input type="text" name="lembur_panjang[0][]" class="w-100 lembur_panjang" value="0">
 
-                                                <label for="">Performa</label>
-                                                <input type="text" name="performa[{{ $e->id }}][]" placeholder="Performa" class="w-100 performance">
-                                            </div>
-
-                                            <label for="offcb{{ $e->id }}sat" class="mt-2 d-flex gap-2 align-items-center w-100">
-                                                <input type="checkbox" class="off-checkbox off-sat" id="offcb{{ $e->id }}sat"> Off
-                                            </label>
-                                            <label for="anoprojcb{{ $e->id }}sat" class="d-flex gap-2 align-items-center w-100">
-                                                <input type="checkbox" class="otherproj-checkbox" id="anoprojcb{{ $e->id }}sat"> Proyek lain
-                                            </label>
+                                            <label>Performa</label>
+                                            <input type="text" name="performa[0][]" placeholder="Performa" class="w-100 performance">
                                         </div>
-                                    </td>
-                                    <td class="border border-1 border-secondary" style="width: 125px;">
-                                        <div class="d-flex flex-column gap-2 py-2 w-100">
-                                            <div class="input_area">
-                                                <label for="">Normal<span class="text-danger">*</span></label>
-                                                <input type="text" name="normal[{{ $e->id }}][]" class="w-100 normal" value="1">
 
-                                                <label for="">Lembur<span class="text-danger">*</span></label>
-                                                <input type="text" name="lembur[{{ $e->id }}][]" class="w-100 lembur" value="0">
+                                        <label for="offcbsat" class="mt-2 d-flex gap-2 align-items-center w-100">
+                                            <input type="checkbox" class="off-checkbox off-sat" id="offcbsat"> Off
+                                        </label>
+                                        <label for="anoprojcbsat" class="d-flex gap-2 align-items-center w-100">
+                                            <input type="checkbox" class="otherproj-checkbox" id="anoprojcbsat"> Proyek lain
+                                        </label>
+                                    </div>
+                                </td>
+                                <td class="border border-1 border-secondary" style="width: 125px;">
+                                    <div class="d-flex flex-column gap-2 py-2 w-100">
+                                        <div class="input_area">
+                                            <label>Normal<span class="text-danger">*</span></label>
+                                            <input type="text" name="normal[0][]" class="w-100 normal" value="1">
 
-                                                <label for="">L. Panjang<span class="text-danger">*</span></label>
-                                                <input type="text" name="lembur_panjang[{{ $e->id }}][]" class="w-100 lembur_panjang" value="0">
+                                            <label>Lembur<span class="text-danger">*</span></label>
+                                            <input type="text" name="lembur[0][]" class="w-100 lembur" value="0">
 
-                                                <label for="">Performa</label>
-                                                <input type="text" name="performa[{{ $e->id }}][]" placeholder="Performa" class="w-100 performance">
-                                            </div>
+                                            <label>L. Panjang<span class="text-danger">*</span></label>
+                                            <input type="text" name="lembur_panjang[0][]" class="w-100 lembur_panjang" value="0">
 
-                                            <label for="offcb{{ $e->id }}sun" class="mt-2 d-flex gap-2 align-items-center w-100">
-                                                <input type="checkbox" class="off-checkbox off-sun" id="offcb{{ $e->id }}sun"> Off
-                                            </label>
-                                            <label for="anoprojcb{{ $e->id }}sun" class="d-flex gap-2 align-items-center w-100">
-                                                <input type="checkbox" class="otherproj-checkbox" id="anoprojcb{{ $e->id }}sun"> Proyek lain
-                                            </label>
+                                            <label>Performa</label>
+                                            <input type="text" name="performa[0][]" placeholder="Performa" class="w-100 performance">
                                         </div>
-                                    </td>
-                                    <td class="border border-1 border-secondary" style="width: 125px;">
-                                        <div class="d-flex flex-column gap-2 py-2 w-100">
-                                            <div class="input_area">
-                                                <label for="">Normal<span class="text-danger">*</span></label>
-                                                <input type="text" name="normal[{{ $e->id }}][]" class="w-100 normal" value="1">
 
-                                                <label for="">Lembur<span class="text-danger">*</span></label>
-                                                <input type="text" name="lembur[{{ $e->id }}][]" class="w-100 lembur" value="0">
+                                        <label for="offcbsun" class="mt-2 d-flex gap-2 align-items-center w-100">
+                                            <input type="checkbox" class="off-checkbox off-sun" id="offcbsun"> Off
+                                        </label>
+                                        <label for="anoprojcbsun" class="d-flex gap-2 align-items-center w-100">
+                                            <input type="checkbox" class="otherproj-checkbox" id="anoprojcbsun"> Proyek lain
+                                        </label>
+                                    </div>
+                                </td>
+                                <td class="border border-1 border-secondary" style="width: 125px;">
+                                    <div class="d-flex flex-column gap-2 py-2 w-100">
+                                        <div class="input_area">
+                                            <label>Normal<span class="text-danger">*</span></label>
+                                            <input type="text" name="normal[0][]" class="w-100 normal" value="1">
 
-                                                <label for="">L. Panjang<span class="text-danger">*</span></label>
-                                                <input type="text" name="lembur_panjang[{{ $e->id }}][]" class="w-100 lembur_panjang" value="0">
+                                            <label>Lembur<span class="text-danger">*</span></label>
+                                            <input type="text" name="lembur[0][]" class="w-100 lembur" value="0">
 
-                                                <label for="">Performa</label>
-                                                <input type="text" name="performa[{{ $e->id }}][]" placeholder="Performa" class="w-100 performance">
-                                            </div>
+                                            <label>L. Panjang<span class="text-danger">*</span></label>
+                                            <input type="text" name="lembur_panjang[0][]" class="w-100 lembur_panjang" value="0">
 
-                                            <label for="offcb{{ $e->id }}mon" class="mt-2 d-flex gap-2 align-items-center w-100">
-                                                <input type="checkbox" class="off-checkbox off-mon" id="offcb{{ $e->id }}mon"> Off
-                                            </label>
-                                            <label for="anoprojcb{{ $e->id }}mon" class="d-flex gap-2 align-items-center w-100">
-                                                <input type="checkbox" class="otherproj-checkbox" id="anoprojcb{{ $e->id }}mon"> Proyek lain
-                                            </label>
+                                            <label>Performa</label>
+                                            <input type="text" name="performa[0][]" placeholder="Performa" class="w-100 performance">
                                         </div>
-                                    </td>
-                                    <td class="border border-1 border-secondary" style="width: 125px;">
-                                        <div class="d-flex flex-column gap-2 py-2 w-100">
-                                            <div class="input_area">
-                                                <label for="">Normal<span class="text-danger">*</span></label>
-                                                <input type="text" name="normal[{{ $e->id }}][]" class="w-100 normal" value="1">
 
-                                                <label for="">Lembur<span class="text-danger">*</span></label>
-                                                <input type="text" name="lembur[{{ $e->id }}][]" class="w-100 lembur" value="0">
+                                        <label for="offcbmon" class="mt-2 d-flex gap-2 align-items-center w-100">
+                                            <input type="checkbox" class="off-checkbox off-mon" id="offcbmon"> Off
+                                        </label>
+                                        <label for="anoprojcbmon" class="d-flex gap-2 align-items-center w-100">
+                                            <input type="checkbox" class="otherproj-checkbox" id="anoprojcbmon"> Proyek lain
+                                        </label>
+                                    </div>
+                                </td>
+                                <td class="border border-1 border-secondary" style="width: 125px;">
+                                    <div class="d-flex flex-column gap-2 py-2 w-100">
+                                        <div class="input_area">
+                                            <label>Normal<span class="text-danger">*</span></label>
+                                            <input type="text" name="normal[0][]" class="w-100 normal" value="1">
 
-                                                <label for="">L. Panjang<span class="text-danger">*</span></label>
-                                                <input type="text" name="lembur_panjang[{{ $e->id }}][]" class="w-100 lembur_panjang" value="0">
+                                            <label>Lembur<span class="text-danger">*</span></label>
+                                            <input type="text" name="lembur[0][]" class="w-100 lembur" value="0">
 
-                                                <label for="">Performa</label>
-                                                <input type="text" name="performa[{{ $e->id }}][]" placeholder="Performa" class="w-100 performance">
-                                            </div>
+                                            <label>L. Panjang<span class="text-danger">*</span></label>
+                                            <input type="text" name="lembur_panjang[0][]" class="w-100 lembur_panjang" value="0">
 
-                                            <label for="offcb{{ $e->id }}tue" class="mt-2 d-flex gap-2 align-items-center w-100">
-                                                <input type="checkbox" class="off-checkbox off-tue" id="offcb{{ $e->id }}tue"> Off
-                                            </label>
-                                            <label for="anoprojcb{{ $e->id }}tue" class="d-flex gap-2 align-items-center w-100">
-                                                <input type="checkbox" class="otherproj-checkbox" id="anoprojcb{{ $e->id }}tue"> Proyek lain
-                                            </label>
+                                            <label>Performa</label>
+                                            <input type="text" name="performa[0][]" placeholder="Performa" class="w-100 performance">
                                         </div>
-                                    </td>
-                                    <td class="border border-1 border-secondary" style="width: 125px;">
-                                        <div class="d-flex flex-column gap-2 py-2 w-100">
-                                            <div class="input_area">
-                                                <label for="">Normal<span class="text-danger">*</span></label>
-                                                <input type="text" name="normal[{{ $e->id }}][]" class="w-100 normal" value="1">
 
-                                                <label for="">Lembur<span class="text-danger">*</span></label>
-                                                <input type="text" name="lembur[{{ $e->id }}][]" class="w-100 lembur" value="0">
+                                        <label for="offcbtue" class="mt-2 d-flex gap-2 align-items-center w-100">
+                                            <input type="checkbox" class="off-checkbox off-tue" id="offcbtue"> Off
+                                        </label>
+                                        <label for="anoprojcbtue" class="d-flex gap-2 align-items-center w-100">
+                                            <input type="checkbox" class="otherproj-checkbox" id="anoprojcbtue"> Proyek lain
+                                        </label>
+                                    </div>
+                                </td>
+                                <td class="border border-1 border-secondary" style="width: 125px;">
+                                    <div class="d-flex flex-column gap-2 py-2 w-100">
+                                        <div class="input_area">
+                                            <label>Normal<span class="text-danger">*</span></label>
+                                            <input type="text" name="normal[0][]" class="w-100 normal" value="1">
 
-                                                <label for="">L. Panjang<span class="text-danger">*</span></label>
-                                                <input type="text" name="lembur_panjang[{{ $e->id }}][]" class="w-100 lembur_panjang" value="0">
+                                            <label>Lembur<span class="text-danger">*</span></label>
+                                            <input type="text" name="lembur[0][]" class="w-100 lembur" value="0">
 
-                                                <label for="">Performa</label>
-                                                <input type="text" name="performa[{{ $e->id }}][]" placeholder="Performa" class="w-100 performance">
-                                            </div>
+                                            <label>L. Panjang<span class="text-danger">*</span></label>
+                                            <input type="text" name="lembur_panjang[0][]" class="w-100 lembur_panjang" value="0">
 
-                                            <label for="offcb{{ $e->id }}wed" class="mt-2 d-flex gap-2 align-items-center w-100">
-                                                <input type="checkbox" class="off-checkbox off-wed" id="offcb{{ $e->id }}wed"> Off
-                                            </label>
-                                            <label for="anoprojcb{{ $e->id }}wed" class="d-flex gap-2 align-items-center w-100">
-                                                <input type="checkbox" class="otherproj-checkbox" id="anoprojcb{{ $e->id }}wed"> Proyek lain
-                                            </label>
+                                            <label>Performa</label>
+                                            <input type="text" name="performa[0][]" placeholder="Performa" class="w-100 performance">
                                         </div>
-                                    </td>
-                                    <td class="border border-1 border-secondary" style="width: 125px;">
-                                        <div class="d-flex flex-column gap-2 py-2 w-100">
-                                            <div class="input_area">
-                                                <label for="">Normal<span class="text-danger">*</span></label>
-                                                <input type="text" name="normal[{{ $e->id }}][]" class="w-100 normal" value="1">
 
-                                                <label for="">Lembur<span class="text-danger">*</span></label>
-                                                <input type="text" name="lembur[{{ $e->id }}][]" class="w-100 lembur" value="0">
+                                        <label for="offcbwed" class="mt-2 d-flex gap-2 align-items-center w-100">
+                                            <input type="checkbox" class="off-checkbox off-wed" id="offcbwed"> Off
+                                        </label>
+                                        <label for="anoprojcbwed" class="d-flex gap-2 align-items-center w-100">
+                                            <input type="checkbox" class="otherproj-checkbox" id="anoprojcbwed"> Proyek lain
+                                        </label>
+                                    </div>
+                                </td>
+                                <td class="border border-1 border-secondary" style="width: 125px;">
+                                    <div class="d-flex flex-column gap-2 py-2 w-100">
+                                        <div class="input_area">
+                                            <label>Normal<span class="text-danger">*</span></label>
+                                            <input type="text" name="normal[0][]" class="w-100 normal" value="1">
 
-                                                <label for="">L. Panjang<span class="text-danger">*</span></label>
-                                                <input type="text" name="lembur_panjang[{{ $e->id }}][]" class="w-100 lembur_panjang" value="0">
+                                            <label>Lembur<span class="text-danger">*</span></label>
+                                            <input type="text" name="lembur[0][]" class="w-100 lembur" value="0">
 
-                                                <label for="">Performa</label>
-                                                <input type="text" name="performa[{{ $e->id }}][]" placeholder="Performa" class="w-100 performance">
-                                            </div>
+                                            <label>L. Panjang<span class="text-danger">*</span></label>
+                                            <input type="text" name="lembur_panjang[0][]" class="w-100 lembur_panjang" value="0">
 
-                                            <label for="offcb{{ $e->id }}thu" class="mt-2 d-flex gap-2 align-items-center w-100">
-                                                <input type="checkbox" class="off-checkbox off-thu" id="offcb{{ $e->id }}thu"> Off
-                                            </label>
-                                            <label for="anoprojcb{{ $e->id }}thu" class="d-flex gap-2 align-items-center w-100">
-                                                <input type="checkbox" class="otherproj-checkbox" id="anoprojcb{{ $e->id }}thu"> Proyek lain
-                                            </label>
+                                            <label>Performa</label>
+                                            <input type="text" name="performa[0][]" placeholder="Performa" class="w-100 performance">
                                         </div>
-                                    </td>
-                                    <td class="border border-1 border-secondary" style="width: 125px;">
-                                        <div class="d-flex flex-column gap-2 py-2 w-100">
-                                            <div class="input_area">
-                                                <label for="">Normal<span class="text-danger">*</span></label>
-                                                <input type="text" name="normal[{{ $e->id }}][]" class="w-100 normal" value="1">
 
-                                                <label for="">Lembur<span class="text-danger">*</span></label>
-                                                <input type="text" name="lembur[{{ $e->id }}][]" class="w-100 lembur" value="0">
+                                        <label for="offcbthu" class="mt-2 d-flex gap-2 align-items-center w-100">
+                                            <input type="checkbox" class="off-checkbox off-thu" id="offcbthu"> Off
+                                        </label>
+                                        <label for="anoprojcbthu" class="d-flex gap-2 align-items-center w-100">
+                                            <input type="checkbox" class="otherproj-checkbox" id="anoprojcbthu"> Proyek lain
+                                        </label>
+                                    </div>
+                                </td>
+                                <td class="border border-1 border-secondary" style="width: 125px;">
+                                    <div class="d-flex flex-column gap-2 py-2 w-100">
+                                        <div class="input_area">
+                                            <label>Normal<span class="text-danger">*</span></label>
+                                            <input type="text" name="normal[0][]" class="w-100 normal" value="1">
 
-                                                <label for="">L. Panjang<span class="text-danger">*</span></label>
-                                                <input type="text" name="lembur_panjang[{{ $e->id }}][]" class="w-100 lembur_panjang" value="0">
+                                            <label>Lembur<span class="text-danger">*</span></label>
+                                            <input type="text" name="lembur[0][]" class="w-100 lembur" value="0">
 
-                                                <label for="">Performa</label>
-                                                <input type="text" name="performa[{{ $e->id }}][]" placeholder="Performa" class="w-100 performance">
-                                            </div>
+                                            <label>L. Panjang<span class="text-danger">*</span></label>
+                                            <input type="text" name="lembur_panjang[0][]" class="w-100 lembur_panjang" value="0">
 
-                                            <label for="offcb{{ $e->id }}fri" class="mt-2 d-flex gap-2 align-items-center w-100">
-                                                <input type="checkbox" class="off-checkbox off-fri" id="offcb{{ $e->id }}fri"> Off
-                                            </label>
-                                            <label for="anoprojcb{{ $e->id }}fri" class="d-flex gap-2 align-items-center w-100">
-                                                <input type="checkbox" class="otherproj-checkbox" id="anoprojcb{{ $e->id }}fri"> Proyek lain
-                                            </label>
+                                            <label>Performa</label>
+                                            <input type="text" name="performa[0][]" placeholder="Performa" class="w-100 performance">
                                         </div>
-                                    </td>
-                                    <td class="border border-1 border-secondary" style="width: 50px;">
-                                        <div class="d-flex gap-2 w-100 justify-content-center">
-                                            <button type="button" class="exclude-btn btn btn-danger" onclick="return confirm('Apakah anda yakin ingin menghapus pegawai ini dari daftar presensi?')"><i class="bi bi-trash3"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
+
+                                        <label for="offcbfri" class="mt-2 d-flex gap-2 align-items-center w-100">
+                                            <input type="checkbox" class="off-checkbox off-fri" id="offcbfri"> Off
+                                        </label>
+                                        <label for="anoprojcbfri" class="d-flex gap-2 align-items-center w-100">
+                                            <input type="checkbox" class="otherproj-checkbox" id="anoprojcbfri"> Proyek lain
+                                        </label>
+                                    </div>
+                                </td>
+                                <td class="border border-1 border-secondary" style="width: 50px;">
+                                    <div class="d-flex gap-2 w-100 justify-content-center">
+                                        <button type="button" class="exclude-btn btn btn-danger"><i class="bi bi-trash3"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
+                </div>
+
+                <div class="mt-3 w-100 d-flex justify-content-end">
+                    <button type="button" class="btn btn-primary" id="add-data-btn">Tambah Data</button>
                 </div>
 
                 <div class="w-100 d-flex flex-column mt-4">
@@ -267,10 +281,23 @@
 
                 <button type="button" class="btn btn-success mt-4" id="submit-attendance-btn">Unggah Data Presensi</button>
             </form>
+
+            {{-- @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif --}}
+
         </div>
     </x-container-middle>
 
     <script>
+        let incrementus = 0;
+
         function toggleInputTime(targetted) {
             if ($(targetted).is(':checked')) {
                 $(targetted).closest('td').find('input').val('');
@@ -284,9 +311,72 @@
             }
         }
 
+        function setTHDate(startDate) {
+            const baseDate = new Date(startDate);
+            const dayIds = ['sat', 'sun', 'mon', 'tue', 'wed', 'thu', 'fri'];
+
+            dayIds.forEach((id, index) => {
+                const tempDate = new Date(baseDate);
+                tempDate.setDate(baseDate.getDate() + index);
+
+                // Format as dd/mm/yyyy
+                const day = String(tempDate.getDate()).padStart(2, '0');
+                const month = String(tempDate.getMonth() + 1).padStart(2, '0');
+                const year = tempDate.getFullYear();
+
+                const formattedDate = `${day}/${month}/${year}`;
+
+                $(`#date-${id}`).text(formattedDate); // e.g., #date-sun
+            });
+        }
+
+        const employees = @json($project->employees);
+
         $(document).ready(() => {
+            $('#add-data-btn').on('click', function(){
+                incrementus++;
+                const newRow = $('tbody').find('tr').first().clone();
+
+                newRow.find('input[name*="normal"]').each(function(){
+                    const oldName = $(this).attr('name');
+                    $(this).attr('name', oldName.replace(/\[(\d+)\]/, `[${incrementus}]`));
+                });
+                newRow.find('input[name*="lembur"]').each(function(){
+                    const oldName = $(this).attr('name');
+                    $(this).attr('name', oldName.replace(/\[(\d+)\]/, `[${incrementus}]`));
+                });
+                newRow.find('input[name*="lembur_panjang"]').each(function(){
+                    const oldName = $(this).attr('name');
+                    $(this).attr('name', oldName.replace(/\[(\d+)\]/, `[${incrementus}]`));
+                });
+                newRow.find('input[name*="performa"]').each(function(){
+                    const oldName = $(this).attr('name');
+                    $(this).attr('name', oldName.replace(/\[(\d+)\]/, `[${incrementus}]`));
+                });
+
+                newRow.find('input[type="checkbox"]').each(function(){
+                    const newId = `${$(this).attr('id')}_${incrementus}`;
+                    $(this).attr('id', newId);
+                    $(this).parent().attr('for', newId);
+                });
+
+                newRow.find('.select-employee').html('');
+                const newSelect = $('<select>').addClass('select2 from-select').attr('name', 'employee[]');
+                employees.forEach(employee => {
+                    newSelect.append($('<option>').attr('value', employee.id).text(`${employee.nama} (${employee.jabatan})`));
+                });
+                newRow.find('.select-employee').append(newSelect);
+
+                $('tbody').append(newRow);
+
+                reinitializeselect2();
+
+                const container = $('#table-container');
+                container.scrollTop(container[0].scrollHeight);
+            });
+
             // Toggling the target .off-checkbox when .setdayoffcb changes
-            $('.setdayoffcb').on('change', function() {
+            $(document).on('change', '.setdayoffcb', function() {
                 const target = $(`.${$(this).data('target')}`);
                 if(target.closest('div').find('.otherproj-checkbox').is(':checked')){
                     target.closest('div').find('.otherproj-checkbox').prop('checked', false);
@@ -307,7 +397,7 @@
             });
 
             // Directly applying the toggleInputTime logic on .off-checkbox changes
-            $('.off-checkbox, .otherproj-checkbox').on('change', function() {
+            $(document).on('change', '.off-checkbox, .otherproj-checkbox', function() {
                 if($(this).is(':checked')){
                     if($(this).hasClass('off-checkbox')){
                         $(this).closest('div').find('.otherproj-checkbox').prop('checked', false);
@@ -320,8 +410,15 @@
                 toggleInputTime($(this));
             });
 
-            $('.exclude-btn').click(function(){
-                $(this).closest("tr").remove();
+            $(document).on('click', '.exclude-btn', function(){
+                if(confirm('Apakah anda yakin ignin menghapus item ini dari data presensi?')){
+                    if($('tbody').find('tr').length > 1){
+                        $(this).closest("tr").remove();
+                    }
+                    else {
+                        alert('Data presensi tidak boleh kosong!');
+                    }
+                }
             });
 
             $('#submit-attendance-btn').on('click', function(){
@@ -349,6 +446,37 @@
                     $('form').submit();
                 }
             });
+
+            $('#start_date').on('change', function() {
+                const startDate = new Date($(this).val());
+
+                // Clone the date to avoid modifying the original
+                const endDate = new Date(startDate);
+                endDate.setDate(endDate.getDate() + 6);
+
+                // Format as YYYY-MM-DD
+                const formattedEndDate = endDate.toISOString().split('T')[0];
+
+                $('#end_date').val(formattedEndDate);
+
+                setTHDate($(this).val());
+            });
+
+            $('#end_date').on('change', function() {
+                const endDate = new Date($(this).val());
+
+                // Clone the endDate to calculate the startDate
+                const startDate = new Date(endDate);
+                startDate.setDate(endDate.getDate() - 6);
+
+                // Format as YYYY-MM-DD
+                const formattedStartDate = startDate.toISOString().split('T')[0];
+
+                $('#start_date').val(formattedStartDate);
+
+                setTHDate($('#start_date').val());
+            });
+
         });
 
     </script>

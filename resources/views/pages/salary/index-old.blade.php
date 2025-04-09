@@ -76,7 +76,7 @@
                         <td class="border border-1 border-secondary">{{ $s->start_period ? Carbon\Carbon::parse($s->start_period)->translatedFormat("d M Y") : "N/A" }} - {{ $s->end_period ? Carbon\Carbon::parse($s->end_period)->translatedFormat("d M Y") : "N/A" }}</td>
                         <td class="border border-1 border-secondary">{{ $s->employee->nama }}</td>
                         <td class="border border-1 border-secondary">{{ $s->employee->jabatan }}</td>
-                        <td class="border border-1 border-secondary">Rp {{ number_format($s->total, 2, ",", ".") }}</td>
+                        <td class="border border-1 border-secondary">{{ number_format($s->total, 0, ",", ".") }}</td>
                         <td class="border border-1 border-secondary">
                             @php
                                 $total_kasbon = 0;
@@ -84,7 +84,7 @@
                                     $total_kasbon += $ppay->amount;
                                 }
 
-                                echo number_format($total_kasbon, 2, ',', '.');
+                                echo number_format($total_kasbon, 0, ',', '.');
                             @endphp
                         </td>
                         <td class="border border-1 border-secondary">{{ $s->keterangan ?? "N/A" }}</td>

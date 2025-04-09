@@ -88,9 +88,9 @@
                         <tr style="background-color: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
                             <td class="border border-1 border-secondary">{{ ($loop->index + 1) + ((request('page') ?? 1) - 1) * 30 }}</td>
                             <td class="border border-1 border-secondary">{{ Carbon\Carbon::parse($ppay->prepay_date)->translatedFormat('d F Y') }}</td>
-                            <td class="border border-1 border-secondary">Rp {{ number_format($ppay->init_amount, 2, ',', '.') }}</td>
-                            <td class="border border-1 border-secondary">Rp {{ number_format($ppay->curr_amount, 2, ',', '.') }}</td>
-                            <td class="border border-1 border-secondary">Rp {{ number_format($ppay->cut_amount, 2, ',', '.') }}</td>
+                            <td class="border border-1 border-secondary">{{ number_format($ppay->init_amount, 0, ',', '.') }}</td>
+                            <td class="border border-1 border-secondary">{{ number_format($ppay->curr_amount, 0, ',', '.') }}</td>
+                            <td class="border border-1 border-secondary">{{ number_format($ppay->cut_amount, 0, ',', '.') }}</td>
                             <td class="border border-1 border-secondary">
                                 @if($ppay->enable_auto_cut == 'yes')
                                     <i class="bi bi-check-circle-fill fs-4" style="color: green"></i>
@@ -139,9 +139,9 @@
                     <tr style="background-color: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
                         <td class="border border-1 border-secondary">{{ $loop->iteration }}</td>
                         <td class="border border-1 border-secondary">{{ Carbon\Carbon::parse($ppc->start_period)->format('d/m/Y') }} - {{ Carbon\Carbon::parse($ppc->end_period)->format('d/m/Y') }}</td>
-                        <td class="border border-1 border-secondary">Rp {{ number_format($ppc->init_amount, 2, ',', '.') }}</td>
-                        <td class="border border-1 border-secondary">Rp {{ number_format($ppc->cut_amount, 2, ',', '.') }}</td>
-                        <td class="border border-1 border-secondary">Rp {{ number_format($ppc->remaining_amount, 2, ',', '.') }}</td>
+                        <td class="border border-1 border-secondary">{{ number_format($ppc->init_amount, 0, ',', '.') }}</td>
+                        <td class="border border-1 border-secondary">{{ number_format($ppc->cut_amount, 0, ',', '.') }}</td>
+                        <td class="border border-1 border-secondary">{{ number_format($ppc->remaining_amount, 0, ',', '.') }}</td>
                         <td class="border border-1 border-secondary">{{ $ppc->prepay->remark }}</td>
                     </tr>
                 @endforeach

@@ -68,9 +68,9 @@
                         <td class="border border-1 border-secondary">{{ $e->nama }}</td>
                         {{-- <td class="border border-1 border-secondary">{{ $e->NIK }}</td> --}}
                         <td class="border border-1 border-secondary">{{ $e->jabatan }}</td>
-                        <td class="border border-1 border-secondary">{{ __("Rp " . number_format($e->pokok, 2, ',', '.')) }}</td>
-                        <td class="border border-1 border-secondary">{{ __("Rp " . number_format($e->lembur, 2, ',', '.')) }}</td>
-                        <td class="border border-1 border-secondary">{{ __("Rp " . number_format($e->lembur_panjang, 2, ',', '.')) }}</td>
+                        <td class="border border-1 border-secondary">{{ __( number_format($e->pokok, 0, ',', '.')) }}</td>
+                        <td class="border border-1 border-secondary">{{ __( number_format($e->lembur, 0, ',', '.')) }}</td>
+                        <td class="border border-1 border-secondary">{{ __( number_format($e->lembur_panjang, 0, ',', '.')) }}</td>
                         <td class="border border-1 border-secondary">
                             @php
                                 $total_kasbon = 0;
@@ -79,7 +79,7 @@
                                 }
                             @endphp
                             <div class="d-flex gap-3 justify-content-between w-100 align-items-center">
-                                <span>{{ __("Rp " . number_format($total_kasbon, 2, ',', '.')) }}</span>
+                                <span>{{ __( number_format($total_kasbon, 0, ',', '.')) }}</span>
                                 <a href="{{ route('prepay-index', $e->id) }}" class="btn btn-success">Detail</a>
                             </div>
                         </td>

@@ -46,7 +46,7 @@
                         <td class="border border-1 border-secondary ">{{ $r->product->product_code }}</td>
                         <td class="border border-1 border-secondary ">{{ $r->product->product_name }}</td>
                         <td class="border border-1 border-secondary ">{{ $r->product->variant }}</td>
-                        <td class="border border-1 border-secondary ">Rp {{ number_format($r->product->price, 2, ',', '.') }}</td>
+                        <td class="border border-1 border-secondary ">{{ number_format($r->product->price, 0, ',', '.') }}</td>
                         <td class="border border-1 border-secondary ">{{ $r->product->discount }}%</td>
                         <td class="border border-1 border-secondary ">{{ $r->product->markup }}</td>
                         <td class="border border-1 border-secondary ">{{ $r->quantity }}</td>

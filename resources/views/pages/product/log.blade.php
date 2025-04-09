@@ -88,11 +88,11 @@
                         </td>
                         <td class="border border-1 border-secondary">{{ $pp->purchase->register }}</td>
                         <td class="border border-1 border-secondary">{{ $pp->product->product_code }}</td>
-                        <td class="border border-1 border-secondary">Rp {{ number_format($pp->product->price, 2, ',', '.') }}</td>
+                        <td class="border border-1 border-secondary">{{ number_format($pp->product->price, 0, ',', '.') }}</td>
                         <td class="border border-1 border-secondary">{{ $pp->product->discount }}%</td>
-                        <td class="border border-1 border-secondary">Rp {{ number_format($disc_price, 2, ',', '.') }}</td>
+                        <td class="border border-1 border-secondary">{{ number_format($disc_price, 0, ',', '.') }}</td>
                         <td class="border border-1 border-secondary">{{ $pp->quantity }}</td>
-                        <td class="border border-1 border-secondary">Rp {{ number_format($subtotal, 2, ',', '.') }}</td>
+                        <td class="border border-1 border-secondary">{{ number_format($subtotal, 0, ',', '.') }}</td>
                     </tr>
                 @endforeach
             </table>
@@ -103,7 +103,7 @@
 
         <div class="d-flex w-100 justify-content-end mt-4 gap-2 fs-4 fw-bold">
             <div class="">Total: </div>
-            <div class="">Rp {{ number_format($total, 2, ',', '.') }}</div>
+            <div class="">{{ number_format($total, 0, ',', '.') }}</div>
         </div>
 
     </x-container>

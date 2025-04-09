@@ -57,19 +57,19 @@
             </tr>
             <tr>
                 <th class="border border-1 border-secondary w-25">Pokok</th>
-                <td class="border border-1 border-secondary">{{ __("Rp " . number_format($employee->pokok, 2, ',', '.')) ?? "N/A" }}</td>
+                <td class="border border-1 border-secondary">{{ __( number_format($employee->pokok, 0, ',', '.')) ?? "N/A" }}</td>
             </tr>
             <tr>
                 <th class="border border-1 border-secondary w-25">Lembur</th>
-                <td class="border border-1 border-secondary">{{ __("Rp " . number_format($employee->lembur, 2, ',', '.')) ?? "N/A" }}</td>
+                <td class="border border-1 border-secondary">{{ __( number_format($employee->lembur, 0, ',', '.')) ?? "N/A" }}</td>
             </tr>
             <tr>
                 <th class="border border-1 border-secondary w-25">Lembur Panjang</th>
-                <td class="border border-1 border-secondary">{{ __("Rp " . number_format($employee->lembur_panjang, 2, ',', '.')) ?? "N/A" }}</td>
+                <td class="border border-1 border-secondary">{{ __( number_format($employee->lembur_panjang, 0, ',', '.')) ?? "N/A" }}</td>
             </tr>
             {{-- <tr>
                 <th class="border border-1 border-secondary w-25">Performa</th>
-                <td class="border border-1 border-secondary">{{ __("Rp " . number_format($employee->performa, 2, ',', '.')) ?? "N/A" }}</td>
+                <td class="border border-1 border-secondary">{{ __( number_format($employee->performa, 0, ',', '.')) ?? "N/A" }}</td>
             </tr> --}}
             {{-- <tr>
                 <th class="border border-1 border-secondary w-25">Payroll</th>
@@ -93,7 +93,7 @@
             </tr>
             <tr>
                 <th class="border border-1 border-secondary w-25">Kasbon</th>
-                <td class="border border-1 border-secondary">{{ __("Rp " . number_format($employee->kasbon, 2, ',', '.')) ?? "N/A" }}</td>
+                <td class="border border-1 border-secondary">{{ __( number_format($employee->kasbon, 0, ',', '.')) ?? "N/A" }}</td>
             </tr>
         </table>
     </x-container>

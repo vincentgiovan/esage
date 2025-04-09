@@ -50,7 +50,7 @@
                         <label for="select-product-dropdown">Nama Barang</label>
                         <select name="product_name" class="form-select select2" id="select-product-dropdown">
                             @foreach ($products as $product)
-                                <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} - {{ $product->variant }} (Harga: Rp {{ number_format($product->price, 2, ',', '.') }}, Stok:  {{ $product->stock }})</option>
+                                <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} - {{ $product->variant }} (Harga: {{ number_format($product->price, 0, ',', '.') }}, Stok:  {{ $product->stock }})</option>
                             @endforeach
                         </select>
                         <p class="text-danger" id="err-product-name"></p>

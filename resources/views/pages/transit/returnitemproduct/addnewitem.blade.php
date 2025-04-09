@@ -12,7 +12,7 @@
                         <label for="product_id">Nama Produk</label>
                         <select class="form-select select2" name="_product_id" id="product_id" placeholder="Nama Barang">
                             @foreach ($products as $product)
-                                <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} - {{ $product->variant }}  (Harga: Rp {{ number_format($product->price, 2, ',', '.') }}, Stok:  {{ $product->stock }}, Diskon: {{ $product->discount }}%)</option>
+                                <option value="{{ $product->toJson() }}" @if ($product->product_name == old("product_name")) selected @endif>{{ $product->product_name }} - {{ $product->variant }}  (Harga: {{ number_format($product->price, 0, ',', '.') }}, Stok:  {{ $product->stock }}, Diskon: {{ $product->discount }}%)</option>
                             @endforeach
                         </select>
                         <p class="text-danger" id="errProductName"></p>

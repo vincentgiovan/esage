@@ -68,9 +68,27 @@
             $total_this_page = 0;
         @endphp
 
-        <a class="btn btn-primary mt-4" href="{{ route('attendance-precreate') }}">
-            <i class="bi bi-plus-square"></i> Buat Presensi Baru
-        </a>
+        <!-- Add Attendance Preform -->
+        <div class="card mb-4 mt-3" style="background-color: white;">
+            <div class="card-header">
+                <button class="w-100 h-100 btn d-flex justify-content-between" type="button" id="add-new-attendance-btn">Buat Presensi Baru <i class="bi bi-chevron-down"></i></button>
+            </div>
+
+            <div class="card-body" id="add-new-attendance-form" style="display: none;">
+                <form action="{{ route('attendance-create-admin') }}" method="GET">
+                    <div class="form-group mb-3">
+                        <label for="project">Pilih Proyek</label>
+                        <select class="form-select" id="project" name="project">
+                            @foreach ($projects as $project)
+                                <option value="{{ $project->id }}">{{ $project->project_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Konfirmasi dan Lanjut</button>
+                </form>
+            </div>
+        </div>
 
         <div class="overflow-x-auto mt-4">
             <table class="w-100">
@@ -121,7 +139,7 @@
                                 $total_this_row = $total_normal + $total_lembur + $total_lembur_panjang + $a->performa;
                                 $total_this_page += $total_this_row;
 
-                                echo 'Rp ' . number_format($total_this_row, 2, ',', '.');
+                                echo  number_format($total_this_row, 0, ',', '.');
                             @endphp
                         </td>
                         <td class="border border-1 border-secondary">
@@ -150,8 +168,8 @@
         </div>
 
         <div class="mt-4 fs-4 d-flex flex-column w-100 align-items-end">
-            <span>Total di halaman ini: <b>Rp {{ number_format($total_this_page, 2, ',', '.') }}</b></span>
-            <span>Total seluruh data: <b>Rp {{ number_format($total_all, 2, ',', '.') }}</b></span>
+            <span>Total di halaman ini: <b>{{ number_format($total_this_page, 0, ',', '.') }}</b></span>
+            <span>Total seluruh data: <b>{{ number_format($total_all, 0, ',', '.') }}</b></span>
         </div>
     </x-container>
 
