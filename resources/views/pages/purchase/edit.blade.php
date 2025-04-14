@@ -15,7 +15,7 @@
                         <label for="partner_id">Supplier<span class="text-danger">*</span></label>
                         <select name="partner_id" id="partner_id" class="form-select select2">
                             @foreach ($supplier as $s)
-                                <option value="{{ $s->id }}">
+                                <option value="{{ $s->id }}" @if($purchase->partner_id == $s->id) selected @endif>
                                     {{ $s->partner_name }}
                                 </option>
                             @endforeach
@@ -25,7 +25,7 @@
                     <div class="mt-3 w-50">
                         <label for="purchase_date">Tanggal Pembelian<span class="text-danger">*</span></label>
                         <input type="date" class="form-control @error("purchase_date") is-invalid @enderror" name="purchase_date" id="purchase_date"
-                            value="{{ Carbon\Carbon::today()->format('Y-m-d') }}">
+                            value="{{ Carbon\Carbon::parse($purchase->purchase_date)->format('Y-m-d') }}">
                         <p class="invalid-feedback">Harap masukkan tanggal pembelian</p>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
                     <div class="mt-3 w-50">
                         <label for="purchase_deadline">Deadline/Tenggat Pembelian<span class="text-danger">*</span></label>
                         <input type="date" class="form-control @error("purchase_deadline") is-invalid @enderror" name="purchase_deadline" id="purchase_deadline"
-                            value="{{ Carbon\Carbon::today()->format('Y-m-d') }}">
+                            value="{{ Carbon\Carbon::parse($purchase->purchase_deadline)->format('Y-m-d') }}">
                         <p class="invalid-feedback">Harap masukkan deadline/tenggat pembelian.</p>
                     </div>
 
@@ -50,11 +50,11 @@
 
                     <div class="d-flex gap-3">
                         <div class="d-flex gap-2 rounded-3 py-2">
-                            <input class="form-check-input" type="radio" name="purchase_status" id="purchase_status1" value="Ordered" @if(old('purchase_status') == "Ordered") checked @endif checked>
+                            <input class="form-check-input" type="radio" name="purchase_status" id="purchase_status1" value="Ordered" @if(old('purchase_status', $purchase->purchase_status) == "Ordered") checked @endif checked>
                             <label class="form-check-label" for="purchase_status1">Telah dipesan</label>
                         </div>
                         <div class="d-flex gap-2 rounded-3 py-2">
-                            <input class="form-check-input" type="radio" name="purchase_status" id="purchase_status2" value="Retrieved" @if(old('purchase_status') == "Retrieved") checked @endif>
+                            <input class="form-check-input" type="radio" name="purchase_status" id="purchase_status2" value="Retrieved" @if(old('purchase_status', $purchase->purchase_status) == "Retrieved") checked @endif>
                             <label class="form-check-label" for="purchase_status2">Diterima</label>
                         </div>
                     </div>
