@@ -17,7 +17,7 @@ class EmployeeController extends Controller
 {
     public function index(){
         return view("pages.employee.index", [
-            "employees" => Employee::filter(request(['status', 'search']))->orderByRaw('CASE WHEN status = "active" THEN 0 ELSE 1 END')->paginate(30)
+            "employees" => Employee::filter(request(['status', 'search']))->orderByRaw('CASE WHEN status = "active" THEN 0 ELSE 1 END')->orderBy('nama', 'asc')->paginate(30)
         ]);
     }
 

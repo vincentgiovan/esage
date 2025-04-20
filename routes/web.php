@@ -237,6 +237,8 @@ Route::middleware(["auth", "verified"])->group(function(){
         Route::post("/prepays/{emp_id}/{ppay_id}/delete", [PrepayController::class, "destroy"])->name("prepay-destroy")->whereNumber('emp_id')->whereNumber('ppay_id');
 
         Route::get('/prepays/generate', [PrepayController::class, 'generate'])->name('prepay-generate');
+        Route::get("/prepays/import", [PrepayController::class, "import_prepay_form"])->name("prepay-import");
+        Route::post("/prepays/import", [PrepayController::class, "import_prepay_store"])->name("prepay-import-store");
     });
 
     // ===== LEAVES ===== //

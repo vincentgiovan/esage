@@ -5,10 +5,25 @@
         <br>
         <div class="w-100 d-flex justify-content-between align-items-center">
             <h3>Data Pegawai</h3>
-            <div class="d-flex gap-3">
-                <a class="btn btn-secondary" href="{{ route('employee-import') }}"><i class="bi bi-file-earmark-arrow-down"></i> Import</a>
+            <div class="position-relative d-flex flex-column align-items-end">
+                <button class="btn btn-secondary" type="button" id="dd-toggler">
+                    <i class="bi bi-file-earmark-arrow-up"></i> Import
+                </button>
+                <div class="bg-white rounded-lg position-absolute z-2 border border-1" id="dd-menu" style="display: none; top: 40px;">
+                    <a class="dropdown-item border border-1 py-2 px-3" href="{{ route('employee-import') }}" target="blank">Pegawai</a></li>
+                    <a class="dropdown-item border border-1 py-2 px-3" href="{{ route('prepay-import') }}" target="blank">Kasbon</a></li>
+                </div>
             </div>
         </div>
+
+        <script>
+            $(document).ready(() => {
+                $("#dd-toggler").click(function(){
+                    $("#dd-menu").toggle();
+                });
+            });
+        </script>
+
         <hr>
 
         @if (session()->has('success-add-employee-data'))

@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Attendance;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Prepay;
 use App\Models\Employee;
 use App\Models\PrepayCut;
+use App\Models\Attendance;
 use Illuminate\Http\Request;
+use App\Imports\PrepaysImport;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class PrepayController extends Controller
@@ -198,6 +201,33 @@ class PrepayController extends Controller
         return back()->with('successGeneratePrepays', 'Data kasbon berhasil di-generate!');
     }
 
+    public function import_prepay_form(){
+        return view("pages.prepay.import-data");
+    }
 
+    public function import_prepay_store(Request $request){
+        // Validate the uploaded file
+        $request->validate([
+            'file_to_upload' => 'required|file|mimes:xlsx,xls,csv',
+        ]);
+
+        $temp_path = $request->file('file_to_upload')->store('temp');
+
+        try {
+			Excel::import(new PrepaysImport, $temp_path);
+
+            Storage::delete($temp_path);
+
+			return redirect(route("employee-index"))->with('successImportExcel', 'Berhasil membaca file Excel dan menambahkan data pegawai.');
+		}
+
+		catch (Exception $e){
+            Storage::delete($temp_path);
+
+            throw $e;
+
+			// return back()->with('failedImportExcel', "Gagal membaca dan menambahkan produk dari file Excel, harap perhatikan format yang telah ditentukan dan silakan coba kembali.");
+		}
+    }
 
 }
