@@ -282,7 +282,7 @@
                         </div>
                     </form>
 
-                    <form action="{{ route('todo-store') }}" method="post" class="add-items d-flex align-items-center px-4">
+                    <form action="{{ route('todo-store') }}" method="post" class="add-items d-flex align-items-center px-4 mb-4">
                         @csrf
                         <input type="text" name="new_task" class="form-control todo-list-input me-2" placeholder="Add new task">
                         <button class="btn text-primary bg-transparent" type="submit">
@@ -458,4 +458,23 @@
     {{-- partial:partials/_footer.html --}}
 
     {{-- partial --}}
+    <script>
+        $(document).ready((() => {
+            $.ajax({
+                url: '{{ route('prepay-generate') }}',  // The Laravel route
+                type: 'GET',                      // Request type (POST)
+                data: {
+                    _token: '{{ csrf_token() }}',  // CSRF token for security
+                },
+                success: function(response) {
+                    // Handle the success response (JSON)
+                    console.log(response.message);
+                },
+                error: function(xhr, status, error) {
+                    // Handle any error
+                    console.error(xhr.responseText);
+                }
+            });
+        }));
+    </script>
 @endsection

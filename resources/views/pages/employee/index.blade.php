@@ -38,7 +38,7 @@
             <div class="d-flex gap-2">
                 <a href="{{ route('employee-create') }}" class="btn btn-primary"><i class="bi bi-plus-square"></i> Data Pegawai Baru</a>
                 <a href="{{ route('employee-manageform') }}" class="btn btn-primary">Atur Jabatan dan Keahlian</a>
-                <a href="{{ route('prepay-generate') }}" onclick="return confirm('Apakah anda yakin ingin meng-generate pemotongan kasbon?')" class="btn btn-primary">Simulasi Pemotongan Kasbon</a>
+                {{-- <a href="{{ route('prepay-generate') }}" onclick="return confirm('Apakah anda yakin ingin meng-generate pemotongan kasbon?')" class="btn btn-primary">Simulasi Pemotongan Kasbon</a> --}}
             </div>
 
             <form action="{{ route('employee-index') }}" class="d-flex gap-3">

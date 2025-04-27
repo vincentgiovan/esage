@@ -87,84 +87,26 @@ class PrepayController extends Controller
 
     // For simulation purpose only
     public function generate() {
-        $prepays = Prepay::where('curr_amount', '>', 0)
-            ->where('enable_auto_cut', 'yes')
-            ->orderBy('employee_id')
-            ->get();
+        try {
+            DB::beginTransaction();
 
-        foreach ($prepays as $ppay) {
-            if($ppay->enable_auto_cut == 'no'){
-                continue;
-            }
+            $prepays = Prepay::where('curr_amount', '>', 0)
+                ->where('enable_auto_cut', 'yes')
+                ->orderBy('employee_id')
+                ->get();
 
-            $last_generated_ppay_cut = PrepayCut::where('prepay_id', $ppay->id)->latest()->first();
-
-            if ($last_generated_ppay_cut) {
-                $today = Carbon::today();
-                $prev_end_period = Carbon::parse($last_generated_ppay_cut->end_period)->startOfDay();
-
-                if($today->diffInDays($prev_end_period) <= 7) {
+            foreach ($prepays as $ppay) {
+                if($ppay->enable_auto_cut == 'no' || $ppay->employee->status == 'passive'){
                     continue;
                 }
 
-                $remaining_amount = 0;
-                $cut_amount = $ppay->curr_amount;
+                $last_generated_ppay_cut = PrepayCut::where('prepay_id', $ppay->id)->latest()->first();
 
-                if(($ppay->curr_amount - $ppay->cut_amount) > 0){
-                    $remaining_amount = $ppay->curr_amount - $ppay->cut_amount;
-                    $cut_amount = $ppay->cut_amount;
-                }
-                else {
-                    $ppay->enable_auto_cut = 'no';
-                }
+                if ($last_generated_ppay_cut) {
+                    $today = Carbon::today();
+                    $prev_end_period = Carbon::parse($last_generated_ppay_cut->end_period)->startOfDay();
 
-                PrepayCut::create([
-                    'prepay_id' => $last_generated_ppay_cut->prepay_id,
-                    'start_period' => $prev_end_period->copy()->addDay(),
-                    'end_period' => $prev_end_period->copy()->addDays(7),
-                    'init_amount' => $ppay->curr_amount,
-                    'cut_amount' => $cut_amount,
-                    'remaining_amount' => $remaining_amount,
-                ]);
-
-                $ppay->curr_amount -= $cut_amount;
-                $ppay->save();
-            } else {
-                // Generate missing periods from the prepay's created date to today
-                $prepay_init_date = Carbon::parse($ppay->prepay_date)->startOfDay();
-                $today = Carbon::today();
-
-                // ✅ Ensure the first start_period is **always a future Saturday**
-                if ($prepay_init_date->isSaturday()) {
-                    $start_period = $prepay_init_date->copy(); // Start on this Saturday
-                } else {
-                    $start_period = $prepay_init_date->copy()->next(Carbon::SATURDAY);
-                }
-
-                $end_period = $start_period->copy()->addDays(6); // Ends on Friday
-
-                while ($end_period->lte($today)) {
-                    if($ppay->enable_auto_cut == 'no'){
-                        break;
-                    }
-
-                    $attendances = Attendance::where('employee_id', $ppay->employee_id)
-                        ->whereBetween('attendance_date', [$start_period, $end_period])
-                        ->get();
-
-                    $salary_in_the_period = 0;
-                    foreach ($attendances as $atd) {
-                        $salary_in_the_period +=
-                            ($atd->normal * $atd->employee->pokok) +
-                            ($atd->jam_lembur * $atd->employee->lembur) +
-                            ($atd->index_lembur_panjang * $atd->employee->lembur_panjang) +
-                            $atd->performa;
-                    }
-
-                    if ($salary_in_the_period < $ppay->cut_amount) {
-                        // Skip this period, but correctly advance to the next week
-                        $start_period = $end_period->copy()->addDay();
-                        $end_period = $start_period->copy()->addDays(6);
+                    if($today->diffInDays($prev_end_period) <= 7) {
                         continue;
                     }
 
@@ -180,9 +122,9 @@ class PrepayController extends Controller
                     }
 
                     PrepayCut::create([
-                        'prepay_id' => $ppay->id,
-                        'start_period' => $start_period,
-                        'end_period' => $end_period,
+                        'prepay_id' => $last_generated_ppay_cut->prepay_id,
+                        'start_period' => $prev_end_period->copy()->addDay(),
+                        'end_period' => $prev_end_period->copy()->addDays(7),
                         'init_amount' => $ppay->curr_amount,
                         'cut_amount' => $cut_amount,
                         'remaining_amount' => $remaining_amount,
@@ -190,15 +132,88 @@ class PrepayController extends Controller
 
                     $ppay->curr_amount -= $cut_amount;
                     $ppay->save();
+                } else {
+                    // Generate missing periods from the prepay's created date to today
+                    $prepay_init_date = Carbon::parse($ppay->prepay_date);
+                    $today = Carbon::today();
 
-                    // ✅ Correctly advance to the next week
-                    $start_period = $end_period->copy()->addDay();
-                    $end_period = $start_period->copy()->addDays(6);
+                    // ✅ Ensure the first start_period is **always a current Saturday**
+                    if ($prepay_init_date->isSaturday()) {
+                        $start_period = $prepay_init_date->copy(); // Start on this Saturday
+                    } else {
+                        $start_period = $prepay_init_date->copy()->previous(Carbon::SATURDAY);
+                    }
+
+                    $end_period = $start_period->copy()->addDays(6); // Ends on Friday
+
+                    while ($end_period->lte($today)) {
+                        if($ppay->enable_auto_cut == 'no'){
+                            break;
+                        }
+
+                        $attendances = Attendance::where('employee_id', $ppay->employee_id)
+                            ->whereBetween('attendance_date', [$start_period, $end_period])
+                            ->get();
+
+                        $salary_in_the_period = 0;
+                        foreach ($attendances as $atd) {
+                            $salary_in_the_period +=
+                                ($atd->normal * $atd->employee->pokok) +
+                                ($atd->jam_lembur * $atd->employee->lembur) +
+                                ($atd->index_lembur_panjang * $atd->employee->lembur_panjang) +
+                                $atd->performa;
+                        }
+
+                        if ($salary_in_the_period < $ppay->cut_amount) {
+                            // Skip this period, but correctly advance to the next week
+                            $start_period = $end_period->copy()->addDay();
+                            $end_period = $start_period->copy()->addDays(6);
+                            continue;
+                        }
+
+                        $remaining_amount = 0;
+                        $cut_amount = $ppay->curr_amount;
+
+                        if(($ppay->curr_amount - $ppay->cut_amount) > 0){
+                            $remaining_amount = $ppay->curr_amount - $ppay->cut_amount;
+                            $cut_amount = $ppay->cut_amount;
+                        }
+                        else {
+                            $cut_amount = $ppay->curr_amount;
+                            $remaining_amount = 0;
+                        }
+
+                        PrepayCut::create([
+                            'prepay_id' => $ppay->id,
+                            'start_period' => $start_period,
+                            'end_period' => $end_period,
+                            'init_amount' => $ppay->curr_amount,
+                            'cut_amount' => $cut_amount,
+                            'remaining_amount' => $remaining_amount,
+                        ]);
+
+                        $ppay->curr_amount -= $cut_amount;
+                        if($remaining_amount == 0){
+                            $ppay->enable_auto_cut = 'no';
+                        }
+                        $ppay->save();
+
+                        // ✅ Correctly advance to the next week
+                        $start_period = $end_period->copy()->addDay();
+                        $end_period = $start_period->copy()->addDays(6);
+                    }
                 }
             }
+
+            DB::commit();
+        }
+        catch(Exception $e){
+            DB::rollback();
+
+            return response()->json(['success' => false, 'message' => 'Terjadi kesalahan saat membuat pemotongan kasbon']);
         }
 
-        return back()->with('successGeneratePrepays', 'Data kasbon berhasil di-generate!');
+        return response()->json(['success' => true, 'message' => 'Pemotongan kasbon berhasil dibuat!']);
     }
 
     public function import_prepay_form(){
@@ -218,7 +233,7 @@ class PrepayController extends Controller
 
             Storage::delete($temp_path);
 
-			return redirect(route("employee-index"))->with('successImportExcel', 'Berhasil membaca file Excel dan menambahkan data pegawai.');
+			return redirect(route("employee-index"))->with('successImportExcel', 'Berhasil membaca file Excel dan menambahkan data kasbon pegawai.');
 		}
 
 		catch (Exception $e){
