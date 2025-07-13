@@ -10,11 +10,13 @@ use App\Models\Attendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Exports\SalariesExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SalaryController extends Controller
 {
     public function index(){
-        $groupedAttendances = Attendance::filter(request(['from', 'until', 'employee']))->with('project')
+        $groupedAttendances = Attendance::filter(request(['from', 'until', 'employee', 'project']))->with('project')
             ->orderBy('attendance_date', 'asc')
             ->orderBy(Employee::select('nama')
                 ->whereColumn('id', 'attendances.employee_id')
@@ -78,5 +80,9 @@ class SalaryController extends Controller
             "end_period" => request('until'),
             "projects" => Project::all(),
         ]);
+    }
+
+    public function export_salaries_excel(Request $request){
+        return Excel::download(new SalariesExport($request->from, $request->until, $request->employee, $request->project), 'slip-gaji.xlsx');
     }
 }

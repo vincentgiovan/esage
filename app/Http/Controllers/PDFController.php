@@ -119,8 +119,8 @@ class PDFController extends Controller
         return $pdf->stream('project.pdf');
     }
 
-    public function export_salaries(Request $request){
-        $groupedAttendances = Attendance::filter(request(['from', 'until', 'employee']))->with('project')
+    public function export_salaries_pdf(Request $request){
+        $groupedAttendances = Attendance::filter(request(['from', 'until', 'employee', 'project']))->with('project')
             ->orderBy('attendance_date', 'asc')
             ->orderBy(Employee::select('nama')
                 ->whereColumn('id', 'attendances.employee_id')

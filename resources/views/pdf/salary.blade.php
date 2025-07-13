@@ -29,7 +29,7 @@
 
             $today = Carbon\Carbon::today();
             $thisWeeksFriday = $today->copy()->endOfWeek(Carbon\Carbon::FRIDAY);
-            $lastWeeksSaturday = $today->copy()->previous(Carbon::SATURDAY);;
+            $lastWeeksSaturday = $today->copy()->previous(Carbon\Carbon::SATURDAY);;
 
             $rangeStart = Carbon\Carbon::parse(request('from'));
             $rangeEnd = Carbon\Carbon::parse(request('until'));

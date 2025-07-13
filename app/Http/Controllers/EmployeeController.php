@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\EmployeesExport;
 use Exception;
 use App\Models\User;
 use App\Models\Salary;
@@ -199,4 +200,7 @@ class EmployeeController extends Controller
 		}
     }
 
+    public function export_excel(){
+        return Excel::download(new EmployeesExport, 'data-pegawai.xlsx');
+    }
 }

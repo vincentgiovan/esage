@@ -32,12 +32,21 @@
                     <i class="bi bi-file-earmark-arrow-up"></i> Export
                 </button>
                 <div class="bg-white rounded-lg position-absolute z-2 border border-1" id="dd-menu" style="display: none; top: 40px;">
-                    <form action="{{ route('salary-export') }}" method="post" target="_blank">
+                    <form action="{{ route('salary-export-pdf') }}" method="post" target="_blank">
                         @csrf
                         <input type="hidden" name="from" value="{{ request('from') }}">
                         <input type="hidden" name="until" value="{{ request('until') }}">
                         <input type="hidden" name="employee" value="{{ request('employee') }}">
+                        <input type="hidden" name="project" value="{{ request('project') }}">
                         <button type="submit" class="dropdown-item border border-1 py-2 px-3">Export (PDF)</button>
+                    </form>
+                    <form action="{{ route('salary-export-excel') }}" method="post" target="_blank">
+                        @csrf
+                        <input type="hidden" name="from" value="{{ request('from') }}">
+                        <input type="hidden" name="until" value="{{ request('until') }}">
+                        <input type="hidden" name="employee" value="{{ request('employee') }}">
+                        <input type="hidden" name="project" value="{{ request('project') }}">
+                        <button type="submit" class="dropdown-item border border-1 py-2 px-3">Export (Excel)</button>
                     </form>
                 </div>
             </div>
@@ -70,6 +79,10 @@
                 <div class="d-flex flex-column ms-3">
                     <label for="">Filter Karyawan</label>
                     <input type="text" class="form-control" name="employee" placeholder="Nama karyawan" value="{{ request('employee') }}">
+                </div>
+                <div class="d-flex flex-column ms-3">
+                    <label for="">Filter Proyek</label>
+                    <input type="text" class="form-control" name="project" placeholder="Nama proyek" value="{{ request('project') }}">
                 </div>
                 <button type="submit" class="btn btn-primary ms-2"><i class="bi bi-search"></i></button>
             </form>

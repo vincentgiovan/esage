@@ -224,6 +224,8 @@ Route::middleware(["auth", "verified"])->group(function(){
 
         Route::get("/employee/import", [EmployeeController::class, "import_employee_form"])->name("employee-import");
         Route::post("/employee/import", [EmployeeController::class, "import_employee_store"])->name("employee-import-store");
+
+        Route::get('/employee/export-excel', [EmployeeController::class, 'export_excel'])->name("employee-export-excel");
     });
 
     // ===== PREPAYS ===== //
@@ -251,10 +253,11 @@ Route::middleware(["auth", "verified"])->group(function(){
     // ===== SALARIES ===== //
     Route::middleware('allow:master,accounting_admin')->group(function(){
         Route::get("/salary", [SalaryController::class, "index"])->name("salary-index");
-        Route::post("/salary/auto-create", [SalaryController::class, "auto_create"])->name('salary-autocreate');
-        Route::get("/salary/{id}/edit", [SalaryController::class, "edit"])->name("salary-edit")->whereNumber("id");
-        Route::post("/salary/{id}/edit", [SalaryController::class, "update"])->name("salary-update")->whereNumber("id");
-        Route::post("/salary/export", [PDFController::class, "export_salaries"])->name("salary-export")->whereNumber("id");
+        // Route::post("/salary/auto-create", [SalaryController::class, "auto_create"])->name('salary-autocreate');
+        // Route::get("/salary/{id}/edit", [SalaryController::class, "edit"])->name("salary-edit")->whereNumber("id");
+        // Route::post("/salary/{id}/edit", [SalaryController::class, "update"])->name("salary-update")->whereNumber("id");
+        Route::post("/salary/export-pdf", [PDFController::class, "export_salaries_pdf"])->name("salary-export-pdf")->whereNumber("id");
+        Route::post("/salary/export-excel", [SalaryController::class, "export_salaries_excel"])->name("salary-export-excel")->whereNumber("id");
     });
 
     // ===== ATTENDANCES ===== //
