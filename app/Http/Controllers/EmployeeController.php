@@ -38,7 +38,7 @@ class EmployeeController extends Controller
     public function store(Request $request){
         $validated_data = $request->validate([
             "nama" => "required|min:3",
-            "NIK" => "unique:employees|required|min:16",
+            "NIK" => "required|min:16",
             "image" => "required|file|image|max:4096",
             "kalkulasi_gaji" => "required",
             "jabatan" => "required",
@@ -82,7 +82,7 @@ class EmployeeController extends Controller
     public function update(Request $request, $id){
         $validated_data = $request->validate([
             "nama" => "required|min:3",
-            "NIK" => "unique:employees|required|min:16",
+            "NIK" => "required|min:16",
             "image" => "nullable|file|image|max:4096",
             "kalkulasi_gaji" => "required",
             "jabatan" => "required",
