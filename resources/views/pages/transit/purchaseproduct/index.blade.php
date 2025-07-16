@@ -118,7 +118,7 @@
                 @php
                     $total = 0;
                     foreach ($pp as $purchase_product){
-                        $total += $purchase_product->product->price * (1 - ($purchase_product->product->discount / 100));
+                        $total += $purchase_product->product->price * $purchase_product->quantity * (1 - ($purchase_product->product->discount / 100));
                     }
 
                     echo  number_format($total, 0, ',', '.');
