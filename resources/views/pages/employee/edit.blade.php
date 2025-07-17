@@ -131,24 +131,14 @@
                     @enderror
                 </div>
 
-                {{-- <div class="mt-3">
-                    <label>Payroll</label>
-
-                    <div class="d-flex gap-3">
-                        <div class="d-flex gap-2 rounded-3 py-2">
-                            <input class="form-check-input" type="radio" name="payroll" id="flexRadioDefault3" value="on" @if($employee->payroll == "on") checked @endif>
-                            <label class="form-check-label" for="flexRadioDefault3">
-                                Ya
-                            </label>
-                        </div>
-                        <div class="d-flex gap-2 rounded-3 py-2">
-                            <input class="form-check-input" type="radio" name="payroll" id="flexRadioDefault4" value="off" @if($employee->payroll == "off") checked @endif>
-                            <label class="form-check-label" for="flexRadioDefault4">
-                                Tidak
-                            </label>
-                        </div>
-                    </div>
-                </div> --}}
+                <div class="mt-3">
+                    <label for="performa">Performa<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control @error('performa') is-invalid @enderror" name="performa" id="performa" placeholder="Performa"
+                        value="{{ old('performa', $employee->performa) }}">
+                    @error('performa')
+                        <p class="text-danger">Harap masukkan nominal performa karyawan.</p>
+                    @enderror
+                </div>
 
                 <div class="mt-3">
                     <label for="masuk">Masuk<span class="text-danger">*</span></label>

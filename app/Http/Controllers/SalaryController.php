@@ -28,6 +28,7 @@ class SalaryController extends Controller
             ->groupBy('employee_id');
 
         $subtotals = collect(); // Use collection for better handling
+        $total_all = 0;
 
         foreach ($groupedAttendances as $employee_id => $attendances) {
             $employee = $attendances->first()->employee; // Get the employee details
@@ -41,10 +42,11 @@ class SalaryController extends Controller
                     $sub_lembur_panjang = $atd->index_lembur_panjang * $employee->lembur_panjang;
                     $sub_performa = $atd->performa;
 
-                    $total_salary += $sub_normal + $sub_lembur + $sub_lembur_panjang + $sub_performa;
+                    $total_salary += $sub_normal + $sub_lembur + $sub_lembur_panjang + $sub_performa + $employee->performa;
                 }
 
                 $subtotals->put($employee_id, $total_salary);
+                $total_all += $total_salary;
             }
         }
 
@@ -76,6 +78,7 @@ class SalaryController extends Controller
         return view("pages.salary.index", [
             "grouped_attendances" => $paginatedAttendances,
             "subtotals" => $paginatedSubtotals,
+            'total_all' => $total_all,
             "start_period" => request('from'),
             "end_period" => request('until'),
             "projects" => Project::all(),

@@ -76,6 +76,7 @@
                     <th class="border border-1 border-secondary">Pokok</th>
                     <th class="border border-1 border-secondary">Lembur</th>
                     <th class="border border-1 border-secondary">L. Panjang</th>
+                    <th class="border border-1 border-secondary">Performa</th>
                     <th class="border border-1 border-secondary">Kasbon</th>
                     <th class="border border-1 border-secondary">Status</th>
                     <th class="border border-1 border-secondary">Akun</th>
@@ -91,6 +92,7 @@
                         <td class="border border-1 border-secondary">{{ __( number_format($e->pokok, 0, ',', '.')) }}</td>
                         <td class="border border-1 border-secondary">{{ __( number_format($e->lembur, 0, ',', '.')) }}</td>
                         <td class="border border-1 border-secondary">{{ __( number_format($e->lembur_panjang, 0, ',', '.')) }}</td>
+                        <td class="border border-1 border-secondary">{{ __( number_format($e->performa, 0, ',', '.')) }}</td>
                         <td class="border border-1 border-secondary">
                             @php
                                 $total_kasbon = 0;

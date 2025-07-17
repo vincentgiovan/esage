@@ -117,7 +117,7 @@
                             $total_gaji_lembur_panjang += $atd->index_lembur_panjang * $atd->employee->lembur_panjang;
                             $total_performa += $atd->performa;
 
-                            $total_gaji = $total_gaji_normal + $total_gaji_lembur + $total_gaji_lembur_panjang + $total_performa;
+                            $total_gaji = $total_gaji_normal + $total_gaji_lembur + $total_gaji_lembur_panjang + $total_performa + $atd->employee->performa;
                         @endphp
                     @endforeach
 

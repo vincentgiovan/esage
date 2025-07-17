@@ -105,6 +105,7 @@
 
                 @php
                     $iterasus = 0;
+                    $total_this_page = 0;
                 @endphp
 
                 @foreach($grouped_attendances as $emp_id => $attendances)
@@ -133,6 +134,8 @@
 
                             $subtotals[$emp_id] -= $total_kasbon;
                         }
+
+                        $total_this_page += $subtotals[$emp_id];
                     @endphp
 
                     <tr style="background-color: @if($iterasus % 2 == 1) #E0E0E0 @else white @endif;">
@@ -174,7 +177,7 @@
                                 $total_gaji_lembur_panjang += $atd->index_lembur_panjang * $atd->employee->lembur_panjang;
                                 $total_performa += $atd->performa;
 
-                                $total_gaji = $total_gaji_normal + $total_gaji_lembur + $total_gaji_lembur_panjang + $total_performa;
+                                $total_gaji = $total_gaji_normal + $total_gaji_lembur + $total_gaji_lembur_panjang + $total_performa + $atd->employee->performa;
                             @endphp
                         @endforeach
 
@@ -249,7 +252,12 @@
         </div>
 
         <div class="mt-4">
-            {{ $grouped_attendances->links() }}
+            {{ $grouped_attendances->appends(request()->query())->links() }}
+        </div>
+
+        <div class="mt-4 fs-4 d-flex flex-column w-100 align-items-end">
+            <span>Total di halaman ini: <b>{{ number_format($total_this_page, 0, ',', '.') }}</b></span>
+            <span>Total seluruh data: <b>{{ number_format($total_all, 0, ',', '.') }}</b></span>
         </div>
     </x-container>
 

@@ -85,6 +85,7 @@
                             <tr>
                                 <td class="border border-1 border-secondary select-employee">
                                     <select name="employee[]" class="select2 form-select">
+                                        <option selected disabled>Pilih Pegawai</option>
                                         @forelse($project->employees as $e)
                                             <option value="{{ $e->id }}">{{ $e->nama }} ({{ $e->jabatan }})</option>
                                         @empty
@@ -270,6 +271,8 @@
                     </table>
                 </div>
 
+                <p class="mt-4 text-danger" id="error-notice"></p>
+
                 <div class="mt-3 w-100 d-flex justify-content-end">
                     <button type="button" class="btn btn-primary" id="add-data-btn">Tambah Data</button>
                 </div>
@@ -362,6 +365,7 @@
 
                 newRow.find('.select-employee').html('');
                 const newSelect = $('<select>').addClass('select2 from-select').attr('name', 'employee[]');
+                newSelect.append($('<option>').attr('selected', true).attr('disabled', true).text('Pilih Pegawai'));
                 employees.forEach(employee => {
                     newSelect.append($('<option>').attr('value', employee.id).text(`${employee.nama} (${employee.jabatan})`));
                 });
@@ -424,7 +428,8 @@
             $('#submit-attendance-btn').on('click', function(){
                 let invalid = false;
 
-                $('#start_date, #end_date').removeClass('is-invalid')
+                $('#start_date, #end_date').removeClass('is-invalid');
+                $('#error-notice').text('');
 
                 if(!$('#start_date').val()){
                     $('#start_date').addClass('is-invalid');
@@ -441,6 +446,15 @@
                     $('#end_date').addClass('is-invalid');
                     invalid = true;
                 }
+
+                $('.select-employee').each(function(){
+                    $(this).removeClass('border-2 border-danger');
+                    if(!$(this).find('.select2').val()){
+                        $('#error-notice').text('Masih ada baris data yang belum dipilih pegawainya.');
+                        $(this).addClass('border-2 border-danger');
+                        invalid = true;
+                    }
+                })
 
                 if(!invalid){
                     $('form').submit();

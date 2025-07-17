@@ -149,7 +149,7 @@ class SalariesExport implements FromArray, WithStyles, WithEvents
                     $total_gaji_lembur_panjang += $atd->index_lembur_panjang * $atd->employee->lembur_panjang;
                     $total_performa += $atd->performa;
 
-                    $total_gaji = $total_gaji_normal + $total_gaji_lembur + $total_gaji_lembur_panjang + $total_performa;
+                    $total_gaji = $total_gaji_normal + $total_gaji_lembur + $total_gaji_lembur_panjang + $total_performa + $atd->employee->performa;
                 }
 
                 if($total_jam_normal != 0){

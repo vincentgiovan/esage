@@ -76,9 +76,9 @@
 
             <div class="card-body" id="add-new-attendance-form" style="display: none;">
                 <form action="{{ route('attendance-create-admin') }}" method="GET">
-                    <div class="form-group mb-3">
+                    <div class="d-flex flex-column mb-3">
                         <label for="project">Pilih Proyek</label>
-                        <select class="form-select" id="project" name="project">
+                        <select class="form-select select2" id="project" name="project">
                             @foreach ($projects as $project)
                                 <option value="{{ $project->id }}">{{ $project->project_name }}</option>
                             @endforeach
@@ -109,7 +109,8 @@
                         <td class="border border-1 border-secondary">{{ $a->project->project_name }}</td>
                         <td class="border border-1 border-secondary">{{ $a->employee->nama }}</td>
                         <td class="border border-1 border-secondary">
-                            <table class="w-100">
+                            <button class="btn btn-success atd-detail-trigger">Lihat Rincian</button>
+                            <table class="w-100 mt-2" style="display: none;">
                                 <tbody>
                                     <tr>
                                         <th class="border border-1 border-secondary">Normal</th>
@@ -177,6 +178,10 @@
         $(document).ready(() => {
             $("#add-new-attendance-btn").click(() => {
                 $("#add-new-attendance-form").slideToggle();
+            });
+
+            $('.atd-detail-trigger').click(function(){
+                $(this).next().toggle();
             })
         });
     </script>
