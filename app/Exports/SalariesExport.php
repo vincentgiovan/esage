@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use Carbon\Carbon;
+use App\Models\Prepay;
 use App\Models\Project;
 use App\Models\Employee;
 use App\Models\PrepayCut;
@@ -31,7 +32,7 @@ class SalariesExport implements FromArray, WithStyles, WithEvents
     public function array(): array
     {
         // Retrieve all the attendance data
-        $groupedAttendances = Attendance::filter(['start_period' => $this->start_period, 'end_period' => $this->end_period, 'employee' => $this->employee, 'project' => $this->project])->with('project')
+        $groupedAttendances = Attendance::filter(request(['from', 'until', 'employee', 'project']))->with('project')
             ->orderBy('attendance_date', 'asc')
             ->orderBy(Employee::select('nama')
                 ->whereColumn('id', 'attendances.employee_id')
@@ -41,6 +42,23 @@ class SalariesExport implements FromArray, WithStyles, WithEvents
                 ->limit(1), 'asc')
             ->get()
             ->groupBy('employee_id');
+
+        $prepaysInThisPeriod = Prepay::filter(request(['from', 'until', 'employee']))->where('enable_auto_cut', 'yes')->get()->groupBy('employee_id');
+
+        $in_current_period = false;
+
+        $today = Carbon::today();
+        $lastWeeksSaturday = $today->copy()->previous(Carbon::SATURDAY);;
+        $thisWeeksFriday = $today->copy()->endOfWeek(Carbon::FRIDAY);
+
+        $rangeStart = Carbon::parse(request('from'));
+        $rangeEnd = Carbon::parse(request('until'));
+
+        if ($rangeStart->greaterThanOrEqualTo($lastWeeksSaturday) && $rangeEnd->lessThanOrEqualTo($thisWeeksFriday)) {
+            $in_current_period = true;
+        } else {
+            $in_current_period = false;
+        }
 
         // Calculate the total salary
         $subtotals = [];
@@ -53,9 +71,18 @@ class SalariesExport implements FromArray, WithStyles, WithEvents
                     $sub_normal = $atd->normal * $atd->employee->pokok;
                     $sub_lembur = $atd->jam_lembur * $atd->employee->lembur;
                     $sub_lembur_panjang = $atd->index_lembur_panjang * $atd->employee->lembur_panjang;
-                    $sub_performa = $atd->performa;
+                    $sub_performa = $atd->performa * $atd->employee->performa;
 
                     $total_salary += $sub_normal + $sub_lembur + $sub_lembur_panjang + $sub_performa;
+                }
+
+                // To show the prepay cut result on the given period
+                if($in_current_period && isset($prepaysInThisPeriod[strval($employee_id)])){
+                    foreach($prepaysInThisPeriod[strval($employee_id)] as $ppay){
+                        if($total_salary > 0){
+                            $total_salary -= $ppay->cut_amount;
+                        }
+                    }
                 }
 
                 $subtotals[$employee_id] = $total_salary;
@@ -95,23 +122,6 @@ class SalariesExport implements FromArray, WithStyles, WithEvents
             $kasubon = $employee->prepays()->pluck('id')->toArray();
             $prepay_cuts = PrepayCut::whereIn('prepay_id', $kasubon)->where('start_period', '>=', request('from'))->where('end_period', '<=', request('until'))->get();
 
-            if($in_current_period){
-                foreach($prepays as $ppay){
-                    if($subtotals[$emp_id] - $ppay->cut_amount > 0){
-                        $subtotals[$emp_id] -= $ppay->cut_amount;
-                    }
-                }
-            }
-            else {
-                $total_kasbon = 0;
-
-                foreach($prepay_cuts as $ppay_cut){
-                    $total_kasbon += $ppay_cut->cut_amount;
-                }
-
-                $subtotals[$emp_id] -= $total_kasbon;
-            }
-
             // The header data
             $excelRows[] = [
                 $data_count,
@@ -147,9 +157,9 @@ class SalariesExport implements FromArray, WithStyles, WithEvents
                     $total_gaji_normal += $atd->normal * $atd->employee->pokok;
                     $total_gaji_lembur += $atd->jam_lembur * $atd->employee->lembur;
                     $total_gaji_lembur_panjang += $atd->index_lembur_panjang * $atd->employee->lembur_panjang;
-                    $total_performa += $atd->performa;
+                    $total_performa += $atd->performa * $atd->employee->performa;
 
-                    $total_gaji = $total_gaji_normal + $total_gaji_lembur + $total_gaji_lembur_panjang + $total_performa + $atd->employee->performa;
+                    $total_gaji += $total_gaji_normal + $total_gaji_lembur + $total_gaji_lembur_panjang + $total_performa + $total_performa;
                 }
 
                 if($total_jam_normal != 0){
@@ -205,11 +215,15 @@ class SalariesExport implements FromArray, WithStyles, WithEvents
                 }
             } else {
                 foreach($prepays as $ppay){
+                    if($ppay->prepay_date >= request('from') && $ppay->prepay_date <= request('until') == false){
+                        continue;
+                    }
+
                     if($total_gaji - $ppay->cut_amount > 0){
                         $excelRows[] = [
-                            'Potongan kasbon untuk ' . $ppay->remark . ' (Sisa saldo: ' . ($ppay->curr_amount - $ppay->cut_amount < 0 ? 0 : -$ppay->curr_amount - $ppay->cut_amount) . ')',
+                            'Potongan kasbon untuk ' . $ppay->remark . ' (Sisa saldo: ' . ($ppay->curr_amount - $ppay->cut_amount < 0 ? 0 : $ppay->curr_amount - $ppay->cut_amount) . ')',
                             '', '', '', '',
-                            ($ppay->curr_amount - $ppay->cut_amount < 0 ? $ppay->curr_amount : $ppay->cut_amount)
+                            -($ppay->curr_amount - $ppay->cut_amount < 0 ? $ppay->curr_amount : $ppay->cut_amount)
                         ];
 
                         $total_gaji -= $ppay->cut_amount;

@@ -126,7 +126,7 @@
                                     </tr>
                                     <tr>
                                         <th class="border border-1 border-secondary">Performa</th>
-                                        <td class="border border-1 border-secondary">{{ $a->performa }}</td>
+                                        <td class="border border-1 border-secondary">{{ $a->performa }} kali</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -136,8 +136,9 @@
                                 $total_normal = $a->normal * $a->employee->pokok;
                                 $total_lembur = $a->jam_lembur * $a->employee->lembur;
                                 $total_lembur_panjang = $a->index_lembur_panjang * $a->employee->lembur_panjang;
+                                $total_performa = $a->performa * $a->employee->performa;
 
-                                $total_this_row = $total_normal + $total_lembur + $total_lembur_panjang + $a->performa;
+                                $total_this_row = $total_normal + $total_lembur + $total_lembur_panjang + $total_performa;
                                 $total_this_page += $total_this_row;
 
                                 echo  number_format($total_this_row, 0, ',', '.');

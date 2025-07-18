@@ -258,6 +258,7 @@ Route::middleware(["auth", "verified"])->group(function(){
         // Route::post("/salary/{id}/edit", [SalaryController::class, "update"])->name("salary-update")->whereNumber("id");
         Route::post("/salary/export-pdf", [PDFController::class, "export_salaries_pdf"])->name("salary-export-pdf")->whereNumber("id");
         Route::post("/salary/export-excel", [SalaryController::class, "export_salaries_excel"])->name("salary-export-excel")->whereNumber("id");
+        Route::post("/salary/export-excel-2", [SalaryController::class, "export_salaries_excel_2"])->name("salary-export-excel-2")->whereNumber("id");
     });
 
     // ===== ATTENDANCES ===== //

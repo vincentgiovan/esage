@@ -32,7 +32,7 @@ class ProjectController extends Controller{
     {
         // Validasi data, kalo ga lolos ga lanjut
         $validatedData = $request->validate([
-            "project_name" => "required|min:3",
+            "project_name" => "required|min:3|unique:projects",
             "location" => "required",
             "PIC" => "required|min:3",
             "address" => "required",

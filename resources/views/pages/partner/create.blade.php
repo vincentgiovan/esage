@@ -12,7 +12,7 @@
                     <input type="text" class="form-control @error('partner_name') is-invalid @enderror" name="partner_name" id="partner_name" placeholder="Nama Partner"
                         value="{{ old('partner_name') }}">
                     @error('partner_name')
-                        <p class="text-danger">Harap masukkan nama partner.</p>
+                        <p class="text-danger">Nama partner belum dimasukkan atau sudah ada partner dengan nama sama.</p>
                     @enderror
                 </div>
                 <div class="mt-3">

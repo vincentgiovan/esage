@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Prepay;
 use App\Models\Salary;
 use App\Models\Partner;
 use App\Models\Product;
@@ -131,6 +133,23 @@ class PDFController extends Controller
             ->get()
             ->groupBy('employee_id');
 
+        $prepaysInThisPeriod = Prepay::filter(request(['from', 'until', 'employee']))->where('enable_auto_cut', 'yes')->get()->groupBy('employee_id');
+
+        $in_current_period = false;
+
+        $today = Carbon::today();
+        $lastWeeksSaturday = $today->copy()->previous(Carbon::SATURDAY);;
+        $thisWeeksFriday = $today->copy()->endOfWeek(Carbon::FRIDAY);
+
+        $rangeStart = Carbon::parse(request('from'));
+        $rangeEnd = Carbon::parse(request('until'));
+
+        if ($rangeStart->greaterThanOrEqualTo($lastWeeksSaturday) && $rangeEnd->lessThanOrEqualTo($thisWeeksFriday)) {
+            $in_current_period = true;
+        } else {
+            $in_current_period = false;
+        }
+
         $subtotals = [];
 
         foreach($groupedAttendances as $employee_id => $attendances){
@@ -141,9 +160,18 @@ class PDFController extends Controller
                     $sub_normal = $atd->normal * $atd->employee->pokok;
                     $sub_lembur = $atd->jam_lembur * $atd->employee->lembur;
                     $sub_lembur_panjang = $atd->index_lembur_panjang * $atd->employee->lembur_panjang;
-                    $sub_performa = $atd->performa;
+                    $sub_performa = $atd->performa * $atd->employee->performa;
 
                     $total_salary += $sub_normal + $sub_lembur + $sub_lembur_panjang + $sub_performa;
+                }
+
+                // To show the prepay cut result on the given period
+                if($in_current_period && isset($prepaysInThisPeriod[strval($employee_id)])){
+                    foreach($prepaysInThisPeriod[strval($employee_id)] as $ppay){
+                        if($total_salary > 0){
+                            $total_salary -= $ppay->cut_amount;
+                        }
+                    }
                 }
 
                 $subtotals[$employee_id] = $total_salary;

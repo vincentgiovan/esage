@@ -13,7 +13,7 @@
             }
             th, td {
                 border: 1px solid black;
-                padding: 8px;
+                padding: 4px;
                 text-align: left;
             }
             th {
@@ -45,7 +45,7 @@
         <hr>
         <br>
 
-        <table style="width: 100%; border: 1px solid black;">
+        <table style="width: 100%; border: 1px solid black; font-size: 10pt;">
             <tr>
                 <th class="border border-1 border-secondary">No</th>
                 <th class="border border-1 border-secondary">Periode</th>
@@ -62,23 +62,6 @@
                     $prepays = $employee->prepays->where('curr_amount', '>', 0)->where('enable_auto_cut', 'yes');
                     $kasubon = $employee->prepays()->pluck('id')->toArray();
                     $prepay_cuts = App\Models\PrepayCut::whereIn('prepay_id', $kasubon)->where('start_period', '>=', request('from'))->where('end_period', '<=', request('until'))->get();
-
-                    if($in_current_period){
-                        foreach($prepays as $ppay){
-                            if($subtotals[$emp_id] - $ppay->cut_amount > 0){
-                                $subtotals[$emp_id] -= $ppay->cut_amount;
-                            }
-                        }
-                    }
-                    else {
-                        $total_kasbon = 0;
-
-                        foreach($prepay_cuts as $ppay_cut){
-                            $total_kasbon += $ppay_cut->cut_amount;
-                        }
-
-                        $subtotals[$emp_id] -= $total_kasbon;
-                    }
                 @endphp
 
                 <tr>
@@ -115,9 +98,9 @@
                             $total_gaji_normal += $atd->normal * $atd->employee->pokok;
                             $total_gaji_lembur += $atd->jam_lembur * $atd->employee->lembur;
                             $total_gaji_lembur_panjang += $atd->index_lembur_panjang * $atd->employee->lembur_panjang;
-                            $total_performa += $atd->performa;
+                            $total_performa += $atd->performa * $atd->employee->performa;
 
-                            $total_gaji = $total_gaji_normal + $total_gaji_lembur + $total_gaji_lembur_panjang + $total_performa + $atd->employee->performa;
+                            $total_gaji += $total_gaji_normal + $total_gaji_lembur + $total_gaji_lembur_panjang + $total_performa + $total_performa;
                         @endphp
                     @endforeach
 
@@ -156,15 +139,14 @@
                     @endforeach
                 @else
                     @foreach($prepays as $ppay)
+                        @if($ppay->prepay_date >= request('from') && $ppay->prepay_date <= request('until') == false)
+                            @continue
+                        @endif
                         @if($total_gaji - $ppay->cut_amount > 0)
                             <tr>
                                 <td class="border border-1 border-secondary" class="py-2" colspan="5">Potongan kasbon untuk {{ $ppay->remark }} (Sisa saldo: {{ number_format(($ppay->curr_amount - $ppay->cut_amount < 0 ? 0 : $ppay->curr_amount - $ppay->cut_amount), 0, ',', '.') }})</td>
                                 <td class="border border-1 border-secondary" class="py-2">- {{ number_format(($ppay->curr_amount - $ppay->cut_amount < 0 ? $ppay->curr_amount : $ppay->cut_amount), 0, ',', '.') }}</td>
                             </tr>
-
-                            @php
-                                $total_gaji -= $ppay->cut_amount;
-                            @endphp
                         @endif
                     @endforeach
                 @endif

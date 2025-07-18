@@ -27,28 +27,48 @@
 
         <div class="d-flex w-100 justify-content-between align-items-center">
             <h3>Gaji Pegawai</h3>
-            <div class="position-relative d-flex flex-column align-items-end">
-                <button class="btn btn-secondary" type="button" id="dd-toggler">
-                    <i class="bi bi-file-earmark-arrow-up"></i> Export
-                </button>
-                <div class="bg-white rounded-lg position-absolute z-2 border border-1" id="dd-menu" style="display: none; top: 40px;">
-                    <form action="{{ route('salary-export-pdf') }}" method="post" target="_blank">
-                        @csrf
-                        <input type="hidden" name="from" value="{{ request('from') }}">
-                        <input type="hidden" name="until" value="{{ request('until') }}">
-                        <input type="hidden" name="employee" value="{{ request('employee') }}">
-                        <input type="hidden" name="project" value="{{ request('project') }}">
-                        <button type="submit" class="dropdown-item border border-1 py-2 px-3">Export (PDF)</button>
-                    </form>
-                    <form action="{{ route('salary-export-excel') }}" method="post" target="_blank">
-                        @csrf
-                        <input type="hidden" name="from" value="{{ request('from') }}">
-                        <input type="hidden" name="until" value="{{ request('until') }}">
-                        <input type="hidden" name="employee" value="{{ request('employee') }}">
-                        <input type="hidden" name="project" value="{{ request('project') }}">
-                        <button type="submit" class="dropdown-item border border-1 py-2 px-3">Export (Excel)</button>
-                    </form>
+            <div class="d-flex gap-2 align-items-center">
+                <div class="position-relative d-flex flex-column align-items-end">
+                    <button class="btn btn-secondary" type="button" id="dd-toggler">
+                        <i class="bi bi-file-earmark-arrow-up"></i> Export
+                    </button>
+                    <div class="bg-white rounded-lg position-absolute z-2 border border-1" id="dd-menu" style="display: none; top: 40px;">
+                        <form action="{{ route('salary-export-pdf') }}" method="post" target="_blank">
+                            @csrf
+                            <input type="hidden" name="from" value="{{ request('from') }}">
+                            <input type="hidden" name="until" value="{{ request('until') }}">
+                            <input type="hidden" name="employee" value="{{ request('employee') }}">
+                            <input type="hidden" name="project" value="{{ request('project') }}">
+                            <button type="submit" class="dropdown-item border border-1 py-2 px-3">Export Slip Gaji (PDF)</button>
+                        </form>
+                        <form action="{{ route('salary-export-excel') }}" method="post" target="_blank">
+                            @csrf
+                            <input type="hidden" name="from" value="{{ request('from') }}">
+                            <input type="hidden" name="until" value="{{ request('until') }}">
+                            <input type="hidden" name="employee" value="{{ request('employee') }}">
+                            <input type="hidden" name="project" value="{{ request('project') }}">
+                            <button type="submit" class="dropdown-item border border-1 py-2 px-3">Export Slip Gaji (Excel)</button>
+                        </form>
+                        <form action="{{ route('salary-export-excel-2') }}" method="post" target="_blank">
+                            @csrf
+                            <input type="hidden" name="from" value="{{ request('from') }}">
+                            <input type="hidden" name="until" value="{{ request('until') }}">
+                            <input type="hidden" name="employee" value="{{ request('employee') }}">
+                            <input type="hidden" name="project" value="{{ request('project') }}">
+                            <button type="submit" class="dropdown-item border border-1 py-2 px-3">Export Data Gaji (Excel)</button>
+                        </form>
+                    </div>
                 </div>
+                <button class="btn btn-secondary" id="filter-toggler"><i class="bi bi-toggles"></i> Filter</button>
+                <form action="{{ route('salary-index') }}" method="get">
+                    @csrf
+                    <input type="hidden" name="from" value="{{ request('from') }}">
+                    <input type="hidden" name="until" value="{{ request('until') }}">
+                    <input type="hidden" name="employee" value="{{ request('employee') }}">
+                    <input type="hidden" name="project" value="{{ request('project') }}">
+                    <input type="hidden" name="show" value="all">
+                    <button type="submit" onclick="return confirm('Apakah anda yakin ingin menampilkan seluruh data?');" class="btn btn-secondary"><i class="bi bi-arrows-angle-expand"></i> All Data</button>
+                </form>
             </div>
         </div>
         <script>
@@ -66,7 +86,7 @@
             <p class="text-success fw-bold">{{ session('successAutoGenerateSalary') }}</p>
         @endif
 
-        <div class="d-flex justify-content-between align-items-end w-100">
+        <div class="justify-content-between align-items-end w-100" id="filters">
             <form action="{{ route('salary-index') }}" class="d-flex align-items-end gap-2">
                 <div class="d-flex flex-column">
                     <label for="">Filter Tanggal</label>
@@ -86,12 +106,13 @@
                 </div>
                 <button type="submit" class="btn btn-primary ms-2"><i class="bi bi-search"></i></button>
             </form>
-            <div class="d-flex justify-content-end">
-                Memperlihatkan {{ $grouped_attendances->firstItem() }} - {{ $grouped_attendances->lastItem()  }} dari {{ $grouped_attendances->total() }} item
-            </div>
         </div>
 
-        <div class="overflow-x-auto mt-3">
+        <div class="d-flex justify-content-end mt-3">
+            Memperlihatkan @if($is_paginated) {{ $grouped_attendances->firstItem() }} - {{ $grouped_attendances->lastItem()  }} dari {{ $grouped_attendances->total() }} @else semua @endif item
+        </div>
+
+        <div class="overflow-x-auto mt-2">
             <table class="w-100">
                 <tr>
                     <th class="border border-1 border-secondary">No</th>
@@ -116,25 +137,6 @@
                         $kasubon = $employee->prepays()->pluck('id')->toArray();
                         $prepay_cuts = App\Models\PrepayCut::whereIn('prepay_id', $kasubon)->where('start_period', '>=', request('from'))->where('end_period', '<=', request('until'))->get();
 
-                        // dd($prepay_cuts);
-
-                        if($in_current_period){
-                            foreach($prepays as $ppay){
-                                if($subtotals[$emp_id] - $ppay->cut_amount > 0){
-                                    $subtotals[$emp_id] -= $ppay->cut_amount;
-                                }
-                            }
-                        }
-                        else {
-                            $total_kasbon = 0;
-
-                            foreach($prepay_cuts as $ppay_cut){
-                                $total_kasbon += $ppay_cut->cut_amount;
-                            }
-
-                            $subtotals[$emp_id] -= $total_kasbon;
-                        }
-
                         $total_this_page += $subtotals[$emp_id];
                     @endphp
 
@@ -151,21 +153,18 @@
                     </tr>
 
                     @foreach($attendances->groupBy('project_id') as $proj_id => $gbp)
+                        {{-- This page only counter --}}
                         @php
                             $total_jam_normal = 0;
                             $total_jam_lembur = 0;
                             $total_kali_lembur_panjang = 0;
 
-                            $total_gaji = 0;
-
                             $total_gaji_normal = 0;
                             $total_gaji_lembur = 0;
                             $total_gaji_lembur_panjang = 0;
                             $total_performa = 0;
-                        @endphp
 
-                        @foreach($gbp as $proj_id => $atd)
-                            @php
+                            foreach($gbp as $proj_id => $atd){
                                 $project_name = $atd->project->project_name;
 
                                 $total_jam_normal += $atd->normal;
@@ -175,11 +174,11 @@
                                 $total_gaji_normal += $atd->normal * $atd->employee->pokok;
                                 $total_gaji_lembur += $atd->jam_lembur * $atd->employee->lembur;
                                 $total_gaji_lembur_panjang += $atd->index_lembur_panjang * $atd->employee->lembur_panjang;
-                                $total_performa += $atd->performa;
+                                $total_performa += $atd->performa * $atd->employee->performa;
 
-                                $total_gaji = $total_gaji_normal + $total_gaji_lembur + $total_gaji_lembur_panjang + $total_performa + $atd->employee->performa;
-                            @endphp
-                        @endforeach
+                                $total_gaji = $total_gaji_normal + $total_gaji_lembur + $total_gaji_lembur_panjang + $total_performa;
+                            }
+                        @endphp
 
                         @if($total_jam_normal != 0)
                             <tr class="detail-area{{ $emp_id }}" style="display: none; background-color: @if($iterasus % 2 == 1) #E0E0E0 @else white @endif;">
@@ -229,6 +228,9 @@
                         @endforeach
                     @else
                         @foreach($prepays as $ppay)
+                            @if($ppay->prepay_date >= request('from') && $ppay->prepay_date <= request('until') == false)
+                                @continue
+                            @endif
                             @if($total_gaji - $ppay->cut_amount > 0)
                                 <tr class="detail-area{{ $emp_id }}" style="display: none; background-color: @if($iterasus % 2 == 1) #E0E0E0 @else white @endif;">
                                     <td class="border border-1 border-secondary" class="py-2"></td>
@@ -236,10 +238,6 @@
                                     <td class="border border-1 border-secondary" class="py-2">- {{ number_format(($ppay->curr_amount - $ppay->cut_amount < 0 ? $ppay->curr_amount : $ppay->cut_amount), 0, ',', '.') }}</td>
                                     <td class="border border-1 border-secondary" class="py-2"></td>
                                 </tr>
-
-                                @php
-                                    $total_gaji -= $ppay->cut_amount;
-                                @endphp
                             @endif
                         @endforeach
                     @endif
@@ -251,9 +249,11 @@
             </table>
         </div>
 
-        <div class="mt-4">
-            {{ $grouped_attendances->appends(request()->query())->links() }}
-        </div>
+        @if($is_paginated)
+            <div class="mt-4">
+                {{ $grouped_attendances->appends(request()->query())->links() }}
+            </div>
+        @endif
 
         <div class="mt-4 fs-4 d-flex flex-column w-100 align-items-end">
             <span>Total di halaman ini: <b>{{ number_format($total_this_page, 0, ',', '.') }}</b></span>
@@ -266,6 +266,10 @@
             $('.see-detail-btn').on('click', function(){
                 $(this).closest('tbody').find(`.detail-area${$(this).data('empid')}`).toggle();
             });
+
+            $('#filter-toggler').click(function(){
+                $('#filters').slideToggle();
+            })
         });
 
     </script>

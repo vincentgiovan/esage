@@ -34,7 +34,7 @@ class PartnerController extends Controller{
     {
         // Validasi data, kalo ga sesuai ga lanjut
         $validatedData = $request->validate([
-            "partner_name" => "required",
+            "partner_name" => "required|unique:partners",
             "role" => "required",
             "remark" => "nullable",
             "address" => "nullable",

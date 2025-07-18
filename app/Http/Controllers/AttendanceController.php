@@ -33,8 +33,9 @@ class AttendanceController extends Controller
             $total_normal = $atdall->normal * $atdall->employee->pokok;
             $total_lembur = $atdall->jam_lembur * $atdall->employee->lembur;
             $total_lembur_panjang = $atdall->index_lembur_panjang * $atdall->employee->lembur_panjang;
+            $total_performa = $atdall->performa * $atdall->employee->performa;
 
-            $total_all += ($total_normal + $total_lembur + $total_lembur_panjang + $atdall->performa);
+            $total_all += ($total_normal + $total_lembur + $total_lembur_panjang + $total_performa);
         }
 
         return view("pages.attendance.index", [
@@ -92,10 +93,6 @@ class AttendanceController extends Controller
                 $project = Project::find($request->project_id);
 
                 for($j = 0; $j < 7; $j++){
-                    if(!$request->normal[$i][$j]){
-                        continue;
-                    }
-
                     Attendance::create([
                         'attendance_date' => Carbon::parse($request->start_date)->addDays($j),
                         'employee_id' => $employee->id,

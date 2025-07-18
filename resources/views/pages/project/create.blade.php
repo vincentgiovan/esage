@@ -13,7 +13,7 @@
                     <input type="text" class="form-control @error('project_name') is-invalid @enderror" id="project_name" name="project_name" placeholder="Nama proyek"
                         value="{{ old('project_name') }}">
                     @error('project_name')
-                        <p class="text-danger">Harap masukkan nama proyek.</p>
+                        <p class="text-danger">Nama proyek belum dimasukkan atau sudah ada proyek dengan nama sama.</p>
                     @enderror
                 </div>
 
