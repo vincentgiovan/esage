@@ -59,9 +59,9 @@
                 @php
                     $employee = App\Models\Employee::find(intval($emp_id));
 
-                    $prepays = $employee->prepays->where('curr_amount', '>', 0)->where('enable_auto_cut', 'yes');
-                    $kasubon = $employee->prepays()->pluck('id')->toArray();
-                    $prepay_cuts = App\Models\PrepayCut::whereIn('prepay_id', $kasubon)->where('start_period', '>=', request('from'))->where('end_period', '<=', request('until'))->get();
+                    $prepays = $employee->prepays()->where('curr_amount', '>', 0)->where('enable_auto_cut', 'yes')->get();
+                    $kasubon = $prepays->pluck('id')->toArray();
+                    $prepay_cuts = App\Models\PrepayCut::whereIn('prepay_id', $kasubon)->where('start_period', request('from'))->where('end_period', request('until'))->get();
                 @endphp
 
                 <tr>

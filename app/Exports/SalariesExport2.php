@@ -51,16 +51,14 @@ class SalariesExport2 implements FromArray, WithStyles, WithEvents, WithHeadings
 
         $prepaysInThisPeriod = Prepay::filter(request(['from', 'until', 'employee']))->where('enable_auto_cut', 'yes')->get()->groupBy('employee_id');
 
+         // Check if the attendances data are in the same period as today
         $in_current_period = false;
 
         $today = Carbon::today();
-        $lastWeeksSaturday = $today->copy()->previous(Carbon::SATURDAY);;
-        $thisWeeksFriday = $today->copy()->endOfWeek(Carbon::FRIDAY);
-
         $rangeStart = Carbon::parse(request('from'));
         $rangeEnd = Carbon::parse(request('until'));
 
-        if ($rangeStart->greaterThanOrEqualTo($lastWeeksSaturday) && $rangeEnd->lessThanOrEqualTo($thisWeeksFriday)) {
+        if ($today >= $rangeStart && $today <= $rangeEnd) {
             $in_current_period = true;
         } else {
             $in_current_period = false;
@@ -70,7 +68,9 @@ class SalariesExport2 implements FromArray, WithStyles, WithEvents, WithHeadings
         $subtotals = [];
 
         foreach($groupedAttendances as $employee_id => $attendances){
-            if(Employee::find($employee_id)->kalkulasi_gaji == "on"){
+            $employee = Employee::find($employee_id);
+            
+            if($employee->kalkulasi_gaji == "on"){
                 $total_salary = 0;
 
                 foreach($attendances as $atd){
@@ -90,28 +90,20 @@ class SalariesExport2 implements FromArray, WithStyles, WithEvents, WithHeadings
                         }
                     }
                 }
+                else {
+                    $kasubon = $employee->prepays->where('curr_amount', '>', 0)->where('enable_auto_cut', 'yes')->pluck('id')->toArray();
+                    $prepay_cuts = PrepayCut::whereIn('prepay_id', $kasubon)->where('start_period', request('from'))->where('end_period', request('until'))->get();
+
+                    foreach($prepay_cuts as $ppc){
+                        $total_salary -= $ppc->cut_amount;
+                    }
+                }
 
                 $subtotals[$employee_id] = $total_salary;
             }
             else {
                 array_push($subtotals, 'N/A');
             }
-        }
-
-        // Check if the attendances data are in the same period as today
-        $in_current_period = false;
-
-        $today = Carbon::today();
-        $thisWeeksFriday = $today->copy()->endOfWeek(Carbon::FRIDAY);
-        $lastWeeksSaturday = $today->copy()->previous(Carbon::SATURDAY);
-
-        $rangeStart = Carbon::parse(request('from'));
-        $rangeEnd = Carbon::parse(request('until'));
-
-        if ($rangeStart->greaterThanOrEqualTo($lastWeeksSaturday) && $rangeEnd->lessThanOrEqualTo($thisWeeksFriday)) {
-            $in_current_period = true;
-        } else {
-            $in_current_period = false;
         }
 
         // Generate the Excel rows

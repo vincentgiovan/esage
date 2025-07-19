@@ -5,15 +5,11 @@
         $in_current_period = false;
 
         $today = Carbon\Carbon::today();
-        $lastWeeksSaturday = $today->copy()->previous(Carbon\Carbon::SATURDAY);;
-        $thisWeeksFriday = $today->copy()->endOfWeek(Carbon\Carbon::FRIDAY);
-
-        // dd($today, $lastWeeksSaturday, $thisWeeksFriday);
-
+        // $today = Carbon\Carbon::parse('2025-07-18');
         $rangeStart = Carbon\Carbon::parse(request('from'));
         $rangeEnd = Carbon\Carbon::parse(request('until'));
 
-        if ($rangeStart->greaterThanOrEqualTo($lastWeeksSaturday) && $rangeEnd->lessThanOrEqualTo($thisWeeksFriday)) {
+        if ($today >= $rangeStart && $today <= $rangeEnd) {
             $in_current_period = true;
         } else {
             $in_current_period = false;
@@ -133,9 +129,9 @@
                     @php
                         $employee = App\Models\Employee::find(intval($emp_id));
 
-                        $prepays = $employee->prepays->where('curr_amount', '>', 0)->where('enable_auto_cut', 'yes');
-                        $kasubon = $employee->prepays()->pluck('id')->toArray();
-                        $prepay_cuts = App\Models\PrepayCut::whereIn('prepay_id', $kasubon)->where('start_period', '>=', request('from'))->where('end_period', '<=', request('until'))->get();
+                        $prepays = $employee->prepays()->where('curr_amount', '>', 0)->where('enable_auto_cut', 'yes')->get();
+                        $kasubon = $prepays->pluck('id')->toArray();
+                        $prepay_cuts = App\Models\PrepayCut::whereIn('prepay_id', $kasubon)->where('start_period', request('from'))->where('end_period', request('until'))->get();
 
                         $total_this_page += $subtotals[$emp_id];
                     @endphp
@@ -257,6 +253,7 @@
 
         <div class="mt-4 fs-4 d-flex flex-column w-100 align-items-end">
             <span>Total di halaman ini: <b>{{ number_format($total_this_page, 0, ',', '.') }}</b></span>
+            <span>Total seluruh kasbon: <b>{{ number_format($total_prepays, 0, ',', '.') }}</b></span>
             <span>Total seluruh data: <b>{{ number_format($total_all, 0, ',', '.') }}</b></span>
         </div>
     </x-container>

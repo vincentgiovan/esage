@@ -97,7 +97,7 @@ class AttendanceController extends Controller
                         'attendance_date' => Carbon::parse($request->start_date)->addDays($j),
                         'employee_id' => $employee->id,
                         'project_id' => $project->id,
-                        'normal' => $request->normal[$i][$j],
+                        'normal' => $request->normal[$i][$j] ?? 0,
                         'jam_lembur' => $request->lembur[$i][$j] ?? 0,
                         'index_lembur_panjang' => $request->lembur_panjang[$i][$j] ?? 0,
                         'performa' => $request->performa[$i][$j] ?? 0

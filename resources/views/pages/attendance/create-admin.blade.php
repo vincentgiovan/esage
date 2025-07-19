@@ -348,10 +348,6 @@
                     const oldName = $(this).attr('name');
                     $(this).attr('name', oldName.replace(/\[(\d+)\]/, `[${incrementus}]`));
                 });
-                newRow.find('input[name*="lembur_panjang"]').each(function(){
-                    const oldName = $(this).attr('name');
-                    $(this).attr('name', oldName.replace(/\[(\d+)\]/, `[${incrementus}]`));
-                });
                 newRow.find('input[name*="performa"]').each(function(){
                     const oldName = $(this).attr('name');
                     $(this).attr('name', oldName.replace(/\[(\d+)\]/, `[${incrementus}]`));
@@ -370,6 +366,8 @@
                     newSelect.append($('<option>').attr('value', employee.id).text(`${employee.nama} (${employee.jabatan})`));
                 });
                 newRow.find('.select-employee').append(newSelect);
+
+                console.log(newRow.html());
 
                 $('tbody').append(newRow);
 

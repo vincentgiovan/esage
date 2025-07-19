@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\Project;
 use App\Models\Employee;
 use App\Models\Purchase;
+use App\Models\PrepayCut;
 use App\Models\Attendance;
 use Illuminate\Http\Request;
 use App\Models\DeliveryOrder;
@@ -138,29 +139,29 @@ class PDFController extends Controller
         $in_current_period = false;
 
         $today = Carbon::today();
-        $lastWeeksSaturday = $today->copy()->previous(Carbon::SATURDAY);;
-        $thisWeeksFriday = $today->copy()->endOfWeek(Carbon::FRIDAY);
-
         $rangeStart = Carbon::parse(request('from'));
         $rangeEnd = Carbon::parse(request('until'));
 
-        if ($rangeStart->greaterThanOrEqualTo($lastWeeksSaturday) && $rangeEnd->lessThanOrEqualTo($thisWeeksFriday)) {
+        if ($today >= $rangeStart && $today <= $rangeEnd) {
             $in_current_period = true;
         } else {
             $in_current_period = false;
         }
 
-        $subtotals = [];
+        $subtotals = collect(); // Use collection for better handling
+        $total_all = 0;
 
-        foreach($groupedAttendances as $employee_id => $attendances){
-            if(Employee::find($employee_id)->kalkulasi_gaji == "on"){
+        foreach ($groupedAttendances as $employee_id => $attendances) {
+            $employee = $attendances->first()->employee; // Get the employee details
+
+            if ($employee->kalkulasi_gaji == "on") {
                 $total_salary = 0;
 
-                foreach($attendances as $atd){
-                    $sub_normal = $atd->normal * $atd->employee->pokok;
-                    $sub_lembur = $atd->jam_lembur * $atd->employee->lembur;
-                    $sub_lembur_panjang = $atd->index_lembur_panjang * $atd->employee->lembur_panjang;
-                    $sub_performa = $atd->performa * $atd->employee->performa;
+                foreach ($attendances as $atd) {
+                    $sub_normal = $atd->normal * $employee->pokok;
+                    $sub_lembur = $atd->jam_lembur * $employee->lembur;
+                    $sub_lembur_panjang = $atd->index_lembur_panjang * $employee->lembur_panjang;
+                    $sub_performa = $atd->performa * $employee->performa;
 
                     $total_salary += $sub_normal + $sub_lembur + $sub_lembur_panjang + $sub_performa;
                 }
@@ -172,12 +173,17 @@ class PDFController extends Controller
                             $total_salary -= $ppay->cut_amount;
                         }
                     }
+                } else {
+                    $kasubon = $employee->prepays->where('curr_amount', '>', 0)->where('enable_auto_cut', 'yes')->pluck('id')->toArray();
+                    $prepay_cuts = PrepayCut::whereIn('prepay_id', $kasubon)->where('start_period', request('from'))->where('end_period', request('until'))->get();
+
+                    foreach($prepay_cuts as $ppc){
+                        $total_salary -= $ppc->cut_amount;
+                    }
                 }
 
-                $subtotals[$employee_id] = $total_salary;
-            }
-            else {
-                array_push($subtotals, 'N/A');
+                $subtotals->put($employee_id, $total_salary);
+                $total_all += $total_salary;
             }
         }
 

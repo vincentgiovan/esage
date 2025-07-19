@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Prepay;
 use App\Models\Project;
 use App\Models\Employee;
+use App\Models\PrepayCut;
 use App\Models\Attendance;
 use Illuminate\Http\Request;
 use App\Exports\SalariesExport;
@@ -32,13 +33,10 @@ class SalaryController extends Controller
         $in_current_period = false;
 
         $today = Carbon::today();
-        $lastWeeksSaturday = $today->copy()->previous(Carbon::SATURDAY);;
-        $thisWeeksFriday = $today->copy()->endOfWeek(Carbon::FRIDAY);
-
         $rangeStart = Carbon::parse(request('from'));
         $rangeEnd = Carbon::parse(request('until'));
 
-        if ($rangeStart->greaterThanOrEqualTo($lastWeeksSaturday) && $rangeEnd->lessThanOrEqualTo($thisWeeksFriday)) {
+        if ($today >= $rangeStart && $today <= $rangeEnd) {
             $in_current_period = true;
         } else {
             $in_current_period = false;
@@ -46,6 +44,7 @@ class SalaryController extends Controller
 
         $subtotals = collect(); // Use collection for better handling
         $total_all = 0;
+        $total_prepays = 0;
 
         foreach ($groupedAttendances as $employee_id => $attendances) {
             $employee = $attendances->first()->employee; // Get the employee details
@@ -67,7 +66,16 @@ class SalaryController extends Controller
                     foreach($prepaysInThisPeriod[strval($employee_id)] as $ppay){
                         if($total_salary > 0){
                             $total_salary -= $ppay->cut_amount;
+                            $total_prepays += $ppay->cut_amount;
                         }
+                    }
+                } else {
+                    $kasubon = $employee->prepays->where('curr_amount', '>', 0)->where('enable_auto_cut', 'yes')->pluck('id')->toArray();
+                    $prepay_cuts = PrepayCut::whereIn('prepay_id', $kasubon)->where('start_period', request('from'))->where('end_period', request('until'))->get();
+
+                    foreach($prepay_cuts as $ppc){
+                        $total_salary -= $ppc->cut_amount;
+                        $total_prepays += $ppc->cut_amount;
                     }
                 }
 
@@ -75,6 +83,8 @@ class SalaryController extends Controller
                 $total_all += $total_salary;
             }
         }
+
+        // return [$total_prepays, $total_all, $total_all + $total_prepays];
 
         // Convert grouped data to a collection for manual pagination
         $groupedCollection = collect($groupedAttendances);
@@ -112,6 +122,7 @@ class SalaryController extends Controller
             "grouped_attendances" => $showAllData ? $groupedAttendances : $paginatedAttendances,
             "subtotals" => $showAllData ? $subtotals : $paginatedSubtotals,
             'total_all' => $total_all,
+            'total_prepays' => $total_prepays,
             'is_paginated' => !$showAllData,
             "start_period" => request('from'),
             "end_period" => request('until'),
