@@ -103,64 +103,66 @@
                 </tr>
 
                 @foreach ($attendances as $a)
-                    <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
-                        <td class="border border-1 border-secondary">{{ ($loop->index + 1) + ((request('page') ?? 1) - 1) * 30 }}</td>
-                        <td class="border border-1 border-secondary">{{ Carbon\Carbon::parse($a->attendance_date)->translatedFormat("d M Y") }}</td>
-                        <td class="border border-1 border-secondary">{{ $a->project->project_name }}</td>
-                        <td class="border border-1 border-secondary">{{ $a->employee->nama }}</td>
-                        <td class="border border-1 border-secondary">
-                            <button class="btn btn-success atd-detail-trigger">Lihat Rincian</button>
-                            <table class="w-100 mt-2" style="display: none;">
-                                <tbody>
-                                    <tr>
-                                        <th class="border border-1 border-secondary">Normal</th>
-                                        <td class="border border-1 border-secondary">{{ $a->normal }} hari</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="border border-1 border-secondary">Lembur</th>
-                                        <td class="border border-1 border-secondary">{{ $a->jam_lembur }} jam</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="border border-1 border-secondary">L. Panjang</th>
-                                        <td class="border border-1 border-secondary">{{ $a->index_lembur_panjang }} kali</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="border border-1 border-secondary">Performa</th>
-                                        <td class="border border-1 border-secondary">{{ $a->performa }} kali</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                        <td class="border border-1 border-secondary">
-                            @php
-                                $total_normal = $a->normal * $a->employee->pokok;
-                                $total_lembur = $a->jam_lembur * $a->employee->lembur;
-                                $total_lembur_panjang = $a->index_lembur_panjang * $a->employee->lembur_panjang;
-                                $total_performa = $a->performa * $a->employee->performa;
+                    @if(!($a->normal == 0 && $a->jam_lembur == 0 && $a->index_lembur_panjang == 0 && $a->performa == 0))
+                        <tr style="background: @if($loop->index % 2 == 1) #E0E0E0 @else white @endif;">
+                            <td class="border border-1 border-secondary">{{ ($loop->index + 1) + ((request('page') ?? 1) - 1) * 30 }}</td>
+                            <td class="border border-1 border-secondary">{{ Carbon\Carbon::parse($a->attendance_date)->translatedFormat("d M Y") }}</td>
+                            <td class="border border-1 border-secondary">{{ $a->project->project_name }}</td>
+                            <td class="border border-1 border-secondary">{{ $a->employee->nama }}</td>
+                            <td class="border border-1 border-secondary">
+                                <button class="btn btn-success atd-detail-trigger">Lihat Rincian</button>
+                                <table class="w-100 mt-2" style="display: none;">
+                                    <tbody>
+                                        <tr>
+                                            <th class="border border-1 border-secondary">Normal</th>
+                                            <td class="border border-1 border-secondary">{{ $a->normal }} hari</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="border border-1 border-secondary">Lembur</th>
+                                            <td class="border border-1 border-secondary">{{ $a->jam_lembur }} jam</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="border border-1 border-secondary">L. Panjang</th>
+                                            <td class="border border-1 border-secondary">{{ $a->index_lembur_panjang }} kali</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="border border-1 border-secondary">Performa</th>
+                                            <td class="border border-1 border-secondary">{{ $a->performa }} kali</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td class="border border-1 border-secondary">
+                                @php
+                                    $total_normal = $a->normal * $a->employee->pokok;
+                                    $total_lembur = $a->jam_lembur * $a->employee->lembur;
+                                    $total_lembur_panjang = $a->index_lembur_panjang * $a->employee->lembur_panjang;
+                                    $total_performa = $a->performa * $a->employee->performa;
 
-                                $total_this_row = $total_normal + $total_lembur + $total_lembur_panjang + $total_performa;
-                                $total_this_page += $total_this_row;
+                                    $total_this_row = $total_normal + $total_lembur + $total_lembur_panjang + $total_performa;
+                                    $total_this_page += $total_this_row;
 
-                                echo  number_format($total_this_row, 0, ',', '.');
-                            @endphp
-                        </td>
-                        <td class="border border-1 border-secondary">
-                            <div class="d-flex gap-2 w-100">
-                                <a href="{{ route('attendance-show', $a->id) }}" class="btn btn-success text-white">
-                                    <i class="bi bi-eye"></i>
-                                </a>
-                                <a href="{{ route('attendance-edit', $a->id) }}" class="btn btn-warning text-white"
-                                    style="font-size: 10pt; background-color: rgb(197, 167, 0);">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                                <form action="{{ route('attendance-destroy', $a->id) }}" method="post">
-                                    @csrf
-                                    <button class="btn btn-danger" onclick="return confirm('This item will be deleted. Are you sure?')"><i class="bi bi-trash3"></i></button>
-                                </form>
-                            </div>
-                        </td>
+                                    echo  number_format($total_this_row, 0, ',', '.');
+                                @endphp
+                            </td>
+                            <td class="border border-1 border-secondary">
+                                <div class="d-flex gap-2 w-100">
+                                    <a href="{{ route('attendance-show', $a->id) }}" class="btn btn-success text-white">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="{{ route('attendance-edit', $a->id) }}" class="btn btn-warning text-white"
+                                        style="font-size: 10pt; background-color: rgb(197, 167, 0);">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form action="{{ route('attendance-destroy', $a->id) }}" method="post">
+                                        @csrf
+                                        <button class="btn btn-danger" onclick="return confirm('This item will be deleted. Are you sure?')"><i class="bi bi-trash3"></i></button>
+                                    </form>
+                                </div>
+                            </td>
 
-                    </tr>
+                        </tr>
+                    @endif
                 @endforeach
             </table>
         </div>
