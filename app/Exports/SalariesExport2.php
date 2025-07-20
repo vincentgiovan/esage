@@ -49,7 +49,7 @@ class SalariesExport2 implements FromArray, WithStyles, WithEvents, WithHeadings
             ->get()
             ->groupBy('employee_id');
 
-        $prepaysInThisPeriod = Prepay::filter(request(['from', 'until', 'employee']))->where('enable_auto_cut', 'yes')->get()->groupBy('employee_id');
+        $prepaysInThisPeriod = Prepay::filter(request(['from', 'until', 'employee']))->where('curr_amount', '>', 0)->where('enable_auto_cut', 'yes')->get()->groupBy('employee_id');
 
          // Check if the attendances data are in the same period as today
         $in_current_period = false;

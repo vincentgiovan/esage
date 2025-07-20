@@ -5,7 +5,7 @@
         $in_current_period = false;
 
         $today = Carbon\Carbon::today();
-        // $today = Carbon\Carbon::parse('2025-07-18');
+        // $today = Carbon\Carbon::parse('2025-07-17');
         $rangeStart = Carbon\Carbon::parse(request('from'));
         $rangeEnd = Carbon\Carbon::parse(request('until'));
 

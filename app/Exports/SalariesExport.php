@@ -43,7 +43,7 @@ class SalariesExport implements FromArray, WithStyles, WithEvents
             ->get()
             ->groupBy('employee_id');
 
-        $prepaysInThisPeriod = Prepay::filter(request(['from', 'until', 'employee']))->where('enable_auto_cut', 'yes')->get()->groupBy('employee_id');
+        $prepaysInThisPeriod = Prepay::filter(request(['from', 'until', 'employee']))->where('curr_amount', '>', 0)->where('enable_auto_cut', 'yes')->get()->groupBy('employee_id');
 
         $in_current_period = false;
 

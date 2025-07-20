@@ -28,11 +28,12 @@ class SalaryController extends Controller
             ->get()
             ->groupBy('employee_id');
 
-        $prepaysInThisPeriod = Prepay::filter(request(['from', 'until', 'employee']))->where('enable_auto_cut', 'yes')->get()->groupBy('employee_id');
+        $prepaysInThisPeriod = Prepay::filter(request(['from', 'until', 'employee']))->where('curr_amount', '>', 0)->where('enable_auto_cut', 'yes')->get()->groupBy('employee_id');
 
         $in_current_period = false;
 
         $today = Carbon::today();
+        // $today = Carbon::parse('2025-07-17');
         $rangeStart = Carbon::parse(request('from'));
         $rangeEnd = Carbon::parse(request('until'));
 
