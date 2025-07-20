@@ -52,13 +52,18 @@ class SalariesExport2 implements FromArray, WithStyles, WithEvents, WithHeadings
         $prepaysInThisPeriod = Prepay::filter(request(['from', 'until', 'employee']))->where('curr_amount', '>', 0)->where('enable_auto_cut', 'yes')->get()->groupBy('employee_id');
 
          // Check if the attendances data are in the same period as today
+
+        // Check if the attendances data are in the same period as today
         $in_current_period = false;
 
         $today = Carbon::today();
+        $thisWeeksFriday = $today->copy()->endOfWeek(Carbon::FRIDAY);
+        $lastWeeksSaturday = $today->copy()->previous(Carbon::SATURDAY);
+
         $rangeStart = Carbon::parse(request('from'));
         $rangeEnd = Carbon::parse(request('until'));
 
-        if ($today >= $rangeStart && $today <= $rangeEnd) {
+        if ($rangeStart->greaterThanOrEqualTo($lastWeeksSaturday) && $rangeEnd->lessThanOrEqualTo($thisWeeksFriday)) {
             $in_current_period = true;
         } else {
             $in_current_period = false;
@@ -108,7 +113,6 @@ class SalariesExport2 implements FromArray, WithStyles, WithEvents, WithHeadings
         }
 
         // Generate the Excel rows
-        $i = 1;
         $data_count = 1;
 
         $finalExcelRows = [];

@@ -129,7 +129,7 @@
                     @php
                         $employee = App\Models\Employee::find(intval($emp_id));
 
-                        $prepays = $employee->prepays()->where('curr_amount', '>', 0)->where('enable_auto_cut', 'yes')->get();
+                        $prepays = $prepays = $employee->prepays()->where('prepay_date', '>=', request('from'))->where('prepay_date', '<=', request('until'))->get();
                         $kasubon = $prepays->pluck('id')->toArray();
                         $prepay_cuts = App\Models\PrepayCut::whereIn('prepay_id', $kasubon)->where('start_period', request('from'))->where('end_period', request('until'))->get();
 
@@ -224,7 +224,7 @@
                         @endforeach
                     @else
                         @foreach($prepays as $ppay)
-                            @if($ppay->prepay_date >= request('from') && $ppay->prepay_date <= request('until') == false)
+                            @if($ppay->enable_auto_cut == 'no' || $ppay->curr_amount <= 0)
                                 @continue
                             @endif
                             @if($total_gaji - $ppay->cut_amount > 0)
