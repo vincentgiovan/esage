@@ -123,17 +123,20 @@ class PrepayController extends Controller
         try {
             DB::beginTransaction();
 
-            $groupedAttendances = Attendance::where('attendance_date', '>=', $prev_start_period)->where('attendance_date', '<=', $prev_end_period)->get()->groupBy('employee_id');
-
+            // Ambil semua data kasbon di periode sebelumnya yang auto-cut dan belum habis, kelompokkan berdasarkan pegawai
             $prepaysInThisPeriod = Prepay::where('prepay_date', '>=', $prev_start_period)->where('prepay_date', '<=', $prev_end_period)->where('enable_auto_cut', 'yes')->where('curr_amount', '>', 0)->get()->groupBy('employee_id');
 
-            foreach ($groupedAttendances as $employee_id => $attendances) {
-                $employee = $attendances->first()->employee; // Get the employee details
+            foreach ($prepaysInThisPeriod as $employee_id => $prepays) {
+                // Ambil info pegawai
+                $employee = Employee::find($employee_id);
 
+                // Lakukan hanya kalau si pegawai diterapkan kalkulasi gaji
                 if ($employee->kalkulasi_gaji == "on") {
                     $total_salary = 0;
 
-                    foreach ($attendances as $atd) {
+                    // Untuk setiap data presensi di periode yang sama...
+                    foreach (Attendance::where('attendance_date', '>=', $prev_start_period)->where('attendance_date', '<=', $prev_end_period)->where('employee_id', $employee_id)->get() as $atd) {
+                        // Hitung gaji kotornya
                         $sub_normal = $atd->normal * $employee->pokok;
                         $sub_lembur = $atd->jam_lembur * $employee->lembur;
                         $sub_lembur_panjang = $atd->index_lembur_panjang * $employee->lembur_panjang;
@@ -142,80 +145,42 @@ class PrepayController extends Controller
                         $total_salary += $sub_normal + $sub_lembur + $sub_lembur_panjang + $sub_performa;
                     }
 
-                    // To show the prepay cut result on the given period
-                    if(isset($prepaysInThisPeriod[strval($employee_id)])){
-                        foreach($prepaysInThisPeriod[strval($employee_id)] as $ppay){
-                            if($total_salary > 0){
-                                $cut_amount = min($ppay->cut_amount, $ppay->curr_amount);
+                    // Untuk setiap kasbon yang si pegawai punya...
+                    foreach($prepays as $ppay){
+                        // Kalo gaji kotor yang diterima masih cukup buat motong kasbon...
+                        if($total_salary > 0){
 
-                                // Calculate the remaining amount after the cut
-                                $remaining_amount = $ppay->curr_amount - $cut_amount;
+                            // Tentuin jumlah pemotongan (habisin kalo lebih kecil dari jumlah pemotongan)
+                            $cut_amount = min($ppay->cut_amount, $ppay->curr_amount);
 
-                                // Determine if auto_cut should be disabled
-                                $enable_auto_cut = $remaining_amount <= 0 ? 'no' : 'yes';
+                            // Tentuin sisa saldo
+                            $remaining_amount = $ppay->curr_amount - $cut_amount;
 
-                                // Create the PrepayCut record
-                                PrepayCut::create([
-                                    'prepay_id' => $ppay->id,
-                                    'start_period' => $prev_start_period,
-                                    'end_period' => $prev_end_period,
-                                    'init_amount' => $ppay->curr_amount,
-                                    'cut_amount' => $cut_amount,
-                                    'remaining_amount' => $remaining_amount,
-                                ]);
+                            // Kalo sisa saldo habis matiin auto-cut
+                            $enable_auto_cut = $remaining_amount <= 0 ? 'no' : 'yes';
 
-                                // Update the prepay with new current amount and auto_cut status
-                                $ppay->update([
-                                    'curr_amount' => $remaining_amount,
-                                    'enable_auto_cut' => $enable_auto_cut,
-                                ]);
+                            // Bikin data pemotongan kasbon
+                            PrepayCut::create([
+                                'prepay_id' => $ppay->id,
+                                'start_period' => $prev_start_period,
+                                'end_period' => $prev_end_period,
+                                'init_amount' => $ppay->curr_amount,
+                                'cut_amount' => $cut_amount,
+                                'remaining_amount' => $remaining_amount,
+                            ]);
 
-                                $total_salary -= $cut_amount;
-                            }
+                            // Update juga data kasbonnya
+                            $ppay->update([
+                                'curr_amount' => $remaining_amount,
+                                'enable_auto_cut' => $enable_auto_cut,
+                            ]);
+
+                            // Gaji yang diterima si pegawai dikurangin sama besar pemotongan kasbon buat dicek masih bisa motong lagi apa ngga
+                            $total_salary -= $cut_amount;
                         }
                     }
                 }
             }
-
-            // // Ambil semua kasbon yang masibh ada saldonya dan disetel auto potong
-            // $prepays = Prepay::where('curr_amount', '>', 0)
-            //     ->where('enable_auto_cut', 'yes')
-            //     ->orderBy('employee_id')
-            //     ->get();
-
-            // foreach ($prepays as $ppay) {
-            //     // Skip pemotongan kasbon kalau ga disetel auto potong atau kalo karyawannya ga aktif
-            //     if($ppay->enable_auto_cut == 'no' || !$ppay->employee || $ppay->employee->status == 'passive'){
-            //         continue;
-            //     }
-
-            //     // ===== MEKANISME POTONG KASBOBN ===== //
-            //     // Calculate the cut amount safely (can't cut more than current amount)
-            //     $cut_amount = min($ppay->cut_amount, $ppay->curr_amount);
-
-            //     // Calculate the remaining amount after the cut
-            //     $remaining_amount = $ppay->curr_amount - $cut_amount;
-
-            //     // Determine if auto_cut should be disabled
-            //     $enable_auto_cut = $remaining_amount <= 0 ? 'no' : 'yes';
-
-            //     // Create the PrepayCut record
-            //     PrepayCut::create([
-            //         'prepay_id' => $ppay->id,
-            //         'start_period' => $prev_start_period,
-            //         'end_period' => $prev_end_period,
-            //         'init_amount' => $ppay->curr_amount,
-            //         'cut_amount' => $cut_amount,
-            //         'remaining_amount' => $remaining_amount,
-            //     ]);
-
-            //     // Update the prepay with new current amount and auto_cut status
-            //     $ppay->update([
-            //         'curr_amount' => $remaining_amount,
-            //         'enable_auto_cut' => $enable_auto_cut,
-            //     ]);
-
-            // }
 
             DB::commit();
         }

@@ -62,7 +62,7 @@ class SalariesExport implements FromArray, WithStyles, WithEvents
 
         foreach($groupedAttendances as $employee_id => $attendances){
             $employee = Employee::find($employee_id);
-            
+
             if($employee->kalkulasi_gaji == "on"){
                 $total_salary = 0;
 
@@ -84,8 +84,9 @@ class SalariesExport implements FromArray, WithStyles, WithEvents
                     }
                 }
                 else {
-                    $kasubon = $employee->prepays->where('curr_amount', '>', 0)->where('enable_auto_cut', 'yes')->pluck('id')->toArray();
-                    $prepay_cuts = PrepayCut::whereIn('prepay_id', $kasubon)->where('start_period', request('from'))->where('end_period', request('until'))->get();
+                    $prepay_cuts = PrepayCut::whereHas('prepay', function($query) use ($employee){
+                        $query->where('employee_id', $employee->id);
+                    })->where('start_period', request('from'))->where('end_period', request('until'))->get();
 
                     foreach($prepay_cuts as $ppc){
                         $total_salary -= $ppc->cut_amount;
