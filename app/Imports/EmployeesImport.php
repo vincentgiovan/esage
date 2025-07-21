@@ -25,6 +25,7 @@ class EmployeesImport implements ToModel, WithHeadingRow
                 "pokok" => intval($row['pokok']),
                 "lembur" => intval($row['lembur']),
                 "lembur_panjang" => intval($row['lembur_panjang']),
+                'performa' => intval($row['performa']),
                 'old_kasbon' => intval($row['kasbon']),
                 'kalkulasi_gaji' => $row['kalkulasi_gaji'] == 'Ya' ? 'on' : 'off',
                 "masuk" => $row['masuk'] != '' ? Carbon::parse($row['masuk'])->format('Y-m-d') : null,
